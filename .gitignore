@@ -1,0 +1,7 @@
+OWLSharp.Extensions/bin/Debug/*
+OWLSharp.Extensions/bin/Release/*
+OWLSharp.Extensions.Test/bin/Debug/*
+OWLSharp.Extensions.Test/bin/Release/*
+OWLSharp.Extensions/obj/*
+OWLSharp.Extensions.Test/obj/*
+/.vs

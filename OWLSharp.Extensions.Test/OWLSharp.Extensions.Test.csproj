@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <AssemblyTitle>OWLSharp.Extensions.Test</AssemblyTitle>
+        <AssemblyName>OWLSharp.Extensions.Test</AssemblyName>
+        <AssemblyVersion>$(Version)</AssemblyVersion>
+        <Version>4.10.0</Version>
+        <Authors>Marco De Salvo</Authors>
+        <Copyright>Marco De Salvo</Copyright>
+        <TargetFramework>net8.0</TargetFramework>
+        <IsPackable>false</IsPackable>
+        <Product>OWLSharp.Extensions</Product>
+        <Description>OWLSharp.Extensions unit testing suite</Description>
+        <Title>OWLSharp.Extensions.Test</Title>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+        <PackageReference Include="MSTest.TestAdapter" Version="3.9.3" />
+        <PackageReference Include="MSTest.TestFramework" Version="3.9.3" />
+        <PackageReference Include="coverlet.collector" Version="6.0.4">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\OWLSharp.Extensions\OWLSharp.Extensions.csproj" />
+    </ItemGroup>
+</Project>
