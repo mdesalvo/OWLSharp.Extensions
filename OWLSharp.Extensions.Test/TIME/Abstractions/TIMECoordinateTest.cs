@@ -133,7 +133,7 @@ public class TIMECoordinateTest
         Assert.AreEqual(30, timeCoodinate.Second);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("2010-05-22T22:45:30Z", null, 1)]
     [DataRow("2010-05-22T22:45:30Z", "2009-05-22T22:45:30Z", 1)]
     [DataRow("2010-05-22T22:45:30Z", "2011-05-22T22:45:30Z", -1)]
@@ -156,7 +156,7 @@ public class TIMECoordinateTest
         Assert.AreEqual(expectedComparison, leftCoordinate.CompareTo(rightCoordinate));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(2011d, 05d, 22d, 22d, 45d, 30d, 2010d, 05d, 22d, 22d, 45d, 30d, 1)]
     [DataRow(2010d, 05d, 22d, 22d, 45d, 30d, 2011d, 05d, 22d, 22d, 45d, 30d, -1)]
     [DataRow(2010d, 05d, 22d, 22d, 45d, 30d, null, 05d, 22d, 22d, 45d, 30d, 1)]

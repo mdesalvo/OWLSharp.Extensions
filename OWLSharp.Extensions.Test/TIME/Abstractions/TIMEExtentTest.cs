@@ -106,7 +106,7 @@ public class TIMEExtentTest
         Assert.IsTrue(timeExtent.Metadata.TRS.Equals(TIMECalendarReferenceSystem.Gregorian));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("P1Y", null, 1)]
     [DataRow("P1Y", "P11M", 1)]
     [DataRow("P11M", "P1Y", -1)]
@@ -119,7 +119,7 @@ public class TIMEExtentTest
         Assert.AreEqual(expectedComparison, leftExtent.CompareTo(rightExtent));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(2d, 1d, 1d, 1d, 1d, 1d, 1d, 1d, 1d, 1d, 1d, 1d, 1d, 1d, 1)]
     [DataRow(1d, 1d, 1d, 1d, 1d, 1d, 1d, 2d, 1d, 1d, 1d, 1d, 1d, 1d, -1)]
     [DataRow(1d, 1d, 1d, 1d, 1d, 1d, 1d, null, 1d, 1d, 1d, 1d, 1d, 1d, 1)]

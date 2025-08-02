@@ -664,7 +664,7 @@ public class TIMEHelperTest : TIMETestOntology
     public void ShouldThrowExceptionOnGettingTemporalFeatureBecauseNullURI()
         => Assert.ThrowsExactly<OWLException>(() => _ = new OWLOntology(new Uri("ex:timeOnt")).GetTemporalFeature(null));
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("http://www.w3.org/2006/time#inXSDDateTimeStamp", "1939-09-01T08:00:00Z", RDFModelEnums.RDFDatatypes.XSD_DATETIMESTAMP, "1939-09-01T08:00:00Z")]
     [DataRow("http://www.w3.org/2006/time#inXSDDateTime", "1939-09-01T09:00:00+01:00", RDFModelEnums.RDFDatatypes.XSD_DATETIME, "1939-09-01T08:00:00Z")]
     [DataRow("http://www.w3.org/2006/time#inXSDDate", "1939-09-01", RDFModelEnums.RDFDatatypes.XSD_DATE, "1939-09-01T00:00:00Z")]
@@ -701,7 +701,7 @@ public class TIMEHelperTest : TIMETestOntology
         Assert.IsNull(timeInstant.Position);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("http://www.w3.org/2006/time#inXSDDateTimeStamp", "1939-09-01T08:00:00Z", RDFModelEnums.RDFDatatypes.XSD_DATETIMESTAMP, "1939-09-01T08:00:00Z")]
     [DataRow("http://www.w3.org/2006/time#inXSDDateTime", "1939-09-01T09:00:00+01:00", RDFModelEnums.RDFDatatypes.XSD_DATETIME, "1939-09-01T08:00:00Z")]
     [DataRow("http://www.w3.org/2006/time#inXSDDate", "1939-09-01", RDFModelEnums.RDFDatatypes.XSD_DATE, "1939-09-01T00:00:00Z")]
@@ -1836,7 +1836,7 @@ public class TIMEHelperTest : TIMETestOntology
     public void ShouldThrowExceptionOnGettingInstantCoordinateBecauseNullInstantURI()
         => Assert.ThrowsExactly<OWLException>(() => _ = new OWLOntology(new Uri("ex:timeOnt")).GetCoordinateOfInstant(null));
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("http://www.w3.org/2006/time#inXSDDateTimeStamp", "1939-09-01T08:00:00Z", RDFModelEnums.RDFDatatypes.XSD_DATETIMESTAMP, 1939, 9, 1, 8, 0, 0)]
     [DataRow("http://www.w3.org/2006/time#inXSDDateTime", "1939-09-01T09:00:00+01:00", RDFModelEnums.RDFDatatypes.XSD_DATETIME, 1939, 9, 1, 8, 0, 0)]
     [DataRow("http://www.w3.org/2006/time#inXSDDate", "1939-09-01", RDFModelEnums.RDFDatatypes.XSD_DATE, 1939, 9, 1, 0, 0, 0)]

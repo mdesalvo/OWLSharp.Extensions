@@ -29,7 +29,7 @@ public class TIMEConverterTest
     public void ShouldThrowExceptionOnGettingCalendarFromPositionBecauseNullPositionTRS()
         => Assert.ThrowsExactly<OWLException>(() => _ = TIMEConverter.CoordinateFromPosition(25226354, null));
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(-413733671.4, 1956, 11, 21, 9, 58, 48)]
     [DataRow(-413733600, 1956, 11, 21, 10, 0, 0)]
     [DataRow(-3675, 1969, 12, 31, 22, 58, 45)]
@@ -62,7 +62,7 @@ public class TIMEConverterTest
         Assert.AreEqual(expectedSecond, tc.Second);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(-25.2502, TIMEUnitType.Year, 1, 1944, 10, 7, 16, 14, 52)] //6 leap years encountered (1968,1964,1960,1956,1952,1948)
     [DataRow(-61.25, TIMEUnitType.Day, 1, 1969, 10, 31, 18, 0, 0)]
     [DataRow(-1, TIMEUnitType.Hour, 26.5, 1969, 12, 30, 21, 30, 0)]
@@ -91,7 +91,7 @@ public class TIMEConverterTest
         Assert.AreEqual(expectedSecond, tc.Second);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(3, 1969, 13, 32, 49, 0, 0, TIMEUnitType.Hour, 0.5, 1970, 2, 3, 2, 30, 0)]
     [DataRow(3, 1969, 12, 31, 23, 0, 0, TIMEUnitType.Hour, 0.5, 1970, 1, 1, 0, 30, 0)]
     [DataRow(717, 2000, 1, 1, 0, 0, 0, TIMEUnitType.Day, 1, 2001, 12, 18, 0, 0, 0)]    //1 leap year encountered
@@ -118,7 +118,7 @@ public class TIMEConverterTest
         Assert.AreEqual(expectedSecond, tc.Second);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1, TIMEUnitType.Hour, 0.5, 1970, 1, 1, 0, 30, 0)]
     [DataRow(-1, TIMEUnitType.Hour, 1, 1969, 12, 30, 23, 0, 0)]
     [DataRow(25, TIMEUnitType.Hour, 1, 1970, 1, 2, 1, 0, 0)]
@@ -154,7 +154,7 @@ public class TIMEConverterTest
         Assert.AreEqual(expectedSecond, tc.Second);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(-66.5, 66501950d, null, null, null, null, null)]
     [DataRow(-0.001, 2950d, null, null, null, null, null)]
     [DataRow(-0.000001, 1951d, null, null, null, null, null)]
@@ -177,7 +177,7 @@ public class TIMEConverterTest
         Assert.AreEqual(expectedSecond, tc.Second);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(-9000, 1969, 12, 31, 23, 0, 0, TIMEUnitType.Month, 500, -373031d, null, null, null, null, null)]
     [DataRow(3700, 1969, 12, 31, 23, 0, 0, TIMEUnitType.Year, 5, 20469d, null, null, null, null, null)]
     [DataRow(819.46, -2000, 1, 1, 0, 0, 0, TIMEUnitType.Year, -1000000, -819462000d, null, null, null, null, null)]
@@ -204,7 +204,7 @@ public class TIMEConverterTest
     public void ShouldThrowExceptionOnNormalizingCoordinateBecauseNullCoordinate()
         => Assert.ThrowsExactly<OWLException>(() => _ = TIMEConverter.NormalizeCoordinate(null, TIMECalendarReferenceSystem.Gregorian));
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1983, 2, 10, 15, 30, 30, 1983, 2, 10, 15, 30, 30)]
     [DataRow(1983, 1, 31, 15, 30, 30, 1983, 1, 31, 15, 30, 30)]
     [DataRow(1983, 12, 31, 15, 30, 30, 1983, 12, 31, 15, 30, 30)]
@@ -256,7 +256,7 @@ public class TIMEConverterTest
         Assert.AreEqual(expectedSecond, tc.Second);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(2000, 2, 10, 8, 7, 9, 2000, 2, 10, 8, 7, 9)]
     [DataRow(2000, 2, 10, 8, 7, 10, 2000, 2, 10, 8, 8, 0)]
     [DataRow(2000, 2, 10, 8, 10, 9, 2000, 2, 10, 9, 0, 9)]
@@ -299,7 +299,7 @@ public class TIMEConverterTest
     public void ShouldThrowExceptionOnGettingExtentFromDurationBecauseNullUnitType()
         => Assert.ThrowsExactly<OWLException>(() => _ = TIMEConverter.ExtentFromDuration(25226354, null, TIMECalendarReferenceSystem.Gregorian));
 
-    [DataTestMethod]
+    [TestMethod]
     //seconds
     [DataRow(0, "http://www.w3.org/2006/time#second", TIMEUnitType.Second, 1, 0d, 0d, 0d, 0d, 0d, 0d, 0d)]
     [DataRow(59, "http://www.w3.org/2006/time#second", TIMEUnitType.Second, 1, 0d, 0d, 0d, 0d, 0d, 0d, 59d)]
@@ -403,7 +403,7 @@ public class TIMEConverterTest
         Assert.AreEqual(expectedSeconds, te.Seconds);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     //seconds
     [DataRow(0, "http://www.w3.org/2006/time#second", TIMEUnitType.Second, 1, 0d, 0d, 0d, 0d, 0d, 0d, 0d)]
     [DataRow(59, "http://www.w3.org/2006/time#second", TIMEUnitType.Second, 1, 0d, 0d, 0d, 0d, 0d, 0d, 59d)]
@@ -534,7 +534,7 @@ public class TIMEConverterTest
     public void ShouldThrowExceptionOnNormalizingExtentBecauseNullExtent()
         => Assert.ThrowsExactly<OWLException>(() => _ = TIMEConverter.NormalizeExtent(null, TIMECalendarReferenceSystem.Gregorian));
 
-    [DataTestMethod]
+    [TestMethod]
     //seconds
     [DataRow(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)]
     [DataRow(0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1)]
@@ -636,7 +636,7 @@ public class TIMEConverterTest
         Assert.AreEqual(expectedSeconds, te.Seconds);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(-2023, null, null, null, null, null, 2023, 4, 29, 11, 38, 10, 0, 0, 0, 1476908, 11, 38, 10)]
     [DataRow(null, null, null, null, null, null, 2023, 4, 29, 11, 38, 10, 0, 0, 0, 738513, 11, 38, 10)]
     [DataRow(2023, 4, 29, 11, 38, 10, null, null, null, null, null, null, 0, 0, 0, 738513, 11, 38, 10)] //swap
