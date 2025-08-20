@@ -50,26 +50,26 @@ public class TIMEOrdinalReferenceSystemTest
         Assert.IsNotNull(TestTRS);
         Assert.IsNotNull(TestTRS.Ontology);
         Assert.IsTrue(TestTRS.Equals(new RDFResource("ex:Thors")));
-        Assert.AreEqual(3, TestTRS.Ontology.Imports.Count);
-        Assert.AreEqual(5, TestTRS.Ontology.Prefixes.Count);
-        Assert.IsTrue(TestTRS.Ontology.DeclarationAxioms.Count > 100);
-        Assert.IsTrue(TestTRS.Ontology.AssertionAxioms.Count > 60);
-        Assert.IsTrue(TestTRS.Ontology.ClassAxioms.Count > 60);
-        Assert.IsTrue(TestTRS.Ontology.DataPropertyAxioms.Count > 20);
-        Assert.IsTrue(TestTRS.Ontology.ObjectPropertyAxioms.Count > 100);
+        Assert.HasCount(3, TestTRS.Ontology.Imports);
+        Assert.HasCount(5, TestTRS.Ontology.Prefixes);
+        Assert.IsGreaterThan(100, TestTRS.Ontology.DeclarationAxioms.Count);
+        Assert.IsGreaterThan(60, TestTRS.Ontology.AssertionAxioms.Count);
+        Assert.IsGreaterThan(60, TestTRS.Ontology.ClassAxioms.Count);
+        Assert.IsGreaterThan(20, TestTRS.Ontology.DataPropertyAxioms.Count);
+        Assert.IsGreaterThan(100, TestTRS.Ontology.ObjectPropertyAxioms.Count);
 
         //Test copy-ctor
         TIMEOrdinalReferenceSystem newTRS = new TIMEOrdinalReferenceSystem(new RDFResource("ex:Thors2"), TestTRS);
         Assert.IsNotNull(newTRS);
         Assert.IsNotNull(newTRS.Ontology);
         Assert.IsTrue(newTRS.Equals(new RDFResource("ex:Thors2")));
-        Assert.AreEqual(3, newTRS.Ontology.Imports.Count);
-        Assert.AreEqual(5, newTRS.Ontology.Prefixes.Count);
-        Assert.IsTrue(newTRS.Ontology.DeclarationAxioms.Count > 100);
-        Assert.IsTrue(newTRS.Ontology.AssertionAxioms.Count > 60);
-        Assert.IsTrue(newTRS.Ontology.ClassAxioms.Count > 60);
-        Assert.IsTrue(newTRS.Ontology.DataPropertyAxioms.Count > 20);
-        Assert.IsTrue(newTRS.Ontology.ObjectPropertyAxioms.Count > 100);
+        Assert.HasCount(3, newTRS.Ontology.Imports);
+        Assert.HasCount(5, newTRS.Ontology.Prefixes);
+        Assert.IsGreaterThan(100, newTRS.Ontology.DeclarationAxioms.Count);
+        Assert.IsGreaterThan(60, newTRS.Ontology.AssertionAxioms.Count);
+        Assert.IsGreaterThan(60, newTRS.Ontology.ClassAxioms.Count);
+        Assert.IsGreaterThan(20, newTRS.Ontology.DataPropertyAxioms.Count);
+        Assert.IsGreaterThan(100, newTRS.Ontology.ObjectPropertyAxioms.Count);
         Assert.ThrowsExactly<OWLException>(() => _ = new TIMEOrdinalReferenceSystem(new RDFResource("ex:Thors2"), null));
     }
 
@@ -488,17 +488,17 @@ public class TIMEOrdinalReferenceSystemTest
         List<RDFResource> subErasOfSubSubEraWithReasoning = thors.GetSubErasOf(new RDFResource("ex:subsubEra"));
         List<RDFResource> subErasOfSubSubEraWithoutReasoning = thors.GetSubErasOf(new RDFResource("ex:subsubEra"), false);
 
-        Assert.AreEqual(2, subErasOfEraWithReasoning.Count);
+        Assert.HasCount(2, subErasOfEraWithReasoning);
         Assert.IsTrue(subErasOfEraWithReasoning.Any(x => x.Equals(new RDFResource("ex:subEra"))));
         Assert.IsTrue(subErasOfEraWithReasoning.Any(x => x.Equals(new RDFResource("ex:subsubEra"))));
-        Assert.AreEqual(1, subErasOfEraWithoutReasoning.Count);
+        Assert.HasCount(1, subErasOfEraWithoutReasoning);
         Assert.IsTrue(subErasOfEraWithoutReasoning.Any(x => x.Equals(new RDFResource("ex:subEra"))));
-        Assert.AreEqual(1, subErasOfSubEraWithReasoning.Count);
+        Assert.HasCount(1, subErasOfSubEraWithReasoning);
         Assert.IsTrue(subErasOfSubEraWithReasoning.Any(x => x.Equals(new RDFResource("ex:subsubEra"))));
-        Assert.AreEqual(1, subErasOfSubEraWithoutReasoning.Count);
+        Assert.HasCount(1, subErasOfSubEraWithoutReasoning);
         Assert.IsTrue(subErasOfSubEraWithoutReasoning.Any(x => x.Equals(new RDFResource("ex:subsubEra"))));
-        Assert.AreEqual(0, subErasOfSubSubEraWithReasoning.Count);
-        Assert.AreEqual(0, subErasOfSubSubEraWithoutReasoning.Count);
+        Assert.IsEmpty(subErasOfSubSubEraWithReasoning);
+        Assert.IsEmpty(subErasOfSubSubEraWithoutReasoning);
     }
 
     [TestMethod]
@@ -577,16 +577,16 @@ public class TIMEOrdinalReferenceSystemTest
         List<RDFResource> superErasOfSubSubEraWithReasoning = thors.GetSuperErasOf(new RDFResource("ex:subsubEra"));
         List<RDFResource> superErasOfSubSubEraWithoutReasoning = thors.GetSuperErasOf(new RDFResource("ex:subsubEra"), false);
 
-        Assert.AreEqual(0, superErasOfEraWithReasoning.Count);
-        Assert.AreEqual(0, superErasOfEraWithoutReasoning.Count);
-        Assert.AreEqual(1, superErasOfSubEraWithReasoning.Count);
+        Assert.IsEmpty(superErasOfEraWithReasoning);
+        Assert.IsEmpty(superErasOfEraWithoutReasoning);
+        Assert.HasCount(1, superErasOfSubEraWithReasoning);
         Assert.IsTrue(superErasOfSubEraWithReasoning.Any(x => x.Equals(new RDFResource("ex:era"))));
-        Assert.AreEqual(1, superErasOfSubEraWithoutReasoning.Count);
+        Assert.HasCount(1, superErasOfSubEraWithoutReasoning);
         Assert.IsTrue(superErasOfSubEraWithoutReasoning.Any(x => x.Equals(new RDFResource("ex:era"))));
-        Assert.AreEqual(2, superErasOfSubSubEraWithReasoning.Count);
+        Assert.HasCount(2, superErasOfSubSubEraWithReasoning);
         Assert.IsTrue(superErasOfSubSubEraWithReasoning.Any(x => x.Equals(new RDFResource("ex:subEra"))));
         Assert.IsTrue(superErasOfSubSubEraWithReasoning.Any(x => x.Equals(new RDFResource("ex:era"))));
-        Assert.AreEqual(1, superErasOfSubSubEraWithoutReasoning.Count);
+        Assert.HasCount(1, superErasOfSubSubEraWithoutReasoning);
         Assert.IsTrue(superErasOfSubSubEraWithoutReasoning.Any(x => x.Equals(new RDFResource("ex:subEra"))));
     }
 

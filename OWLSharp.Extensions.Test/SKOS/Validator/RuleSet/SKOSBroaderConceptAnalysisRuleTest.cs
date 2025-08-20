@@ -87,7 +87,7 @@ public class SKOSBroaderConceptAnalysisRuleTest
         List<OWLIssue> issues = await SKOSBroaderConceptAnalysisRule.ExecuteRuleAsync(ontology, cacheRegistry);
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, SKOSBroaderConceptAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, SKOSBroaderConceptAnalysisRule.rulesugg1A));
@@ -156,7 +156,7 @@ public class SKOSBroaderConceptAnalysisRuleTest
         List<OWLIssue> issues = await SKOSBroaderConceptAnalysisRule.ExecuteRuleAsync(ontology, cacheRegistry);
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, SKOSBroaderConceptAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, SKOSBroaderConceptAnalysisRule.rulesugg1B));
@@ -225,7 +225,7 @@ public class SKOSBroaderConceptAnalysisRuleTest
         List<OWLIssue> issues = await SKOSBroaderConceptAnalysisRule.ExecuteRuleAsync(ontology, cacheRegistry);
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, SKOSBroaderConceptAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, SKOSBroaderConceptAnalysisRule.rulesugg2A));
@@ -294,7 +294,7 @@ public class SKOSBroaderConceptAnalysisRuleTest
         List<OWLIssue> issues = await SKOSBroaderConceptAnalysisRule.ExecuteRuleAsync(ontology, cacheRegistry);
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, SKOSBroaderConceptAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, SKOSBroaderConceptAnalysisRule.rulesugg2B));
@@ -363,7 +363,7 @@ public class SKOSBroaderConceptAnalysisRuleTest
         List<OWLIssue> issues = await SKOSBroaderConceptAnalysisRule.ExecuteRuleAsync(ontology, cacheRegistry);
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, SKOSBroaderConceptAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, SKOSBroaderConceptAnalysisRule.rulesugg3A));
@@ -432,7 +432,7 @@ public class SKOSBroaderConceptAnalysisRuleTest
         List<OWLIssue> issues = await SKOSBroaderConceptAnalysisRule.ExecuteRuleAsync(ontology, cacheRegistry);
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, SKOSBroaderConceptAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, SKOSBroaderConceptAnalysisRule.rulesugg3B));
@@ -501,7 +501,7 @@ public class SKOSBroaderConceptAnalysisRuleTest
         List<OWLIssue> issues = await SKOSBroaderConceptAnalysisRule.ExecuteRuleAsync(ontology, cacheRegistry);
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, SKOSBroaderConceptAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, SKOSBroaderConceptAnalysisRule.rulesugg4A));
@@ -570,7 +570,7 @@ public class SKOSBroaderConceptAnalysisRuleTest
         List<OWLIssue> issues = await SKOSBroaderConceptAnalysisRule.ExecuteRuleAsync(ontology, cacheRegistry);
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, SKOSBroaderConceptAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, SKOSBroaderConceptAnalysisRule.rulesugg4B));
@@ -639,7 +639,7 @@ public class SKOSBroaderConceptAnalysisRuleTest
         List<OWLIssue> issues = await SKOSBroaderConceptAnalysisRule.ExecuteRuleAsync(ontology, cacheRegistry);
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, SKOSBroaderConceptAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, SKOSBroaderConceptAnalysisRule.rulesugg5A));
@@ -708,7 +708,7 @@ public class SKOSBroaderConceptAnalysisRuleTest
         List<OWLIssue> issues = await SKOSBroaderConceptAnalysisRule.ExecuteRuleAsync(ontology, cacheRegistry);
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, SKOSBroaderConceptAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, SKOSBroaderConceptAnalysisRule.rulesugg5B));
@@ -777,7 +777,7 @@ public class SKOSBroaderConceptAnalysisRuleTest
         List<OWLIssue> issues = await SKOSBroaderConceptAnalysisRule.ExecuteRuleAsync(ontology, cacheRegistry);
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, SKOSBroaderConceptAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, SKOSBroaderConceptAnalysisRule.rulesugg6A));
@@ -846,7 +846,7 @@ public class SKOSBroaderConceptAnalysisRuleTest
         List<OWLIssue> issues = await SKOSBroaderConceptAnalysisRule.ExecuteRuleAsync(ontology, cacheRegistry);
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, SKOSBroaderConceptAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, SKOSBroaderConceptAnalysisRule.rulesugg6B));

@@ -80,7 +80,7 @@ public class SKOSAlternativeLabelAnalysisRuleTest
         List<OWLIssue> issues = await SKOSAlternativeLabelAnalysisRule.ExecuteRuleAsync(ontology, cacheRegistry);
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.IsTrue(issues.TrueForAll(iss => iss.Severity == OWLEnums.OWLIssueSeverity.Error));
         Assert.IsTrue(issues.TrueForAll(iss => string.Equals(iss.RuleName, SKOSAlternativeLabelAnalysisRule.rulename)));
         Assert.IsTrue(issues.TrueForAll(iss => string.Equals(iss.Description, SKOSAlternativeLabelAnalysisRule.rulesugg1)));
@@ -142,7 +142,7 @@ public class SKOSAlternativeLabelAnalysisRuleTest
         List<OWLIssue> issues = await SKOSAlternativeLabelAnalysisRule.ExecuteRuleAsync(ontology, cacheRegistry);
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.IsTrue(issues.TrueForAll(iss => iss.Severity == OWLEnums.OWLIssueSeverity.Error));
         Assert.IsTrue(issues.TrueForAll(iss => string.Equals(iss.RuleName, SKOSAlternativeLabelAnalysisRule.rulename)));
         Assert.IsTrue(issues.TrueForAll(iss => string.Equals(iss.Description, SKOSAlternativeLabelAnalysisRule.rulesugg2)));
@@ -244,7 +244,7 @@ public class SKOSAlternativeLabelAnalysisRuleTest
         List<OWLIssue> issues = await SKOSAlternativeLabelAnalysisRule.ExecuteRuleAsync(ontology, cacheRegistry);
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.IsTrue(issues.TrueForAll(iss => iss.Severity == OWLEnums.OWLIssueSeverity.Error));
         Assert.IsTrue(issues.TrueForAll(iss => string.Equals(iss.RuleName, SKOSAlternativeLabelAnalysisRule.rulename)));
         Assert.IsTrue(issues.TrueForAll(iss => string.Equals(iss.Description, SKOSAlternativeLabelAnalysisRule.rulesugg3)));
@@ -346,7 +346,7 @@ public class SKOSAlternativeLabelAnalysisRuleTest
         List<OWLIssue> issues = await SKOSAlternativeLabelAnalysisRule.ExecuteRuleAsync(ontology, cacheRegistry);
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.IsTrue(issues.TrueForAll(iss => iss.Severity == OWLEnums.OWLIssueSeverity.Error));
         Assert.IsTrue(issues.TrueForAll(iss => string.Equals(iss.RuleName, SKOSAlternativeLabelAnalysisRule.rulename)));
         Assert.IsTrue(issues.TrueForAll(iss => string.Equals(iss.Description, SKOSAlternativeLabelAnalysisRule.rulesugg4)));

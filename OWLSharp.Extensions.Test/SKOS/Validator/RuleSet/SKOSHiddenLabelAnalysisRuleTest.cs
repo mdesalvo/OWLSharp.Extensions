@@ -80,7 +80,7 @@ public class SKOSHiddenLabelAnalysisRuleTest
         List<OWLIssue> issues = await SKOSHiddenLabelAnalysisRule.ExecuteRuleAsync(ontology, cacheRegistry);
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.IsTrue(issues.TrueForAll(iss => iss.Severity == OWLEnums.OWLIssueSeverity.Error));
         Assert.IsTrue(issues.TrueForAll(iss => string.Equals(iss.RuleName, SKOSHiddenLabelAnalysisRule.rulename)));
         Assert.IsTrue(issues.TrueForAll(iss => string.Equals(iss.Description, SKOSHiddenLabelAnalysisRule.rulesugg1)));
@@ -142,7 +142,7 @@ public class SKOSHiddenLabelAnalysisRuleTest
         List<OWLIssue> issues = await SKOSHiddenLabelAnalysisRule.ExecuteRuleAsync(ontology, cacheRegistry);
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.IsTrue(issues.TrueForAll(iss => iss.Severity == OWLEnums.OWLIssueSeverity.Error));
         Assert.IsTrue(issues.TrueForAll(iss => string.Equals(iss.RuleName, SKOSHiddenLabelAnalysisRule.rulename)));
         Assert.IsTrue(issues.TrueForAll(iss => string.Equals(iss.Description, SKOSHiddenLabelAnalysisRule.rulesugg2)));
@@ -244,7 +244,7 @@ public class SKOSHiddenLabelAnalysisRuleTest
         List<OWLIssue> issues = await SKOSHiddenLabelAnalysisRule.ExecuteRuleAsync(ontology, cacheRegistry);
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.IsTrue(issues.TrueForAll(iss => iss.Severity == OWLEnums.OWLIssueSeverity.Error));
         Assert.IsTrue(issues.TrueForAll(iss => string.Equals(iss.RuleName, SKOSHiddenLabelAnalysisRule.rulename)));
         Assert.IsTrue(issues.TrueForAll(iss => string.Equals(iss.Description, SKOSHiddenLabelAnalysisRule.rulesugg3)));
@@ -346,7 +346,7 @@ public class SKOSHiddenLabelAnalysisRuleTest
         List<OWLIssue> issues = await SKOSHiddenLabelAnalysisRule.ExecuteRuleAsync(ontology, cacheRegistry);
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.IsTrue(issues.TrueForAll(iss => iss.Severity == OWLEnums.OWLIssueSeverity.Error));
         Assert.IsTrue(issues.TrueForAll(iss => string.Equals(iss.RuleName, SKOSHiddenLabelAnalysisRule.rulename)));
         Assert.IsTrue(issues.TrueForAll(iss => string.Equals(iss.Description, SKOSHiddenLabelAnalysisRule.rulesugg4)));

@@ -31,10 +31,10 @@ public class SKOSValidatorTest
         SKOSValidator validator = new SKOSValidator();
 
         Assert.IsNotNull(validator);
-        Assert.AreEqual(0, validator.Rules.Count);
+        Assert.IsEmpty(validator.Rules);
 
         validator.AddRule(SKOSEnums.SKOSValidatorRules.RelatedConceptAnalysis);
-        Assert.AreEqual(1, validator.Rules.Count);
+        Assert.HasCount(1, validator.Rules);
     }
 
     [TestMethod]
@@ -89,7 +89,7 @@ public class SKOSValidatorTest
         List<OWLIssue> issues = await validator.ApplyToOntologyAsync(ontology);
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.IsTrue(issues.TrueForAll(iss => iss.Severity == OWLEnums.OWLIssueSeverity.Error));
         Assert.IsTrue(issues.TrueForAll(iss => string.Equals(iss.RuleName, SKOSAlternativeLabelAnalysisRule.rulename)));
         Assert.IsTrue(issues.TrueForAll(iss => string.Equals(iss.Description, SKOSAlternativeLabelAnalysisRule.rulesugg1)));
@@ -148,7 +148,7 @@ public class SKOSValidatorTest
         List<OWLIssue> issues = await validator.ApplyToOntologyAsync(ontology);
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.IsTrue(issues.TrueForAll(iss => iss.Severity == OWLEnums.OWLIssueSeverity.Error));
         Assert.IsTrue(issues.TrueForAll(iss => string.Equals(iss.RuleName, SKOSHiddenLabelAnalysisRule.rulename)));
         Assert.IsTrue(issues.TrueForAll(iss => string.Equals(iss.Description, SKOSHiddenLabelAnalysisRule.rulesugg1)));
@@ -205,7 +205,7 @@ public class SKOSValidatorTest
         List<OWLIssue> issues = await validator.ApplyToOntologyAsync(ontology);
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(2, issues.Count);
+        Assert.HasCount(2, issues);
         Assert.IsTrue(issues.TrueForAll(iss => iss.Severity == OWLEnums.OWLIssueSeverity.Error));
         Assert.IsTrue(issues.TrueForAll(iss => string.Equals(iss.RuleName, SKOSPreferredLabelAnalysisRule.rulename)));
         Assert.IsTrue(issues.TrueForAll(iss => string.Equals(iss.Description, SKOSPreferredLabelAnalysisRule.rulesugg1)));
@@ -270,7 +270,7 @@ public class SKOSValidatorTest
         List<OWLIssue> issues = await validator.ApplyToOntologyAsync(ontology);
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(2, issues.Count);
+        Assert.HasCount(2, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, SKOSNotationAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, SKOSNotationAnalysisRule.rulesugg));
@@ -340,7 +340,7 @@ public class SKOSValidatorTest
         List<OWLIssue> issues = await validator.ApplyToOntologyAsync(ontology);
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, SKOSBroaderConceptAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, SKOSBroaderConceptAnalysisRule.rulesugg1A));
@@ -406,7 +406,7 @@ public class SKOSValidatorTest
         List<OWLIssue> issues = await validator.ApplyToOntologyAsync(ontology);
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, SKOSNarrowerConceptAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, SKOSNarrowerConceptAnalysisRule.rulesugg1A));
@@ -472,7 +472,7 @@ public class SKOSValidatorTest
         List<OWLIssue> issues = await validator.ApplyToOntologyAsync(ontology);
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, SKOSCloseOrExactMatchConceptAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, SKOSCloseOrExactMatchConceptAnalysisRule.rulesugg1A));
@@ -538,7 +538,7 @@ public class SKOSValidatorTest
         List<OWLIssue> issues = await validator.ApplyToOntologyAsync(ontology);
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, SKOSRelatedConceptAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, SKOSRelatedConceptAnalysisRule.rulesugg1A));
@@ -613,7 +613,7 @@ public class SKOSValidatorTest
         List<OWLIssue> issues = await validator.ApplyToOntologyAsync(ontology);
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(2, issues.Count);
+        Assert.HasCount(2, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, SKOSXLLiteralFormAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, SKOSXLLiteralFormAnalysisRule.rulesugg));

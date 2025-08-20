@@ -60,7 +60,7 @@ public class SKOSXLLiteralFormAnalysisRuleTest
         List<OWLIssue> issues = await SKOSXLLiteralFormAnalysisRule.ExecuteRuleAsync(ontology);
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(2, issues.Count);
+        Assert.HasCount(2, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, SKOSXLLiteralFormAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, SKOSXLLiteralFormAnalysisRule.rulesugg));

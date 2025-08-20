@@ -86,7 +86,7 @@ public class SKOSNotationAnalysisRuleTest
         List<OWLIssue> issues = await SKOSNotationAnalysisRule.ExecuteRuleAsync(ontology, cacheRegistry);
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(2, issues.Count);
+        Assert.HasCount(2, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, SKOSNotationAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, SKOSNotationAnalysisRule.rulesugg));

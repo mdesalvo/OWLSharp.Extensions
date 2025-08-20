@@ -65,7 +65,7 @@ public class TIMEInstantAfterAnalysisRuleTest : TIMETestOntology
         List<OWLIssue> issues = await TIMEInstantAfterAnalysisRule.ExecuteRuleAsync(ontology, cacheRegistry);
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(2, issues.Count);
+        Assert.HasCount(2, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, TIMEInstantAfterAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, TIMEInstantAfterAnalysisRule.rulesugg1));
@@ -114,7 +114,7 @@ public class TIMEInstantAfterAnalysisRuleTest : TIMETestOntology
         List<OWLIssue> issues = await TIMEInstantAfterAnalysisRule.ExecuteRuleAsync(ontology, cacheRegistry);
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, TIMEInstantAfterAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, TIMEInstantAfterAnalysisRule.rulesugg2));

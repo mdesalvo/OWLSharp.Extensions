@@ -36,10 +36,10 @@ public class GEOHelperTest
         GEOPoint geom = new GEOPoint(new RDFResource("ex:MilanGM"), (9.188540, 45.464664));
         ontology.DeclarePointFeature(new RDFResource("ex:MilanFT"), geom);
 
-        Assert.AreEqual(2, ontology.DeclarationAxioms.Count);
-        Assert.AreEqual(3, ontology.GetAssertionAxiomsOfType<OWLClassAssertion>().Count);
-        Assert.AreEqual(1, ontology.GetAssertionAxiomsOfType<OWLObjectPropertyAssertion>().Count);
-        Assert.AreEqual(2, ontology.GetAssertionAxiomsOfType<OWLDataPropertyAssertion>().Count);
+        Assert.HasCount(2, ontology.DeclarationAxioms);
+        Assert.HasCount(3, ontology.GetAssertionAxiomsOfType<OWLClassAssertion>());
+        Assert.HasCount(1, ontology.GetAssertionAxiomsOfType<OWLObjectPropertyAssertion>());
+        Assert.HasCount(2, ontology.GetAssertionAxiomsOfType<OWLDataPropertyAssertion>());
 
         Assert.ThrowsExactly<OWLException>(() => _ = ontology.DeclarePointFeature(null, geom));
         Assert.ThrowsExactly<OWLException>(() => _ = ontology.DeclarePointFeature(new RDFResource("ex:MilanFT"), null));
@@ -52,10 +52,10 @@ public class GEOHelperTest
         GEOPoint geom = new GEOPoint(new RDFResource("ex:MilanGM"), (9.188540, 45.464664));
         ontology.DeclarePointFeature(new RDFResource("ex:MilanFT"), geom, false);
 
-        Assert.AreEqual(2, ontology.DeclarationAxioms.Count);
-        Assert.AreEqual(3, ontology.GetAssertionAxiomsOfType<OWLClassAssertion>().Count);
-        Assert.AreEqual(1, ontology.GetAssertionAxiomsOfType<OWLObjectPropertyAssertion>().Count);
-        Assert.AreEqual(2, ontology.GetAssertionAxiomsOfType<OWLDataPropertyAssertion>().Count);
+        Assert.HasCount(2, ontology.DeclarationAxioms);
+        Assert.HasCount(3, ontology.GetAssertionAxiomsOfType<OWLClassAssertion>());
+        Assert.HasCount(1, ontology.GetAssertionAxiomsOfType<OWLObjectPropertyAssertion>());
+        Assert.HasCount(2, ontology.GetAssertionAxiomsOfType<OWLDataPropertyAssertion>());
     }
 
     [TestMethod]
@@ -65,10 +65,10 @@ public class GEOHelperTest
         GEOLine geom = new GEOLine(new RDFResource("ex:MilanGM"), [(9.188540, 45.464664), (9.198540, 45.474664)]);
         ontology.DeclareLineFeature(new RDFResource("ex:MilanFT"), geom);
 
-        Assert.AreEqual(2, ontology.DeclarationAxioms.Count);
-        Assert.AreEqual(3, ontology.GetAssertionAxiomsOfType<OWLClassAssertion>().Count);
-        Assert.AreEqual(1, ontology.GetAssertionAxiomsOfType<OWLObjectPropertyAssertion>().Count);
-        Assert.AreEqual(2, ontology.GetAssertionAxiomsOfType<OWLDataPropertyAssertion>().Count);
+        Assert.HasCount(2, ontology.DeclarationAxioms);
+        Assert.HasCount(3, ontology.GetAssertionAxiomsOfType<OWLClassAssertion>());
+        Assert.HasCount(1, ontology.GetAssertionAxiomsOfType<OWLObjectPropertyAssertion>());
+        Assert.HasCount(2, ontology.GetAssertionAxiomsOfType<OWLDataPropertyAssertion>());
 
         Assert.ThrowsExactly<OWLException>(() => _ = ontology.DeclareLineFeature(null, geom));
         Assert.ThrowsExactly<OWLException>(() => _ = ontology.DeclareLineFeature(new RDFResource("ex:MilanFT"), null));
@@ -81,10 +81,10 @@ public class GEOHelperTest
         GEOLine geom = new GEOLine(new RDFResource("ex:MilanGM"), [(9.188540, 45.464664), (9.198540, 45.474664)]);
         ontology.DeclareLineFeature(new RDFResource("ex:MilanFT"), geom, false);
 
-        Assert.AreEqual(2, ontology.DeclarationAxioms.Count);
-        Assert.AreEqual(3, ontology.GetAssertionAxiomsOfType<OWLClassAssertion>().Count);
-        Assert.AreEqual(1, ontology.GetAssertionAxiomsOfType<OWLObjectPropertyAssertion>().Count);
-        Assert.AreEqual(2, ontology.GetAssertionAxiomsOfType<OWLDataPropertyAssertion>().Count);
+        Assert.HasCount(2, ontology.DeclarationAxioms);
+        Assert.HasCount(3, ontology.GetAssertionAxiomsOfType<OWLClassAssertion>());
+        Assert.HasCount(1, ontology.GetAssertionAxiomsOfType<OWLObjectPropertyAssertion>());
+        Assert.HasCount(2, ontology.GetAssertionAxiomsOfType<OWLDataPropertyAssertion>());
     }
 
     [TestMethod]
@@ -94,10 +94,10 @@ public class GEOHelperTest
         GEOArea geom = new GEOArea(new RDFResource("ex:MilanGM"), [(9.188540, 45.464664), (9.198540, 45.474664), (9.208540, 45.484664)]); //will be automatically closed
         ontology.DeclareAreaFeature(new RDFResource("ex:MilanFT"), geom);
 
-        Assert.AreEqual(2, ontology.DeclarationAxioms.Count);
-        Assert.AreEqual(3, ontology.GetAssertionAxiomsOfType<OWLClassAssertion>().Count);
-        Assert.AreEqual(1, ontology.GetAssertionAxiomsOfType<OWLObjectPropertyAssertion>().Count);
-        Assert.AreEqual(2, ontology.GetAssertionAxiomsOfType<OWLDataPropertyAssertion>().Count);
+        Assert.HasCount(2, ontology.DeclarationAxioms);
+        Assert.HasCount(3, ontology.GetAssertionAxiomsOfType<OWLClassAssertion>());
+        Assert.HasCount(1, ontology.GetAssertionAxiomsOfType<OWLObjectPropertyAssertion>());
+        Assert.HasCount(2, ontology.GetAssertionAxiomsOfType<OWLDataPropertyAssertion>());
 
         Assert.ThrowsExactly<OWLException>(() => _ = ontology.DeclareAreaFeature(null, geom));
         Assert.ThrowsExactly<OWLException>(() => _ = ontology.DeclareAreaFeature(new RDFResource("ex:MilanFT"), null));
@@ -110,10 +110,10 @@ public class GEOHelperTest
         GEOArea geom = new GEOArea(new RDFResource("ex:MilanGM"), [(9.188540, 45.464664), (9.198540, 45.474664), (9.208540, 45.484664)]); //will be automatically closed
         ontology.DeclareAreaFeature(new RDFResource("ex:MilanFT"), geom, false);
 
-        Assert.AreEqual(2, ontology.DeclarationAxioms.Count);
-        Assert.AreEqual(3, ontology.GetAssertionAxiomsOfType<OWLClassAssertion>().Count);
-        Assert.AreEqual(1, ontology.GetAssertionAxiomsOfType<OWLObjectPropertyAssertion>().Count);
-        Assert.AreEqual(2, ontology.GetAssertionAxiomsOfType<OWLDataPropertyAssertion>().Count);
+        Assert.HasCount(2, ontology.DeclarationAxioms);
+        Assert.HasCount(3, ontology.GetAssertionAxiomsOfType<OWLClassAssertion>());
+        Assert.HasCount(1, ontology.GetAssertionAxiomsOfType<OWLObjectPropertyAssertion>());
+        Assert.HasCount(2, ontology.GetAssertionAxiomsOfType<OWLDataPropertyAssertion>());
     }
     #endregion
 
@@ -133,7 +133,7 @@ public class GEOHelperTest
         Assert.IsTrue(geoEntities.Single() is GEOPoint geoPoint
                       && geoPoint.URI.Equals(new Uri("ex:MilanGM"))
                       && string.Equals(geoPoint.ToWKT(), "POINT (9.18854 45.464664)"));
-        Assert.AreEqual(0, (await ontology.GetSpatialFeatureAsync(new RDFResource("ex:MilanGGGGFT"))).Count);
+        Assert.IsEmpty(await ontology.GetSpatialFeatureAsync(new RDFResource("ex:MilanGGGGFT")));
     }
 
     [TestMethod]
@@ -1136,11 +1136,11 @@ public class GEOHelperTest
         List<RDFResource> tivoliDirectionNorthFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new RDFResource("ex:tivoliFT"), GEOEnums.GeoDirections.North);
 
         Assert.IsNotNull(milanDirectionNorthFeatures);
-        Assert.AreEqual(0, milanDirectionNorthFeatures.Count);
+        Assert.IsEmpty(milanDirectionNorthFeatures);
         Assert.IsNotNull(romeDirectionNorthFeatures);
-        Assert.AreEqual(2, romeDirectionNorthFeatures.Count);
+        Assert.HasCount(2, romeDirectionNorthFeatures);
         Assert.IsNotNull(tivoliDirectionNorthFeatures);
-        Assert.AreEqual(1, tivoliDirectionNorthFeatures.Count);
+        Assert.HasCount(1, tivoliDirectionNorthFeatures);
 
         //Unexisting features
         Assert.IsNull(await GEOHelper.GetFeaturesDirectionAsync(geoOntology,
@@ -1221,11 +1221,11 @@ public class GEOHelperTest
         List<RDFResource> tivoliDirectionNorthEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new RDFResource("ex:tivoliFT"), GEOEnums.GeoDirections.NorthEast);
 
         Assert.IsNotNull(milanDirectionNorthEastFeatures);
-        Assert.AreEqual(0, milanDirectionNorthEastFeatures.Count);
+        Assert.IsEmpty(milanDirectionNorthEastFeatures);
         Assert.IsNotNull(romeDirectionNorthEastFeatures);
-        Assert.AreEqual(1, romeDirectionNorthEastFeatures.Count);
+        Assert.HasCount(1, romeDirectionNorthEastFeatures);
         Assert.IsNotNull(tivoliDirectionNorthEastFeatures);
-        Assert.AreEqual(0, tivoliDirectionNorthEastFeatures.Count);
+        Assert.IsEmpty(tivoliDirectionNorthEastFeatures);
 
         //Unexisting features
         Assert.IsNull(await GEOHelper.GetFeaturesDirectionAsync(geoOntology,
@@ -1306,11 +1306,11 @@ public class GEOHelperTest
         List<RDFResource> tivoliDirectionNorthWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new RDFResource("ex:tivoliFT"), GEOEnums.GeoDirections.NorthWest);
 
         Assert.IsNotNull(milanDirectionNorthWestFeatures);
-        Assert.AreEqual(0, milanDirectionNorthWestFeatures.Count);
+        Assert.IsEmpty(milanDirectionNorthWestFeatures);
         Assert.IsNotNull(romeDirectionNorthWestFeatures);
-        Assert.AreEqual(1, romeDirectionNorthWestFeatures.Count);
+        Assert.HasCount(1, romeDirectionNorthWestFeatures);
         Assert.IsNotNull(tivoliDirectionNorthWestFeatures);
-        Assert.AreEqual(1, tivoliDirectionNorthWestFeatures.Count);
+        Assert.HasCount(1, tivoliDirectionNorthWestFeatures);
 
         //Unexisting features
         Assert.IsNull(await GEOHelper.GetFeaturesDirectionAsync(geoOntology,
@@ -1391,11 +1391,11 @@ public class GEOHelperTest
         List<RDFResource> tivoliDirectionEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new RDFResource("ex:tivoliFT"), GEOEnums.GeoDirections.East);
 
         Assert.IsNotNull(milanDirectionEastFeatures);
-        Assert.AreEqual(2, milanDirectionEastFeatures.Count);
+        Assert.HasCount(2, milanDirectionEastFeatures);
         Assert.IsNotNull(romeDirectionEastFeatures);
-        Assert.AreEqual(1, romeDirectionEastFeatures.Count);
+        Assert.HasCount(1, romeDirectionEastFeatures);
         Assert.IsNotNull(tivoliDirectionEastFeatures);
-        Assert.AreEqual(0, tivoliDirectionEastFeatures.Count);
+        Assert.IsEmpty(tivoliDirectionEastFeatures);
 
         //Unexisting features
         Assert.IsNull(await GEOHelper.GetFeaturesDirectionAsync(geoOntology,
@@ -1476,11 +1476,11 @@ public class GEOHelperTest
         List<RDFResource> tivoliDirectionSouthEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new RDFResource("ex:tivoliFT"), GEOEnums.GeoDirections.SouthEast);
 
         Assert.IsNotNull(milanDirectionSouthEastFeatures);
-        Assert.AreEqual(2, milanDirectionSouthEastFeatures.Count);
+        Assert.HasCount(2, milanDirectionSouthEastFeatures);
         Assert.IsNotNull(romeDirectionSouthEastFeatures);
-        Assert.AreEqual(0, romeDirectionSouthEastFeatures.Count);
+        Assert.IsEmpty(romeDirectionSouthEastFeatures);
         Assert.IsNotNull(tivoliDirectionSouthEastFeatures);
-        Assert.AreEqual(0, tivoliDirectionSouthEastFeatures.Count);
+        Assert.IsEmpty(tivoliDirectionSouthEastFeatures);
 
         //Unexisting features
         Assert.IsNull(await GEOHelper.GetFeaturesDirectionAsync(geoOntology,
@@ -1561,11 +1561,11 @@ public class GEOHelperTest
         List<RDFResource> tivoliDirectionWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new RDFResource("ex:tivoliFT"), GEOEnums.GeoDirections.West);
 
         Assert.IsNotNull(milanDirectionWestFeatures);
-        Assert.AreEqual(0, milanDirectionWestFeatures.Count);
+        Assert.IsEmpty(milanDirectionWestFeatures);
         Assert.IsNotNull(romeDirectionWestFeatures);
-        Assert.AreEqual(1, romeDirectionWestFeatures.Count);
+        Assert.HasCount(1, romeDirectionWestFeatures);
         Assert.IsNotNull(tivoliDirectionWestFeatures);
-        Assert.AreEqual(2, tivoliDirectionWestFeatures.Count);
+        Assert.HasCount(2, tivoliDirectionWestFeatures);
 
         //Unexisting features
         Assert.IsNull(await GEOHelper.GetFeaturesDirectionAsync(geoOntology,
@@ -1646,11 +1646,11 @@ public class GEOHelperTest
         List<RDFResource> tivoliDirectionSouthWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new RDFResource("ex:tivoliFT"), GEOEnums.GeoDirections.SouthWest);
 
         Assert.IsNotNull(milanDirectionSouthWestFeatures);
-        Assert.AreEqual(0, milanDirectionSouthWestFeatures.Count);
+        Assert.IsEmpty(milanDirectionSouthWestFeatures);
         Assert.IsNotNull(romeDirectionSouthWestFeatures);
-        Assert.AreEqual(0, romeDirectionSouthWestFeatures.Count);
+        Assert.IsEmpty(romeDirectionSouthWestFeatures);
         Assert.IsNotNull(tivoliDirectionSouthWestFeatures);
-        Assert.AreEqual(1, tivoliDirectionSouthWestFeatures.Count);
+        Assert.HasCount(1, tivoliDirectionSouthWestFeatures);
 
         //Unexisting features
         Assert.IsNull(await GEOHelper.GetFeaturesDirectionAsync(geoOntology,
@@ -1731,11 +1731,11 @@ public class GEOHelperTest
         List<RDFResource> tivoliDirectionSouthFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new RDFResource("ex:tivoliFT"), GEOEnums.GeoDirections.South);
 
         Assert.IsNotNull(milanDirectionSouthFeatures);
-        Assert.AreEqual(2, milanDirectionSouthFeatures.Count);
+        Assert.HasCount(2, milanDirectionSouthFeatures);
         Assert.IsNotNull(romeDirectionSouthFeatures);
-        Assert.AreEqual(0, romeDirectionSouthFeatures.Count);
+        Assert.IsEmpty(romeDirectionSouthFeatures);
         Assert.IsNotNull(tivoliDirectionSouthFeatures);
-        Assert.AreEqual(1, tivoliDirectionSouthFeatures.Count);
+        Assert.HasCount(1, tivoliDirectionSouthFeatures);
 
         //Unexisting features
         Assert.IsNull(await GEOHelper.GetFeaturesDirectionAsync(geoOntology,
@@ -1819,11 +1819,11 @@ public class GEOHelperTest
         List<RDFResource> tivoliDirectionNorthFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, tivoliTL, GEOEnums.GeoDirections.North);
 
         Assert.IsNotNull(milanDirectionNorthFeatures);
-        Assert.AreEqual(0, milanDirectionNorthFeatures.Count);
+        Assert.IsEmpty(milanDirectionNorthFeatures);
         Assert.IsNotNull(romeDirectionNorthFeatures);
-        Assert.AreEqual(2, romeDirectionNorthFeatures.Count);
+        Assert.HasCount(2, romeDirectionNorthFeatures);
         Assert.IsNotNull(tivoliDirectionNorthFeatures);
-        Assert.AreEqual(1, tivoliDirectionNorthFeatures.Count);
+        Assert.HasCount(1, tivoliDirectionNorthFeatures);
 
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(null,
@@ -1904,11 +1904,11 @@ public class GEOHelperTest
         List<RDFResource> tivoliDirectionNorthEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, tivoliTL, GEOEnums.GeoDirections.NorthEast);
 
         Assert.IsNotNull(milanDirectionNorthEastFeatures);
-        Assert.AreEqual(0, milanDirectionNorthEastFeatures.Count);
+        Assert.IsEmpty(milanDirectionNorthEastFeatures);
         Assert.IsNotNull(romeDirectionNorthEastFeatures);
-        Assert.AreEqual(1, romeDirectionNorthEastFeatures.Count);
+        Assert.HasCount(1, romeDirectionNorthEastFeatures);
         Assert.IsNotNull(tivoliDirectionNorthEastFeatures);
-        Assert.AreEqual(0, tivoliDirectionNorthEastFeatures.Count);
+        Assert.IsEmpty(tivoliDirectionNorthEastFeatures);
 
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(null,
@@ -1989,11 +1989,11 @@ public class GEOHelperTest
         List<RDFResource> tivoliDirectionNorthWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, tivoliTL, GEOEnums.GeoDirections.NorthWest);
 
         Assert.IsNotNull(milanDirectionNorthWestFeatures);
-        Assert.AreEqual(0, milanDirectionNorthWestFeatures.Count);
+        Assert.IsEmpty(milanDirectionNorthWestFeatures);
         Assert.IsNotNull(romeDirectionNorthWestFeatures);
-        Assert.AreEqual(1, romeDirectionNorthWestFeatures.Count);
+        Assert.HasCount(1, romeDirectionNorthWestFeatures);
         Assert.IsNotNull(tivoliDirectionNorthWestFeatures);
-        Assert.AreEqual(1, tivoliDirectionNorthWestFeatures.Count);
+        Assert.HasCount(1, tivoliDirectionNorthWestFeatures);
 
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(null,
@@ -2074,11 +2074,11 @@ public class GEOHelperTest
         List<RDFResource> tivoliDirectionEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, tivoliTL, GEOEnums.GeoDirections.East);
 
         Assert.IsNotNull(milanDirectionEastFeatures);
-        Assert.AreEqual(2, milanDirectionEastFeatures.Count);
+        Assert.HasCount(2, milanDirectionEastFeatures);
         Assert.IsNotNull(romeDirectionEastFeatures);
-        Assert.AreEqual(1, romeDirectionEastFeatures.Count);
+        Assert.HasCount(1, romeDirectionEastFeatures);
         Assert.IsNotNull(tivoliDirectionEastFeatures);
-        Assert.AreEqual(0, tivoliDirectionEastFeatures.Count);
+        Assert.IsEmpty(tivoliDirectionEastFeatures);
 
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(null,
@@ -2159,11 +2159,11 @@ public class GEOHelperTest
         List<RDFResource> tivoliDirectionSouthEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, tivoliTL, GEOEnums.GeoDirections.SouthEast);
 
         Assert.IsNotNull(milanDirectionSouthEastFeatures);
-        Assert.AreEqual(2, milanDirectionSouthEastFeatures.Count);
+        Assert.HasCount(2, milanDirectionSouthEastFeatures);
         Assert.IsNotNull(romeDirectionSouthEastFeatures);
-        Assert.AreEqual(0, romeDirectionSouthEastFeatures.Count);
+        Assert.IsEmpty(romeDirectionSouthEastFeatures);
         Assert.IsNotNull(tivoliDirectionSouthEastFeatures);
-        Assert.AreEqual(0, tivoliDirectionSouthEastFeatures.Count);
+        Assert.IsEmpty(tivoliDirectionSouthEastFeatures);
 
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(null,
@@ -2244,11 +2244,11 @@ public class GEOHelperTest
         List<RDFResource> tivoliDirectionWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, tivoliTL, GEOEnums.GeoDirections.West);
 
         Assert.IsNotNull(milanDirectionWestFeatures);
-        Assert.AreEqual(0, milanDirectionWestFeatures.Count);
+        Assert.IsEmpty(milanDirectionWestFeatures);
         Assert.IsNotNull(romeDirectionWestFeatures);
-        Assert.AreEqual(1, romeDirectionWestFeatures.Count);
+        Assert.HasCount(1, romeDirectionWestFeatures);
         Assert.IsNotNull(tivoliDirectionWestFeatures);
-        Assert.AreEqual(2, tivoliDirectionWestFeatures.Count);
+        Assert.HasCount(2, tivoliDirectionWestFeatures);
 
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(null,
@@ -2329,11 +2329,11 @@ public class GEOHelperTest
         List<RDFResource> tivoliDirectionSouthWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, tivoliTL, GEOEnums.GeoDirections.SouthWest);
 
         Assert.IsNotNull(milanDirectionSouthWestFeatures);
-        Assert.AreEqual(0, milanDirectionSouthWestFeatures.Count);
+        Assert.IsEmpty(milanDirectionSouthWestFeatures);
         Assert.IsNotNull(romeDirectionSouthWestFeatures);
-        Assert.AreEqual(0, romeDirectionSouthWestFeatures.Count);
+        Assert.IsEmpty(romeDirectionSouthWestFeatures);
         Assert.IsNotNull(tivoliDirectionSouthWestFeatures);
-        Assert.AreEqual(1, tivoliDirectionSouthWestFeatures.Count);
+        Assert.HasCount(1, tivoliDirectionSouthWestFeatures);
 
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(null,
@@ -2414,11 +2414,11 @@ public class GEOHelperTest
         List<RDFResource> tivoliDirectionSouthFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, tivoliTL, GEOEnums.GeoDirections.South);
 
         Assert.IsNotNull(milanDirectionSouthFeatures);
-        Assert.AreEqual(2, milanDirectionSouthFeatures.Count);
+        Assert.HasCount(2, milanDirectionSouthFeatures);
         Assert.IsNotNull(romeDirectionSouthFeatures);
-        Assert.AreEqual(0, romeDirectionSouthFeatures.Count);
+        Assert.IsEmpty(romeDirectionSouthFeatures);
         Assert.IsNotNull(tivoliDirectionSouthFeatures);
-        Assert.AreEqual(1, tivoliDirectionSouthFeatures.Count);
+        Assert.HasCount(1, tivoliDirectionSouthFeatures);
 
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(null,
@@ -2512,7 +2512,7 @@ public class GEOHelperTest
         List<RDFResource> crossedByPoRiver = await GEOHelper.GetFeaturesCrossedByAsync(geoOntology, new RDFResource("ex:PoFT"));
 
         Assert.IsNotNull(crossedByPoRiver);
-        Assert.AreEqual(2, crossedByPoRiver.Count);
+        Assert.HasCount(2, crossedByPoRiver);
         Assert.IsTrue(crossedByPoRiver.Any(ft => ft.Equals(new RDFResource("ex:MontagnanaCentoFT"))));
         Assert.IsTrue(crossedByPoRiver.Any(ft => ft.Equals(new RDFResource("ex:NogaraPortoMaggioreFT"))));
 
@@ -2593,7 +2593,7 @@ public class GEOHelperTest
         List<RDFResource> crossedByPoRiver = await GEOHelper.GetFeaturesCrossedByAsync(geoOntology, new RDFTypedLiteral("LINESTRING(11.001141059265075 45.06554633935097, 11.058819281921325 45.036440377586516, 11.127483832702575 45.05972633195962, 11.262066352233825 45.05002500301712, 11.421368110046325 44.960695556664774, 11.605389106140075 44.89068838827955, 11.814129340515075 44.97624111890936, 12.069561469421325 44.98012685115769)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
 
         Assert.IsNotNull(crossedByPoRiver);
-        Assert.AreEqual(2, crossedByPoRiver.Count);
+        Assert.HasCount(2, crossedByPoRiver);
         Assert.IsTrue(crossedByPoRiver.Any(ft => ft.Equals(new RDFResource("ex:MontagnanaCentoFT"))));
         Assert.IsTrue(crossedByPoRiver.Any(ft => ft.Equals(new RDFResource("ex:NogaraPortoMaggioreFT"))));
 
@@ -2689,7 +2689,7 @@ public class GEOHelperTest
         List<RDFResource> touchedByIseoFT = await GEOHelper.GetFeaturesTouchedByAsync(geoOntology, new RDFResource("ex:IseoFT"));
 
         Assert.IsNotNull(touchedByIseoFT);
-        Assert.AreEqual(2, touchedByIseoFT.Count);
+        Assert.HasCount(2, touchedByIseoFT);
         Assert.IsTrue(touchedByIseoFT.Any(ft => ft.Equals(new RDFResource("ex:IseoBiennoFT"))));
         Assert.IsTrue(touchedByIseoFT.Any(ft => ft.Equals(new RDFResource("ex:IseoLevrangeFT"))));
 
@@ -2770,7 +2770,7 @@ public class GEOHelperTest
         List<RDFResource> touchedByIseoFT = await GEOHelper.GetFeaturesTouchedByAsync(geoOntology, new RDFTypedLiteral("POINT(10.090599060058592 45.701863522304734)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
 
         Assert.IsNotNull(touchedByIseoFT);
-        Assert.AreEqual(2, touchedByIseoFT.Count);
+        Assert.HasCount(2, touchedByIseoFT);
         Assert.IsTrue(touchedByIseoFT.Any(ft => ft.Equals(new RDFResource("ex:IseoBiennoFT"))));
         Assert.IsTrue(touchedByIseoFT.Any(ft => ft.Equals(new RDFResource("ex:IseoLevrangeFT"))));
 
@@ -2866,7 +2866,7 @@ public class GEOHelperTest
         List<RDFResource> overlappedByBallabioCivateFT = await GEOHelper.GetFeaturesOverlappedByAsync(geoOntology, new RDFResource("ex:BallabioCivateFT"));
 
         Assert.IsNotNull(overlappedByBallabioCivateFT);
-        Assert.AreEqual(1, overlappedByBallabioCivateFT.Count);
+        Assert.HasCount(1, overlappedByBallabioCivateFT);
         Assert.IsTrue(overlappedByBallabioCivateFT.Any(ft => ft.Equals(new RDFResource("ex:LaorcaVercuragoFT"))));
 
         //Unexisting features
@@ -2946,7 +2946,7 @@ public class GEOHelperTest
         List<RDFResource> overlappedByBallabioCivateFT = await GEOHelper.GetFeaturesOverlappedByAsync(geoOntology, new RDFTypedLiteral("POLYGON((9.425042848892229 45.89413442236222, 9.346078615493791 45.828624093492635, 9.455255251235979 45.77932096932273, 9.425042848892229 45.89413442236222))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
 
         Assert.IsNotNull(overlappedByBallabioCivateFT);
-        Assert.AreEqual(1, overlappedByBallabioCivateFT.Count);
+        Assert.HasCount(1, overlappedByBallabioCivateFT);
         Assert.IsTrue(overlappedByBallabioCivateFT.Any(ft => ft.Equals(new RDFResource("ex:LaorcaVercuragoFT"))));
 
         //Input guards
@@ -3041,7 +3041,7 @@ public class GEOHelperTest
         List<RDFResource> overlappedByBallabioCivateFT = await GEOHelper.GetFeaturesWithinAsync(geoOntology, new RDFResource("ex:BallabioCivateFT"));
 
         Assert.IsNotNull(overlappedByBallabioCivateFT);
-        Assert.AreEqual(2, overlappedByBallabioCivateFT.Count);
+        Assert.HasCount(2, overlappedByBallabioCivateFT);
         Assert.IsTrue(overlappedByBallabioCivateFT.Any(ft => ft.Equals(new RDFResource("ex:BallabioPescateFT"))));
         Assert.IsTrue(overlappedByBallabioCivateFT.Any(ft => ft.Equals(new RDFResource("ex:FornaciVillaFT"))));
 
@@ -3122,7 +3122,7 @@ public class GEOHelperTest
         List<RDFResource> overlappedByBallabioCivateFT = await GEOHelper.GetFeaturesWithinAsync(geoOntology, new RDFTypedLiteral("POLYGON((9.425042848892229 45.89413442236222, 9.346078615493791 45.828624093492635, 9.455255251235979 45.77932096932273, 9.425042848892229 45.89413442236222))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
 
         Assert.IsNotNull(overlappedByBallabioCivateFT);
-        Assert.AreEqual(2, overlappedByBallabioCivateFT.Count);
+        Assert.HasCount(2, overlappedByBallabioCivateFT);
         Assert.IsTrue(overlappedByBallabioCivateFT.Any(ft => ft.Equals(new RDFResource("ex:BallabioPescateFT"))));
         Assert.IsTrue(overlappedByBallabioCivateFT.Any(ft => ft.Equals(new RDFResource("ex:FornaciVillaFT"))));
 

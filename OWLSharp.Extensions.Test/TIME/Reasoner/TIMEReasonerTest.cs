@@ -29,9 +29,9 @@ public class TIMEReasonerTest
 
         Assert.IsNotNull(reasoner);
         Assert.IsNotNull(reasoner.Rules);
-        Assert.AreEqual(0, reasoner.Rules.Count);
+        Assert.IsEmpty(reasoner.Rules);
 
         reasoner.AddRule(TIMEEnums.TIMEReasonerRules.EqualsEntailment);
-        Assert.AreEqual(1, reasoner.Rules.Count);
+        Assert.HasCount(1, reasoner.Rules);
     }
 }

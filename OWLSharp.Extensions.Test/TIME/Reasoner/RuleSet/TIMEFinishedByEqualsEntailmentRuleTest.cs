@@ -51,7 +51,7 @@ public class TIMEFinishedByEqualsEntailmentRuleTest : TIMETestOntology
         List<OWLInference> inferences = await TIMEFinishedByEqualsEntailmentRule.ExecuteRuleAsync(ontology, cacheRegistry);
 
         Assert.IsNotNull(inferences);
-        Assert.AreEqual(1, inferences.Count);
+        Assert.HasCount(1, inferences);
     }
 
     [TestMethod]
@@ -74,7 +74,7 @@ public class TIMEFinishedByEqualsEntailmentRuleTest : TIMETestOntology
         List<OWLInference> inferences = await reasoner.ApplyToOntologyAsync(ontology);
 
         Assert.IsNotNull(inferences);
-        Assert.AreEqual(1, inferences.Count);
+        Assert.HasCount(1, inferences);
     }
     #endregion
 }

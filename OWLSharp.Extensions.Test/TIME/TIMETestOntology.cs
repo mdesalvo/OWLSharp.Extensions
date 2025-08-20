@@ -37,7 +37,7 @@ public class TIMETestOntology
             TestOntology = new OWLOntology(new Uri("ex:ont"));
             await TestOntology.InitializeTIMEAsync(30000);
 
-            Assert.IsTrue(OWLImportHelper.OntologyCache.Count > 0);
+            Assert.IsGreaterThan(0, OWLImportHelper.OntologyCache.Count);
         }
     }
     #endregion

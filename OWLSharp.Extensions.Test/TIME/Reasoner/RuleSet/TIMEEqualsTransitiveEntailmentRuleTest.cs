@@ -51,7 +51,7 @@ public class TIMEEqualsTransitiveEntailmentRuleTest : TIMETestOntology
         List<OWLInference> inferences = await TIMEEqualsTransitiveEntailmentRule.ExecuteRuleAsync(ontology, cacheRegistry);
 
         Assert.IsNotNull(inferences);
-        Assert.AreEqual(2, inferences.Count);
+        Assert.HasCount(2, inferences);
     }
 
     [TestMethod]
@@ -74,7 +74,7 @@ public class TIMEEqualsTransitiveEntailmentRuleTest : TIMETestOntology
         List<OWLInference> inferences = await reasoner.ApplyToOntologyAsync(ontology);
 
         Assert.IsNotNull(inferences);
-        Assert.AreEqual(2, inferences.Count);
+        Assert.HasCount(2, inferences);
     }
     #endregion
 }

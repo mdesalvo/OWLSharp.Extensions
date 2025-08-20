@@ -690,7 +690,7 @@ public class TIMEHelperTest : TIMETestOntology
         List<TIMEEntity> timeEntities = timeOntology.GetTemporalFeature(new RDFResource("ex:WorldWarII"));
 
         Assert.IsNotNull(timeEntities);
-        Assert.AreEqual(1, timeEntities.Count);
+        Assert.HasCount(1, timeEntities);
         Assert.IsTrue(timeEntities.Single() is TIMEInstant);
 
         TIMEInstant timeInstant = (TIMEInstant)timeEntities.Single();
@@ -731,7 +731,7 @@ public class TIMEHelperTest : TIMETestOntology
         List<TIMEEntity> timeEntities = timeOntology.GetTemporalFeature(new RDFResource("ex:WorldWarII"));
 
         Assert.IsNotNull(timeEntities);
-        Assert.AreEqual(1, timeEntities.Count);
+        Assert.HasCount(1, timeEntities);
         Assert.IsTrue(timeEntities.Single() is TIMEInstant);
 
         TIMEInstant timeInstant = (TIMEInstant)timeEntities.Single();
@@ -812,7 +812,7 @@ public class TIMEHelperTest : TIMETestOntology
         List<TIMEEntity> timeEntities = timeOntology.GetTemporalFeature(new RDFResource("ex:WorldWarII"));
 
         Assert.IsNotNull(timeEntities);
-        Assert.AreEqual(1, timeEntities.Count);
+        Assert.HasCount(1, timeEntities);
         Assert.IsTrue(timeEntities.Single() is TIMEInstant);
 
         TIMEInstant timeInstant = (TIMEInstant)timeEntities.Single();
@@ -823,15 +823,15 @@ public class TIMEHelperTest : TIMETestOntology
         Assert.IsNotNull(timeInstant.Description.Coordinate);
         Assert.IsTrue(timeInstant.Description.Coordinate.Metadata.TRS.Equals(TIMECalendarReferenceSystem.Gregorian));
         Assert.IsTrue(timeInstant.Description.Coordinate.Metadata.UnitType.Equals(RDFVocabulary.TIME.UNIT_SECOND));
-        Assert.IsTrue(timeInstant.Description.Coordinate.Year is 1939);
-        Assert.IsTrue(timeInstant.Description.Coordinate.Month is 9);
+        Assert.AreEqual(1939, timeInstant.Description.Coordinate.Year);
+        Assert.AreEqual(9, timeInstant.Description.Coordinate.Month);
         Assert.IsTrue(timeInstant.Description.Coordinate.Metadata.MonthOfYear.Equals(RDFVocabulary.TIME.GREG.SEPTEMBER));
-        Assert.IsTrue(timeInstant.Description.Coordinate.Day is 1);
+        Assert.AreEqual(1, timeInstant.Description.Coordinate.Day);
         Assert.IsTrue(timeInstant.Description.Coordinate.Metadata.DayOfWeek.Equals(RDFVocabulary.TIME.FRIDAY));
-        Assert.IsTrue(timeInstant.Description.Coordinate.Metadata.DayOfYear is 244);
-        Assert.IsTrue(timeInstant.Description.Coordinate.Hour is 8);
-        Assert.IsTrue(timeInstant.Description.Coordinate.Minute is 1);
-        Assert.IsTrue(timeInstant.Description.Coordinate.Second is 1);
+        Assert.AreEqual(244u, timeInstant.Description.Coordinate.Metadata.DayOfYear.Value);
+        Assert.AreEqual(8, timeInstant.Description.Coordinate.Hour);
+        Assert.AreEqual(1, timeInstant.Description.Coordinate.Minute);
+        Assert.AreEqual(1, timeInstant.Description.Coordinate.Second);
         Assert.IsNull(timeInstant.Position);
     }
 
@@ -909,7 +909,7 @@ public class TIMEHelperTest : TIMETestOntology
         List<TIMEEntity> timeEntities = timeOntology.GetTemporalFeature(new RDFResource("ex:WorldWarII"));
 
         Assert.IsNotNull(timeEntities);
-        Assert.AreEqual(1, timeEntities.Count);
+        Assert.HasCount(1, timeEntities);
         Assert.IsTrue(timeEntities.Single() is TIMEInstant);
 
         TIMEInstant timeInstant = (TIMEInstant)timeEntities.Single();
@@ -920,15 +920,15 @@ public class TIMEHelperTest : TIMETestOntology
         Assert.IsNotNull(timeInstant.Description.Coordinate);
         Assert.IsTrue(timeInstant.Description.Coordinate.Metadata.TRS.Equals(TIMECalendarReferenceSystem.Gregorian));
         Assert.IsTrue(timeInstant.Description.Coordinate.Metadata.UnitType.Equals(RDFVocabulary.TIME.UNIT_SECOND));
-        Assert.IsTrue(timeInstant.Description.Coordinate.Year is 1939);
-        Assert.IsTrue(timeInstant.Description.Coordinate.Month is 9);
+        Assert.AreEqual(1939, timeInstant.Description.Coordinate.Year);
+        Assert.AreEqual(9, timeInstant.Description.Coordinate.Month);
         Assert.IsTrue(timeInstant.Description.Coordinate.Metadata.MonthOfYear.Equals(RDFVocabulary.TIME.GREG.SEPTEMBER));
-        Assert.IsTrue(timeInstant.Description.Coordinate.Day is 1);
+        Assert.AreEqual(1, timeInstant.Description.Coordinate.Day);
         Assert.IsTrue(timeInstant.Description.Coordinate.Metadata.DayOfWeek.Equals(RDFVocabulary.TIME.FRIDAY));
-        Assert.IsTrue(timeInstant.Description.Coordinate.Metadata.DayOfYear is 244);
-        Assert.IsTrue(timeInstant.Description.Coordinate.Hour is 8);
-        Assert.IsTrue(timeInstant.Description.Coordinate.Minute is 1);
-        Assert.IsTrue(timeInstant.Description.Coordinate.Second is 1);
+        Assert.AreEqual(244u, timeInstant.Description.Coordinate.Metadata.DayOfYear.Value);
+        Assert.AreEqual(8, timeInstant.Description.Coordinate.Hour);
+        Assert.AreEqual(1, timeInstant.Description.Coordinate.Minute);
+        Assert.AreEqual(1, timeInstant.Description.Coordinate.Second);
         Assert.IsNull(timeInstant.Position);
     }
 
@@ -998,7 +998,7 @@ public class TIMEHelperTest : TIMETestOntology
         List<TIMEEntity> timeEntities = timeOntology.GetTemporalFeature(new RDFResource("ex:AbbyBirthday"));
 
         Assert.IsNotNull(timeEntities);
-        Assert.AreEqual(1, timeEntities.Count);
+        Assert.HasCount(1, timeEntities);
         Assert.IsTrue(timeEntities.Single() is TIMEInstant);
 
         TIMEInstant timeInstant = (TIMEInstant)timeEntities.Single();
@@ -1007,15 +1007,15 @@ public class TIMEHelperTest : TIMETestOntology
         Assert.IsFalse(timeInstant.DateTime.HasValue);
         Assert.IsNotNull(timeInstant.Description);
         Assert.IsTrue(timeInstant.Description.Coordinate.Metadata.TRS.Equals(new RDFResource("http://dbpedia.org/resource/Hebrew_calendar")));
-        Assert.IsTrue(timeInstant.Description.Coordinate.Year is 5761);
-        Assert.IsTrue(timeInstant.Description.Coordinate.Month is 3);
+        Assert.AreEqual(5761, timeInstant.Description.Coordinate.Year);
+        Assert.AreEqual(3, timeInstant.Description.Coordinate.Month);
         Assert.IsTrue(timeInstant.Description.Coordinate.Metadata.MonthOfYear.Equals(new RDFResource("ex:Sivan")));
-        Assert.IsTrue(timeInstant.Description.Coordinate.Day is 1);
+        Assert.AreEqual(1, timeInstant.Description.Coordinate.Day);
         Assert.IsTrue(timeInstant.Description.Coordinate.Metadata.DayOfWeek.Equals(new RDFResource("ex:RoshChodesh")));
-        Assert.IsTrue(timeInstant.Description.Coordinate.Metadata.DayOfYear is 45);
-        Assert.IsTrue(timeInstant.Description.Coordinate.Hour is 8);
-        Assert.IsTrue(timeInstant.Description.Coordinate.Minute is 1);
-        Assert.IsTrue(timeInstant.Description.Coordinate.Second is 1.25);
+        Assert.AreEqual(45u, timeInstant.Description.Coordinate.Metadata.DayOfYear.Value);
+        Assert.AreEqual(8, timeInstant.Description.Coordinate.Hour);
+        Assert.AreEqual(1, timeInstant.Description.Coordinate.Minute);
+        Assert.AreEqual(1.25, timeInstant.Description.Coordinate.Second);
         Assert.IsNull(timeInstant.Position);
     }
 
@@ -1053,7 +1053,7 @@ public class TIMEHelperTest : TIMETestOntology
         List<TIMEEntity> timeEntities = timeOntology.GetTemporalFeature(new RDFResource("ex:WorldWarII"));
 
         Assert.IsNotNull(timeEntities);
-        Assert.AreEqual(1, timeEntities.Count);
+        Assert.HasCount(1, timeEntities);
         Assert.IsTrue(timeEntities.Single() is TIMEInstant);
 
         TIMEInstant timeInstant = (TIMEInstant)timeEntities.Single();
@@ -1104,7 +1104,7 @@ public class TIMEHelperTest : TIMETestOntology
         List<TIMEEntity> timeEntities = timeOntology.GetTemporalFeature(new RDFResource("ex:WorldWarII"));
 
         Assert.IsNotNull(timeEntities);
-        Assert.AreEqual(1, timeEntities.Count);
+        Assert.HasCount(1, timeEntities);
         Assert.IsTrue(timeEntities.Single() is TIMEInstant);
 
         TIMEInstant timeInstant = (TIMEInstant)timeEntities.Single();
@@ -1152,7 +1152,7 @@ public class TIMEHelperTest : TIMETestOntology
         List<TIMEEntity> timeEntities = timeOntology.GetTemporalFeature(new RDFResource("ex:WorldWarII"));
 
         Assert.IsNotNull(timeEntities);
-        Assert.AreEqual(1, timeEntities.Count);
+        Assert.HasCount(1, timeEntities);
         Assert.IsTrue(timeEntities.Single() is TIMEInstant);
 
         TIMEInstant timeInstant = (TIMEInstant)timeEntities.Single();
@@ -1186,7 +1186,7 @@ public class TIMEHelperTest : TIMETestOntology
         List<TIMEEntity> timeEntities = timeOntology.GetTemporalFeature(new RDFResource("ex:WorldWarII"));
 
         Assert.IsNotNull(timeEntities);
-        Assert.AreEqual(1, timeEntities.Count);
+        Assert.HasCount(1, timeEntities);
         Assert.IsTrue(timeEntities.Single() is TIMEInterval);
 
         TIMEInterval timeInterval = (TIMEInterval)timeEntities.Single();
@@ -1224,7 +1224,7 @@ public class TIMEHelperTest : TIMETestOntology
         List<TIMEEntity> timeEntities = timeOntology.GetTemporalFeature(new RDFResource("ex:WorldWarII"));
 
         Assert.IsNotNull(timeEntities);
-        Assert.AreEqual(1, timeEntities.Count);
+        Assert.HasCount(1, timeEntities);
         Assert.IsTrue(timeEntities.Single() is TIMEInterval);
 
         TIMEInterval timeInterval = (TIMEInterval)timeEntities.Single();
@@ -1294,7 +1294,7 @@ public class TIMEHelperTest : TIMETestOntology
         List<TIMEEntity> timeEntities = timeOntology.GetTemporalFeature(new RDFResource("ex:WorldWarII"));
 
         Assert.IsNotNull(timeEntities);
-        Assert.AreEqual(1, timeEntities.Count);
+        Assert.HasCount(1, timeEntities);
         Assert.IsTrue(timeEntities.Single() is TIMEInterval);
 
         TIMEInterval timeInterval = (TIMEInterval)timeEntities.Single();
@@ -1304,13 +1304,13 @@ public class TIMEHelperTest : TIMETestOntology
         Assert.IsNotNull(timeInterval.Description);
         Assert.IsNotNull(timeInterval.Description.Extent);
         Assert.IsTrue(timeInterval.Description.Extent.Metadata.TRS.Equals(TIMECalendarReferenceSystem.Gregorian));
-        Assert.IsTrue(timeInterval.Description.Extent.Years is 6);
-        Assert.IsTrue(timeInterval.Description.Extent.Months is 3);
-        Assert.IsTrue(timeInterval.Description.Extent.Weeks is 2);
-        Assert.IsTrue(timeInterval.Description.Extent.Days is 5);
-        Assert.IsTrue(timeInterval.Description.Extent.Hours is 9);
-        Assert.IsTrue(timeInterval.Description.Extent.Minutes is 7);
-        Assert.IsTrue(timeInterval.Description.Extent.Seconds is 8.7);
+        Assert.AreEqual(6, timeInterval.Description.Extent.Years);
+        Assert.AreEqual(3, timeInterval.Description.Extent.Months);
+        Assert.AreEqual(2, timeInterval.Description.Extent.Weeks);
+        Assert.AreEqual(5, timeInterval.Description.Extent.Days);
+        Assert.AreEqual(9, timeInterval.Description.Extent.Hours);
+        Assert.AreEqual(7, timeInterval.Description.Extent.Minutes);
+        Assert.AreEqual(8.7, timeInterval.Description.Extent.Seconds);
         Assert.IsNull(timeInterval.Duration);
         Assert.IsNull(timeInterval.Beginning);
         Assert.IsNull(timeInterval.End);
@@ -1377,7 +1377,7 @@ public class TIMEHelperTest : TIMETestOntology
         List<TIMEEntity> timeEntities = timeOntology.GetTemporalFeature(new RDFResource("ex:WorldWarII"));
 
         Assert.IsNotNull(timeEntities);
-        Assert.AreEqual(1, timeEntities.Count);
+        Assert.HasCount(1, timeEntities);
         Assert.IsTrue(timeEntities.Single() is TIMEInterval);
 
         TIMEInterval timeInterval = (TIMEInterval)timeEntities.Single();
@@ -1387,13 +1387,13 @@ public class TIMEHelperTest : TIMETestOntology
         Assert.IsNotNull(timeInterval.Description);
         Assert.IsNotNull(timeInterval.Description.Extent);
         Assert.IsTrue(timeInterval.Description.Extent.Metadata.TRS.Equals(TIMECalendarReferenceSystem.Gregorian));
-        Assert.IsTrue(timeInterval.Description.Extent.Years is 6);
-        Assert.IsTrue(timeInterval.Description.Extent.Months is 3);
-        Assert.IsTrue(timeInterval.Description.Extent.Weeks is 2);
-        Assert.IsTrue(timeInterval.Description.Extent.Days is 5);
-        Assert.IsTrue(timeInterval.Description.Extent.Hours is 9);
-        Assert.IsTrue(timeInterval.Description.Extent.Minutes is 7);
-        Assert.IsTrue(timeInterval.Description.Extent.Seconds is 8.7);
+        Assert.AreEqual(6, timeInterval.Description.Extent.Years);
+        Assert.AreEqual(3, timeInterval.Description.Extent.Months);
+        Assert.AreEqual(2, timeInterval.Description.Extent.Weeks);
+        Assert.AreEqual(5, timeInterval.Description.Extent.Days);
+        Assert.AreEqual(9, timeInterval.Description.Extent.Hours);
+        Assert.AreEqual(7, timeInterval.Description.Extent.Minutes);
+        Assert.AreEqual(8.7, timeInterval.Description.Extent.Seconds);
         Assert.IsNull(timeInterval.Duration);
         Assert.IsNull(timeInterval.Beginning);
         Assert.IsNull(timeInterval.End);
@@ -1456,7 +1456,7 @@ public class TIMEHelperTest : TIMETestOntology
         List<TIMEEntity> timeEntities = timeOntology.GetTemporalFeature(new RDFResource("ex:WorldWarII"));
 
         Assert.IsNotNull(timeEntities);
-        Assert.AreEqual(1, timeEntities.Count);
+        Assert.HasCount(1, timeEntities);
         Assert.IsTrue(timeEntities.Single() is TIMEInterval);
 
         TIMEInterval timeInterval = (TIMEInterval)timeEntities.Single();
@@ -1466,13 +1466,13 @@ public class TIMEHelperTest : TIMETestOntology
         Assert.IsNotNull(timeInterval.Description);
         Assert.IsNotNull(timeInterval.Description.Extent);
         Assert.IsTrue(timeInterval.Description.Extent.Metadata.TRS.Equals(TIMECalendarReferenceSystem.Gregorian));
-        Assert.IsTrue(timeInterval.Description.Extent.Years is 6);
-        Assert.IsTrue(timeInterval.Description.Extent.Months is 3);
-        Assert.IsTrue(timeInterval.Description.Extent.Weeks is 2);
-        Assert.IsTrue(timeInterval.Description.Extent.Days is 5);
-        Assert.IsTrue(timeInterval.Description.Extent.Hours is 9);
-        Assert.IsTrue(timeInterval.Description.Extent.Minutes is 7);
-        Assert.IsTrue(timeInterval.Description.Extent.Seconds is 8.7);
+        Assert.AreEqual(6, timeInterval.Description.Extent.Years);
+        Assert.AreEqual(3, timeInterval.Description.Extent.Months);
+        Assert.AreEqual(2, timeInterval.Description.Extent.Weeks);
+        Assert.AreEqual(5, timeInterval.Description.Extent.Days);
+        Assert.AreEqual(9, timeInterval.Description.Extent.Hours);
+        Assert.AreEqual(7, timeInterval.Description.Extent.Minutes);
+        Assert.AreEqual(8.7, timeInterval.Description.Extent.Seconds);
         Assert.IsNull(timeInterval.Duration);
         Assert.IsNull(timeInterval.Beginning);
         Assert.IsNull(timeInterval.End);
@@ -1511,7 +1511,7 @@ public class TIMEHelperTest : TIMETestOntology
         List<TIMEEntity> timeEntities = timeOntology.GetTemporalFeature(new RDFResource("ex:WorldWarII"));
 
         Assert.IsNotNull(timeEntities);
-        Assert.AreEqual(1, timeEntities.Count);
+        Assert.HasCount(1, timeEntities);
         Assert.IsTrue(timeEntities.Single() is TIMEInterval);
 
         TIMEInterval timeInterval = (TIMEInterval)timeEntities.Single();
@@ -1563,7 +1563,7 @@ public class TIMEHelperTest : TIMETestOntology
         List<TIMEEntity> timeEntities = timeOntology.GetTemporalFeature(new RDFResource("ex:WorldWarII"));
 
         Assert.IsNotNull(timeEntities);
-        Assert.AreEqual(1, timeEntities.Count);
+        Assert.HasCount(1, timeEntities);
         Assert.IsTrue(timeEntities.Single() is TIMEInterval);
 
         TIMEInterval timeInterval = (TIMEInterval)timeEntities.Single();
@@ -1607,7 +1607,7 @@ public class TIMEHelperTest : TIMETestOntology
         List<TIMEEntity> timeEntities = timeOntology.GetTemporalFeature(new RDFResource("ex:WorldWarII"));
 
         Assert.IsNotNull(timeEntities);
-        Assert.AreEqual(1, timeEntities.Count);
+        Assert.HasCount(1, timeEntities);
         Assert.IsTrue(timeEntities.Single() is TIMEInterval);
 
         TIMEInterval timeInterval = (TIMEInterval)timeEntities.Single();
@@ -1657,7 +1657,7 @@ public class TIMEHelperTest : TIMETestOntology
         List<TIMEEntity> timeEntities = timeOntology.GetTemporalFeature(new RDFResource("ex:WorldWarII"));
 
         Assert.IsNotNull(timeEntities);
-        Assert.AreEqual(1, timeEntities.Count);
+        Assert.HasCount(1, timeEntities);
         Assert.IsTrue(timeEntities.Single() is TIMEInterval);
 
         TIMEInterval timeInterval = (TIMEInterval)timeEntities.Single();
@@ -1703,7 +1703,7 @@ public class TIMEHelperTest : TIMETestOntology
         List<TIMEEntity> timeEntities = timeOntology.GetTemporalFeature(new RDFResource("ex:WorldWarII"));
 
         Assert.IsNotNull(timeEntities);
-        Assert.AreEqual(1, timeEntities.Count);
+        Assert.HasCount(1, timeEntities);
         Assert.IsTrue(timeEntities.Single() is TIMEInterval);
 
         TIMEInterval timeInterval = (TIMEInterval)timeEntities.Single();
@@ -1753,7 +1753,7 @@ public class TIMEHelperTest : TIMETestOntology
         List<TIMEEntity> timeEntities = timeOntology.GetTemporalFeature(new RDFResource("ex:WorldWarII"));
 
         Assert.IsNotNull(timeEntities);
-        Assert.AreEqual(1, timeEntities.Count);
+        Assert.HasCount(1, timeEntities);
         Assert.IsTrue(timeEntities.Single() is TIMEInterval);
 
         TIMEInterval timeInterval = (TIMEInterval)timeEntities.Single();
@@ -1811,7 +1811,7 @@ public class TIMEHelperTest : TIMETestOntology
         List<TIMEEntity> timeEntities = timeOntology.GetTemporalFeature(new RDFResource("ex:WorldWarII"));
 
         Assert.IsNotNull(timeEntities);
-        Assert.AreEqual(1, timeEntities.Count);
+        Assert.HasCount(1, timeEntities);
         Assert.IsTrue(timeEntities.Single() is TIMEInterval);
 
         TIMEInterval timeInterval = (TIMEInterval)timeEntities.Single();

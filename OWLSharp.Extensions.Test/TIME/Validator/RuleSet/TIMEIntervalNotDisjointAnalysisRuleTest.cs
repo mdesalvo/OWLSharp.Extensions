@@ -66,7 +66,7 @@ public class TIMEIntervalNotDisjointAnalysisRuleTest : TIMETestOntology
         const string clashingRelation = "time:intervalBefore";
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, TIMEIntervalNotDisjointAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, string.Format(TIMEIntervalNotDisjointAnalysisRule.rulesugg, clashingRelation)));
@@ -114,7 +114,7 @@ public class TIMEIntervalNotDisjointAnalysisRuleTest : TIMETestOntology
         const string clashingRelation = "time:intervalAfter";
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, TIMEIntervalNotDisjointAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, string.Format(TIMEIntervalNotDisjointAnalysisRule.rulesugg, clashingRelation)));
@@ -162,7 +162,7 @@ public class TIMEIntervalNotDisjointAnalysisRuleTest : TIMETestOntology
         const string clashingRelation = "time:intervalDisjoint";
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, TIMEIntervalNotDisjointAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, string.Format(TIMEIntervalNotDisjointAnalysisRule.rulesugg, clashingRelation)));

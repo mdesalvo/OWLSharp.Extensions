@@ -34,10 +34,10 @@ public class TIMEValidatorTest : TIMETestOntology
 
         Assert.IsNotNull(validator);
         Assert.IsNotNull(validator.Rules);
-        Assert.AreEqual(0, validator.Rules.Count);
+        Assert.IsEmpty(validator.Rules);
 
         validator.AddRule(TIMEEnums.TIMEValidatorRules.InstantAfterAnalysis);
-        Assert.AreEqual(1, validator.Rules.Count);
+        Assert.HasCount(1, validator.Rules);
     }
 
     [TestMethod]
@@ -79,7 +79,7 @@ public class TIMEValidatorTest : TIMETestOntology
         List<OWLIssue> issues = await validator.ApplyToOntologyAsync(ontology);
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(2, issues.Count);
+        Assert.HasCount(2, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, TIMEInstantAfterAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, TIMEInstantAfterAnalysisRule.rulesugg1));
@@ -129,7 +129,7 @@ public class TIMEValidatorTest : TIMETestOntology
         List<OWLIssue> issues = await validator.ApplyToOntologyAsync(ontology);
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(2, issues.Count);
+        Assert.HasCount(2, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, TIMEInstantBeforeAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, TIMEInstantBeforeAnalysisRule.rulesugg1));
@@ -181,7 +181,7 @@ public class TIMEValidatorTest : TIMETestOntology
         const string clashingRelation = "time:intervalAfter";
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(2, issues.Count);
+        Assert.HasCount(2, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, TIMEIntervalAfterAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, string.Format(TIMEIntervalAfterAnalysisRule.rulesugg, clashingRelation)));
@@ -233,7 +233,7 @@ public class TIMEValidatorTest : TIMETestOntology
         const string clashingRelation = "time:intervalBefore";
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(2, issues.Count);
+        Assert.HasCount(2, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, TIMEIntervalBeforeAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, string.Format(TIMEIntervalBeforeAnalysisRule.rulesugg, clashingRelation)));
@@ -285,7 +285,7 @@ public class TIMEValidatorTest : TIMETestOntology
         const string clashingRelation = "time:intervalContains";
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(2, issues.Count);
+        Assert.HasCount(2, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, TIMEIntervalContainsAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, string.Format(TIMEIntervalContainsAnalysisRule.rulesugg, clashingRelation)));
@@ -337,7 +337,7 @@ public class TIMEValidatorTest : TIMETestOntology
         const string clashingRelation = "time:notDisjoint";
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, TIMEIntervalDisjointAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, string.Format(TIMEIntervalDisjointAnalysisRule.rulesugg, clashingRelation)));
@@ -385,7 +385,7 @@ public class TIMEValidatorTest : TIMETestOntology
         const string clashingRelation = "time:intervalDuring";
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(2, issues.Count);
+        Assert.HasCount(2, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, TIMEIntervalDuringAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, string.Format(TIMEIntervalDuringAnalysisRule.rulesugg, clashingRelation)));
@@ -437,7 +437,7 @@ public class TIMEValidatorTest : TIMETestOntology
         const string clashingRelation = "time:intervalAfter";
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, TIMEIntervalEqualsAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, string.Format(TIMEIntervalEqualsAnalysisRule.rulesugg, clashingRelation)));
@@ -485,7 +485,7 @@ public class TIMEValidatorTest : TIMETestOntology
         const string clashingRelation = "time:intervalAfter";
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, TIMEIntervalFinishesAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, string.Format(TIMEIntervalFinishesAnalysisRule.rulesugg, clashingRelation)));
@@ -533,7 +533,7 @@ public class TIMEValidatorTest : TIMETestOntology
         const string clashingRelation = "time:intervalAfter";
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, TIMEIntervalFinishedByAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, string.Format(TIMEIntervalFinishedByAnalysisRule.rulesugg, clashingRelation)));
@@ -581,7 +581,7 @@ public class TIMEValidatorTest : TIMETestOntology
         const string clashingRelation = "time:intervalAfter";
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, TIMEIntervalHasInsideAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, string.Format(TIMEIntervalHasInsideAnalysisRule.rulesugg, clashingRelation)));
@@ -629,7 +629,7 @@ public class TIMEValidatorTest : TIMETestOntology
         const string clashingRelation = "time:intervalAfter";
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, TIMEIntervalInAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, string.Format(TIMEIntervalInAnalysisRule.rulesugg, clashingRelation)));
@@ -677,7 +677,7 @@ public class TIMEValidatorTest : TIMETestOntology
         const string clashingRelation = "time:intervalAfter";
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, TIMEIntervalMeetsAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, string.Format(TIMEIntervalMeetsAnalysisRule.rulesugg, clashingRelation)));
@@ -725,7 +725,7 @@ public class TIMEValidatorTest : TIMETestOntology
         const string clashingRelation = "time:intervalAfter";
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, TIMEIntervalMetByAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, string.Format(TIMEIntervalMetByAnalysisRule.rulesugg, clashingRelation)));
@@ -773,7 +773,7 @@ public class TIMEValidatorTest : TIMETestOntology
         const string clashingRelation = "time:intervalAfter";
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, TIMEIntervalNotDisjointAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, string.Format(TIMEIntervalNotDisjointAnalysisRule.rulesugg, clashingRelation)));
@@ -821,7 +821,7 @@ public class TIMEValidatorTest : TIMETestOntology
         const string clashingRelation = "time:intervalAfter";
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, TIMEIntervalOverlapsAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, string.Format(TIMEIntervalOverlapsAnalysisRule.rulesugg, clashingRelation)));
@@ -869,7 +869,7 @@ public class TIMEValidatorTest : TIMETestOntology
         const string clashingRelation = "time:intervalAfter";
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, TIMEIntervalOverlappedByAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, string.Format(TIMEIntervalOverlappedByAnalysisRule.rulesugg, clashingRelation)));
@@ -917,7 +917,7 @@ public class TIMEValidatorTest : TIMETestOntology
         const string clashingRelation = "time:intervalAfter";
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, TIMEIntervalStartsAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, string.Format(TIMEIntervalStartsAnalysisRule.rulesugg, clashingRelation)));
@@ -965,7 +965,7 @@ public class TIMEValidatorTest : TIMETestOntology
         const string clashingRelation = "time:intervalAfter";
 
         Assert.IsNotNull(issues);
-        Assert.AreEqual(1, issues.Count);
+        Assert.HasCount(1, issues);
         Assert.AreEqual(OWLEnums.OWLIssueSeverity.Error, issues[0].Severity);
         Assert.IsTrue(string.Equals(issues[0].RuleName, TIMEIntervalStartedByAnalysisRule.rulename));
         Assert.IsTrue(string.Equals(issues[0].Description, string.Format(TIMEIntervalStartedByAnalysisRule.rulesugg, clashingRelation)));
