@@ -1142,7 +1142,7 @@ namespace OWLSharp.Extensions.TIME
 
             //Perform a sequential search of the beginning instant on the set of compatible intervals
             TIMECoordinate compatibleBeginning = null;
-            IEnumerator<RDFResource> compatibleStartingIntervalsEnumerator = compatibleStartIntervals.GetEnumerator();
+            List<RDFResource>.Enumerator compatibleStartingIntervalsEnumerator = compatibleStartIntervals.GetEnumerator();
             while (compatibleBeginning == null && compatibleStartingIntervalsEnumerator.MoveNext())
                 compatibleBeginning = GetBeginningOfIntervalInternal(ontology, compatibleStartingIntervalsEnumerator.Current, calendarTRS, dtPropAsns, objPropAsns, visitContext);
             if (compatibleBeginning == null)
@@ -1157,7 +1157,7 @@ namespace OWLSharp.Extensions.TIME
                      .Select(objPropAsn => objPropAsn.TargetIndividualExpression.GetIRI()).ToList());
 
                 //Perform a sequential search of the start instant on the set of metBy intervals
-                IEnumerator<RDFResource> metByIntervalsEnumerator = metByIntervals.GetEnumerator();
+                List<RDFResource>.Enumerator metByIntervalsEnumerator = metByIntervals.GetEnumerator();
                 while (compatibleBeginning == null && metByIntervalsEnumerator.MoveNext())
                     compatibleBeginning = GetEndOfIntervalInternal(ontology, metByIntervalsEnumerator.Current, calendarTRS, dtPropAsns, objPropAsns, visitContext);
                 #endregion
@@ -1217,7 +1217,7 @@ namespace OWLSharp.Extensions.TIME
 
             //Perform a sequential search of the end instant on the set of compatible ending intervals
             TIMECoordinate compatibleEnd = null;
-            IEnumerator<RDFResource> compatibleEndIntervalsEnumerator = compatibleEndIntervals.GetEnumerator();
+            List<RDFResource>.Enumerator compatibleEndIntervalsEnumerator = compatibleEndIntervals.GetEnumerator();
             while (compatibleEnd == null && compatibleEndIntervalsEnumerator.MoveNext())
                 compatibleEnd = GetEndOfIntervalInternal(ontology, compatibleEndIntervalsEnumerator.Current, calendarTRS, dtPropAsns, objPropAsns, visitContext);
             if (compatibleEnd == null)
@@ -1232,7 +1232,7 @@ namespace OWLSharp.Extensions.TIME
                      .Select(objPropAsn => objPropAsn.TargetIndividualExpression.GetIRI()).ToList());
 
                 //Perform a sequential search of the end instant on the set of meets intervals
-                IEnumerator<RDFResource> meetsIntervalsEnumerator = meetsIntervals.GetEnumerator();
+                List<RDFResource>.Enumerator meetsIntervalsEnumerator = meetsIntervals.GetEnumerator();
                 while (compatibleEnd == null && meetsIntervalsEnumerator.MoveNext())
                     compatibleEnd = GetBeginningOfIntervalInternal(ontology, meetsIntervalsEnumerator.Current, calendarTRS, dtPropAsns, objPropAsns, visitContext);
                 #endregion
