@@ -44,7 +44,7 @@ namespace OWLSharp.Extensions.TIME
                 Rules = Rules.Distinct().ToList();
 
                 //Initialize inference registry
-                Dictionary<string, List<OWLInference>> inferenceRegistry = new Dictionary<string, List<OWLInference>>();
+                Dictionary<string, List<OWLInference>> inferenceRegistry = new Dictionary<string, List<OWLInference>>(Rules.Count);
                 Rules.ForEach(timeRule => inferenceRegistry.Add(timeRule.ToString(), null));
 
                 //Initialize cache registry

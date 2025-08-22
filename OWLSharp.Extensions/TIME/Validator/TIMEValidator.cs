@@ -46,7 +46,7 @@ namespace OWLSharp.Extensions.TIME
                 Rules = Rules.Distinct().ToList();
 
                 //Initialize issue registry
-                Dictionary<string, List<OWLIssue>> issueRegistry = new Dictionary<string, List<OWLIssue>>();
+                Dictionary<string, List<OWLIssue>> issueRegistry = new Dictionary<string, List<OWLIssue>>(Rules.Count);
                 Rules.ForEach(rule => issueRegistry.Add(rule.ToString(), null));
 
                 //Initialize cache registry

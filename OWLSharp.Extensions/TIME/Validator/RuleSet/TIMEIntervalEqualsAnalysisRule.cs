@@ -24,7 +24,7 @@ namespace OWLSharp.Extensions.TIME
     internal static class TIMEIntervalEqualsAnalysisRule
     {
         internal static readonly string rulename = nameof(TIMEEnums.TIMEValidatorRules.IntervalEqualsAnalysis);
-        internal const string rulesugg = "There should not be OWL-TIME intervals having a clash in temporal relations (time:intervalEquals VS {0}";
+        internal const string rulesugg = "There should not be OWL-TIME intervals having a clash in temporal relations (time:intervalEquals VS {0})";
 
         internal static async Task<List<OWLIssue>> ExecuteRuleAsync(OWLOntology ontology, Dictionary<string, List<OWLIndividualExpression>> cacheRegistry)
         {
