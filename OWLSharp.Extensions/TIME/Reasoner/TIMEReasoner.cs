@@ -11,10 +11,12 @@
    limitations under the License.
 */
 
+#if !NET8_0_OR_GREATER
+using Dasync.Collections;
+#endif
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Dasync.Collections;
 using OWLSharp.Ontology;
 using OWLSharp.Reasoner;
 using RDFSharp.Model;
@@ -55,7 +57,11 @@ namespace OWLSharp.Extensions.TIME
                 };
 
                 //Execute OWL-TIME reasoner rules
-                await Rules.ParallelForEachAsync(async rule =>
+#if !NET8_0_OR_GREATER
+                await Rules.ParallelForEachAsync(async (rule, _) =>
+#else
+                await Parallel.ForEachAsync(Rules, async (rule, _) =>
+#endif
                 {
                     OWLEvents.RaiseInfo($"Launching OWL-TIME rule {rule}...");
 
@@ -138,27 +144,23 @@ namespace OWLSharp.Extensions.TIME
                     OWLEvents.RaiseInfo($"Completed OWL-TIME rule {rule} => {inferenceRegistry[rule.ToString()].Count} candidate inferences");
                 });
 
-                //Process inference registry
-                await Task.Run(async () =>
-                {
-                    //Fetch axioms commonly targeted by OWL-TIME rules
-                    Task<HashSet<string>> dtPropAsnAxiomsTask = Task.Run(() => new HashSet<string>(ontology.GetAssertionAxiomsOfType<OWLDataPropertyAssertion>().Select(asn => asn.GetXML())));
-                    Task<HashSet<string>> opPropAsnAxiomsTask = Task.Run(() => new HashSet<string>(ontology.GetAssertionAxiomsOfType<OWLObjectPropertyAssertion>().Select(asn => asn.GetXML())));
-                    await Task.WhenAll(dtPropAsnAxiomsTask, opPropAsnAxiomsTask);
+                //Process inferences: fetch axioms commonly targeted by OWL-TIME rules
+                Task<HashSet<string>> dtPropAsnAxiomsTask = Task.Run(() => new HashSet<string>(ontology.GetAssertionAxiomsOfType<OWLDataPropertyAssertion>().Select(asn => asn.GetXML())));
+                Task<HashSet<string>> opPropAsnAxiomsTask = Task.Run(() => new HashSet<string>(ontology.GetAssertionAxiomsOfType<OWLObjectPropertyAssertion>().Select(asn => asn.GetXML())));
+                await Task.WhenAll(dtPropAsnAxiomsTask, opPropAsnAxiomsTask);
 
-                    //Deduplicate inferences by analyzing explicit knowledge
-                    foreach (KeyValuePair<string, List<OWLInference>> inferenceRegistryEntry in inferenceRegistry.Where(ir => ir.Value?.Count > 0))
-                        inferenceRegistryEntry.Value.RemoveAll(inf =>
-                        {
-                            string infXML = inf.Axiom.GetXML();
-                            return dtPropAsnAxiomsTask.Result.Contains(infXML)
-                                   || opPropAsnAxiomsTask.Result.Contains(infXML);
-                        });
+                //Process inferences: deduplicate inferences by analyzing explicit knowledge
+                foreach (KeyValuePair<string, List<OWLInference>> inferenceRegistryEntry in inferenceRegistry.Where(ir => ir.Value?.Count > 0))
+                    inferenceRegistryEntry.Value.RemoveAll(inf =>
+                    {
+                        string infXML = inf.Axiom.GetXML();
+                        return dtPropAsnAxiomsTask.Result.Contains(infXML)
+                               || opPropAsnAxiomsTask.Result.Contains(infXML);
+                    });
 
-                    //Collect inferences and perform final cleanup
-                    inferences.AddRange(inferenceRegistry.SelectMany(ir => ir.Value ?? Enumerable.Empty<OWLInference>()).Distinct());
-                    inferenceRegistry.Clear();
-                });
+                //Process inferences: collect inferences and perform final cleanup
+                inferences.AddRange(inferenceRegistry.SelectMany(ir => ir.Value ?? Enumerable.Empty<OWLInference>()).Distinct());
+                inferenceRegistry.Clear();
 
                 OWLEvents.RaiseInfo($"Completed OWL-TIME reasoner on ontology {ontology.IRI} => {inferences.Count} unique inferences");
             }

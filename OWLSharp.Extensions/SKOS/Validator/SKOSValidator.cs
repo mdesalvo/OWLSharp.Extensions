@@ -11,10 +11,12 @@
    limitations under the License.
 */
 
+#if !NET8_0_OR_GREATER
+using Dasync.Collections;
+#endif
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Dasync.Collections;
 using OWLSharp.Ontology;
 using OWLSharp.Validator;
 using RDFSharp.Model;
@@ -56,7 +58,11 @@ namespace OWLSharp.Extensions.SKOS
                 };
 
                 //Execute validator rules
-                await Rules.ParallelForEachAsync(async rule =>
+#if !NET8_0_OR_GREATER
+                await Rules.ParallelForEachAsync(async (rule, _) =>
+#else
+                await Parallel.ForEachAsync(Rules, async (rule, _) =>
+#endif
                 {
                     OWLEvents.RaiseInfo($"Launching SKOS rule {rule}...");
 
@@ -94,12 +100,9 @@ namespace OWLSharp.Extensions.SKOS
                     OWLEvents.RaiseInfo($"Completed SKOS rule {rule} => {issueRegistry[rule.ToString()].Count} issues");
                 });
 
-                //Process issues registry
-                await Task.Run(() =>
-                {
-                    issues.AddRange(issueRegistry.SelectMany(ir => ir.Value ?? Enumerable.Empty<OWLIssue>()));
-                    issueRegistry.Clear();
-                });
+                //Process issues
+                issues.AddRange(issueRegistry.SelectMany(ir => ir.Value ?? Enumerable.Empty<OWLIssue>()));
+                issueRegistry.Clear();
 
                 OWLEvents.RaiseInfo($"Completed SKOS validator on ontology {ontology.IRI} => {issues.Count} issues");
             }
