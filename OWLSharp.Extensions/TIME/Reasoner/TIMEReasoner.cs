@@ -56,6 +56,11 @@ namespace OWLSharp.Extensions.TIME
                     { "INTERVALS", ontology.GetIndividualsOf(new OWLClass(RDFVocabulary.TIME.INTERVAL)) }
                 };
 
+                //Initialize axioms XML
+                Task<HashSet<string>> dtPropAsnAxiomsTask = Task.Run(() => new HashSet<string>(ontology.GetAssertionAxiomsOfType<OWLDataPropertyAssertion>().Select(asn => asn.GetXML())));
+                Task<HashSet<string>> opPropAsnAxiomsTask = Task.Run(() => new HashSet<string>(ontology.GetAssertionAxiomsOfType<OWLObjectPropertyAssertion>().Select(asn => asn.GetXML())));
+                await Task.WhenAll(dtPropAsnAxiomsTask, opPropAsnAxiomsTask);
+
                 //Execute OWL-TIME reasoner rules
 #if !NET8_0_OR_GREATER
                 await Rules.ParallelForEachAsync(async (rule, _) =>
@@ -144,12 +149,7 @@ namespace OWLSharp.Extensions.TIME
                     OWLEvents.RaiseInfo($"Completed OWL-TIME rule {rule} => {inferenceRegistry[rule.ToString()].Count} candidate inferences");
                 });
 
-                //Process inferences: fetch axioms commonly targeted by OWL-TIME rules
-                Task<HashSet<string>> dtPropAsnAxiomsTask = Task.Run(() => new HashSet<string>(ontology.GetAssertionAxiomsOfType<OWLDataPropertyAssertion>().Select(asn => asn.GetXML())));
-                Task<HashSet<string>> opPropAsnAxiomsTask = Task.Run(() => new HashSet<string>(ontology.GetAssertionAxiomsOfType<OWLObjectPropertyAssertion>().Select(asn => asn.GetXML())));
-                await Task.WhenAll(dtPropAsnAxiomsTask, opPropAsnAxiomsTask);
-
-                //Process inferences: deduplicate inferences by analyzing explicit knowledge
+                //Deduplicate inferences by analyzing explicit knowledge
                 foreach (KeyValuePair<string, List<OWLInference>> inferenceRegistryEntry in inferenceRegistry.Where(ir => ir.Value?.Count > 0))
                     inferenceRegistryEntry.Value.RemoveAll(inf =>
                     {
@@ -158,7 +158,7 @@ namespace OWLSharp.Extensions.TIME
                                || opPropAsnAxiomsTask.Result.Contains(infXML);
                     });
 
-                //Process inferences: collect inferences and perform final cleanup
+                //Collect inferences
                 inferences.AddRange(inferenceRegistry.SelectMany(ir => ir.Value ?? Enumerable.Empty<OWLInference>()).Distinct());
                 inferenceRegistry.Clear();
 
