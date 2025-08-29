@@ -7,7 +7,7 @@
     <Authors>Marco De Salvo</Authors>
     <Copyright>Marco De Salvo</Copyright>
     <Description>OWLSharp extensions for working with LinkedData ontologies and vocabularies (SKOS, GEOSPARQL, OWL-TIME)</Description>
-    <TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <SignAssembly>false</SignAssembly>
     <Product>OWLSharp.Extensions</Product>
     <PackageId>OWLSharp.Extensions</PackageId>
@@ -46,6 +46,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="OWLSharp" Version="4.11.0" />
+    <PackageReference Include="OWLSharp" Version="4.12.0" />
   </ItemGroup>
 </Project>
