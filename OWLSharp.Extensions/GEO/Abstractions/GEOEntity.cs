@@ -80,7 +80,7 @@ namespace OWLSharp.Extensions.GEO
                 throw new OWLException("Cannot declare line entity because given \"wgs84Coordinates\" parameter contains a point with invalid WGS84 latitude");
             #endregion
 
-            WGS84Geometry = new LineString(wgs84Coordinates.Select(wgs84Point => new Coordinate(wgs84Point.longitude, wgs84Point.latitude)).ToArray()) { SRID = 4326 };
+            WGS84Geometry = new LineString([.. wgs84Coordinates.Select(wgs84Point => new Coordinate(wgs84Point.longitude, wgs84Point.latitude))]) { SRID = 4326 };
         }
         #endregion
     }
@@ -106,12 +106,12 @@ namespace OWLSharp.Extensions.GEO
             if (wgs84Coordinates[0].longitude != wgs84Coordinates[wgs84Coordinates.Length - 1].longitude
                  && wgs84Coordinates[0].latitude != wgs84Coordinates[wgs84Coordinates.Length - 1].latitude)
             {
-                List<(double, double)> wgs84CoordinatesList = wgs84Coordinates.ToList();
+                List<(double, double)> wgs84CoordinatesList = [.. wgs84Coordinates];
                 wgs84CoordinatesList.Add(wgs84Coordinates[0]);
-                wgs84Coordinates = wgs84CoordinatesList.ToArray();
+                wgs84Coordinates = [.. wgs84CoordinatesList];
             }
 
-            WGS84Geometry = new Polygon(new LinearRing(wgs84Coordinates.Select(wgs84Point => new Coordinate(wgs84Point.longitude, wgs84Point.latitude)).ToArray())) { SRID = 4326 };
+            WGS84Geometry = new Polygon(new LinearRing([.. wgs84Coordinates.Select(wgs84Point => new Coordinate(wgs84Point.longitude, wgs84Point.latitude))])) { SRID = 4326 };
         }
         #endregion
     }

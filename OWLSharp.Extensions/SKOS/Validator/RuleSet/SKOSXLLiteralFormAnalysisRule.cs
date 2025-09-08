@@ -28,16 +28,16 @@ namespace OWLSharp.Extensions.SKOS
 
         internal static async Task<List<OWLIssue>> ExecuteRuleAsync(OWLOntology ontology)
         {
-            List<OWLIssue> issues = new List<OWLIssue>();
-            List<OWLInference> violations = new List<OWLInference>();
+            List<OWLIssue> issues = [];
+            List<OWLInference> violations = [];
 
             SWRLRule literalFormRule = new SWRLRule(
                 new RDFPlainLiteral(nameof(SKOSXLLiteralFormAnalysisRule)),
                 new RDFPlainLiteral("This rule checks for skosxl:Label instances having more than one occurrence of skosxl:literalForm relation"),
                 new SWRLAntecedent
                 {
-                    Atoms = new List<SWRLAtom>
-                    {
+                    Atoms =
+                    [
                         new SWRLClassAtom(
                             new OWLClass(RDFVocabulary.SKOS.SKOSXL.LABEL),
                             new SWRLVariableArgument(new RDFVariable("?L"))),
@@ -49,23 +49,23 @@ namespace OWLSharp.Extensions.SKOS
                             new OWLDataProperty(RDFVocabulary.SKOS.SKOSXL.LITERAL_FORM),
                             new SWRLVariableArgument(new RDFVariable("?L")),
                             new SWRLVariableArgument(new RDFVariable("?LF2")))
-                    },
-                    BuiltIns = new List<SWRLBuiltIn>
-                    {
+                    ],
+                    BuiltIns =
+                    [
                         SWRLBuiltIn.NotEqual(
                             new SWRLVariableArgument(new RDFVariable("?LF1")),
                             new SWRLVariableArgument(new RDFVariable("?LF2")))
-                    }
+                    ]
                 },
                 new SWRLConsequent
                 {
-                    Atoms = new List<SWRLAtom>
-                    {
+                    Atoms =
+                    [
                         new SWRLDataPropertyAtom(
                             new OWLDataProperty(SKOSValidator.ViolationIRI),
                             new SWRLVariableArgument(new RDFVariable("?L")),
                             new SWRLLiteralArgument(RDFTypedLiteral.True))
-                    }
+                    ]
                 });
             violations.AddRange(await literalFormRule.ApplyToOntologyAsync(ontology));
             violations.ForEach(violation => issues.Add(

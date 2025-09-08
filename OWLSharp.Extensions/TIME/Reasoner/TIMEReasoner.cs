@@ -26,7 +26,7 @@ namespace OWLSharp.Extensions.TIME
     public sealed class TIMEReasoner
     {
         #region Properties
-        public List<TIMEEnums.TIMEReasonerRules> Rules { get; internal set; } = new List<TIMEEnums.TIMEReasonerRules>();
+        public List<TIMEEnums.TIMEReasonerRules> Rules { get; internal set; } = [];
         #endregion
 
         #region Methods
@@ -38,12 +38,12 @@ namespace OWLSharp.Extensions.TIME
 
         public async Task<List<OWLInference>> ApplyToOntologyAsync(OWLOntology ontology)
         {
-            List<OWLInference> inferences = new List<OWLInference>();
+            List<OWLInference> inferences = [];
 
             if (ontology != null)
             {
                 OWLEvents.RaiseInfo($"Launching OWL-TIME reasoner on ontology '{ontology.IRI}'...");
-                Rules = Rules.Distinct().ToList();
+                Rules = [.. Rules.Distinct()];
 
                 //Initialize inference registry
                 Dictionary<string, List<OWLInference>> inferenceRegistry = new Dictionary<string, List<OWLInference>>(Rules.Count);

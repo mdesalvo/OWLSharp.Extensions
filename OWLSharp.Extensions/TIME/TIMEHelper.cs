@@ -374,13 +374,12 @@ namespace OWLSharp.Extensions.TIME
             List<OWLObjectPropertyAssertion> hasTimeObjPropAsns = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, hasTimeOP);
 
             //Filter assertions compatible with "time:hasTime" object property
-            List<OWLObjectPropertyExpression> hasTimeObjPropExprs = ontology.GetSubObjectPropertiesOf(hasTimeOP)
-                                                                      .Union(ontology.GetEquivalentObjectProperties(hasTimeOP)).ToList();
+            List<OWLObjectPropertyExpression> hasTimeObjPropExprs = [.. ontology.GetSubObjectPropertiesOf(hasTimeOP).Union(ontology.GetEquivalentObjectProperties(hasTimeOP))];
             foreach (OWLObjectPropertyExpression hasTimeObjPropExpr in hasTimeObjPropExprs)
                 hasTimeObjPropAsns.AddRange(OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, hasTimeObjPropExpr));
 
             //Iterate these assertions to reconstruct the temporal extent of corresponding temporal entity
-            List<TIMEEntity> temporalExtentOfFeature = new List<TIMEEntity>();
+            List<TIMEEntity> temporalExtentOfFeature = [];
             foreach (OWLObjectPropertyAssertion hasTimeObjPropsAsn in hasTimeObjPropAsns.Where(asn => asn.SourceIndividualExpression.GetIRI().Equals(featureURI)))
             {
                 //Detect if the temporal extent is a time instant
@@ -606,13 +605,12 @@ namespace OWLSharp.Extensions.TIME
             List<OWLObjectPropertyAssertion> inDateTimeObjPropAsns = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, inDateTimeOP);
 
             //Filter assertions compatible with "time:inDateTime" object property
-            List<OWLObjectPropertyExpression> inDateTimeObjPropExprs = ontology.GetSubObjectPropertiesOf(inDateTimeOP)
-                                                                        .Union(ontology.GetEquivalentObjectProperties(inDateTimeOP)).ToList();
+            List<OWLObjectPropertyExpression> inDateTimeObjPropExprs = [.. ontology.GetSubObjectPropertiesOf(inDateTimeOP).Union(ontology.GetEquivalentObjectProperties(inDateTimeOP))];
             foreach (OWLObjectPropertyExpression inDateTimeObjPropExpr in inDateTimeObjPropExprs)
                 inDateTimeObjPropAsns.AddRange(OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, inDateTimeObjPropExpr));
 
             //Iterate these assertions to reconstruct the temporal extent of corresponding temporal entity
-            List<TIMEInstantDescription> descriptionsOfTimeInstant = new List<TIMEInstantDescription>();
+            List<TIMEInstantDescription> descriptionsOfTimeInstant = [];
             foreach (OWLObjectPropertyAssertion inDateTimeObjPropAsn in inDateTimeObjPropAsns.Where(asn => asn.SourceIndividualExpression.GetIRI().Equals(timeInstant)))
             {
                 //Detect if the temporal extent is a general datetime description
@@ -677,13 +675,12 @@ namespace OWLSharp.Extensions.TIME
             List<OWLObjectPropertyAssertion> inTimePositionObjPropAsns = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, inTimePositionOP);
 
             //Filter assertions compatible with "time:inTimePosition" object property
-            List<OWLObjectPropertyExpression> inTimePositionObjPropExprs = ontology.GetSubObjectPropertiesOf(inTimePositionOP)
-                                                                            .Union(ontology.GetEquivalentObjectProperties(inTimePositionOP)).ToList();
+            List<OWLObjectPropertyExpression> inTimePositionObjPropExprs = [.. ontology.GetSubObjectPropertiesOf(inTimePositionOP).Union(ontology.GetEquivalentObjectProperties(inTimePositionOP))];
             foreach (OWLObjectPropertyExpression inTimePositionObjPropExpr in inTimePositionObjPropExprs)
                 inTimePositionObjPropAsns.AddRange(OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, inTimePositionObjPropExpr));
 
             //Iterate these assertions to reconstruct the temporal extent of corresponding temporal entity
-            List<TIMEInstantPosition> positionsOfTimeInstant = new List<TIMEInstantPosition>();
+            List<TIMEInstantPosition> positionsOfTimeInstant = [];
             foreach (OWLObjectPropertyAssertion inTimePositionObjPropAsn in inTimePositionObjPropAsns.Where(asn => asn.SourceIndividualExpression.GetIRI().Equals(timeInstant)))
             {
                 //Detect if the temporal extent is a temporal position
@@ -818,13 +815,12 @@ namespace OWLSharp.Extensions.TIME
             List<OWLObjectPropertyAssertion> hasDurationDescriptionObjPropAsns = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, hasDurationDescriptionOP);
 
             //Filter assertions compatible with "time:hasDurationDescription" object property
-            List<OWLObjectPropertyExpression> hasDurationDescriptionObjPropExprs = ontology.GetSubObjectPropertiesOf(hasDurationDescriptionOP)
-                                                                                    .Union(ontology.GetEquivalentObjectProperties(hasDurationDescriptionOP)).ToList();
+            List<OWLObjectPropertyExpression> hasDurationDescriptionObjPropExprs = [.. ontology.GetSubObjectPropertiesOf(hasDurationDescriptionOP).Union(ontology.GetEquivalentObjectProperties(hasDurationDescriptionOP))];
             foreach (OWLObjectPropertyExpression hasDurationDescriptionObjPropExpr in hasDurationDescriptionObjPropExprs)
                 hasDurationDescriptionObjPropAsns.AddRange(OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, hasDurationDescriptionObjPropExpr));
 
             //Iterate these assertions to reconstruct the temporal extent of corresponding temporal entity
-            List<TIMEIntervalDescription> descriptionsOfTimeInterval = new List<TIMEIntervalDescription>();
+            List<TIMEIntervalDescription> descriptionsOfTimeInterval = [];
             foreach (OWLObjectPropertyAssertion hasDurationDescriptionObjPropAsn in hasDurationDescriptionObjPropAsns.Where(asn => asn.SourceIndividualExpression.GetIRI().Equals(timeInterval)))
             {
                 //Detect if the temporal extent is a general duration description
@@ -874,20 +870,17 @@ namespace OWLSharp.Extensions.TIME
             OWLObjectProperty hasDurationOP = new OWLObjectProperty(RDFVocabulary.TIME.HAS_DURATION);
             OWLObjectProperty positionalUncertaintyOP = new OWLObjectProperty(RDFVocabulary.TIME.THORS.POSITIONAL_UNCERTAINTY);
             OWLClass durationCLS = new OWLClass(RDFVocabulary.TIME.DURATION);
-            List<OWLObjectPropertyAssertion> hasDurationObjPropAsns = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, hasDurationOP)
-                                                                       .Union(OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, positionalUncertaintyOP)).ToList();
+            List<OWLObjectPropertyAssertion> hasDurationObjPropAsns = [.. OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, hasDurationOP).Union(OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, positionalUncertaintyOP))];
 
             //Filter assertions compatible with "time:hasDuration" object property
-            List<OWLObjectPropertyExpression> hasDurationObjPropExprs = ontology.GetSubObjectPropertiesOf(hasDurationOP)
-                                                                         .Union(ontology.GetEquivalentObjectProperties(hasDurationOP)).ToList();
+            List<OWLObjectPropertyExpression> hasDurationObjPropExprs = [.. ontology.GetSubObjectPropertiesOf(hasDurationOP).Union(ontology.GetEquivalentObjectProperties(hasDurationOP))];
             //Filter assertions compatible with "thors:positionalUncertainty" object property
-            List<OWLObjectPropertyExpression> positionalUncertaintyObjPropExprs = ontology.GetSubObjectPropertiesOf(positionalUncertaintyOP)
-                                                                                   .Union(ontology.GetEquivalentObjectProperties(positionalUncertaintyOP)).ToList();
+            List<OWLObjectPropertyExpression> positionalUncertaintyObjPropExprs = [.. ontology.GetSubObjectPropertiesOf(positionalUncertaintyOP).Union(ontology.GetEquivalentObjectProperties(positionalUncertaintyOP))];
             foreach (OWLObjectPropertyExpression hasDurationObjPropExpr in hasDurationObjPropExprs.Union(positionalUncertaintyObjPropExprs))
                 hasDurationObjPropAsns.AddRange(OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, hasDurationObjPropExpr));
 
             //Iterate these assertions to reconstruct the temporal extent of corresponding temporal entity
-            List<TIMEIntervalDuration> durationsOfTimeInterval = new List<TIMEIntervalDuration>();
+            List<TIMEIntervalDuration> durationsOfTimeInterval = [];
             foreach (OWLObjectPropertyAssertion hasDurationObjPropAsn in hasDurationObjPropAsns.Where(asn => asn.SourceIndividualExpression.GetIRI().Equals(timeInterval)))
             {
                 //Detect if the temporal extent is a temporal duration
@@ -913,13 +906,12 @@ namespace OWLSharp.Extensions.TIME
             List<OWLObjectPropertyAssertion> hasBeginningObjPropAsns = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, hasBeginningOP);
 
             //Filter assertions compatible with "time:hasBeginning" object property
-            List<OWLObjectPropertyExpression> hasBeginningObjPropExprs = ontology.GetSubObjectPropertiesOf(hasBeginningOP)
-                                                                          .Union(ontology.GetEquivalentObjectProperties(hasBeginningOP)).ToList();
+            List<OWLObjectPropertyExpression> hasBeginningObjPropExprs = [.. ontology.GetSubObjectPropertiesOf(hasBeginningOP).Union(ontology.GetEquivalentObjectProperties(hasBeginningOP))];
             foreach (OWLObjectPropertyExpression hasBeginningObjPropExpr in hasBeginningObjPropExprs)
                 hasBeginningObjPropAsns.AddRange(OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, hasBeginningObjPropExpr));
 
             //Iterate these assertions to reconstruct the temporal extent of corresponding temporal entity
-            List<TIMEInstant> beginningsOfTimeInterval = new List<TIMEInstant>();
+            List<TIMEInstant> beginningsOfTimeInterval = [];
             foreach (OWLObjectPropertyAssertion hasBeginningObjPropAsn in hasBeginningObjPropAsns.Where(asn => asn.SourceIndividualExpression.GetIRI().Equals(timeInterval)))
             {
                 //Detect if the temporal extent is a time instant
@@ -947,13 +939,12 @@ namespace OWLSharp.Extensions.TIME
             List<OWLObjectPropertyAssertion> hasEndObjPropAsns = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, hasEndOP);
 
             //Filter assertions compatible with "time:hasEnd" object property
-            List<OWLObjectPropertyExpression> hasEndObjPropExprs = ontology.GetSubObjectPropertiesOf(hasEndOP)
-                                                                    .Union(ontology.GetEquivalentObjectProperties(hasEndOP)).ToList();
+            List<OWLObjectPropertyExpression> hasEndObjPropExprs = [.. ontology.GetSubObjectPropertiesOf(hasEndOP).Union(ontology.GetEquivalentObjectProperties(hasEndOP))];
             foreach (OWLObjectPropertyExpression hasEndObjPropExpr in hasEndObjPropExprs)
                 hasEndObjPropAsns.AddRange(OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, hasEndObjPropExpr));
 
             //Iterate these assertions to reconstruct the temporal extent of corresponding temporal entity
-            List<TIMEInstant> endsOfTimeInterval = new List<TIMEInstant>();
+            List<TIMEInstant> endsOfTimeInterval = [];
             foreach (OWLObjectPropertyAssertion hasEndObjPropAsn in hasEndObjPropAsns.Where(asn => asn.SourceIndividualExpression.GetIRI().Equals(timeInterval)))
             {
                 //Detect if the temporal extent is a time instant
@@ -980,8 +971,7 @@ namespace OWLSharp.Extensions.TIME
             if (timeInstantURI == null)
                 throw new OWLException("Cannot get temporal coordinate of instant because given \"timeInstantURI\" parameter is null");
 
-            if (calendarTRS == null)
-                calendarTRS = TIMECalendarReferenceSystem.Gregorian;
+            calendarTRS ??= TIMECalendarReferenceSystem.Gregorian;
             #endregion
 
             //Temporary working variables
@@ -1040,8 +1030,7 @@ namespace OWLSharp.Extensions.TIME
             if (timeIntervalURI == null)
                 throw new OWLException("Cannot get temporal extent of interval because given \"timeIntervalURI\" parameter is null");
 
-            if (calendarTRS == null)
-                calendarTRS = TIMECalendarReferenceSystem.Gregorian;
+            calendarTRS ??= TIMECalendarReferenceSystem.Gregorian;
             #endregion
 
             //Temporary working variables
@@ -1097,23 +1086,20 @@ namespace OWLSharp.Extensions.TIME
             if (timeIntervalURI == null)
                 throw new OWLException("Cannot get beginning of interval because given \"timeIntervalURI\" parameter is null");
 
-            if (calendarTRS == null)
-                calendarTRS = TIMECalendarReferenceSystem.Gregorian;
+            calendarTRS ??= TIMECalendarReferenceSystem.Gregorian;
             #endregion
 
             //Temporary working variables
             List<OWLDataPropertyAssertion> dtPropAsns = ontology.GetAssertionAxiomsOfType<OWLDataPropertyAssertion>();
             List<OWLObjectPropertyAssertion> objPropAsns = OWLAssertionAxiomHelper.CalibrateObjectAssertions(ontology);
 
-            return GetBeginningOfIntervalInternal(ontology, timeIntervalURI, calendarTRS, dtPropAsns, objPropAsns, new Dictionary<long, RDFResource>());
+            return GetBeginningOfIntervalInternal(ontology, timeIntervalURI, calendarTRS, dtPropAsns, objPropAsns, []);
         }
         internal static TIMECoordinate GetBeginningOfIntervalInternal(this OWLOntology ontology, RDFResource timeIntervalURI, TIMECalendarReferenceSystem calendarTRS,
             List<OWLDataPropertyAssertion> dtPropAsns, List<OWLObjectPropertyAssertion> objPropAsns, Dictionary<long,RDFResource> visitContext)
         {
             #region visitContext
-            if (!visitContext.ContainsKey(timeIntervalURI.PatternMemberID))
-                visitContext.Add(timeIntervalURI.PatternMemberID, timeIntervalURI);
-            else
+            if (!visitContext.TryAdd(timeIntervalURI.PatternMemberID, timeIntervalURI))
                 return null;
             #endregion
 
@@ -1172,23 +1158,20 @@ namespace OWLSharp.Extensions.TIME
             if (timeIntervalURI == null)
                 throw new OWLException("Cannot get end of interval because given \"timeIntervalURI\" parameter is null");
 
-            if (calendarTRS == null)
-                calendarTRS = TIMECalendarReferenceSystem.Gregorian;
+            calendarTRS ??= TIMECalendarReferenceSystem.Gregorian;
             #endregion
 
             //Temporary working variables
             List<OWLDataPropertyAssertion> dtPropAsns = ontology.GetAssertionAxiomsOfType<OWLDataPropertyAssertion>();
             List<OWLObjectPropertyAssertion> objPropAsns = OWLAssertionAxiomHelper.CalibrateObjectAssertions(ontology);
 
-            return GetEndOfIntervalInternal(ontology, timeIntervalURI, calendarTRS, dtPropAsns, objPropAsns, new Dictionary<long, RDFResource>());
+            return GetEndOfIntervalInternal(ontology, timeIntervalURI, calendarTRS, dtPropAsns, objPropAsns, []);
         }
         internal static TIMECoordinate GetEndOfIntervalInternal(this OWLOntology ontology, RDFResource timeIntervalURI,  TIMECalendarReferenceSystem calendarTRS,
             List<OWLDataPropertyAssertion> dtPropAsns, List<OWLObjectPropertyAssertion> objPropAsns, Dictionary<long,RDFResource> visitContext)
         {
             #region visitContext
-            if (!visitContext.ContainsKey(timeIntervalURI.PatternMemberID))
-                visitContext.Add(timeIntervalURI.PatternMemberID, timeIntervalURI);
-            else
+            if (!visitContext.TryAdd(timeIntervalURI.PatternMemberID, timeIntervalURI))
                 return null;
             #endregion
 
@@ -1248,37 +1231,37 @@ namespace OWLSharp.Extensions.TIME
             if (!month.HasValue)
                 return null;
 
-            switch (month)
+            return month switch
             {
-                case  1: return RDFVocabulary.TIME.GREG.JANUARY;
-                case  2: return RDFVocabulary.TIME.GREG.FEBRUARY;
-                case  3: return RDFVocabulary.TIME.GREG.MARCH;
-                case  4: return RDFVocabulary.TIME.GREG.APRIL;
-                case  5: return RDFVocabulary.TIME.GREG.MAY;
-                case  6: return RDFVocabulary.TIME.GREG.JUNE;
-                case  7: return RDFVocabulary.TIME.GREG.JULY;
-                case  8: return RDFVocabulary.TIME.GREG.AUGUST;
-                case  9: return RDFVocabulary.TIME.GREG.SEPTEMBER;
-                case 10: return RDFVocabulary.TIME.GREG.OCTOBER;
-                case 11: return RDFVocabulary.TIME.GREG.NOVEMBER;
-                case 12: return RDFVocabulary.TIME.GREG.DECEMBER;
-                default: return null;
-            }
+                1 => RDFVocabulary.TIME.GREG.JANUARY,
+                2 => RDFVocabulary.TIME.GREG.FEBRUARY,
+                3 => RDFVocabulary.TIME.GREG.MARCH,
+                4 => RDFVocabulary.TIME.GREG.APRIL,
+                5 => RDFVocabulary.TIME.GREG.MAY,
+                6 => RDFVocabulary.TIME.GREG.JUNE,
+                7 => RDFVocabulary.TIME.GREG.JULY,
+                8 => RDFVocabulary.TIME.GREG.AUGUST,
+                9 => RDFVocabulary.TIME.GREG.SEPTEMBER,
+                10 => RDFVocabulary.TIME.GREG.OCTOBER,
+                11 => RDFVocabulary.TIME.GREG.NOVEMBER,
+                12 => RDFVocabulary.TIME.GREG.DECEMBER,
+                _ => null,
+            };
         }
         [ExcludeFromCodeCoverage]
         internal static RDFResource GetDayOfWeek(DayOfWeek dayOfWeek)
         {
-            switch (dayOfWeek)
+            return dayOfWeek switch
             {
-                case DayOfWeek.Sunday:    return RDFVocabulary.TIME.SUNDAY;
-                case DayOfWeek.Monday:    return RDFVocabulary.TIME.MONDAY;
-                case DayOfWeek.Tuesday:   return RDFVocabulary.TIME.TUESDAY;
-                case DayOfWeek.Wednesday: return RDFVocabulary.TIME.WEDNESDAY;
-                case DayOfWeek.Thursday:  return RDFVocabulary.TIME.THURSDAY;
-                case DayOfWeek.Friday:    return RDFVocabulary.TIME.FRIDAY;
-                case DayOfWeek.Saturday:  return RDFVocabulary.TIME.SATURDAY;
-                default:                  return null;
-            }
+                DayOfWeek.Sunday => RDFVocabulary.TIME.SUNDAY,
+                DayOfWeek.Monday => RDFVocabulary.TIME.MONDAY,
+                DayOfWeek.Tuesday => RDFVocabulary.TIME.TUESDAY,
+                DayOfWeek.Wednesday => RDFVocabulary.TIME.WEDNESDAY,
+                DayOfWeek.Thursday => RDFVocabulary.TIME.THURSDAY,
+                DayOfWeek.Friday => RDFVocabulary.TIME.FRIDAY,
+                DayOfWeek.Saturday => RDFVocabulary.TIME.SATURDAY,
+                _ => null,
+            };
         }
         #endregion
     }

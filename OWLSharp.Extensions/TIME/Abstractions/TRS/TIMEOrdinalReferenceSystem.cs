@@ -205,7 +205,7 @@ namespace OWLSharp.Extensions.TIME
 
         public List<RDFResource> GetSubErasOf(RDFResource era, bool enableReasoning=true)
         {
-            List<RDFResource> subEras = new List<RDFResource>();
+            List<RDFResource> subEras = [];
 
             if (era != null)
             {
@@ -214,7 +214,7 @@ namespace OWLSharp.Extensions.TIME
                 List<OWLObjectPropertyAssertion> thorsMemberObjPropAsns = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, new OWLObjectProperty(RDFVocabulary.TIME.THORS.MEMBER));
 
                 //Reason on the given era
-                subEras.AddRange(FindSubErasOf(era, thorsMemberObjPropAsns, new Dictionary<long, RDFResource>(), enableReasoning));
+                subEras.AddRange(FindSubErasOf(era, thorsMemberObjPropAsns, [], enableReasoning));
 
                 //We don't want to also enlist the given thors:Era
                 subEras.RemoveAll(cls => cls.Equals(era));
@@ -224,12 +224,10 @@ namespace OWLSharp.Extensions.TIME
         }
         internal List<RDFResource> FindSubErasOf(RDFResource era, List<OWLObjectPropertyAssertion> thorsMemberObjPropAsns, Dictionary<long, RDFResource> visitContext, bool enableReasoning)
         {
-            List<RDFResource> subEras = new List<RDFResource>();
+            List<RDFResource> subEras = [];
 
             #region VisitContext
-            if (!visitContext.ContainsKey(era.PatternMemberID))
-                visitContext.Add(era.PatternMemberID, era);
-            else
+            if (!visitContext.TryAdd(era.PatternMemberID, era))
                 return subEras;
             #endregion
 
@@ -249,7 +247,7 @@ namespace OWLSharp.Extensions.TIME
 
         public List<RDFResource> GetSuperErasOf(RDFResource era, bool enableReasoning=true)
         {
-            List<RDFResource> superEras = new List<RDFResource>();
+            List<RDFResource> superEras = [];
 
             if (era != null)
             {
@@ -258,7 +256,7 @@ namespace OWLSharp.Extensions.TIME
                 List<OWLObjectPropertyAssertion> thorsMemberObjPropAsns = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, new OWLObjectProperty(RDFVocabulary.TIME.THORS.MEMBER));
 
                 //Reason on the given era
-                superEras.AddRange(FindSuperErasOf(era, thorsMemberObjPropAsns, new Dictionary<long, RDFResource>(), enableReasoning));
+                superEras.AddRange(FindSuperErasOf(era, thorsMemberObjPropAsns, [], enableReasoning));
 
                 //We don't want to also enlist the given thors:Era
                 superEras.RemoveAll(cls => cls.Equals(era));
@@ -268,12 +266,10 @@ namespace OWLSharp.Extensions.TIME
         }
         internal List<RDFResource> FindSuperErasOf(RDFResource era, List<OWLObjectPropertyAssertion> thorsMemberObjPropAsns, Dictionary<long, RDFResource> visitContext, bool enableReasoning)
         {
-            List<RDFResource> superEras = new List<RDFResource>();
+            List<RDFResource> superEras = [];
 
             #region VisitContext
-            if (!visitContext.ContainsKey(era.PatternMemberID))
-                visitContext.Add(era.PatternMemberID, era);
-            else
+            if (!visitContext.TryAdd(era.PatternMemberID, era))
                 return superEras;
             #endregion
 
@@ -299,8 +295,7 @@ namespace OWLSharp.Extensions.TIME
             if (!CheckHasEra(era))
                 throw new OWLException("Cannot get coordinates of era because given \"era\" parameter is not a component of this ordinal TRS");
 
-            if (calendarTRS == null)
-                calendarTRS = TIMECalendarReferenceSystem.Gregorian;
+            calendarTRS ??= TIMECalendarReferenceSystem.Gregorian;
             #endregion
 
             //Temporary working variables
@@ -333,8 +328,7 @@ namespace OWLSharp.Extensions.TIME
             if (!CheckHasEra(era))
                 throw new OWLException("Cannot get extent of era because given \"era\" parameter is not a component of this ordinal TRS");
 
-            if (calendarTRS == null)
-                calendarTRS = TIMECalendarReferenceSystem.Gregorian;
+            calendarTRS ??= TIMECalendarReferenceSystem.Gregorian;
             #endregion
 
             //Get coordinates of era (if correctly declared to the ordinal TRS with THORS semantics)

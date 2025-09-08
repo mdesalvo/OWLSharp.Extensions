@@ -28,16 +28,16 @@ namespace OWLSharp.Extensions.SKOS
 
         internal static async Task<List<OWLIssue>> ExecuteRuleAsync(OWLOntology ontology, Dictionary<string, List<OWLIndividualExpression>> cacheRegistry)
         {
-            List<OWLIssue> issues = new List<OWLIssue>();
-            List<OWLInference> violations = new List<OWLInference>();
+            List<OWLIssue> issues = [];
+            List<OWLInference> violations = [];
 
             SWRLRule notationRule = new SWRLRule(
                 new RDFPlainLiteral(nameof(SKOSNotationAnalysisRule)),
                 new RDFPlainLiteral("This rule checks for collisions of values assumed by different skos:Concept instances in their skos:Notation data relations within the same skos:ConceptScheme"),
                 new SWRLAntecedent
                 {
-                    Atoms = new List<SWRLAtom>
-                    {
+                    Atoms =
+                    [
                         new SWRLClassAtom(
                             new OWLClass(RDFVocabulary.SKOS.CONCEPT_SCHEME),
                             new SWRLVariableArgument(new RDFVariable("?S"))),
@@ -63,26 +63,26 @@ namespace OWLSharp.Extensions.SKOS
                             new OWLDataProperty(RDFVocabulary.SKOS.NOTATION),
                             new SWRLVariableArgument(new RDFVariable("?C2")),
                             new SWRLVariableArgument(new RDFVariable("?N2")))
-                    },
-                    BuiltIns = new List<SWRLBuiltIn>
-                    {
+                    ],
+                    BuiltIns =
+                    [
                         SWRLBuiltIn.NotEqual(
                             new SWRLVariableArgument(new RDFVariable("?C1")),
                             new SWRLVariableArgument(new RDFVariable("?C2"))),
                         SWRLBuiltIn.Equal(
                             new SWRLVariableArgument(new RDFVariable("?N1")),
                             new SWRLVariableArgument(new RDFVariable("?N2")))
-                    }
+                    ]
                 },
                 new SWRLConsequent
                 {
-                    Atoms = new List<SWRLAtom>
-                    {
+                    Atoms =
+                    [
                         new SWRLObjectPropertyAtom(
                             new OWLObjectProperty(SKOSValidator.ViolationIRI),
                             new SWRLVariableArgument(new RDFVariable("?C1")),
                             new SWRLVariableArgument(new RDFVariable("?C2")))
-                    }
+                    ]
                 });
             violations.AddRange(await notationRule.ApplyToOntologyAsync(ontology));
             violations.ForEach(violation => issues.Add(

@@ -28,8 +28,7 @@ namespace OWLSharp.Extensions.TIME
             if (bTimeInstantURI == null)
                 throw new OWLException("Cannot check if aInstant is after bInstant because given \"bTimeInstantURI\" parameter is null");
 
-            if (calendarTRS == null)
-                calendarTRS = TIMECalendarReferenceSystem.Gregorian;
+            calendarTRS ??= TIMECalendarReferenceSystem.Gregorian;
             #endregion
 
             //Retrieve the temporal coordinate of the given time aInstant
@@ -55,8 +54,7 @@ namespace OWLSharp.Extensions.TIME
             if (timeIntervalURI == null)
                 throw new OWLException("Cannot check if instant is after interval because given \"timeIntervalURI\" parameter is null");
 
-            if (calendarTRS == null)
-                calendarTRS = TIMECalendarReferenceSystem.Gregorian;
+            calendarTRS ??= TIMECalendarReferenceSystem.Gregorian;
             #endregion
 
             //Retrieve the temporal coordinate of the given time instant
@@ -82,8 +80,7 @@ namespace OWLSharp.Extensions.TIME
             if (bTimeInstantURI == null)
                 throw new OWLException("Cannot check if aInstant is before bInstant because given \"bTimeInstantURI\" parameter is null");
 
-            if (calendarTRS == null)
-                calendarTRS = TIMECalendarReferenceSystem.Gregorian;
+            calendarTRS ??= TIMECalendarReferenceSystem.Gregorian;
             #endregion
 
             //Retrieve the temporal coordinate of the given time aInstant
@@ -109,8 +106,7 @@ namespace OWLSharp.Extensions.TIME
             if (timeIntervalURI == null)
                 throw new OWLException("Cannot check if instant is before interval because given \"timeIntervalURI\" parameter is null");
 
-            if (calendarTRS == null)
-                calendarTRS = TIMECalendarReferenceSystem.Gregorian;
+            calendarTRS ??= TIMECalendarReferenceSystem.Gregorian;
             #endregion
 
             //Retrieve the temporal coordinate of the given time instant
@@ -136,8 +132,7 @@ namespace OWLSharp.Extensions.TIME
             if (timeIntervalURI == null)
                 throw new OWLException("Cannot check if instant is inside interval because given \"timeIntervalURI\" parameter is null");
 
-            if (calendarTRS == null)
-                calendarTRS = TIMECalendarReferenceSystem.Gregorian;
+            calendarTRS ??= TIMECalendarReferenceSystem.Gregorian;
             #endregion
 
             //Retrieve the temporal coordinate of the given time instant
