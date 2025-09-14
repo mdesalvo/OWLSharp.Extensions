@@ -28,7 +28,7 @@ namespace OWLSharp.Extensions.TIME
         #region Properties
         internal static readonly RDFResource ViolationIRI = new RDFResource("urn:owlsharp:swrl:hasViolations");
 
-        public List<TIMEEnums.TIMEValidatorRules> Rules { get; internal set; } = [];
+        public List<TIMEEnums.TIMEValidatorRules> Rules { get; internal set; } = new List<TIMEEnums.TIMEValidatorRules>();
         #endregion
 
         #region Methods
@@ -40,12 +40,12 @@ namespace OWLSharp.Extensions.TIME
 
         public async Task<List<OWLIssue>> ApplyToOntologyAsync(OWLOntology ontology)
         {
-            List<OWLIssue> issues = [];
+            List<OWLIssue> issues = new List<OWLIssue>();
 
             if (ontology != null)
             {
                 OWLEvents.RaiseInfo($"Launching OWL-TIME validator on ontology '{ontology.IRI}'...");
-                Rules = [.. Rules.Distinct()];
+                Rules = Rules.Distinct().ToList();
 
                 //Initialize issue registry
                 Dictionary<string, List<OWLIssue>> issueRegistry = new Dictionary<string, List<OWLIssue>>(Rules.Count);

@@ -28,7 +28,8 @@ namespace OWLSharp.Extensions.TIME
             if (positionTRS == null)
                 throw new OWLException("Cannot convert position to coordinate because given \"positionTRS\" parameter is null");
 
-            calendarTRS ??= TIMECalendarReferenceSystem.Gregorian;
+            if (calendarTRS == null)
+                calendarTRS = TIMECalendarReferenceSystem.Gregorian;
             #endregion
 
             //Normalize origin of the given positional TRS according to the metrics of the given calendar TRS
@@ -94,7 +95,8 @@ namespace OWLSharp.Extensions.TIME
             if (timeCoordinate == null)
                 throw new OWLException("Cannot normalize coordinate because given \"timeExtent\" parameter is null");
 
-            calendarTRS ??= TIMECalendarReferenceSystem.Gregorian;
+            if (calendarTRS == null)
+                calendarTRS = TIMECalendarReferenceSystem.Gregorian;
             #endregion
 
             //Normalize second
@@ -179,7 +181,8 @@ namespace OWLSharp.Extensions.TIME
             if (unitType == null)
                 throw new OWLException("Cannot convert duration to extent because given \"unitType\" parameter is null");
 
-            calendarTRS ??= TIMECalendarReferenceSystem.Gregorian;
+            if (calendarTRS == null)
+                calendarTRS = TIMECalendarReferenceSystem.Gregorian;
             #endregion
 
             TIMEExtent extent = new TIMEExtent { Metadata = new TIMEExtentMetadata(calendarTRS) };
@@ -222,7 +225,8 @@ namespace OWLSharp.Extensions.TIME
             if (timeExtent == null)
                 throw new OWLException("Cannot normalize extent because given \"timeExtent\" parameter is null");
 
-            calendarTRS ??= TIMECalendarReferenceSystem.Gregorian;
+            if (calendarTRS == null)
+                calendarTRS = TIMECalendarReferenceSystem.Gregorian;
             #endregion
 
             //Transform the components to seconds (since duration works at this level of detail)
@@ -253,7 +257,8 @@ namespace OWLSharp.Extensions.TIME
             if (timeCoordinateEnd == null)
                 throw new OWLException("Cannot get extent because given \"timeCoordinateEnd\" parameter is null");
 
-            calendarTRS ??= TIMECalendarReferenceSystem.Gregorian;
+            if (calendarTRS == null)
+                calendarTRS = TIMECalendarReferenceSystem.Gregorian;
             #endregion
 
             //Normalize the given coordinates according to the metrics of the given calendar TRS

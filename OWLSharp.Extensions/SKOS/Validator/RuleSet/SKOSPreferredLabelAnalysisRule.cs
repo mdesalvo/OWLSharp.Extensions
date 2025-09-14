@@ -29,8 +29,8 @@ namespace OWLSharp.Extensions.SKOS
 
         internal static async Task<List<OWLIssue>> ExecuteRuleAsync(OWLOntology ontology, Dictionary<string, List<OWLIndividualExpression>> cacheRegistry)
         {
-            List<OWLIssue> issues = [];
-            List<OWLInference> violations = [];
+            List<OWLIssue> issues = new List<OWLIssue>();
+            List<OWLInference> violations = new List<OWLInference>();
 
             //SKOS
 
@@ -39,8 +39,8 @@ namespace OWLSharp.Extensions.SKOS
                 new RDFPlainLiteral("This rule checks for duplicate language tags detected for values assumed by a skos:Concept in its skos:prefLabel data annotations"),
                 new SWRLAntecedent
                 {
-                    Atoms =
-                    [
+                    Atoms = new List<SWRLAtom>
+                    {
                         new SWRLClassAtom(
                             new OWLClass(RDFVocabulary.SKOS.CONCEPT),
                             new SWRLVariableArgument(new RDFVariable("?C"))) { IndividualsCache = cacheRegistry["CONCEPTS"] },
@@ -52,26 +52,26 @@ namespace OWLSharp.Extensions.SKOS
                             new OWLAnnotationProperty(RDFVocabulary.SKOS.PREF_LABEL),
                             new SWRLVariableArgument(new RDFVariable("?C")),
                             new SWRLVariableArgument(new RDFVariable("?PREF_LABEL_2")))
-                    ],
-                    BuiltIns =
-                    [
+                    },
+                    BuiltIns = new List<SWRLBuiltIn>
+                    {
                         SWRLBuiltIn.NotEqual(
                             new SWRLVariableArgument(new RDFVariable("?PREF_LABEL_1")),
                             new SWRLVariableArgument(new RDFVariable("?PREF_LABEL_2"))),
                         SWRLBuiltIn.EXTLangMatches(
                             new SWRLVariableArgument(new RDFVariable("?PREF_LABEL_1")),
                             new SWRLVariableArgument(new RDFVariable("?PREF_LABEL_2")))
-                    ]
+                    }
                 },
                 new SWRLConsequent
                 {
-                    Atoms =
-                    [
+                    Atoms = new List<SWRLAtom>
+                    {
                         new SWRLDataPropertyAtom(
                             new OWLDataProperty(SKOSValidator.ViolationIRI),
                             new SWRLVariableArgument(new RDFVariable("?C")),
                             new SWRLLiteralArgument(RDFTypedLiteral.True))
-                    ]
+                    }
                 });
             violations.AddRange(await prefRule.ApplyToOntologyAsync(ontology));
             violations.ForEach(violation => issues.Add(
@@ -90,8 +90,8 @@ namespace OWLSharp.Extensions.SKOS
                 new RDFPlainLiteral("This rule checks for duplicate language tags detected for values assumed by a skos:Concept in its skosxl:prefLabel data relations"),
                 new SWRLAntecedent
                 {
-                    Atoms =
-                    [
+                    Atoms = new List<SWRLAtom>
+                    {
                         new SWRLClassAtom(
                             new OWLClass(RDFVocabulary.SKOS.CONCEPT),
                             new SWRLVariableArgument(new RDFVariable("?C"))) { IndividualsCache = cacheRegistry["CONCEPTS"] },
@@ -111,9 +111,9 @@ namespace OWLSharp.Extensions.SKOS
                             new OWLDataProperty(RDFVocabulary.SKOS.SKOSXL.LITERAL_FORM),
                             new SWRLVariableArgument(new RDFVariable("?PL2")),
                             new SWRLVariableArgument(new RDFVariable("?PREF_LABEL_2")))
-                    ],
-                    BuiltIns =
-                    [
+                    },
+                    BuiltIns = new List<SWRLBuiltIn>
+                    {
                         SWRLBuiltIn.NotEqual(
                             new SWRLVariableArgument(new RDFVariable("?PL1")),
                             new SWRLVariableArgument(new RDFVariable("?PL2"))),
@@ -123,17 +123,17 @@ namespace OWLSharp.Extensions.SKOS
                         SWRLBuiltIn.EXTLangMatches(
                             new SWRLVariableArgument(new RDFVariable("?PREF_LABEL_1")),
                             new SWRLVariableArgument(new RDFVariable("?PREF_LABEL_2")))
-                    ]
+                    }
                 },
                 new SWRLConsequent
                 {
-                    Atoms =
-                    [
+                    Atoms = new List<SWRLAtom>
+                    {
                         new SWRLDataPropertyAtom(
                             new OWLDataProperty(SKOSValidator.ViolationIRI),
                             new SWRLVariableArgument(new RDFVariable("?C")),
                             new SWRLLiteralArgument(RDFTypedLiteral.True))
-                    ]
+                    }
                 });
             violations.AddRange(await prefXLRule.ApplyToOntologyAsync(ontology));
             violations.ForEach(violation => issues.Add(

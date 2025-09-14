@@ -29,8 +29,8 @@ namespace OWLSharp.Extensions.TIME
 
         internal static async Task<List<OWLIssue>> ExecuteRuleAsync(OWLOntology ontology, Dictionary<string, List<OWLIndividualExpression>> cacheRegistry)
         {
-            List<OWLIssue> issues = [];
-            List<OWLInference> violations = [];
+            List<OWLIssue> issues = new List<OWLIssue>();
+            List<OWLInference> violations = new List<OWLInference>();
 
             //time:after vs time:after
             SWRLRule clashRule1 = new SWRLRule(
@@ -38,8 +38,8 @@ namespace OWLSharp.Extensions.TIME
                 new RDFPlainLiteral("BEFORE(?I1,?I2) ^ BEFORE(?I2,?I1) -> ERROR"),
                 new SWRLAntecedent
                 {
-                    Atoms =
-                    [
+                    Atoms = new List<SWRLAtom>
+                    {
                         new SWRLClassAtom(
                             new OWLClass(RDFVocabulary.TIME.INSTANT),
                             new SWRLVariableArgument(new RDFVariable("?I1"))) { IndividualsCache = cacheRegistry["INSTANTS"] },
@@ -54,23 +54,23 @@ namespace OWLSharp.Extensions.TIME
                             new OWLObjectProperty(RDFVocabulary.TIME.BEFORE),
                             new SWRLVariableArgument(new RDFVariable("?I2")),
                             new SWRLVariableArgument(new RDFVariable("?I1")))
-                    ],
-                    BuiltIns =
-                    [
+                    },
+                    BuiltIns = new List<SWRLBuiltIn>
+                    {
                         SWRLBuiltIn.NotEqual(
                             new SWRLVariableArgument(new RDFVariable("?I1")),
                             new SWRLVariableArgument(new RDFVariable("?I2")))
-                    ]
+                    }
                 },
                 new SWRLConsequent
                 {
-                    Atoms =
-                    [
+                    Atoms = new List<SWRLAtom>
+                    {
                         new SWRLObjectPropertyAtom(
                             new OWLObjectProperty(TIMEValidator.ViolationIRI),
                             new SWRLVariableArgument(new RDFVariable("?I1")),
                             new SWRLVariableArgument(new RDFVariable("?I2")))
-                    ]
+                    }
                 });
             violations.AddRange(await clashRule1.ApplyToOntologyAsync(ontology));
             violations.ForEach(violation => issues.Add(
@@ -88,8 +88,8 @@ namespace OWLSharp.Extensions.TIME
                 new RDFPlainLiteral("BEFORE(?I1,?I2) ^ AFTER(?I1,?I2) -> ERROR"),
                 new SWRLAntecedent
                 {
-                    Atoms =
-                    [
+                    Atoms = new List<SWRLAtom>
+                    {
                         new SWRLClassAtom(
                             new OWLClass(RDFVocabulary.TIME.INSTANT),
                             new SWRLVariableArgument(new RDFVariable("?I1"))),
@@ -104,23 +104,23 @@ namespace OWLSharp.Extensions.TIME
                             new OWLObjectProperty(RDFVocabulary.TIME.AFTER),
                             new SWRLVariableArgument(new RDFVariable("?I1")),
                             new SWRLVariableArgument(new RDFVariable("?I2")))
-                    ],
-                    BuiltIns =
-                    [
+                    },
+                    BuiltIns = new List<SWRLBuiltIn>
+                    {
                         SWRLBuiltIn.NotEqual(
                             new SWRLVariableArgument(new RDFVariable("?I1")),
                             new SWRLVariableArgument(new RDFVariable("?I2")))
-                    ]
+                    }
                 },
                 new SWRLConsequent
                 {
-                    Atoms =
-                    [
+                    Atoms = new List<SWRLAtom>
+                    {
                         new SWRLObjectPropertyAtom(
                             new OWLObjectProperty(TIMEValidator.ViolationIRI),
                             new SWRLVariableArgument(new RDFVariable("?I1")),
                             new SWRLVariableArgument(new RDFVariable("?I2")))
-                    ]
+                    }
                 });
             violations.AddRange(await clashRule2.ApplyToOntologyAsync(ontology));
             violations.ForEach(violation => issues.Add(

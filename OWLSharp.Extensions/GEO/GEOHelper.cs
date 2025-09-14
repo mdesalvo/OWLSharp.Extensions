@@ -174,7 +174,7 @@ namespace OWLSharp.Extensions.GEO
                 throw new OWLException("Cannot get spatial dimension of feature because given \"featureURI\" parameter is null");
             #endregion
 
-            List<GEOEntity> spatialExtentOfFeature = [];
+            List<GEOEntity> spatialExtentOfFeature = new List<GEOEntity>();
             Dictionary<string,List<(Geometry,Geometry)>> featuresWithGeometry = await GetFeaturesWithGeometriesAsync(ontology);
             if (featuresWithGeometry.TryGetValue(featureURI.ToString(), out List<(Geometry wgs84,Geometry laz)> featureGeometries))
                 foreach (Geometry wgs84Geom in featureGeometries.Select(fg => fg.wgs84))
@@ -186,10 +186,10 @@ namespace OWLSharp.Extensions.GEO
                             spatialExtentOfFeature.Add(new GEOPoint(geometryUri, (wgs84Point.Coordinate.X,wgs84Point.Coordinate.Y)));
                             break;
                         case LineString wgs84Line:
-                            spatialExtentOfFeature.Add(new GEOLine(geometryUri, [.. wgs84Line.Coordinates.Select(c => (c.X,c.Y))]));
+                            spatialExtentOfFeature.Add(new GEOLine(geometryUri, wgs84Line.Coordinates.Select(c => (c.X,c.Y)).ToArray()));
                             break;
                         case Polygon wgs84Area:
-                            spatialExtentOfFeature.Add(new GEOArea(geometryUri, [.. wgs84Area.Coordinates.Select(c => (c.X,c.Y))]));
+                            spatialExtentOfFeature.Add(new GEOArea(geometryUri, wgs84Area.Coordinates.Select(c => (c.X,c.Y)).ToArray()));
                             break;
                     }
                     //other types of OGC geometries are not supported yet...
@@ -693,7 +693,7 @@ namespace OWLSharp.Extensions.GEO
 
             //Perform spatial analysis between collected geometries:
             //iterate geometries and collect those within given radius
-            List<RDFResource> featuresWithinDistance = [];
+            List<RDFResource> featuresWithinDistance = new List<RDFResource>();
             foreach (KeyValuePair<string,List<(Geometry,Geometry)>> featureWithGeometry in featuresWithGeometry)
             {
                 //Obviously exclude the given feature itself
@@ -735,7 +735,7 @@ namespace OWLSharp.Extensions.GEO
 
             //Perform spatial analysis between collected geometries:
             //iterate geometries and collect those within given radius
-            List<RDFResource> featuresWithinDistance = [];
+            List<RDFResource> featuresWithinDistance = new List<RDFResource>();
             foreach (KeyValuePair<string,List<(Geometry,Geometry)>> featureWithGeometry in featuresWithGeometry)
             {
                 foreach ((Geometry,Geometry) geometryOfFeature in featureWithGeometry.Value)
@@ -767,7 +767,7 @@ namespace OWLSharp.Extensions.GEO
                 Dictionary<string, List<(Geometry, Geometry)>> featuresWithGeometry = await ontology.GetFeaturesWithGeometriesAsync();
 
                 //Perform spatial analysis between collected geometries
-                List<RDFResource> featuresDirection = [];
+                List<RDFResource> featuresDirection = new List<RDFResource>();
                 foreach (KeyValuePair<string, List<(Geometry, Geometry)>> featureWithGeometry in featuresWithGeometry)
                 {
                     //Obviously exclude the given feature itself
@@ -792,7 +792,7 @@ namespace OWLSharp.Extensions.GEO
                 Dictionary<string, List<(Geometry, Geometry)>> featuresWithGeometry = await ontology.GetFeaturesWithGeometriesAsync();
 
                 //Perform spatial analysis between collected geometries
-                List<RDFResource> featuresDirection = [];
+                List<RDFResource> featuresDirection = new List<RDFResource>();
                 foreach (KeyValuePair<string, List<(Geometry, Geometry)>> featureWithGeometry in featuresWithGeometry)
                 {
                     //Obviously exclude the given feature itself
@@ -833,7 +833,7 @@ namespace OWLSharp.Extensions.GEO
             Dictionary<string, List<(Geometry, Geometry)>> featuresWithGeometry = await ontology.GetFeaturesWithGeometriesAsync();
 
             //Perform spatial analysis between collected geometries
-            List<RDFResource> featuresDirection = [];
+            List<RDFResource> featuresDirection = new List<RDFResource>();
             foreach (KeyValuePair<string, List<(Geometry, Geometry)>> featureWithGeometry in featuresWithGeometry)
             {
                 foreach ((Geometry, Geometry) geometryOfFeature in featureWithGeometry.Value)
@@ -865,7 +865,7 @@ namespace OWLSharp.Extensions.GEO
                 Dictionary<string, List<(Geometry, Geometry)>> featuresWithGeometry = await ontology.GetFeaturesWithGeometriesAsync();
 
                 //Perform spatial analysis between collected geometries
-                List<RDFResource> featuresInteraction = [];
+                List<RDFResource> featuresInteraction = new List<RDFResource>();
                 foreach (KeyValuePair<string, List<(Geometry, Geometry)>> featureWithGeometry in featuresWithGeometry)
                 {
                     //Obviously exclude the given feature itself
@@ -890,7 +890,7 @@ namespace OWLSharp.Extensions.GEO
                 Dictionary<string, List<(Geometry, Geometry)>> featuresWithGeometry = await ontology.GetFeaturesWithGeometriesAsync();
 
                 //Perform spatial analysis between collected geometries
-                List<RDFResource> featuresInteraction = [];
+                List<RDFResource> featuresInteraction = new List<RDFResource>();
                 foreach (KeyValuePair<string, List<(Geometry, Geometry)>> featureWithGeometry in featuresWithGeometry)
                 {
                     //Obviously exclude the given feature itself
@@ -931,7 +931,7 @@ namespace OWLSharp.Extensions.GEO
             Dictionary<string, List<(Geometry, Geometry)>> featuresWithGeometry = await ontology.GetFeaturesWithGeometriesAsync();
 
             //Perform spatial analysis between collected geometries
-            List<RDFResource> featuresDirectionOf = [];
+            List<RDFResource> featuresDirectionOf = new List<RDFResource>();
             foreach (KeyValuePair<string, List<(Geometry, Geometry)>> featureWithGeometry in featuresWithGeometry)
             {
                 foreach ((Geometry, Geometry) geometryOfFeature in featureWithGeometry.Value)
@@ -961,7 +961,7 @@ namespace OWLSharp.Extensions.GEO
                 Dictionary<string, List<(Geometry, Geometry)>> featuresWithGeometry = await ontology.GetFeaturesWithGeometriesAsync();
 
                 //Perform spatial analysis between collected geometries
-                List<RDFResource> featuresInteraction = [];
+                List<RDFResource> featuresInteraction = new List<RDFResource>();
                 foreach (KeyValuePair<string, List<(Geometry, Geometry)>> featureWithGeometry in featuresWithGeometry)
                 {
                     //Obviously exclude the given feature itself
@@ -986,7 +986,7 @@ namespace OWLSharp.Extensions.GEO
                 Dictionary<string, List<(Geometry, Geometry)>> featuresWithGeometry = await ontology.GetFeaturesWithGeometriesAsync();
 
                 //Perform spatial analysis between collected geometries
-                List<RDFResource> featuresInteraction = [];
+                List<RDFResource> featuresInteraction = new List<RDFResource>();
                 foreach (KeyValuePair<string, List<(Geometry, Geometry)>> featureWithGeometry in featuresWithGeometry)
                 {
                     //Obviously exclude the given feature itself
@@ -1027,7 +1027,7 @@ namespace OWLSharp.Extensions.GEO
             Dictionary<string, List<(Geometry, Geometry)>> featuresWithGeometry = await ontology.GetFeaturesWithGeometriesAsync();
 
             //Perform spatial analysis between collected geometries
-            List<RDFResource> featuresDirectionOf = [];
+            List<RDFResource> featuresDirectionOf = new List<RDFResource>();
             foreach (KeyValuePair<string, List<(Geometry, Geometry)>> featureWithGeometry in featuresWithGeometry)
             {
                 foreach ((Geometry, Geometry) geometryOfFeature in featureWithGeometry.Value)
@@ -1057,7 +1057,7 @@ namespace OWLSharp.Extensions.GEO
                 Dictionary<string, List<(Geometry, Geometry)>> featuresWithGeometry = await ontology.GetFeaturesWithGeometriesAsync();
 
                 //Perform spatial analysis between collected geometries
-                List<RDFResource> featuresInteraction = [];
+                List<RDFResource> featuresInteraction = new List<RDFResource>();
                 foreach (KeyValuePair<string, List<(Geometry, Geometry)>> featureWithGeometry in featuresWithGeometry)
                 {
                     //Obviously exclude the given feature itself
@@ -1082,7 +1082,7 @@ namespace OWLSharp.Extensions.GEO
                 Dictionary<string, List<(Geometry, Geometry)>> featuresWithGeometry = await ontology.GetFeaturesWithGeometriesAsync();
 
                 //Perform spatial analysis between collected geometries
-                List<RDFResource> featuresInteraction = [];
+                List<RDFResource> featuresInteraction = new List<RDFResource>();
                 foreach (KeyValuePair<string, List<(Geometry, Geometry)>> featureWithGeometry in featuresWithGeometry)
                 {
                     //Obviously exclude the given feature itself
@@ -1123,7 +1123,7 @@ namespace OWLSharp.Extensions.GEO
             Dictionary<string, List<(Geometry, Geometry)>> featuresWithGeometry = await ontology.GetFeaturesWithGeometriesAsync();
 
             //Perform spatial analysis between collected geometries
-            List<RDFResource> featuresDirectionOf = [];
+            List<RDFResource> featuresDirectionOf = new List<RDFResource>();
             foreach (KeyValuePair<string, List<(Geometry, Geometry)>> featureWithGeometry in featuresWithGeometry)
             {
                 foreach ((Geometry, Geometry) geometryOfFeature in featureWithGeometry.Value)
@@ -1153,7 +1153,7 @@ namespace OWLSharp.Extensions.GEO
                 Dictionary<string, List<(Geometry, Geometry)>> featuresWithGeometry = await ontology.GetFeaturesWithGeometriesAsync();
 
                 //Perform spatial analysis between collected geometries
-                List<RDFResource> featuresInteraction = [];
+                List<RDFResource> featuresInteraction = new List<RDFResource>();
                 foreach (KeyValuePair<string, List<(Geometry, Geometry)>> featureWithGeometry in featuresWithGeometry)
                 {
                     //Obviously exclude the given feature itself
@@ -1178,7 +1178,7 @@ namespace OWLSharp.Extensions.GEO
                 Dictionary<string, List<(Geometry, Geometry)>> featuresWithGeometry = await ontology.GetFeaturesWithGeometriesAsync();
 
                 //Perform spatial analysis between collected geometries
-                List<RDFResource> featuresInteraction = [];
+                List<RDFResource> featuresInteraction = new List<RDFResource>();
                 foreach (KeyValuePair<string, List<(Geometry, Geometry)>> featureWithGeometry in featuresWithGeometry)
                 {
                     //Obviously exclude the given feature itself
@@ -1219,7 +1219,7 @@ namespace OWLSharp.Extensions.GEO
             Dictionary<string, List<(Geometry, Geometry)>> featuresWithGeometry = await ontology.GetFeaturesWithGeometriesAsync();
 
             //Perform spatial analysis between collected geometries
-            List<RDFResource> featuresDirectionOf = [];
+            List<RDFResource> featuresDirectionOf = new List<RDFResource>();
             foreach (KeyValuePair<string, List<(Geometry, Geometry)>> featureWithGeometry in featuresWithGeometry)
             {
                 foreach ((Geometry, Geometry) geometryOfFeature in featureWithGeometry.Value)
@@ -1236,14 +1236,14 @@ namespace OWLSharp.Extensions.GEO
         #region Utilities
         internal static async Task<Dictionary<string,List<(Geometry wgs84Geom,Geometry lazGeom)>>> GetFeaturesWithGeometriesAsync(this OWLOntology ontology)
         {
-            Dictionary<string,List<(Geometry,Geometry)>> featuresWithGeometry = [];
+            Dictionary<string,List<(Geometry,Geometry)>> featuresWithGeometry = new Dictionary<string,List<(Geometry,Geometry)>>();
 
             foreach(OWLIndividualExpression featureIdv in ontology.GetIndividualsOf(new OWLClass(RDFVocabulary.GEOSPARQL.FEATURE)))
             {
                 RDFResource featureIRI = featureIdv.GetIRI();
                 string featureIRIString = featureIRI.ToString();
                 if (!featuresWithGeometry.ContainsKey(featureIRIString))
-                    featuresWithGeometry.Add(featureIRIString, []);
+                    featuresWithGeometry.Add(featureIRIString, new List<(Geometry wgs84Geom, Geometry lazGeom)>());
 
                 //Analyze default geometry of feature
                 (Geometry wgs84Geom,Geometry lazGeom) defaultGeometry = await ontology.GetDefaultGeometryOfFeatureAsync(featureIRI);
@@ -1262,13 +1262,13 @@ namespace OWLSharp.Extensions.GEO
         internal static async Task<(Geometry wgs84Geom,Geometry lazGeom)> GetDefaultGeometryOfFeatureAsync(this OWLOntology ontology, RDFResource featureUri)
         {
             //Execute SWRL rule to retrieve WKT serialization of the given feature's default geometry
-            List<OWLInference> inferences = [];
+            List<OWLInference> inferences = new List<OWLInference>();
             SWRLRule defaultGeometryAsWKT = new SWRLRule
             {
                 Antecedent = new SWRLAntecedent
                 {
-                    Atoms =
-                    [
+                    Atoms = new List<SWRLAtom>
+                    {
                         new SWRLClassAtom(
                             new OWLClass(RDFVocabulary.GEOSPARQL.FEATURE),
                             new SWRLVariableArgument(new RDFVariable("?FEATURE"))),
@@ -1283,23 +1283,23 @@ namespace OWLSharp.Extensions.GEO
                             new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
                             new SWRLVariableArgument(new RDFVariable("?GEOMETRY")),
                             new SWRLVariableArgument(new RDFVariable("?WKT")))
-                    ],
-                    BuiltIns =
-                    [
+                    },
+                    BuiltIns = new List<SWRLBuiltIn>
+                    {
                         SWRLBuiltIn.Equal(
                             new SWRLVariableArgument(new RDFVariable("?FEATURE")),
                             new SWRLIndividualArgument(featureUri))
-                    ]
+                    }
                 },
                 Consequent = new SWRLConsequent
                 {
-                    Atoms =
-                    [
+                    Atoms = new List<SWRLAtom>
+                    {
                         new SWRLDataPropertyAtom(
                             new OWLDataProperty(new RDFResource("urn:swrl:geosparql:asWKT")),
                             new SWRLVariableArgument(new RDFVariable("?GEOMETRY")),
                             new SWRLVariableArgument(new RDFVariable("?WKT")))
-                    ]
+                    }
                 }
             };
             inferences.AddRange(await defaultGeometryAsWKT.ApplyToOntologyAsync(ontology));
@@ -1311,8 +1311,8 @@ namespace OWLSharp.Extensions.GEO
                 {
                     Antecedent = new SWRLAntecedent
                     {
-                        Atoms =
-                        [
+                        Atoms = new List<SWRLAtom>
+                        {
                             new SWRLClassAtom(
                                 new OWLClass(RDFVocabulary.GEOSPARQL.FEATURE),
                                 new SWRLVariableArgument(new RDFVariable("?FEATURE"))),
@@ -1327,23 +1327,23 @@ namespace OWLSharp.Extensions.GEO
                                 new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_GML),
                                 new SWRLVariableArgument(new RDFVariable("?GEOMETRY")),
                                 new SWRLVariableArgument(new RDFVariable("?GML")))
-                        ],
-                        BuiltIns =
-                        [
+                        },
+                        BuiltIns = new List<SWRLBuiltIn>
+                        {
                             SWRLBuiltIn.Equal(
                                 new SWRLVariableArgument(new RDFVariable("?FEATURE")),
                                 new SWRLIndividualArgument(featureUri))
-                        ]
+                        }
                     },
                     Consequent = new SWRLConsequent
                     {
-                        Atoms =
-                        [
+                        Atoms = new List<SWRLAtom>
+                        {
                             new SWRLDataPropertyAtom(
                                 new OWLDataProperty(new RDFResource("urn:swrl:geosparql:asGML")),
                                 new SWRLVariableArgument(new RDFVariable("?GEOMETRY")),
                                 new SWRLVariableArgument(new RDFVariable("?GML")))
-                        ]
+                        }
                     }
                 };
                 inferences.AddRange(await defaultGeometryAsGML.ApplyToOntologyAsync(ontology));
@@ -1392,16 +1392,16 @@ namespace OWLSharp.Extensions.GEO
 
         internal static async Task<List<(Geometry wgs84Geom,Geometry lazGeom)>> GetSecondaryGeometriesOfFeatureAsync(this OWLOntology ontology, RDFResource featureUri)
         {
-            List<(Geometry,Geometry)> secondaryGeometries = [];
+            List<(Geometry,Geometry)> secondaryGeometries = new List<(Geometry,Geometry)>();
 
             //Execute SWRL rule to retrieve WKT serialization of the given feature's default geometry
-            List<OWLInference> inferences = [];
+            List<OWLInference> inferences = new List<OWLInference>();
             SWRLRule secondaryGeometriesAsWKT = new SWRLRule
             {
                 Antecedent = new SWRLAntecedent
                 {
-                    Atoms =
-                    [
+                    Atoms = new List<SWRLAtom>
+                    {
                         new SWRLClassAtom(
                             new OWLClass(RDFVocabulary.GEOSPARQL.FEATURE),
                             new SWRLVariableArgument(new RDFVariable("?FEATURE"))),
@@ -1416,23 +1416,23 @@ namespace OWLSharp.Extensions.GEO
                             new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
                             new SWRLVariableArgument(new RDFVariable("?GEOMETRY")),
                             new SWRLVariableArgument(new RDFVariable("?WKT")))
-                    ],
-                    BuiltIns =
-                    [
+                    },
+                    BuiltIns = new List<SWRLBuiltIn>
+                    {
                         SWRLBuiltIn.Equal(
                             new SWRLVariableArgument(new RDFVariable("?FEATURE")),
                             new SWRLIndividualArgument(featureUri))
-                    ]
+                    }
                 },
                 Consequent = new SWRLConsequent
                 {
-                    Atoms =
-                    [
+                    Atoms = new List<SWRLAtom>
+                    {
                         new SWRLDataPropertyAtom(
                             new OWLDataProperty(new RDFResource("urn:swrl:geosparql:asWKT")),
                             new SWRLVariableArgument(new RDFVariable("?GEOMETRY")),
                             new SWRLVariableArgument(new RDFVariable("?WKT")))
-                    ]
+                    }
                 }
             };
             inferences.AddRange(await secondaryGeometriesAsWKT.ApplyToOntologyAsync(ontology));
@@ -1444,8 +1444,8 @@ namespace OWLSharp.Extensions.GEO
                 {
                     Antecedent = new SWRLAntecedent
                     {
-                        Atoms =
-                        [
+                        Atoms = new List<SWRLAtom>
+                        {
                             new SWRLClassAtom(
                                 new OWLClass(RDFVocabulary.GEOSPARQL.FEATURE),
                                 new SWRLVariableArgument(new RDFVariable("?FEATURE"))),
@@ -1460,23 +1460,23 @@ namespace OWLSharp.Extensions.GEO
                                 new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_GML),
                                 new SWRLVariableArgument(new RDFVariable("?GEOMETRY")),
                                 new SWRLVariableArgument(new RDFVariable("?GML")))
-                        ],
-                        BuiltIns =
-                        [
+                        },
+                        BuiltIns = new List<SWRLBuiltIn>
+                        {
                             SWRLBuiltIn.Equal(
                                 new SWRLVariableArgument(new RDFVariable("?FEATURE")),
                                 new SWRLIndividualArgument(featureUri))
-                        ]
+                        }
                     },
                     Consequent = new SWRLConsequent
                     {
-                        Atoms =
-                        [
+                        Atoms = new List<SWRLAtom>
+                        {
                             new SWRLDataPropertyAtom(
                                 new OWLDataProperty(new RDFResource("urn:swrl:geosparql:asGML")),
                                 new SWRLVariableArgument(new RDFVariable("?GEOMETRY")),
                                 new SWRLVariableArgument(new RDFVariable("?GML")))
-                        ]
+                        }
                     }
                 };
                 inferences.AddRange(await defaultGeomAsGML.ApplyToOntologyAsync(ontology));
@@ -1528,18 +1528,28 @@ namespace OWLSharp.Extensions.GEO
         }
 
         internal static bool MatchCoordinates(Coordinate c1, Coordinate c2, GEOEnums.GeoDirections geoDirection)
-            => geoDirection switch
+        {
+            switch (geoDirection)
             {
-                GEOEnums.GeoDirections.North => c1.Y > c2.Y,
-                GEOEnums.GeoDirections.East => c1.X > c2.X,
-                GEOEnums.GeoDirections.South => c1.Y < c2.Y,
-                GEOEnums.GeoDirections.West => c1.X < c2.X,
-                GEOEnums.GeoDirections.NorthEast => c1.Y > c2.Y && c1.X > c2.X,
-                GEOEnums.GeoDirections.NorthWest => c1.Y > c2.Y && c1.X < c2.X,
-                GEOEnums.GeoDirections.SouthEast => c1.Y < c2.Y && c1.X > c2.X,
-                GEOEnums.GeoDirections.SouthWest => c1.Y < c2.Y && c1.X < c2.X,
-                _ => false,
-            };
+                case GEOEnums.GeoDirections.North:
+                    return c1.Y > c2.Y;
+                case GEOEnums.GeoDirections.East:
+                    return c1.X > c2.X;
+                case GEOEnums.GeoDirections.South:
+                    return c1.Y < c2.Y;
+                case GEOEnums.GeoDirections.West:
+                    return c1.X < c2.X;
+                case GEOEnums.GeoDirections.NorthEast:
+                    return c1.Y > c2.Y && c1.X > c2.X;
+                case GEOEnums.GeoDirections.NorthWest:
+                    return c1.Y > c2.Y && c1.X < c2.X;
+                case GEOEnums.GeoDirections.SouthEast:
+                    return c1.Y < c2.Y && c1.X > c2.X;
+                case GEOEnums.GeoDirections.SouthWest:
+                    return c1.Y < c2.Y && c1.X < c2.X;
+            }
+            return false;
+        }
         #endregion
     }
 }
