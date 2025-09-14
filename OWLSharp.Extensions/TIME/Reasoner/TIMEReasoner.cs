@@ -11,6 +11,9 @@
    limitations under the License.
 */
 
+#if !NET8_0_OR_GREATER
+using Dasync.Collections;
+#endif
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -59,7 +62,11 @@ namespace OWLSharp.Extensions.TIME
                 await Task.WhenAll(dtPropAsnAxiomsTask, opPropAsnAxiomsTask);
 
                 //Execute OWL-TIME reasoner rules
+#if !NET8_0_OR_GREATER
+                await Rules.ParallelForEachAsync(async (rule, _) =>
+#else
                 await Parallel.ForEachAsync(Rules, async (rule, _) =>
+#endif
                 {
                     OWLEvents.RaiseInfo($"Launching OWL-TIME rule {rule}...");
 
