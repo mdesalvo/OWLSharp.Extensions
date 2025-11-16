@@ -46,6 +46,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="OWLSharp" Version="4.12.0" />
+    <PackageReference Include="OWLSharp" Version="4.22.0" />
   </ItemGroup>
 </Project>
