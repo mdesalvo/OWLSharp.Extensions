@@ -16,8 +16,14 @@
 
 namespace OWLSharp.Extensions.GEO
 {
+    /// <summary>
+    /// GEOEnums represents a collector for all the enumerations used by the "OWLSharp.Extensions.GEO" namespace
+    /// </summary>
     public static class GEOEnums
     {
+        /// <summary>
+        /// Indicates the direction requested for the proximity analysis of a spatial feature
+        /// </summary>
         public enum GeoDirections
         {
             North = 1,

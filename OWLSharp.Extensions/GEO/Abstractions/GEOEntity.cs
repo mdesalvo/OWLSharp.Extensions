@@ -19,6 +19,9 @@ using RDFSharp.Model;
 
 namespace OWLSharp.Extensions.GEO
 {
+    /// <summary>
+    /// Represents the spatial dimension of a GeoSPARQL feature
+    /// </summary>
     public class GEOEntity : RDFResource
     {
         #region Properties
@@ -31,8 +34,15 @@ namespace OWLSharp.Extensions.GEO
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Gets the WKT representation of the spatial entity
+        /// </summary>
         public string ToWKT()
             => GEOHelper.WKTWriter.Write(WGS84Geometry);
+
+        /// <summary>
+        /// Gets the GML representation of the spatial entity
+        /// </summary>
         public string ToGML()
         {
             using (XmlReader gmlReader = GEOHelper.GMLWriter.Write(WGS84Geometry))
@@ -45,17 +55,23 @@ namespace OWLSharp.Extensions.GEO
         #endregion
     }
 
+    /// <summary>
+    /// Represents a spatial entity specialized at encoding a WGS84 point
+    /// </summary>
     public sealed class GEOPoint : GEOEntity
     {
         #region Ctors
-        public GEOPoint(RDFResource geoEntityUri, (double longitude, double latitude) wgs84Coordinate)
-            : base(geoEntityUri)
+        /// <summary>
+        /// Builds a spatial entity encoding a point having the given name and WGS84 coordinates
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        public GEOPoint(RDFResource geoEntityUri, (double longitude, double latitude) wgs84Coordinate) : base(geoEntityUri)
         {
             #region Guards
             if (wgs84Coordinate.longitude < -180 || wgs84Coordinate.longitude > 180)
-                throw new OWLException("Cannot declare point entity because given \"wgs84Coordinate\" parameter has not a valid WGS84 longitude");
+                throw new OWLException($"Cannot declare point entity because given '{nameof(wgs84Coordinate)}' parameter has not a valid WGS84 longitude");
             if (wgs84Coordinate.latitude < -90 || wgs84Coordinate.latitude > 90)
-                throw new OWLException("Cannot declare point entity because given \"wgs84Coordinate\" parameter has not a valid WGS84 latitude");
+                throw new OWLException($"Cannot declare point entity because given '{nameof(wgs84Coordinate)}' parameter has not a valid WGS84 latitude");
             #endregion
 
             WGS84Geometry = new Point(wgs84Coordinate.longitude, wgs84Coordinate.latitude) { SRID=4326 };
@@ -63,21 +79,27 @@ namespace OWLSharp.Extensions.GEO
         #endregion
     }
 
+    /// <summary>
+    /// Represents a spatial entity specialized at encoding a WGS84 linestring
+    /// </summary>
     public sealed class GEOLine : GEOEntity
     {
         #region Ctors
-        public GEOLine(RDFResource geoEntityUri, (double longitude, double latitude)[] wgs84Coordinates)
-            : base(geoEntityUri)
+        /// <summary>
+        /// Builds a spatial entity encoding a linestring having the given name and WGS84 coordinates (at least 2 required)
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        public GEOLine(RDFResource geoEntityUri, (double longitude, double latitude)[] wgs84Coordinates) : base(geoEntityUri)
         {
             #region Guards
             if (wgs84Coordinates == null)
-                throw new OWLException("Cannot declare line entity because given \"wgs84Coordinates\" parameter is null");
+                throw new OWLException($"Cannot declare line entity because given '{nameof(wgs84Coordinates)}' parameter is null");
             if (wgs84Coordinates.Length < 2)
-                throw new OWLException("Cannot declare line entity because given \"wgs84Coordinates\" parameter contains less than 2 points");
+                throw new OWLException($"Cannot declare line entity because given '{nameof(wgs84Coordinates)}' parameter contains less than 2 points");
             if (wgs84Coordinates.Any(pt => pt.longitude < -180 || pt.longitude > 180))
-                throw new OWLException("Cannot declare line entity because given \"wgs84Coordinates\" parameter contains a point with invalid WGS84 longitude");
+                throw new OWLException($"Cannot declare line entity because given '{nameof(wgs84Coordinates)}' parameter contains a point with invalid WGS84 longitude");
             if (wgs84Coordinates.Any(pt => pt.latitude < -90 || pt.latitude > 90))
-                throw new OWLException("Cannot declare line entity because given \"wgs84Coordinates\" parameter contains a point with invalid WGS84 latitude");
+                throw new OWLException($"Cannot declare line entity because given '{nameof(wgs84Coordinates)}' parameter contains a point with invalid WGS84 latitude");
             #endregion
 
             WGS84Geometry = new LineString(wgs84Coordinates.Select(wgs84Point => new Coordinate(wgs84Point.longitude, wgs84Point.latitude)).ToArray()) { SRID=4326 };
@@ -85,26 +107,33 @@ namespace OWLSharp.Extensions.GEO
         #endregion
     }
 
+    /// <summary>
+    /// Represents a spatial entity specialized at encoding a WGS84 polygon
+    /// </summary>
     public sealed class GEOArea : GEOEntity
     {
         #region Ctors
-        public GEOArea(RDFResource geoEntityUri, (double longitude, double latitude)[] wgs84Coordinates)
-            : base(geoEntityUri)
+        /// <summary>
+        /// Builds a spatial entity encoding a polygon having the given name and WGS84 coordinates (at least 3 required)
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        public GEOArea(RDFResource geoEntityUri, (double longitude, double latitude)[] wgs84Coordinates) : base(geoEntityUri)
         {
             #region Guards
             if (wgs84Coordinates == null)
-                throw new OWLException("Cannot declare area entity because given \"wgs84Coordinates\" parameter is null");
+                throw new OWLException($"Cannot declare area entity because given '{nameof(wgs84Coordinates)}' parameter is null");
             if (wgs84Coordinates.Length < 3)
-                throw new OWLException("Cannot declare area entity because given \"wgs84Coordinates\" parameter contains less than 2 points");
+                throw new OWLException($"Cannot declare area entity because given '{nameof(wgs84Coordinates)}' parameter contains less than 3 points");
             if (wgs84Coordinates.Any(pt => pt.longitude < -180 || pt.longitude > 180))
-                throw new OWLException("Cannot declare area entity because given \"wgs84Coordinates\" parameter contains a point with invalid WGS84 longitude");
+                throw new OWLException($"Cannot declare area entity because given '{nameof(wgs84Coordinates)}' parameter contains a point with invalid WGS84 longitude");
             if (wgs84Coordinates.Any(pt => pt.latitude < -90 || pt.latitude > 90))
-                throw new OWLException("Cannot declare area entity because given \"wgs84Coordinates\" parameter contains a point with invalid WGS84 latitude");
+                throw new OWLException($"Cannot declare area entity because given '{nameof(wgs84Coordinates)}' parameter contains a point with invalid WGS84 latitude");
             #endregion
 
             //Automatically close polygon (if the last coordinate does not match with the first one)
-            if (wgs84Coordinates[0].longitude != wgs84Coordinates[wgs84Coordinates.Length - 1].longitude
-                 && wgs84Coordinates[0].latitude != wgs84Coordinates[wgs84Coordinates.Length - 1].latitude)
+            Point openingPoint = new Point(new Coordinate(wgs84Coordinates[0].longitude, wgs84Coordinates[0].latitude)) { SRID=4326 };
+            Point closingPoint = new Point(new Coordinate(wgs84Coordinates[wgs84Coordinates.Length - 1].longitude, wgs84Coordinates[wgs84Coordinates.Length - 1].latitude)) { SRID=4326 };
+            if (!openingPoint.EqualsExact(closingPoint))
             {
                 List<(double, double)> wgs84CoordinatesList = wgs84Coordinates.ToList();
                 wgs84CoordinatesList.Add(wgs84Coordinates[0]);
