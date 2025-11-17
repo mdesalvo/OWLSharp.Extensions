@@ -46,7 +46,7 @@ namespace OWLSharp.Extensions.SKOS
                     {
                         new SWRLClassAtom(
                             new OWLClass(RDFVocabulary.SKOS.CONCEPT),
-                            new SWRLVariableArgument(new RDFVariable("?C"))) { IndividualsCache = cacheRegistry["CONCEPTS"] },
+                            new SWRLVariableArgument(new RDFVariable("?C"))),
                         new SWRLAnnotationPropertyAtom(
                             new OWLAnnotationProperty(RDFVocabulary.SKOS.ALT_LABEL),
                             new SWRLVariableArgument(new RDFVariable("?C")),
@@ -93,7 +93,7 @@ namespace OWLSharp.Extensions.SKOS
                     {
                         new SWRLClassAtom(
                             new OWLClass(RDFVocabulary.SKOS.CONCEPT),
-                            new SWRLVariableArgument(new RDFVariable("?C"))) { IndividualsCache = cacheRegistry["CONCEPTS"] },
+                            new SWRLVariableArgument(new RDFVariable("?C"))),
                         new SWRLAnnotationPropertyAtom(
                             new OWLAnnotationProperty(RDFVocabulary.SKOS.ALT_LABEL),
                             new SWRLVariableArgument(new RDFVariable("?C")),
@@ -142,7 +142,7 @@ namespace OWLSharp.Extensions.SKOS
                     {
                         new SWRLClassAtom(
                             new OWLClass(RDFVocabulary.SKOS.CONCEPT),
-                            new SWRLVariableArgument(new RDFVariable("?C"))) { IndividualsCache = cacheRegistry["CONCEPTS"] },
+                            new SWRLVariableArgument(new RDFVariable("?C"))),
                         new SWRLObjectPropertyAtom(
                             new OWLObjectProperty(RDFVocabulary.SKOS.SKOSXL.ALT_LABEL),
                             new SWRLVariableArgument(new RDFVariable("?C")),
@@ -197,7 +197,7 @@ namespace OWLSharp.Extensions.SKOS
                     {
                         new SWRLClassAtom(
                             new OWLClass(RDFVocabulary.SKOS.CONCEPT),
-                            new SWRLVariableArgument(new RDFVariable("?C"))) { IndividualsCache = cacheRegistry["CONCEPTS"] },
+                            new SWRLVariableArgument(new RDFVariable("?C"))),
                         new SWRLObjectPropertyAtom(
                             new OWLObjectProperty(RDFVocabulary.SKOS.SKOSXL.ALT_LABEL),
                             new SWRLVariableArgument(new RDFVariable("?C")),

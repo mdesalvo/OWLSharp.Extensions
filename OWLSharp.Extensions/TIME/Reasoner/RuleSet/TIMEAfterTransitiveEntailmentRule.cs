@@ -33,9 +33,9 @@ namespace OWLSharp.Extensions.TIME
                 {
                     Atoms = new List<SWRLAtom>
                     {
-                        new SWRLClassAtom(new OWLClass(RDFVocabulary.TIME.INSTANT), new SWRLVariableArgument(new RDFVariable("?I1"))) { IndividualsCache = cacheRegistry["INSTANTS"] },
-                        new SWRLClassAtom(new OWLClass(RDFVocabulary.TIME.INSTANT), new SWRLVariableArgument(new RDFVariable("?I2"))) { IndividualsCache = cacheRegistry["INSTANTS"] },
-                        new SWRLClassAtom(new OWLClass(RDFVocabulary.TIME.INSTANT), new SWRLVariableArgument(new RDFVariable("?I3"))) { IndividualsCache = cacheRegistry["INSTANTS"] },
+                        new SWRLClassAtom(new OWLClass(RDFVocabulary.TIME.INSTANT), new SWRLVariableArgument(new RDFVariable("?I1"))),
+                        new SWRLClassAtom(new OWLClass(RDFVocabulary.TIME.INSTANT), new SWRLVariableArgument(new RDFVariable("?I2"))),
+                        new SWRLClassAtom(new OWLClass(RDFVocabulary.TIME.INSTANT), new SWRLVariableArgument(new RDFVariable("?I3"))),
                         new SWRLObjectPropertyAtom(new OWLObjectProperty(RDFVocabulary.TIME.AFTER), new SWRLVariableArgument(new RDFVariable("?I1")), new SWRLVariableArgument(new RDFVariable("?I2"))),
                         new SWRLObjectPropertyAtom(new OWLObjectProperty(RDFVocabulary.TIME.AFTER), new SWRLVariableArgument(new RDFVariable("?I2")), new SWRLVariableArgument(new RDFVariable("?I3")))
                     },

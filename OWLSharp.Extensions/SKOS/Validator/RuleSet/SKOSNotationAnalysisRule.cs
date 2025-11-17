@@ -43,10 +43,10 @@ namespace OWLSharp.Extensions.SKOS
                             new SWRLVariableArgument(new RDFVariable("?S"))),
                         new SWRLClassAtom(
                             new OWLClass(RDFVocabulary.SKOS.CONCEPT),
-                            new SWRLVariableArgument(new RDFVariable("?C1"))) { IndividualsCache = cacheRegistry["CONCEPTS"] },
+                            new SWRLVariableArgument(new RDFVariable("?C1"))),
                         new SWRLClassAtom(
                             new OWLClass(RDFVocabulary.SKOS.CONCEPT),
-                            new SWRLVariableArgument(new RDFVariable("?C2"))) { IndividualsCache = cacheRegistry["CONCEPTS"] },
+                            new SWRLVariableArgument(new RDFVariable("?C2"))),
                         new SWRLObjectPropertyAtom(
                             new OWLObjectProperty(RDFVocabulary.SKOS.IN_SCHEME),
                             new SWRLVariableArgument(new RDFVariable("?C1")),

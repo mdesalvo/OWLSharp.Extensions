@@ -43,7 +43,7 @@ namespace OWLSharp.Extensions.SKOS
                     {
                         new SWRLClassAtom(
                             new OWLClass(RDFVocabulary.SKOS.CONCEPT),
-                            new SWRLVariableArgument(new RDFVariable("?C"))) { IndividualsCache = cacheRegistry["CONCEPTS"] },
+                            new SWRLVariableArgument(new RDFVariable("?C"))),
                         new SWRLAnnotationPropertyAtom(
                             new OWLAnnotationProperty(RDFVocabulary.SKOS.PREF_LABEL),
                             new SWRLVariableArgument(new RDFVariable("?C")),
@@ -58,7 +58,7 @@ namespace OWLSharp.Extensions.SKOS
                         SWRLBuiltIn.NotEqual(
                             new SWRLVariableArgument(new RDFVariable("?PREF_LABEL_1")),
                             new SWRLVariableArgument(new RDFVariable("?PREF_LABEL_2"))),
-                        SWRLBuiltIn.EXTLangMatches(
+                        SWRLBuiltIn.LangMatches(
                             new SWRLVariableArgument(new RDFVariable("?PREF_LABEL_1")),
                             new SWRLVariableArgument(new RDFVariable("?PREF_LABEL_2")))
                     }
@@ -94,7 +94,7 @@ namespace OWLSharp.Extensions.SKOS
                     {
                         new SWRLClassAtom(
                             new OWLClass(RDFVocabulary.SKOS.CONCEPT),
-                            new SWRLVariableArgument(new RDFVariable("?C"))) { IndividualsCache = cacheRegistry["CONCEPTS"] },
+                            new SWRLVariableArgument(new RDFVariable("?C"))),
                         new SWRLObjectPropertyAtom(
                             new OWLObjectProperty(RDFVocabulary.SKOS.SKOSXL.PREF_LABEL),
                             new SWRLVariableArgument(new RDFVariable("?C")),
@@ -120,7 +120,7 @@ namespace OWLSharp.Extensions.SKOS
                         SWRLBuiltIn.NotEqual(
                             new SWRLVariableArgument(new RDFVariable("?PREF_LABEL_1")),
                             new SWRLVariableArgument(new RDFVariable("?PREF_LABEL_2"))),
-                        SWRLBuiltIn.EXTLangMatches(
+                        SWRLBuiltIn.LangMatches(
                             new SWRLVariableArgument(new RDFVariable("?PREF_LABEL_1")),
                             new SWRLVariableArgument(new RDFVariable("?PREF_LABEL_2")))
                     }

@@ -42,10 +42,10 @@ namespace OWLSharp.Extensions.TIME
                     {
                         new SWRLClassAtom(
                             new OWLClass(RDFVocabulary.TIME.INSTANT),
-                            new SWRLVariableArgument(new RDFVariable("?I1"))) { IndividualsCache = cacheRegistry["INSTANTS"] },
+                            new SWRLVariableArgument(new RDFVariable("?I1"))),
                         new SWRLClassAtom(
                             new OWLClass(RDFVocabulary.TIME.INSTANT),
-                            new SWRLVariableArgument(new RDFVariable("?I2"))) { IndividualsCache = cacheRegistry["INSTANTS"] },
+                            new SWRLVariableArgument(new RDFVariable("?I2"))),
                         new SWRLObjectPropertyAtom(
                             new OWLObjectProperty(RDFVocabulary.TIME.AFTER),
                             new SWRLVariableArgument(new RDFVariable("?I1")),

@@ -43,10 +43,10 @@ namespace OWLSharp.Extensions.TIME
                     {
                         new SWRLClassAtom(
                             new OWLClass(RDFVocabulary.TIME.INTERVAL),
-                            new SWRLVariableArgument(new RDFVariable("?I1"))) { IndividualsCache = cacheRegistry["INTERVALS"] },
+                            new SWRLVariableArgument(new RDFVariable("?I1"))),
                         new SWRLClassAtom(
                             new OWLClass(RDFVocabulary.TIME.INTERVAL),
-                            new SWRLVariableArgument(new RDFVariable("?I2"))) { IndividualsCache = cacheRegistry["INTERVALS"] },
+                            new SWRLVariableArgument(new RDFVariable("?I2"))),
                         new SWRLObjectPropertyAtom(
                             new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_MET_BY),
                             new SWRLVariableArgument(new RDFVariable("?I1")),
