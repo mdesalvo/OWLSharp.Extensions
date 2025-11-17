@@ -32,7 +32,7 @@ namespace OWLSharp.Extensions.GEO
     public static class GEOHelper
     {
         // WGS84 uses LON/LAT coordinates
-        // LON => X (West/East, -180 ->180)
+        // LON => X (West/East,  -180->180)
         // LAT => Y (North/South, -90->90)
 
         internal static readonly WKTReader WKTReader = new WKTReader();
@@ -41,6 +41,9 @@ namespace OWLSharp.Extensions.GEO
         internal static readonly GMLWriter GMLWriter = new GMLWriter();
 
         #region Initializer
+        /// <summary>
+        /// Imports GeoSPARQL-related ontologies into the working ontology, enriching it with T-BOX/A-BOX required for spatial modeling and reasoning
+        /// </summary>
         [ExcludeFromCodeCoverage]
         public static async Task InitializeGEOAsync(this OWLOntology ontology, int timeoutMilliseconds=20000, int cacheMilliseconds=3600000)
         {
@@ -54,13 +57,17 @@ namespace OWLSharp.Extensions.GEO
         #endregion
 
         #region Declarer
+        /// <summary>
+        /// Injects the A-BOX axioms for declaring the existence of a geospatial feature having the given name and the given point encoding
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
         public static OWLOntology DeclarePointFeature(this OWLOntology ontology, RDFResource featureUri, GEOPoint geoPoint, bool isDefaultGeometry=true)
         {
             #region Guards
             if (featureUri == null)
-                throw new OWLException("Cannot declare point feature because given \"featureUri\" parameter is null");
+                throw new OWLException($"Cannot declare point feature because given '{nameof(featureUri)}' parameter is null");
             if (geoPoint == null)
-                throw new OWLException("Cannot declare point feature because given \"geoPoint\" parameter is null");
+                throw new OWLException($"Cannot declare point feature because given '{nameof(featureUri)}' parameter is null");
             #endregion
 
             ontology.DeclareEntity(new OWLNamedIndividual(featureUri));
@@ -91,13 +98,17 @@ namespace OWLSharp.Extensions.GEO
             return ontology;
         }
 
+        /// <summary>
+        /// Injects the A-BOX axioms for declaring the existence of a geospatial feature having the given name and the given linestring encoding
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
         public static OWLOntology DeclareLineFeature(this OWLOntology ontology, RDFResource featureUri, GEOLine geoLine, bool isDefaultGeometry=true)
         {
             #region Guards
             if (featureUri == null)
-                throw new OWLException("Cannot declare line feature because given \"featureUri\" parameter is null");
+                throw new OWLException($"Cannot declare line feature because given '{nameof(featureUri)}' parameter is null");
             if (geoLine == null)
-                throw new OWLException("Cannot declare line feature because given \"geoLine\" parameter is null");
+                throw new OWLException($"Cannot declare line feature because given '{nameof(geoLine)}' parameter is null");
             #endregion
 
             ontology.DeclareEntity(new OWLNamedIndividual(featureUri));
@@ -128,13 +139,17 @@ namespace OWLSharp.Extensions.GEO
             return ontology;
         }
 
+        /// <summary>
+        /// Injects the A-BOX axioms for declaring the existence of a geospatial feature having the given name and the given polygon encoding
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
         public static OWLOntology DeclareAreaFeature(this OWLOntology ontology, RDFResource featureUri, GEOArea geoArea, bool isDefaultGeometry=true)
         {
             #region Guards
             if (featureUri == null)
-                throw new OWLException("Cannot declare area feature because given \"featureUri\" parameter is null");
+                throw new OWLException($"Cannot declare area feature because given '{nameof(featureUri)}' parameter is null");
             if (geoArea == null)
-                throw new OWLException("Cannot declare area feature because given \"geoArea\" parameter is null");
+                throw new OWLException($"Cannot declare area feature because given '{nameof(geoArea)}' parameter is null");
             #endregion
 
             ontology.DeclareEntity(new OWLNamedIndividual(featureUri));
