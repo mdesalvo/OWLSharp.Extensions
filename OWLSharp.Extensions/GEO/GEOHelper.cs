@@ -187,7 +187,7 @@ namespace OWLSharp.Extensions.GEO
         #region Getter
         /// <summary>
         /// Gets the spatial dimension of the given GeoSPARQL feature from the working ontology.<br/>
-        /// It is usually a single entity encoding the default geometry of the feature (but it may also contain its secondary geometries).
+        /// It is usually a single entity encoding the default geometry (but it may also contain the secondary geometries).
         /// </summary>
         /// <exception cref="OWLException"></exception>
         public static async Task<List<GEOEntity>> GetSpatialFeatureAsync(this OWLOntology ontology, RDFResource featureURI)
