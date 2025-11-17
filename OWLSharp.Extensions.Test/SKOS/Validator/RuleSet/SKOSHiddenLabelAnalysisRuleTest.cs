@@ -73,11 +73,7 @@ public class SKOSHiddenLabelAnalysisRuleTest
                     new OWLNamedIndividual(new RDFResource("ex:ConceptC")))
             ]
         };
-        Dictionary<string, List<OWLIndividualExpression>> cacheRegistry = new Dictionary<string, List<OWLIndividualExpression>>
-        {
-            { "CONCEPTS",  ontology.GetIndividualsOf(new OWLClass(RDFVocabulary.SKOS.CONCEPT)) }
-        };
-        List<OWLIssue> issues = await SKOSHiddenLabelAnalysisRule.ExecuteRuleAsync(ontology, cacheRegistry);
+        List<OWLIssue> issues = await SKOSHiddenLabelAnalysisRule.ExecuteRuleAsync(ontology);
 
         Assert.IsNotNull(issues);
         Assert.HasCount(1, issues);
@@ -135,11 +131,7 @@ public class SKOSHiddenLabelAnalysisRuleTest
                     new OWLNamedIndividual(new RDFResource("ex:ConceptC")))
             ]
         };
-        Dictionary<string, List<OWLIndividualExpression>> cacheRegistry = new Dictionary<string, List<OWLIndividualExpression>>
-        {
-            { "CONCEPTS",  ontology.GetIndividualsOf(new OWLClass(RDFVocabulary.SKOS.CONCEPT)) }
-        };
-        List<OWLIssue> issues = await SKOSHiddenLabelAnalysisRule.ExecuteRuleAsync(ontology, cacheRegistry);
+        List<OWLIssue> issues = await SKOSHiddenLabelAnalysisRule.ExecuteRuleAsync(ontology);
 
         Assert.IsNotNull(issues);
         Assert.HasCount(1, issues);
@@ -237,11 +229,7 @@ public class SKOSHiddenLabelAnalysisRuleTest
                     new OWLLiteral(new RDFPlainLiteral("This is concept C")))
             ]
         };
-        Dictionary<string, List<OWLIndividualExpression>> cacheRegistry = new Dictionary<string, List<OWLIndividualExpression>>
-        {
-            { "CONCEPTS",  ontology.GetIndividualsOf(new OWLClass(RDFVocabulary.SKOS.CONCEPT)) }
-        };
-        List<OWLIssue> issues = await SKOSHiddenLabelAnalysisRule.ExecuteRuleAsync(ontology, cacheRegistry);
+        List<OWLIssue> issues = await SKOSHiddenLabelAnalysisRule.ExecuteRuleAsync(ontology);
 
         Assert.IsNotNull(issues);
         Assert.HasCount(1, issues);
@@ -339,11 +327,7 @@ public class SKOSHiddenLabelAnalysisRuleTest
                     new OWLLiteral(new RDFPlainLiteral("This is concept C")))
             ]
         };
-        Dictionary<string, List<OWLIndividualExpression>> cacheRegistry = new Dictionary<string, List<OWLIndividualExpression>>
-        {
-            { "CONCEPTS",  ontology.GetIndividualsOf(new OWLClass(RDFVocabulary.SKOS.CONCEPT)) }
-        };
-        List<OWLIssue> issues = await SKOSHiddenLabelAnalysisRule.ExecuteRuleAsync(ontology, cacheRegistry);
+        List<OWLIssue> issues = await SKOSHiddenLabelAnalysisRule.ExecuteRuleAsync(ontology);
 
         Assert.IsNotNull(issues);
         Assert.HasCount(1, issues);

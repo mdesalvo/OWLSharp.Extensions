@@ -57,12 +57,7 @@ public class TIMEInstantAfterAnalysisRuleTest : TIMETestOntology
                 new OWLNamedIndividual(new RDFResource("ex:InstantA")),
                 new OWLNamedIndividual(new RDFResource("ex:InstantC")))
         ]);
-        Dictionary<string, List<OWLIndividualExpression>> cacheRegistry = new Dictionary<string, List<OWLIndividualExpression>>
-        {
-            { "INSTANTS",  ontology.GetIndividualsOf(new OWLClass(RDFVocabulary.TIME.INSTANT)) },
-            { "INTERVALS", ontology.GetIndividualsOf(new OWLClass(RDFVocabulary.TIME.INTERVAL)) }
-        };
-        List<OWLIssue> issues = await TIMEInstantAfterAnalysisRule.ExecuteRuleAsync(ontology, cacheRegistry);
+        List<OWLIssue> issues = await TIMEInstantAfterAnalysisRule.ExecuteRuleAsync(ontology);
 
         Assert.IsNotNull(issues);
         Assert.HasCount(2, issues);
@@ -106,12 +101,7 @@ public class TIMEInstantAfterAnalysisRuleTest : TIMETestOntology
                 new OWLNamedIndividual(new RDFResource("ex:InstantA")),
                 new OWLNamedIndividual(new RDFResource("ex:InstantC")))
         ]);
-        Dictionary<string, List<OWLIndividualExpression>> cacheRegistry = new Dictionary<string, List<OWLIndividualExpression>>
-        {
-            { "INSTANTS",  ontology.GetIndividualsOf(new OWLClass(RDFVocabulary.TIME.INSTANT)) },
-            { "INTERVALS", ontology.GetIndividualsOf(new OWLClass(RDFVocabulary.TIME.INTERVAL)) }
-        };
-        List<OWLIssue> issues = await TIMEInstantAfterAnalysisRule.ExecuteRuleAsync(ontology, cacheRegistry);
+        List<OWLIssue> issues = await TIMEInstantAfterAnalysisRule.ExecuteRuleAsync(ontology);
 
         Assert.IsNotNull(issues);
         Assert.HasCount(1, issues);

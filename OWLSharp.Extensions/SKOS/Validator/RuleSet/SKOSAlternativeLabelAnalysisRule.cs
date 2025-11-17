@@ -29,7 +29,7 @@ namespace OWLSharp.Extensions.SKOS
         internal const string rulesugg3 = "There should not be SKOS-XL concepts having the same value for skosxl:altLabel and skosxl:prefLabel data relations.";
         internal const string rulesugg4 = "There should not be SKOS-XL concepts having the same value for skosxl:altLabel and skosxl:hiddenLabel data relations.";
 
-        internal static async Task<List<OWLIssue>> ExecuteRuleAsync(OWLOntology ontology, Dictionary<string, List<OWLIndividualExpression>> cacheRegistry)
+        internal static async Task<List<OWLIssue>> ExecuteRuleAsync(OWLOntology ontology)
         {
             List<OWLIssue> issues = new List<OWLIssue>();
             List<OWLInference> violations = new List<OWLInference>();

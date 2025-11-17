@@ -27,7 +27,7 @@ namespace OWLSharp.Extensions.TIME
         internal const string rulesugg1 = "There should not be OWL-TIME instants having a clash in temporal relations (time:before VS time:before)";
         internal const string rulesugg2 = "There should not be OWL-TIME instants having a clash in temporal relations (time:before VS time:after)";
 
-        internal static async Task<List<OWLIssue>> ExecuteRuleAsync(OWLOntology ontology, Dictionary<string, List<OWLIndividualExpression>> cacheRegistry)
+        internal static async Task<List<OWLIssue>> ExecuteRuleAsync(OWLOntology ontology)
         {
             List<OWLIssue> issues = new List<OWLIssue>();
             List<OWLInference> violations = new List<OWLInference>();

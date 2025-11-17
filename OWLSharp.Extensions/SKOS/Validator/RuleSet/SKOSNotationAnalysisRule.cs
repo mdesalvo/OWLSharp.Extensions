@@ -26,7 +26,7 @@ namespace OWLSharp.Extensions.SKOS
         internal static readonly string rulename = nameof(SKOSEnums.SKOSValidatorRules.NotationAnalysis);
         internal const string rulesugg = "There should not be SKOS concepts sharing the same value for skos:Notation data relation under the same schema.";
 
-        internal static async Task<List<OWLIssue>> ExecuteRuleAsync(OWLOntology ontology, Dictionary<string, List<OWLIndividualExpression>> cacheRegistry)
+        internal static async Task<List<OWLIssue>> ExecuteRuleAsync(OWLOntology ontology)
         {
             List<OWLIssue> issues = new List<OWLIssue>();
             List<OWLInference> violations = new List<OWLInference>();

@@ -42,12 +42,7 @@ public class TIMEEqualsInverseEntailmentRuleTest : TIMETestOntology
             new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_FINISHED_BY),
             new OWLNamedIndividual(new RDFResource("ex:Interval1")),
             new OWLNamedIndividual(new RDFResource("ex:Interval2"))));
-        Dictionary<string, List<OWLIndividualExpression>> cacheRegistry = new Dictionary<string, List<OWLIndividualExpression>>
-        {
-            { "INSTANTS",  ontology.GetIndividualsOf(new OWLClass(RDFVocabulary.TIME.INSTANT)) },
-            { "INTERVALS", ontology.GetIndividualsOf(new OWLClass(RDFVocabulary.TIME.INTERVAL)) }
-        };
-        List<OWLInference> inferences = await TIMEEqualsInverseEntailmentRule.ExecuteRuleAsync(ontology, cacheRegistry);
+        List<OWLInference> inferences = await TIMEEqualsInverseEntailmentRule.ExecuteRuleAsync(ontology);
 
         Assert.IsNotNull(inferences);
         Assert.HasCount(2, inferences);

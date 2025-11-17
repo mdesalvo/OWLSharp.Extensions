@@ -43,12 +43,7 @@ public class TIMEAfterMetByEntailmentRuleTest : TIMETestOntology
             new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_MET_BY),
             new OWLNamedIndividual(new RDFResource("ex:Interval2")),
             new OWLNamedIndividual(new RDFResource("ex:Interval3"))));
-        Dictionary<string, List<OWLIndividualExpression>> cacheRegistry = new Dictionary<string, List<OWLIndividualExpression>>
-        {
-            { "INSTANTS",  ontology.GetIndividualsOf(new OWLClass(RDFVocabulary.TIME.INSTANT)) },
-            { "INTERVALS", ontology.GetIndividualsOf(new OWLClass(RDFVocabulary.TIME.INTERVAL)) }
-        };
-        List<OWLInference> inferences = await TIMEAfterMetByEntailmentRule.ExecuteRuleAsync(ontology, cacheRegistry);
+        List<OWLInference> inferences = await TIMEAfterMetByEntailmentRule.ExecuteRuleAsync(ontology);
 
         Assert.IsNotNull(inferences);
         Assert.HasCount(1, inferences);

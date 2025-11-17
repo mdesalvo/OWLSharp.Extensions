@@ -22,7 +22,7 @@ namespace OWLSharp.Extensions.TIME
 {
     internal static class TIMEContainsTransitiveEntailmentRule
     {
-        internal static Task<List<OWLInference>> ExecuteRuleAsync(OWLOntology ontology, Dictionary<string, List<OWLIndividualExpression>> cacheRegistry)
+        internal static Task<List<OWLInference>> ExecuteRuleAsync(OWLOntology ontology)
         {
             SWRLRule swrlRule = new SWRLRule(
                 new RDFPlainLiteral(nameof(TIMEContainsTransitiveEntailmentRule)),

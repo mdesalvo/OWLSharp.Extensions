@@ -71,11 +71,7 @@ public class SKOSPreferredLabelAnalysisRuleTest
                     new OWLNamedIndividual(new RDFResource("ex:ConceptC")))
             ]
         };
-        Dictionary<string, List<OWLIndividualExpression>> cacheRegistry = new Dictionary<string, List<OWLIndividualExpression>>
-        {
-            { "CONCEPTS",  ontology.GetIndividualsOf(new OWLClass(RDFVocabulary.SKOS.CONCEPT)) }
-        };
-        List<OWLIssue> issues = await SKOSPreferredLabelAnalysisRule.ExecuteRuleAsync(ontology, cacheRegistry);
+        List<OWLIssue> issues = await SKOSPreferredLabelAnalysisRule.ExecuteRuleAsync(ontology);
 
         Assert.IsNotNull(issues);
         Assert.HasCount(2, issues);
@@ -171,11 +167,7 @@ public class SKOSPreferredLabelAnalysisRuleTest
                     new OWLLiteral(new RDFPlainLiteral("This is concept C")))
             ]
         };
-        Dictionary<string, List<OWLIndividualExpression>> cacheRegistry = new Dictionary<string, List<OWLIndividualExpression>>
-        {
-            { "CONCEPTS",  ontology.GetIndividualsOf(new OWLClass(RDFVocabulary.SKOS.CONCEPT)) }
-        };
-        List<OWLIssue> issues = await SKOSPreferredLabelAnalysisRule.ExecuteRuleAsync(ontology, cacheRegistry);
+        List<OWLIssue> issues = await SKOSPreferredLabelAnalysisRule.ExecuteRuleAsync(ontology);
 
         Assert.IsNotNull(issues);
         Assert.HasCount(2, issues);

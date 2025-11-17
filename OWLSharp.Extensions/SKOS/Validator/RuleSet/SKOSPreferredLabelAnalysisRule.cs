@@ -27,7 +27,7 @@ namespace OWLSharp.Extensions.SKOS
         internal const string rulesugg1 = "There should not be SKOS concepts having more than one occurrence of the same language tag in values of skos:prefLabel data annotations.";
         internal const string rulesugg2 = "There should not be SKOS concepts having more than one occurrence of the same language tag in values of skosxl:prefLabel data relations.";
 
-        internal static async Task<List<OWLIssue>> ExecuteRuleAsync(OWLOntology ontology, Dictionary<string, List<OWLIndividualExpression>> cacheRegistry)
+        internal static async Task<List<OWLIssue>> ExecuteRuleAsync(OWLOntology ontology)
         {
             List<OWLIssue> issues = new List<OWLIssue>();
             List<OWLInference> violations = new List<OWLInference>();

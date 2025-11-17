@@ -37,7 +37,7 @@ namespace OWLSharp.Extensions.SKOS
         internal const string rulesugg6A = "There should not be SKOS concepts having a clash in hierarchical VS mapping relations (skos:narrower VS skos:relatedMatch)";
         internal const string rulesugg6B = "There should not be SKOS concepts having a clash in hierarchical VS mapping relations (skos:narrowerTransitive VS skos:relatedMatch)";
 
-        internal static async Task<List<OWLIssue>> ExecuteRuleAsync(OWLOntology ontology, Dictionary<string, List<OWLIndividualExpression>> cacheRegistry)
+        internal static async Task<List<OWLIssue>> ExecuteRuleAsync(OWLOntology ontology)
         {
             List<OWLIssue> issues = new List<OWLIssue>();
             List<OWLInference> violations = new List<OWLInference>();

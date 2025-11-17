@@ -22,7 +22,7 @@ namespace OWLSharp.Extensions.TIME
 {
     internal static class TIMEAfterTransitiveEntailmentRule
     {
-        internal static async Task<List<OWLInference>> ExecuteRuleAsync(OWLOntology ontology, Dictionary<string, List<OWLIndividualExpression>> cacheRegistry)
+        internal static async Task<List<OWLInference>> ExecuteRuleAsync(OWLOntology ontology)
         {
             List<OWLInference> inferences = new List<OWLInference>();
 
