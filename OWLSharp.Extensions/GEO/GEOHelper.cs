@@ -29,6 +29,9 @@ using RDFSharp.Query;
 
 namespace OWLSharp.Extensions.GEO
 {
+    /// <summary>
+    /// Spatial engine of OWLSharp: it can declare, analyze and correlate GeoSPARQL features georeferenced as WGS84 geometries
+    /// </summary>
     public static class GEOHelper
     {
         // WGS84 uses LON/LAT coordinates
@@ -181,17 +184,23 @@ namespace OWLSharp.Extensions.GEO
         }
         #endregion
 
-        #region Analyzer
+        #region Getter
+        /// <summary>
+        /// Gets the spatial dimension of the given GeoSPARQL feature from the working ontology.<br/>
+        /// It is usually a single entity encoding the default geometry of the feature (but it may also contain its secondary geometries).
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
         public static async Task<List<GEOEntity>> GetSpatialFeatureAsync(this OWLOntology ontology, RDFResource featureURI)
         {
             #region Guards
             if (featureURI == null)
-                throw new OWLException("Cannot get spatial dimension of feature because given \"featureURI\" parameter is null");
+                throw new OWLException($"Cannot get spatial dimension of feature because given '{nameof(featureURI)}' parameter is null");
             #endregion
 
             List<GEOEntity> spatialExtentOfFeature = new List<GEOEntity>();
-            Dictionary<string,List<(Geometry,Geometry)>> featuresWithGeometry = await GetFeaturesWithGeometriesAsync(ontology);
+            Dictionary<string,List<(Geometry,Geometry)>> featuresWithGeometry = await GetFeaturesWithGeometriesAsync(ontology, featureURI);
             if (featuresWithGeometry.TryGetValue(featureURI.ToString(), out List<(Geometry wgs84,Geometry laz)> featureGeometries))
+            {
                 foreach (Geometry wgs84Geom in featureGeometries.Select(fg => fg.wgs84))
                 {
                     RDFResource geometryUri = new RDFResource((string)wgs84Geom.UserData);
@@ -207,8 +216,8 @@ namespace OWLSharp.Extensions.GEO
                             spatialExtentOfFeature.Add(new GEOArea(geometryUri, wgs84Area.Coordinates.Select(c => (c.X,c.Y)).ToArray()));
                             break;
                     }
-                    //other types of OGC geometries are not supported yet...
                 }
+            }
             return spatialExtentOfFeature;
         }
         #endregion
@@ -1249,24 +1258,30 @@ namespace OWLSharp.Extensions.GEO
         #endregion
 
         #region Utilities
-        internal static async Task<Dictionary<string,List<(Geometry wgs84Geom,Geometry lazGeom)>>> GetFeaturesWithGeometriesAsync(this OWLOntology ontology)
+        /// <summary>
+        /// Extracts all the GeoSPARQL features living in the A-BOX of the working ontology, eventually filtering the specified one.<br/>
+        /// It gives a dictionary having the detected features as keys and their spatial geometries as corresponding values (both WGS84 and Azimuthal).
+        /// </summary>
+        internal static async Task<Dictionary<string,List<(Geometry wgs84Geom,Geometry lazGeom)>>> GetFeaturesWithGeometriesAsync(this OWLOntology ontology, RDFResource featureIRI=null)
         {
             Dictionary<string,List<(Geometry,Geometry)>> featuresWithGeometry = new Dictionary<string,List<(Geometry,Geometry)>>();
 
             foreach(OWLIndividualExpression featureIdv in ontology.GetIndividualsOf(new OWLClass(RDFVocabulary.GEOSPARQL.FEATURE)))
             {
-                RDFResource featureIRI = featureIdv.GetIRI();
-                string featureIRIString = featureIRI.ToString();
+                RDFResource featureIdvIRI = featureIdv.GetIRI();
+                if (featureIRI != null && !featureIRI.Equals(featureIdvIRI))
+                    continue;
+                string featureIRIString = featureIdvIRI.ToString();
                 if (!featuresWithGeometry.ContainsKey(featureIRIString))
                     featuresWithGeometry.Add(featureIRIString, new List<(Geometry wgs84Geom, Geometry lazGeom)>());
 
-                //Analyze default geometry of feature
-                (Geometry wgs84Geom,Geometry lazGeom) defaultGeometry = await ontology.GetDefaultGeometryOfFeatureAsync(featureIRI);
+                //Analyze default geometry of the feature
+                (Geometry wgs84Geom,Geometry lazGeom) defaultGeometry = await ontology.GetDefaultGeometryOfFeatureAsync(featureIdvIRI);
                 if (defaultGeometry.wgs84Geom != null && defaultGeometry.lazGeom != null)
                     featuresWithGeometry[featureIRIString].Add(defaultGeometry);
 
-                //Analyze secondary geometries of feature
-                List<(Geometry wgs84Geom, Geometry lazGeom)> secondaryGeometries = await ontology.GetSecondaryGeometriesOfFeatureAsync(featureIRI);
+                //Analyze secondary geometries of the feature
+                List<(Geometry wgs84Geom, Geometry lazGeom)> secondaryGeometries = await ontology.GetSecondaryGeometriesOfFeatureAsync(featureIdvIRI);
                 if (secondaryGeometries.Count > 0)
                     featuresWithGeometry[featureIRIString].AddRange(secondaryGeometries);
             }
@@ -1274,6 +1289,9 @@ namespace OWLSharp.Extensions.GEO
             return featuresWithGeometry;
         }
 
+        /// <summary>
+        /// Extracts the default geometry of the given feature, which is returned both in WGS84 and Azimuthal.
+        /// </summary>
         internal static async Task<(Geometry wgs84Geom,Geometry lazGeom)> GetDefaultGeometryOfFeatureAsync(this OWLOntology ontology, RDFResource featureUri)
         {
             //Execute SWRL rule to retrieve WKT serialization of the given feature's default geometry
@@ -1366,7 +1384,7 @@ namespace OWLSharp.Extensions.GEO
 
             //Parse retrieved WKT/GML serialization into (WGS84,UTM) result geometry
             OWLDataPropertyAssertion inferenceAxiom = (OWLDataPropertyAssertion)inferences.FirstOrDefault()?.Axiom;
-            if (string.Equals(inferenceAxiom?.DataProperty.GetIRI().ToString(), "urn:swrl:geosparql:asWKT"))
+            if (string.Equals(inferenceAxiom?.DataProperty.GetIRI().ToString(), "urn:swrl:geosparql:asWKT", StringComparison.Ordinal))
             {
                 try
                 {
@@ -1383,7 +1401,7 @@ namespace OWLSharp.Extensions.GEO
                 }
                 catch { /* Just a no-op, since type errors are normal when trying to face variable's bindings */ }
             }
-            if (string.Equals(inferenceAxiom?.DataProperty.GetIRI().ToString(), "urn:swrl:geosparql:asGML"))
+            if (string.Equals(inferenceAxiom?.DataProperty.GetIRI().ToString(), "urn:swrl:geosparql:asGML", StringComparison.Ordinal))
             {
                 try
                 {
@@ -1405,6 +1423,9 @@ namespace OWLSharp.Extensions.GEO
             return (null,null);
         }
 
+        /// <summary>
+        /// Extracts the secondary geometries of the given feature, which are returned both in WGS84 and Azimuthal.
+        /// </summary>
         internal static async Task<List<(Geometry wgs84Geom,Geometry lazGeom)>> GetSecondaryGeometriesOfFeatureAsync(this OWLOntology ontology, RDFResource featureUri)
         {
             List<(Geometry,Geometry)> secondaryGeometries = new List<(Geometry,Geometry)>();
@@ -1501,7 +1522,7 @@ namespace OWLSharp.Extensions.GEO
             foreach (OWLInference inference in inferences)
             {
                 OWLDataPropertyAssertion inferenceAxiom = (OWLDataPropertyAssertion)inference.Axiom;
-                if (string.Equals(inferenceAxiom?.DataProperty.GetIRI().ToString(), "urn:swrl:geosparql:asWKT"))
+                if (string.Equals(inferenceAxiom?.DataProperty.GetIRI().ToString(), "urn:swrl:geosparql:asWKT", StringComparison.Ordinal))
                 {
                     try
                     {
@@ -1519,7 +1540,7 @@ namespace OWLSharp.Extensions.GEO
                     }
                     catch { /* Just a no-op, since type errors are normal when trying to face variable's bindings */ }
                 }
-                if (string.Equals(inferenceAxiom?.DataProperty.GetIRI().ToString(), "urn:swrl:geosparql:asGML"))
+                if (string.Equals(inferenceAxiom?.DataProperty.GetIRI().ToString(), "urn:swrl:geosparql:asGML", StringComparison.Ordinal))
                 {
                     try
                     {
@@ -1542,6 +1563,9 @@ namespace OWLSharp.Extensions.GEO
             return secondaryGeometries;
         }
 
+        /// <summary>
+        /// Compares the given pair of coordinates according to the specified direction of analysis.
+        /// </summary>
         internal static bool MatchCoordinates(Coordinate c1, Coordinate c2, GEOEnums.GeoDirections geoDirection)
         {
             switch (geoDirection)
