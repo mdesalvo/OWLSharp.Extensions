@@ -42,7 +42,7 @@ namespace OWLSharp.Extensions.GEO
 
         #region Initializer
         /// <summary>
-        /// Imports GeoSPARQL-related ontologies into the working ontology, enriching it with T-BOX/A-BOX required for spatial modeling and reasoning
+        /// Imports GeoSPARQL-related ontologies into the working ontology, enriching it with T-BOX required for spatial modeling and reasoning
         /// </summary>
         [ExcludeFromCodeCoverage]
         public static async Task InitializeGEOAsync(this OWLOntology ontology, int timeoutMilliseconds=20000, int cacheMilliseconds=3600000)
