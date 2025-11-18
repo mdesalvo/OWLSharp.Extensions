@@ -187,7 +187,7 @@ namespace OWLSharp.Extensions.GEO
         #region Getter
         /// <summary>
         /// Gets the spatial dimension of the given GeoSPARQL feature from the working ontology.<br/>
-        /// It is usually a single entity encoding the default geometry (but it may also contain the secondary geometries).
+        /// It is usually a single entity encoding the default geometry, but it may also contain the secondary geometries.
         /// </summary>
         /// <exception cref="OWLException"></exception>
         public static async Task<List<GEOEntity>> GetSpatialFeatureAsync(this OWLOntology ontology, RDFResource featureURI)
@@ -223,30 +223,34 @@ namespace OWLSharp.Extensions.GEO
         #endregion
 
         #region Analyzer (Distance)
+        /// <summary>
+        /// Gets the minimum spatial distance, expressed in meters, between the given GeoSPARQL features from the working ontology.
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
         public static async Task<double?> GetDistanceBetweenFeaturesAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFResource toFeatureUri)
         {
             #region Guards
             if (ontology == null)
-                throw new OWLException("Cannot get distance between features because given \"ontology\" parameter is null");
+                throw new OWLException($"Cannot get distance between features because given '{nameof(ontology)}' parameter is null");
             if (fromFeatureUri == null)
-                throw new OWLException("Cannot get distance between features because given \"fromFeatureUri\" parameter is null");
+                throw new OWLException($"Cannot get distance between features because given '{nameof(fromFeatureUri)}' parameter is null");
             if (toFeatureUri == null)
-                throw new OWLException("Cannot get distance between features because given \"toFeatureUri\" parameter is null");
+                throw new OWLException($"Cannot get distance between features because given '{nameof(toFeatureUri)}' parameter is null");
             #endregion
 
-            //Collect secondaryGeometries of "From" feature
+            //Collect geometries of "From" feature
             (Geometry, Geometry) defaultGeometryFrom = await ontology.GetDefaultGeometryOfFeatureAsync(fromFeatureUri);
             List<(Geometry, Geometry)> geometriesFrom = await ontology.GetSecondaryGeometriesOfFeatureAsync(fromFeatureUri);
             if (defaultGeometryFrom.Item1 != null && defaultGeometryFrom.Item2 != null)
                 geometriesFrom.Insert(0, defaultGeometryFrom);
 
-            //Collect secondaryGeometries of "To" feature
+            //Collect geometries of "To" feature
             (Geometry, Geometry) defaultGeometryTo = await ontology.GetDefaultGeometryOfFeatureAsync(toFeatureUri);
             List<(Geometry, Geometry)> geometriesTo = await ontology.GetSecondaryGeometriesOfFeatureAsync(toFeatureUri);
             if (defaultGeometryTo.Item1 != null && defaultGeometryTo.Item2 != null)
                 geometriesTo.Insert(0, defaultGeometryTo);
 
-            //Perform spatial analysis between collected secondaryGeometries (calibrate minimum distance)
+            //Perform spatial analysis between collected geometries (calibrate minimum distance)
             double? featuresDistance = double.MaxValue;
             geometriesFrom.ForEach(fromGeom =>
             {
@@ -258,24 +262,28 @@ namespace OWLSharp.Extensions.GEO
                 });
             });
 
-            //Give null in case distance could not be calculated (no available secondaryGeometries from any sides)
-            return featuresDistance == double.MaxValue ? null : featuresDistance;
+            //Give null in case distance could not be calculated (no available geometries from any sides)
+            return featuresDistance is double.MaxValue ? null : featuresDistance;
         }
 
+        /// <summary>
+        /// Gets the minimum spatial distance, expressed in meters, between the given GeoSPARQL feature and the given GeoSPARQL literal from the working ontology.
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
         public static async Task<double?> GetDistanceBetweenFeaturesAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFTypedLiteral toFeatureLiteral)
         {
             #region Guards
             if (ontology == null)
-                throw new OWLException("Cannot get distance between features because given \"ontology\" parameter is null");
+                throw new OWLException($"Cannot get distance between features because given '{nameof(ontology)}' parameter is null");
             if (fromFeatureUri == null)
-                throw new OWLException("Cannot get distance between features because given \"fromFeatureUri\" parameter is null");
+                throw new OWLException($"Cannot get distance between features because given '{nameof(fromFeatureUri)}' parameter is null");
             if (toFeatureLiteral == null)
-                throw new OWLException("Cannot get distance between features because given \"toFeatureLiteral\" parameter is null");
+                throw new OWLException($"Cannot get distance between features because given '{nameof(toFeatureLiteral)}' parameter is null");
             if (!toFeatureLiteral.HasGeographicDatatype())
-                throw new OWLException("Cannot get distance between features because given \"toFeatureLiteral\" parameter is not a geographic typed literal");
+                throw new OWLException($"Cannot get distance between features because given '{nameof(toFeatureLiteral)}' parameter is not a geographic typed literal");
             #endregion
 
-            //Collect secondaryGeometries of "From" feature
+            //Collect geometries of "From" feature
             (Geometry, Geometry) defaultGeometryFrom = await ontology.GetDefaultGeometryOfFeatureAsync(fromFeatureUri);
             List<(Geometry, Geometry)> geometriesFrom = await ontology.GetSecondaryGeometriesOfFeatureAsync(fromFeatureUri);
             if (defaultGeometryFrom.Item1 != null && defaultGeometryFrom.Item2 != null)
@@ -287,7 +295,7 @@ namespace OWLSharp.Extensions.GEO
             wgs84GeometryTo.SRID=4326;
             Geometry lazGeometryTo = RDFGeoConverter.GetLambertAzimuthalGeometryFromWGS84(wgs84GeometryTo);
 
-            //Perform spatial analysis between collected secondaryGeometries (calibrate minimum distance)
+            //Perform spatial analysis between collected geometries (calibrate minimum distance)
             double? featuresDistance = double.MaxValue;
             geometriesFrom.ForEach(fromGeom =>
             {
@@ -296,21 +304,25 @@ namespace OWLSharp.Extensions.GEO
                     featuresDistance = tempDistance;
             });
 
-            //Give null in case distance could not be calculated (no available secondaryGeometries)
-            return featuresDistance == double.MaxValue ? null : featuresDistance;
+            //Give null in case distance could not be calculated (no available geometries)
+            return featuresDistance is double.MaxValue ? null : featuresDistance;
         }
 
+        /// <summary>
+        /// Gets the minimum spatial distance, expressed in meters, between the given GeoSPARQL literals.
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
         public static async Task<double?> GetDistanceBetweenFeaturesAsync(RDFTypedLiteral fromFeatureLiteral, RDFTypedLiteral toFeatureLiteral)
         {
             #region Guards
             if (fromFeatureLiteral == null)
-                throw new OWLException("Cannot get distance between features because given \"fromFeatureLiteral\" parameter is null");
+                throw new OWLException($"Cannot get distance between features because given '{nameof(fromFeatureLiteral)}' parameter is null");
             if (!fromFeatureLiteral.HasGeographicDatatype())
-                throw new OWLException("Cannot get distance between features because given \"fromFeatureLiteral\" parameter is not a geographic typed literal");
+                throw new OWLException($"Cannot get distance between features because given '{nameof(fromFeatureLiteral)}' parameter is not a geographic typed literal");
             if (toFeatureLiteral == null)
-                throw new OWLException("Cannot get distance between features because given \"toFeatureLiteral\" parameter is null");
+                throw new OWLException($"Cannot get distance between features because given '{nameof(toFeatureLiteral)}' parameter is null");
             if (!toFeatureLiteral.HasGeographicDatatype())
-                throw new OWLException("Cannot get distance between features because given \"toFeatureLiteral\" parameter is not a geographic typed literal");
+                throw new OWLException($"Cannot get distance between features because given '{nameof(toFeatureLiteral)}' parameter is not a geographic typed literal");
             #endregion
 
             //Transform "From" feature into geometry
@@ -325,7 +337,7 @@ namespace OWLSharp.Extensions.GEO
             wgs84GeometryTo.SRID=4326;
             Geometry lazGeometryTo = RDFGeoConverter.GetLambertAzimuthalGeometryFromWGS84(wgs84GeometryTo);
 
-            //Perform spatial analysis between secondaryGeometries
+            //Perform spatial analysis between geometries
             return await Task.FromResult(lazGeometryFrom.Distance(lazGeometryTo));
         }
         #endregion
