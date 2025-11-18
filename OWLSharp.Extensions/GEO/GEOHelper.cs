@@ -1266,17 +1266,15 @@ namespace OWLSharp.Extensions.GEO
         {
             Dictionary<string,List<(Geometry,Geometry)>> featuresWithGeometry = new Dictionary<string,List<(Geometry,Geometry)>>();
 
-            foreach(OWLIndividualExpression featureIdv in ontology.GetIndividualsOf(new OWLClass(RDFVocabulary.GEOSPARQL.FEATURE)))
+            #region Facilities
+            async Task GetGeometriesAsync(RDFResource featureIdvIRI)
             {
-                RDFResource featureIdvIRI = featureIdv.GetIRI();
-                if (featureIRI != null && !featureIRI.Equals(featureIdvIRI))
-                    continue;
                 string featureIRIString = featureIdvIRI.ToString();
                 if (!featuresWithGeometry.ContainsKey(featureIRIString))
                     featuresWithGeometry.Add(featureIRIString, new List<(Geometry wgs84Geom, Geometry lazGeom)>());
 
                 //Analyze default geometry of the feature
-                (Geometry wgs84Geom,Geometry lazGeom) defaultGeometry = await ontology.GetDefaultGeometryOfFeatureAsync(featureIdvIRI);
+                (Geometry wgs84Geom, Geometry lazGeom) defaultGeometry = await ontology.GetDefaultGeometryOfFeatureAsync(featureIdvIRI);
                 if (defaultGeometry.wgs84Geom != null && defaultGeometry.lazGeom != null)
                     featuresWithGeometry[featureIRIString].Add(defaultGeometry);
 
@@ -1284,6 +1282,21 @@ namespace OWLSharp.Extensions.GEO
                 List<(Geometry wgs84Geom, Geometry lazGeom)> secondaryGeometries = await ontology.GetSecondaryGeometriesOfFeatureAsync(featureIdvIRI);
                 if (secondaryGeometries.Count > 0)
                     featuresWithGeometry[featureIRIString].AddRange(secondaryGeometries);
+            }
+            #endregion
+
+            //If a specific individual of class geosparql:Feature has been requested, we can directly extract its geometries
+            if (featureIRI != null
+                 && ontology.CheckIsIndividualOf(RDFVocabulary.GEOSPARQL.FEATURE.ToEntity<OWLClass>(), featureIRI.ToEntity<OWLNamedIndividual>()))
+            {
+                await GetGeometriesAsync(featureIRI);
+            }
+
+            //Otherwise we must iterate all individuals of class geosparql:Feature and extract their geometries
+            else
+            {
+                foreach (OWLIndividualExpression featureIdv in ontology.GetIndividualsOf(RDFVocabulary.GEOSPARQL.FEATURE.ToEntity<OWLClass>()))
+                    await GetGeometriesAsync(featureIdv.GetIRI());
             }
 
             return featuresWithGeometry;
