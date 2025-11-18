@@ -42,6 +42,8 @@ namespace OWLSharp.Extensions.GEO
         internal static readonly WKTWriter WKTWriter = new WKTWriter();
         internal static readonly GMLReader GMLReader = new GMLReader();
         internal static readonly GMLWriter GMLWriter = new GMLWriter();
+        private static readonly RDFResource AsWKT = new RDFResource("urn:swrl:geosparql:asWKT");
+        private static readonly RDFResource AsGML = new RDFResource("urn:swrl:geosparql:asGML");
 
         #region Initializer
         /// <summary>
@@ -76,25 +78,25 @@ namespace OWLSharp.Extensions.GEO
             ontology.DeclareEntity(new OWLNamedIndividual(featureUri));
             ontology.DeclareEntity(new OWLNamedIndividual(geoPoint));
             ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.GEOSPARQL.FEATURE),
+                RDFVocabulary.GEOSPARQL.FEATURE.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(featureUri)));
             ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.GEOSPARQL.GEOMETRY),
+                RDFVocabulary.GEOSPARQL.GEOMETRY.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(geoPoint)));
             ontology.DeclareAssertionAxiom(new OWLClassAssertion(
                 new OWLClass(RDFVocabulary.GEOSPARQL.SF.POINT),
                 new OWLNamedIndividual(geoPoint)));
             ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-                isDefaultGeometry ? new OWLObjectProperty(RDFVocabulary.GEOSPARQL.DEFAULT_GEOMETRY)
+                isDefaultGeometry ? RDFVocabulary.GEOSPARQL.DEFAULT_GEOMETRY.ToEntity<OWLObjectProperty>()
                                   : new OWLObjectProperty(RDFVocabulary.GEOSPARQL.HAS_GEOMETRY),
                 new OWLNamedIndividual(featureUri),
                 new OWLNamedIndividual(geoPoint)));
             ontology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
-                new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
+                RDFVocabulary.GEOSPARQL.AS_WKT.ToEntity<OWLDataProperty>(),
                 new OWLNamedIndividual(geoPoint),
                 new OWLLiteral(new RDFTypedLiteral(geoPoint.ToWKT(), RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT))));
             ontology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
-                new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_GML),
+                RDFVocabulary.GEOSPARQL.AS_GML.ToEntity<OWLDataProperty>(),
                 new OWLNamedIndividual(geoPoint),
                 new OWLLiteral(new RDFTypedLiteral(geoPoint.ToGML(), RDFModelEnums.RDFDatatypes.GEOSPARQL_GML))));
 
@@ -117,25 +119,25 @@ namespace OWLSharp.Extensions.GEO
             ontology.DeclareEntity(new OWLNamedIndividual(featureUri));
             ontology.DeclareEntity(new OWLNamedIndividual(geoLine));
             ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.GEOSPARQL.FEATURE),
+                RDFVocabulary.GEOSPARQL.FEATURE.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(featureUri)));
             ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.GEOSPARQL.GEOMETRY),
+                RDFVocabulary.GEOSPARQL.GEOMETRY.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(geoLine)));
             ontology.DeclareAssertionAxiom(new OWLClassAssertion(
                 new OWLClass(RDFVocabulary.GEOSPARQL.SF.LINESTRING),
                 new OWLNamedIndividual(geoLine)));
             ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-                isDefaultGeometry ? new OWLObjectProperty(RDFVocabulary.GEOSPARQL.DEFAULT_GEOMETRY)
+                isDefaultGeometry ? RDFVocabulary.GEOSPARQL.DEFAULT_GEOMETRY.ToEntity<OWLObjectProperty>()
                                   : new OWLObjectProperty(RDFVocabulary.GEOSPARQL.HAS_GEOMETRY),
                 new OWLNamedIndividual(featureUri),
                 new OWLNamedIndividual(geoLine)));
             ontology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
-                new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
+                RDFVocabulary.GEOSPARQL.AS_WKT.ToEntity<OWLDataProperty>(),
                 new OWLNamedIndividual(geoLine),
                 new OWLLiteral(new RDFTypedLiteral(geoLine.ToWKT(), RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT))));
             ontology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
-                new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_GML),
+                RDFVocabulary.GEOSPARQL.AS_GML.ToEntity<OWLDataProperty>(),
                 new OWLNamedIndividual(geoLine),
                 new OWLLiteral(new RDFTypedLiteral(geoLine.ToGML(), RDFModelEnums.RDFDatatypes.GEOSPARQL_GML))));
 
@@ -158,25 +160,25 @@ namespace OWLSharp.Extensions.GEO
             ontology.DeclareEntity(new OWLNamedIndividual(featureUri));
             ontology.DeclareEntity(new OWLNamedIndividual(geoArea));
             ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.GEOSPARQL.FEATURE),
+                RDFVocabulary.GEOSPARQL.FEATURE.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(featureUri)));
             ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.GEOSPARQL.GEOMETRY),
+                RDFVocabulary.GEOSPARQL.GEOMETRY.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(geoArea)));
             ontology.DeclareAssertionAxiom(new OWLClassAssertion(
                 new OWLClass(RDFVocabulary.GEOSPARQL.SF.POLYGON),
                 new OWLNamedIndividual(geoArea)));
             ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-                isDefaultGeometry ? new OWLObjectProperty(RDFVocabulary.GEOSPARQL.DEFAULT_GEOMETRY)
+                isDefaultGeometry ? RDFVocabulary.GEOSPARQL.DEFAULT_GEOMETRY.ToEntity<OWLObjectProperty>()
                                   : new OWLObjectProperty(RDFVocabulary.GEOSPARQL.HAS_GEOMETRY),
                 new OWLNamedIndividual(featureUri),
                 new OWLNamedIndividual(geoArea)));
             ontology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
-                new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
+                RDFVocabulary.GEOSPARQL.AS_WKT.ToEntity<OWLDataProperty>(),
                 new OWLNamedIndividual(geoArea),
                 new OWLLiteral(new RDFTypedLiteral(geoArea.ToWKT(), RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT))));
             ontology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
-                new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_GML),
+                RDFVocabulary.GEOSPARQL.AS_GML.ToEntity<OWLDataProperty>(),
                 new OWLNamedIndividual(geoArea),
                 new OWLLiteral(new RDFTypedLiteral(geoArea.ToGML(), RDFModelEnums.RDFDatatypes.GEOSPARQL_GML))));
 
@@ -1328,17 +1330,17 @@ namespace OWLSharp.Extensions.GEO
                     Atoms = new List<SWRLAtom>
                     {
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.GEOSPARQL.FEATURE),
+                            RDFVocabulary.GEOSPARQL.FEATURE.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?FEATURE"))),
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.GEOSPARQL.GEOMETRY),
+                            RDFVocabulary.GEOSPARQL.GEOMETRY.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?GEOMETRY"))),
                         new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(RDFVocabulary.GEOSPARQL.DEFAULT_GEOMETRY),
+                            RDFVocabulary.GEOSPARQL.DEFAULT_GEOMETRY.ToEntity<OWLObjectProperty>(),
                             new SWRLVariableArgument(new RDFVariable("?FEATURE")),
                             new SWRLVariableArgument(new RDFVariable("?GEOMETRY"))),
                         new SWRLDataPropertyAtom(
-                            new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
+                            RDFVocabulary.GEOSPARQL.AS_WKT.ToEntity<OWLDataProperty>(),
                             new SWRLVariableArgument(new RDFVariable("?GEOMETRY")),
                             new SWRLVariableArgument(new RDFVariable("?WKT")))
                     },
@@ -1354,7 +1356,7 @@ namespace OWLSharp.Extensions.GEO
                     Atoms = new List<SWRLAtom>
                     {
                         new SWRLDataPropertyAtom(
-                            new OWLDataProperty(new RDFResource("urn:swrl:geosparql:asWKT")),
+                            AsWKT.ToEntity<OWLDataProperty>(),
                             new SWRLVariableArgument(new RDFVariable("?GEOMETRY")),
                             new SWRLVariableArgument(new RDFVariable("?WKT")))
                     }
@@ -1372,17 +1374,17 @@ namespace OWLSharp.Extensions.GEO
                         Atoms = new List<SWRLAtom>
                         {
                             new SWRLClassAtom(
-                                new OWLClass(RDFVocabulary.GEOSPARQL.FEATURE),
+                                RDFVocabulary.GEOSPARQL.FEATURE.ToEntity<OWLClass>(),
                                 new SWRLVariableArgument(new RDFVariable("?FEATURE"))),
                             new SWRLClassAtom(
-                                new OWLClass(RDFVocabulary.GEOSPARQL.GEOMETRY),
+                                RDFVocabulary.GEOSPARQL.GEOMETRY.ToEntity<OWLClass>(),
                                 new SWRLVariableArgument(new RDFVariable("?GEOMETRY"))),
                             new SWRLObjectPropertyAtom(
-                                new OWLObjectProperty(RDFVocabulary.GEOSPARQL.DEFAULT_GEOMETRY),
+                                RDFVocabulary.GEOSPARQL.DEFAULT_GEOMETRY.ToEntity<OWLObjectProperty>(),
                                 new SWRLVariableArgument(new RDFVariable("?FEATURE")),
                                 new SWRLVariableArgument(new RDFVariable("?GEOMETRY"))),
                             new SWRLDataPropertyAtom(
-                                new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_GML),
+                                RDFVocabulary.GEOSPARQL.AS_GML.ToEntity<OWLDataProperty>(),
                                 new SWRLVariableArgument(new RDFVariable("?GEOMETRY")),
                                 new SWRLVariableArgument(new RDFVariable("?GML")))
                         },
@@ -1398,7 +1400,7 @@ namespace OWLSharp.Extensions.GEO
                         Atoms = new List<SWRLAtom>
                         {
                             new SWRLDataPropertyAtom(
-                                new OWLDataProperty(new RDFResource("urn:swrl:geosparql:asGML")),
+                                AsGML.ToEntity<OWLDataProperty>(),
                                 new SWRLVariableArgument(new RDFVariable("?GEOMETRY")),
                                 new SWRLVariableArgument(new RDFVariable("?GML")))
                         }
@@ -1409,7 +1411,7 @@ namespace OWLSharp.Extensions.GEO
 
             //Parse retrieved WKT/GML serialization into (WGS84,UTM) result geometry
             OWLDataPropertyAssertion inferenceAxiom = (OWLDataPropertyAssertion)inferences.FirstOrDefault()?.Axiom;
-            if (string.Equals(inferenceAxiom?.DataProperty.GetIRI().ToString(), "urn:swrl:geosparql:asWKT", StringComparison.Ordinal))
+            if (string.Equals(inferenceAxiom?.DataProperty.GetIRI().ToString(), AsWKT.ToString(), StringComparison.Ordinal))
             {
                 try
                 {
@@ -1426,7 +1428,7 @@ namespace OWLSharp.Extensions.GEO
                 }
                 catch { /* Just a no-op, since type errors are normal when trying to face variable's bindings */ }
             }
-            if (string.Equals(inferenceAxiom?.DataProperty.GetIRI().ToString(), "urn:swrl:geosparql:asGML", StringComparison.Ordinal))
+            if (string.Equals(inferenceAxiom?.DataProperty.GetIRI().ToString(), AsGML.ToString(), StringComparison.Ordinal))
             {
                 try
                 {
@@ -1464,17 +1466,17 @@ namespace OWLSharp.Extensions.GEO
                     Atoms = new List<SWRLAtom>
                     {
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.GEOSPARQL.FEATURE),
+                            RDFVocabulary.GEOSPARQL.FEATURE.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?FEATURE"))),
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.GEOSPARQL.GEOMETRY),
+                            RDFVocabulary.GEOSPARQL.GEOMETRY.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?GEOMETRY"))),
                         new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(RDFVocabulary.GEOSPARQL.HAS_GEOMETRY),
+                            RDFVocabulary.GEOSPARQL.HAS_GEOMETRY.ToEntity<OWLObjectProperty>(),
                             new SWRLVariableArgument(new RDFVariable("?FEATURE")),
                             new SWRLVariableArgument(new RDFVariable("?GEOMETRY"))),
                         new SWRLDataPropertyAtom(
-                            new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
+                            RDFVocabulary.GEOSPARQL.AS_WKT.ToEntity<OWLDataProperty>(),
                             new SWRLVariableArgument(new RDFVariable("?GEOMETRY")),
                             new SWRLVariableArgument(new RDFVariable("?WKT")))
                     },
@@ -1490,7 +1492,7 @@ namespace OWLSharp.Extensions.GEO
                     Atoms = new List<SWRLAtom>
                     {
                         new SWRLDataPropertyAtom(
-                            new OWLDataProperty(new RDFResource("urn:swrl:geosparql:asWKT")),
+                            AsWKT.ToEntity<OWLDataProperty>(),
                             new SWRLVariableArgument(new RDFVariable("?GEOMETRY")),
                             new SWRLVariableArgument(new RDFVariable("?WKT")))
                     }
@@ -1508,17 +1510,17 @@ namespace OWLSharp.Extensions.GEO
                         Atoms = new List<SWRLAtom>
                         {
                             new SWRLClassAtom(
-                                new OWLClass(RDFVocabulary.GEOSPARQL.FEATURE),
+                                RDFVocabulary.GEOSPARQL.FEATURE.ToEntity<OWLClass>(),
                                 new SWRLVariableArgument(new RDFVariable("?FEATURE"))),
                             new SWRLClassAtom(
-                                new OWLClass(RDFVocabulary.GEOSPARQL.GEOMETRY),
+                                RDFVocabulary.GEOSPARQL.GEOMETRY.ToEntity<OWLClass>(),
                                 new SWRLVariableArgument(new RDFVariable("?GEOMETRY"))),
                             new SWRLObjectPropertyAtom(
-                                new OWLObjectProperty(RDFVocabulary.GEOSPARQL.HAS_GEOMETRY),
+                                RDFVocabulary.GEOSPARQL.HAS_GEOMETRY.ToEntity<OWLObjectProperty>(),
                                 new SWRLVariableArgument(new RDFVariable("?FEATURE")),
                                 new SWRLVariableArgument(new RDFVariable("?GEOMETRY"))),
                             new SWRLDataPropertyAtom(
-                                new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_GML),
+                                RDFVocabulary.GEOSPARQL.AS_GML.ToEntity<OWLDataProperty>(),
                                 new SWRLVariableArgument(new RDFVariable("?GEOMETRY")),
                                 new SWRLVariableArgument(new RDFVariable("?GML")))
                         },
@@ -1534,7 +1536,7 @@ namespace OWLSharp.Extensions.GEO
                         Atoms = new List<SWRLAtom>
                         {
                             new SWRLDataPropertyAtom(
-                                new OWLDataProperty(new RDFResource("urn:swrl:geosparql:asGML")),
+                                AsGML.ToEntity<OWLDataProperty>(),
                                 new SWRLVariableArgument(new RDFVariable("?GEOMETRY")),
                                 new SWRLVariableArgument(new RDFVariable("?GML")))
                         }
@@ -1547,7 +1549,7 @@ namespace OWLSharp.Extensions.GEO
             foreach (OWLInference inference in inferences)
             {
                 OWLDataPropertyAssertion inferenceAxiom = (OWLDataPropertyAssertion)inference.Axiom;
-                if (string.Equals(inferenceAxiom?.DataProperty.GetIRI().ToString(), "urn:swrl:geosparql:asWKT", StringComparison.Ordinal))
+                if (string.Equals(inferenceAxiom.DataProperty.GetIRI().ToString(), AsWKT.ToString(), StringComparison.Ordinal))
                 {
                     try
                     {
@@ -1565,7 +1567,7 @@ namespace OWLSharp.Extensions.GEO
                     }
                     catch { /* Just a no-op, since type errors are normal when trying to face variable's bindings */ }
                 }
-                if (string.Equals(inferenceAxiom?.DataProperty.GetIRI().ToString(), "urn:swrl:geosparql:asGML", StringComparison.Ordinal))
+                if (string.Equals(inferenceAxiom.DataProperty.GetIRI().ToString(), AsGML.ToString(), StringComparison.Ordinal))
                 {
                     try
                     {
