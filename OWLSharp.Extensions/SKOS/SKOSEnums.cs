@@ -16,6 +16,9 @@
 
 namespace OWLSharp.Extensions.SKOS
 {
+    /// <summary>
+    /// SKOSEnums represents a collector for all the enumerations used by the "OWLSharp.Extensions.SKOS" namespace
+    /// </summary>
     public static class SKOSEnums
     {
         public enum SKOSValidatorRules

@@ -16,6 +16,9 @@
 
 namespace OWLSharp.Extensions.TIME
 {
+    /// <summary>
+    /// TIMEEnums represents a collector for all the enumerations used by the "OWLSharp.Extensions.TIME" namespace
+    /// </summary>
     public static class TIMEEnums
     {
         public enum TIMEUnitType
