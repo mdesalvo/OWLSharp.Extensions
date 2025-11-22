@@ -35,5 +35,17 @@ namespace OWLSharp.Extensions.GEO
             SouthEast = 7,
             SouthWest = 8
         }
+
+        /// <summary>
+        /// Indicates the type of analysis requested for a spatial feature
+        /// </summary>
+        internal enum GeoAnalysis
+        {
+            Boundary = 1,
+            Buffer = 2,
+            Centroid = 3,
+            ConvexHull = 4,
+            Envelope = 5
+        }
     }
 }
