@@ -1699,7 +1699,7 @@ namespace OWLSharp.Extensions.GEO
         /// <summary>
         /// Compares the given pair of coordinates according to the specified direction of analysis.
         /// </summary>
-        internal static bool MatchCoordinates(Coordinate c1, Coordinate c2, GEOEnums.GeoDirections geoDirection)
+        private static bool MatchCoordinates(Coordinate c1, Coordinate c2, GEOEnums.GeoDirections geoDirection)
         {
             switch (geoDirection)
             {
