@@ -21,7 +21,7 @@ using RDFSharp.Model;
 using System;
 using System.Collections.Generic;
 
-namespace OWLSharp.Test.Extensions.SKOS;
+namespace OWLSharp.Extensions.Test.SKOS;
 
 [TestClass]
 public class SKOSHelperTest

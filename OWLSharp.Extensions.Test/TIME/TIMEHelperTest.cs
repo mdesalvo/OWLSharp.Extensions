@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 
-namespace OWLSharp.Test.Extensions.TIME;
+namespace OWLSharp.Extensions.Test.TIME;
 
 [TestClass]
 public class TIMEHelperTest : TIMETestOntology

@@ -22,7 +22,7 @@ using RDFSharp.Model;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace OWLSharp.Test.Extensions.TIME;
+namespace OWLSharp.Extensions.Test.TIME;
 
 [TestClass]
 public class TIMEValidatorTest : TIMETestOntology

@@ -18,7 +18,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OWLSharp.Extensions.TIME;
 using System.Xml;
 
-namespace OWLSharp.Test.Extensions.TIME;
+namespace OWLSharp.Extensions.Test.TIME;
 
 [TestClass]
 public class TIMEExtentTest

@@ -19,7 +19,7 @@ using OWLSharp.Ontology;
 using OWLSharp.Validator;
 using RDFSharp.Model;
 
-namespace OWLSharp.Test.Extensions.SKOS;
+namespace OWLSharp.Extensions.Test.SKOS;
 
 [TestClass]
 public class SKOSNotationAnalysisRuleTest

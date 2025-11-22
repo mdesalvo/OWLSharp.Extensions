@@ -19,7 +19,7 @@ using OWLSharp.Ontology;
 using OWLSharp.Validator;
 using RDFSharp.Model;
 
-namespace OWLSharp.Test.Extensions.TIME;
+namespace OWLSharp.Extensions.Test.TIME;
 
 [TestClass]
 public class TIMEIntervalContainsAnalysisRuleTest : TIMETestOntology

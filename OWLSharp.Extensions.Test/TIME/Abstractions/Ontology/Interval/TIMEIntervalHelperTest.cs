@@ -20,7 +20,7 @@ using OWLSharp.Ontology;
 using RDFSharp.Model;
 using System;
 
-namespace OWLSharp.Test.Extensions.TIME;
+namespace OWLSharp.Extensions.Test.TIME;
 
 [TestClass]
 public class TIMEIntervalHelperTest

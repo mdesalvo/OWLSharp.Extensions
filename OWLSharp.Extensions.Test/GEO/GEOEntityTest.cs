@@ -19,7 +19,7 @@ using OWLSharp.Extensions.GEO;
 using RDFSharp.Model;
 using System;
 
-namespace OWLSharp.Test.Extensions.GEO;
+namespace OWLSharp.Extensions.Test.GEO;
 
 [TestClass]
 public class GEOEntityTest

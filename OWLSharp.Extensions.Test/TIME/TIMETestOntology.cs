@@ -20,7 +20,7 @@ using OWLSharp.Ontology;
 using OWLSharp.Extensions.TIME;
 using System;
 
-namespace OWLSharp.Test.Extensions.TIME;
+namespace OWLSharp.Extensions.Test.TIME;
 
 public class TIMETestOntology
 {

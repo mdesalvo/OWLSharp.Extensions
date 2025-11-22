@@ -19,7 +19,7 @@ using OWLSharp.Extensions.TIME;
 using RDFSharp.Model;
 using static OWLSharp.Extensions.TIME.TIMEEnums;
 
-namespace OWLSharp.Test.Extensions.TIME;
+namespace OWLSharp.Extensions.Test.TIME;
 
 [TestClass]
 public class TIMEConverterTest

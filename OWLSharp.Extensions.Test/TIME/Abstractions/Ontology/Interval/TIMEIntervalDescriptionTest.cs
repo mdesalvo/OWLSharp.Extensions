@@ -20,7 +20,7 @@ using RDFSharp.Model;
 using System;
 using System.Xml;
 
-namespace OWLSharp.Test.Extensions.TIME;
+namespace OWLSharp.Extensions.Test.TIME;
 
 [TestClass]
 public class TIMEIntervalDescriptionTest

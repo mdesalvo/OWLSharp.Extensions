@@ -22,7 +22,7 @@ using OWLSharp.Ontology;
 using OWLSharp.Reasoner;
 using RDFSharp.Model;
 
-namespace OWLSharp.Test.Extensions.TIME;
+namespace OWLSharp.Extensions.Test.TIME;
 
 [TestClass]
 public class TIMEFinishesEqualsEntailmentRuleTest : TIMETestOntology
