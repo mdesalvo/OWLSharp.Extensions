@@ -41,17 +41,17 @@ namespace OWLSharp.Extensions.TIME
             => TimeSpan = timeSpan;
 
         public TIMEInterval(RDFResource timeInstantUri, TIMEIntervalDescription timeIntervalDescription) : base(timeInstantUri)
-            => Description = timeIntervalDescription ?? throw new OWLException("Cannot create time interval because given \"timeIntervalDescription\" parameter is null");
+            => Description = timeIntervalDescription ?? throw new OWLException($"Cannot create time interval because given \"timeIntervalDescription\" parameter is null");
 
         public TIMEInterval(RDFResource timeInstantUri, TIMEIntervalDuration timeIntervalDuration) : base(timeInstantUri)
-            => Duration = timeIntervalDuration ?? throw new OWLException("Cannot create time interval because given \"timeIntervalDuration\" parameter is null");
+            => Duration = timeIntervalDuration ?? throw new OWLException($"Cannot create time interval because given \"timeIntervalDuration\" parameter is null");
 
         public TIMEInterval(RDFResource timeInstantUri, TIMEInstant timeInstantBeginning, TIMEInstant timeInstantEnd)
             : base(timeInstantUri)
         {
             #region Guards
             if (timeInstantBeginning == null && timeInstantEnd == null)
-                throw new OWLException("Cannot create time interval because both \"timeInstantBeginning\" and \"timeInstantEnd\" parameters are null");
+                throw new OWLException($"Cannot create time interval because both \"timeInstantBeginning\" and \"timeInstantEnd\" parameters are null");
             #endregion
 
             Beginning = timeInstantBeginning;

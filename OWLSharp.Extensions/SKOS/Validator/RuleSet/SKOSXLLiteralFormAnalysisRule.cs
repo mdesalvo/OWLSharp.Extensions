@@ -39,7 +39,7 @@ namespace OWLSharp.Extensions.SKOS
                     Atoms = new List<SWRLAtom>
                     {
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.SKOS.SKOSXL.LABEL),
+                            RDFVocabulary.SKOS.SKOSXL.LABEL.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?L"))),
                         new SWRLDataPropertyAtom(
                             new OWLDataProperty(RDFVocabulary.SKOS.SKOSXL.LITERAL_FORM),

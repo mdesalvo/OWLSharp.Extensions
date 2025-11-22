@@ -45,7 +45,7 @@ namespace OWLSharp.Extensions.SKOS
                     Atoms = new List<SWRLAtom>
                     {
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?C"))),
                         new SWRLAnnotationPropertyAtom(
                             new OWLAnnotationProperty(RDFVocabulary.SKOS.ALT_LABEL),
@@ -92,7 +92,7 @@ namespace OWLSharp.Extensions.SKOS
                     Atoms = new List<SWRLAtom>
                     {
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?C"))),
                         new SWRLAnnotationPropertyAtom(
                             new OWLAnnotationProperty(RDFVocabulary.SKOS.ALT_LABEL),
@@ -141,7 +141,7 @@ namespace OWLSharp.Extensions.SKOS
                     Atoms = new List<SWRLAtom>
                     {
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?C"))),
                         new SWRLObjectPropertyAtom(
                             new OWLObjectProperty(RDFVocabulary.SKOS.SKOSXL.ALT_LABEL),
@@ -196,7 +196,7 @@ namespace OWLSharp.Extensions.SKOS
                     Atoms = new List<SWRLAtom>
                     {
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?C"))),
                         new SWRLObjectPropertyAtom(
                             new OWLObjectProperty(RDFVocabulary.SKOS.SKOSXL.ALT_LABEL),

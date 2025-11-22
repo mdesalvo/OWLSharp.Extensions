@@ -43,9 +43,9 @@ namespace OWLSharp.Extensions.TIME
         {
             #region Guards
             if (featureUri == null)
-                throw new OWLException("Cannot declare temporal instant because given \"featureUri\" parameter is null");
+                throw new OWLException($"Cannot declare temporal instant because given \"featureUri\" parameter is null");
             if (timeInstant == null)
-                throw new OWLException("Cannot declare temporal instant because given \"timeInstant\" parameter is null");
+                throw new OWLException($"Cannot declare temporal instant because given \"timeInstant\" parameter is null");
             #endregion
 
             ontology.DeclareEntity(new OWLNamedIndividual(featureUri));
@@ -221,9 +221,9 @@ namespace OWLSharp.Extensions.TIME
         {
             #region Guards
             if (featureUri == null)
-                throw new OWLException("Cannot declare temporal interval because given \"featureUri\" parameter is null");
+                throw new OWLException($"Cannot declare temporal interval because given \"featureUri\" parameter is null");
             if (timeInterval == null)
-                throw new OWLException("Cannot declare temporal interval because given \"timeInterval\" parameter is null");
+                throw new OWLException($"Cannot declare temporal interval because given \"timeInterval\" parameter is null");
             #endregion
 
             //Add knowledge to the A-BOX
@@ -362,7 +362,7 @@ namespace OWLSharp.Extensions.TIME
         {
             #region Guards
             if (featureURI == null)
-                throw new OWLException("Cannot get temporal dimension of feature because given \"featureURI\" parameter is null");
+                throw new OWLException($"Cannot get temporal dimension of feature because given \"featureURI\" parameter is null");
             #endregion
 
             //Temporary working variables
@@ -978,7 +978,7 @@ namespace OWLSharp.Extensions.TIME
         {
             #region Guards
             if (timeInstantURI == null)
-                throw new OWLException("Cannot get temporal coordinate of instant because given \"timeInstantURI\" parameter is null");
+                throw new OWLException($"Cannot get temporal coordinate of instant because given \"timeInstantURI\" parameter is null");
 
             if (calendarTRS == null)
                 calendarTRS = TIMECalendarReferenceSystem.Gregorian;
@@ -1038,7 +1038,7 @@ namespace OWLSharp.Extensions.TIME
         {
             #region Guards
             if (timeIntervalURI == null)
-                throw new OWLException("Cannot get temporal extent of interval because given \"timeIntervalURI\" parameter is null");
+                throw new OWLException($"Cannot get temporal extent of interval because given \"timeIntervalURI\" parameter is null");
 
             if (calendarTRS == null)
                 calendarTRS = TIMECalendarReferenceSystem.Gregorian;
@@ -1095,7 +1095,7 @@ namespace OWLSharp.Extensions.TIME
         {
             #region Guards
             if (timeIntervalURI == null)
-                throw new OWLException("Cannot get beginning of interval because given \"timeIntervalURI\" parameter is null");
+                throw new OWLException($"Cannot get beginning of interval because given \"timeIntervalURI\" parameter is null");
 
             if (calendarTRS == null)
                 calendarTRS = TIMECalendarReferenceSystem.Gregorian;
@@ -1170,7 +1170,7 @@ namespace OWLSharp.Extensions.TIME
         {
             #region Guards
             if (timeIntervalURI == null)
-                throw new OWLException("Cannot get end of interval because given \"timeIntervalURI\" parameter is null");
+                throw new OWLException($"Cannot get end of interval because given \"timeIntervalURI\" parameter is null");
 
             if (calendarTRS == null)
                 calendarTRS = TIMECalendarReferenceSystem.Gregorian;

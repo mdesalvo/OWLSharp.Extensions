@@ -32,7 +32,7 @@ namespace OWLSharp.Extensions.TIME
             => Extent = new TIMEExtent(timeSpan);
 
         public TIMEIntervalDescription(RDFResource timeInstantDescriptionUri, TIMEExtent timeIntervalExtent) : this(timeInstantDescriptionUri)
-            => Extent = timeIntervalExtent?? throw new OWLException("Cannot create description of time interval because given \"timeIntervalExtent\" parameter is null");
+            => Extent = timeIntervalExtent?? throw new OWLException($"Cannot create description of time interval because given \"timeIntervalExtent\" parameter is null");
         #endregion
 
         #region Interfaces

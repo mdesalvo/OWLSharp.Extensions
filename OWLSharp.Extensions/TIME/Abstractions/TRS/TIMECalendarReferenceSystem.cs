@@ -39,7 +39,7 @@ namespace OWLSharp.Extensions.TIME
 
         #region Ctors
         public TIMECalendarReferenceSystem(RDFResource trsUri, TIMECalendarReferenceSystemMetrics trsMetrics) : base(trsUri)
-            => Metrics = trsMetrics ?? throw new OWLException("Cannot create calendar-based TRS because given \"trsMetrics\" parameter is null");
+            => Metrics = trsMetrics ?? throw new OWLException($"Cannot create calendar-based TRS because given \"trsMetrics\" parameter is null");
         #endregion
     }
 
@@ -70,17 +70,17 @@ namespace OWLSharp.Extensions.TIME
         {
             #region Guards
             if (secondsInMinute == 0)
-                throw new OWLException("Cannot build calendar metrics because given \"secondsInMinute\" parameter must be greater than zero");
+                throw new OWLException($"Cannot build calendar metrics because given \"secondsInMinute\" parameter must be greater than zero");
             if (minutesInHour == 0)
-                throw new OWLException("Cannot build calendar metrics because given \"minutesInHour\" parameter must be greater than zero");
+                throw new OWLException($"Cannot build calendar metrics because given \"minutesInHour\" parameter must be greater than zero");
             if (hoursInDay == 0)
-                throw new OWLException("Cannot build calendar metrics because given \"hoursInDay\" parameter must be greater than zero");
+                throw new OWLException($"Cannot build calendar metrics because given \"hoursInDay\" parameter must be greater than zero");
             if (months == null)
-                throw new OWLException("Cannot build calendar metrics because given \"months\" parameter is null");
+                throw new OWLException($"Cannot build calendar metrics because given \"months\" parameter is null");
             if (months.Length == 0)
-                throw new OWLException("Cannot build calendar metrics because given \"months\" parameter must contain at least one element");
+                throw new OWLException($"Cannot build calendar metrics because given \"months\" parameter must contain at least one element");
             if (months.Contains<uint>(0))
-                throw new OWLException("Cannot build calendar metrics because given \"months\" parameter must contain all elements greater than zerp");
+                throw new OWLException($"Cannot build calendar metrics because given \"months\" parameter must contain all elements greater than zerp");
             #endregion
 
             SecondsInMinute = secondsInMinute;

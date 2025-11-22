@@ -35,15 +35,15 @@ namespace OWLSharp.Extensions.TIME
         public TIMEInstantPosition(RDFResource timeInstantPositionUri, RDFResource trsUri, double numericValue)
             : this(timeInstantPositionUri)
         {
-            TRS = trsUri ?? throw new OWLException("Cannot create position of time instant because given \"trsUri\" parameter is null");
+            TRS = trsUri ?? throw new OWLException($"Cannot create position of time instant because given \"trsUri\" parameter is null");
             NumericValue = numericValue;
         }
 
         public TIMEInstantPosition(RDFResource timeInstantPositionUri, RDFResource trsUri, RDFResource nominalValue)
             : this(timeInstantPositionUri)
         {
-            TRS = trsUri ?? throw new OWLException("Cannot create position of time instant because given \"trsUri\" parameter is null");
-            NominalValue = nominalValue ?? throw new OWLException("Cannot create position of time instant because given \"nominalValue\" parameter is null");
+            TRS = trsUri ?? throw new OWLException($"Cannot create position of time instant because given \"trsUri\" parameter is null");
+            NominalValue = nominalValue ?? throw new OWLException($"Cannot create position of time instant because given \"nominalValue\" parameter is null");
         }
         #endregion
     }

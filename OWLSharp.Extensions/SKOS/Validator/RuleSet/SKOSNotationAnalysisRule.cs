@@ -39,13 +39,13 @@ namespace OWLSharp.Extensions.SKOS
                     Atoms = new List<SWRLAtom>
                     {
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.SKOS.CONCEPT_SCHEME),
+                            RDFVocabulary.SKOS.CONCEPT_SCHEME.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?S"))),
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?C1"))),
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?C2"))),
                         new SWRLObjectPropertyAtom(
                             new OWLObjectProperty(RDFVocabulary.SKOS.IN_SCHEME),

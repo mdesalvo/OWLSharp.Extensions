@@ -109,14 +109,14 @@ public class SKOSHelperTest
     public void ShouldCheckConceptScheme()
     {
         OWLOntology ontology = new OWLOntology(new Uri("ex:ontology"));
-        ontology.DeclareEntity(new OWLClass(RDFVocabulary.SKOS.CONCEPT_SCHEME));
+        ontology.DeclareEntity(RDFVocabulary.SKOS.CONCEPT_SCHEME.ToEntity<OWLClass>());
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:conceptScheme1")));
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:conceptScheme2")));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT_SCHEME),
+            RDFVocabulary.SKOS.CONCEPT_SCHEME.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:conceptScheme1"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT_SCHEME),
+            RDFVocabulary.SKOS.CONCEPT_SCHEME.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:conceptScheme2"))));
 
         Assert.IsTrue(ontology.CheckHasConceptScheme(new RDFResource("ex:conceptScheme1")));
@@ -129,8 +129,8 @@ public class SKOSHelperTest
     public void ShouldCheckAndGetConceptsInScheme()
     {
         OWLOntology ontology = new OWLOntology(new Uri("ex:ontology"));
-        ontology.DeclareEntity(new OWLClass(RDFVocabulary.SKOS.CONCEPT_SCHEME));
-        ontology.DeclareEntity(new OWLClass(RDFVocabulary.SKOS.CONCEPT));
+        ontology.DeclareEntity(RDFVocabulary.SKOS.CONCEPT_SCHEME.ToEntity<OWLClass>());
+        ontology.DeclareEntity(RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>());
         ontology.DeclareEntity(new OWLObjectProperty(RDFVocabulary.SKOS.IN_SCHEME));
         ontology.DeclareEntity(new OWLObjectProperty(RDFVocabulary.SKOS.HAS_TOP_CONCEPT));
         ontology.DeclareEntity(new OWLObjectProperty(RDFVocabulary.SKOS.TOP_CONCEPT_OF));
@@ -142,25 +142,25 @@ public class SKOSHelperTest
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept4")));
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept5")));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT_SCHEME),
+            RDFVocabulary.SKOS.CONCEPT_SCHEME.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:conceptScheme1"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT_SCHEME),
+            RDFVocabulary.SKOS.CONCEPT_SCHEME.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:conceptScheme2"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept1"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept2"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept3"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept4"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept5"))));
         ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(RDFVocabulary.SKOS.IN_SCHEME),
@@ -206,10 +206,10 @@ public class SKOSHelperTest
     public void ShouldCheckAndGetCollectionsInScheme()
     {
         OWLOntology ontology = new OWLOntology(new Uri("ex:ontology"));
-        ontology.DeclareEntity(new OWLClass(RDFVocabulary.SKOS.COLLECTION));
-        ontology.DeclareEntity(new OWLClass(RDFVocabulary.SKOS.ORDERED_COLLECTION));
-        ontology.DeclareEntity(new OWLClass(RDFVocabulary.SKOS.CONCEPT_SCHEME));
-        ontology.DeclareEntity(new OWLClass(RDFVocabulary.SKOS.CONCEPT));
+        ontology.DeclareEntity(RDFVocabulary.SKOS.COLLECTION.ToEntity<OWLClass>());
+        ontology.DeclareEntity(RDFVocabulary.SKOS.ORDERED_COLLECTION.ToEntity<OWLClass>());
+        ontology.DeclareEntity(RDFVocabulary.SKOS.CONCEPT_SCHEME.ToEntity<OWLClass>());
+        ontology.DeclareEntity(RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>());
         ontology.DeclareEntity(new OWLObjectProperty(RDFVocabulary.SKOS.IN_SCHEME));
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:conceptScheme1")));
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:collection1")));
@@ -220,28 +220,28 @@ public class SKOSHelperTest
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept4")));
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept5")));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT_SCHEME),
+            RDFVocabulary.SKOS.CONCEPT_SCHEME.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:conceptScheme1"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.COLLECTION),
+            RDFVocabulary.SKOS.COLLECTION.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:collection1"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.ORDERED_COLLECTION),
+            RDFVocabulary.SKOS.ORDERED_COLLECTION.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:collection2"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept1"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept2"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept3"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept4"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept5"))));
         ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(RDFVocabulary.SKOS.IN_SCHEME),
@@ -289,7 +289,7 @@ public class SKOSHelperTest
     public void ShouldCheckAndGetBroaderConcepts()
     {
         OWLOntology ontology = new OWLOntology(new Uri("ex:ontology"));
-        ontology.DeclareEntity(new OWLClass(RDFVocabulary.SKOS.CONCEPT));
+        ontology.DeclareEntity(RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>());
         ontology.DeclareEntity(new OWLObjectProperty(RDFVocabulary.SKOS.BROADER));
         ontology.DeclareEntity(new OWLObjectProperty(RDFVocabulary.SKOS.BROADER_TRANSITIVE));
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept1")));
@@ -298,16 +298,16 @@ public class SKOSHelperTest
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept4")));
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept5")));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept1"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept2"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept3"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept4"))));
         ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(RDFVocabulary.SKOS.BROADER),
@@ -345,7 +345,7 @@ public class SKOSHelperTest
     public void ShouldCheckAndGetNarrowerConcepts()
     {
         OWLOntology ontology = new OWLOntology(new Uri("ex:ontology"));
-        ontology.DeclareEntity(new OWLClass(RDFVocabulary.SKOS.CONCEPT));
+        ontology.DeclareEntity(RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>());
         ontology.DeclareEntity(new OWLObjectProperty(RDFVocabulary.SKOS.NARROWER));
         ontology.DeclareEntity(new OWLObjectProperty(RDFVocabulary.SKOS.NARROWER_TRANSITIVE));
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept1")));
@@ -354,16 +354,16 @@ public class SKOSHelperTest
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept4")));
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept5")));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept1"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept2"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept3"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept4"))));
         ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(RDFVocabulary.SKOS.NARROWER),
@@ -401,42 +401,42 @@ public class SKOSHelperTest
     public void ShouldCheckAndGetRelatedConcepts()
     {
         OWLOntology ontology = new OWLOntology(new Uri("ex:ontology"));
-        ontology.DeclareEntity(new OWLClass(RDFVocabulary.SKOS.CONCEPT));
-        ontology.DeclareEntity(new OWLObjectProperty(RDFVocabulary.SKOS.RELATED));
+        ontology.DeclareEntity(RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>());
+        ontology.DeclareEntity(RDFVocabulary.SKOS.RELATED.ToEntity<OWLObjectProperty>());
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept1")));
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept2")));
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept3")));
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept4")));
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept5")));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept1"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept2"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept3"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept4"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept5"))));
         ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-            new OWLObjectProperty(RDFVocabulary.SKOS.RELATED),
+            RDFVocabulary.SKOS.RELATED.ToEntity<OWLObjectProperty>(),
             new OWLNamedIndividual(new RDFResource("ex:concept1")),
             new OWLNamedIndividual(new RDFResource("ex:concept2"))));
         ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-            new OWLObjectProperty(RDFVocabulary.SKOS.RELATED),
+            RDFVocabulary.SKOS.RELATED.ToEntity<OWLObjectProperty>(),
             new OWLNamedIndividual(new RDFResource("ex:concept3")),
             new OWLNamedIndividual(new RDFResource("ex:concept1"))));
         ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-            new OWLObjectProperty(RDFVocabulary.SKOS.RELATED),
+            RDFVocabulary.SKOS.RELATED.ToEntity<OWLObjectProperty>(),
             new OWLNamedIndividual(new RDFResource("ex:concept2")),
             new OWLNamedIndividual(new RDFResource("ex:concept4"))));
         ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-            new OWLObjectProperty(RDFVocabulary.SKOS.RELATED),
+            RDFVocabulary.SKOS.RELATED.ToEntity<OWLObjectProperty>(),
             new OWLNamedIndividual(new RDFResource("ex:concept3")),
             new OWLNamedIndividual(new RDFResource("ex:concept5"))));
 
@@ -457,39 +457,39 @@ public class SKOSHelperTest
     public void ShouldCheckAndGetBroadMatchConcepts()
     {
         OWLOntology ontology = new OWLOntology(new Uri("ex:ontology"));
-        ontology.DeclareEntity(new OWLClass(RDFVocabulary.SKOS.CONCEPT));
-        ontology.DeclareEntity(new OWLObjectProperty(RDFVocabulary.SKOS.BROAD_MATCH));
-        ontology.DeclareEntity(new OWLObjectProperty(RDFVocabulary.SKOS.NARROW_MATCH));
+        ontology.DeclareEntity(RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>());
+        ontology.DeclareEntity(RDFVocabulary.SKOS.BROAD_MATCH.ToEntity<OWLObjectProperty>());
+        ontology.DeclareEntity(RDFVocabulary.SKOS.NARROW_MATCH.ToEntity<OWLObjectProperty>());
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept1")));
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept2")));
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept3")));
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept4")));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept1"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept2"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept3"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept4"))));
         ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-            new OWLObjectProperty(RDFVocabulary.SKOS.BROAD_MATCH),
+            RDFVocabulary.SKOS.BROAD_MATCH.ToEntity<OWLObjectProperty>(),
             new OWLNamedIndividual(new RDFResource("ex:concept1")),
             new OWLNamedIndividual(new RDFResource("ex:concept2"))));
         ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-            new OWLObjectProperty(RDFVocabulary.SKOS.NARROW_MATCH),
+            RDFVocabulary.SKOS.NARROW_MATCH.ToEntity<OWLObjectProperty>(),
             new OWLNamedIndividual(new RDFResource("ex:concept3")),
             new OWLNamedIndividual(new RDFResource("ex:concept1"))));
         ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-            new OWLObjectProperty(RDFVocabulary.SKOS.BROAD_MATCH),
+            RDFVocabulary.SKOS.BROAD_MATCH.ToEntity<OWLObjectProperty>(),
             new OWLNamedIndividual(new RDFResource("ex:concept2")),
             new OWLNamedIndividual(new RDFResource("ex:concept4"))));
         ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-            new OWLObjectProperty(RDFVocabulary.SKOS.BROAD_MATCH),
+            RDFVocabulary.SKOS.BROAD_MATCH.ToEntity<OWLObjectProperty>(),
             new OWLNamedIndividual(new RDFResource("ex:concept3")),
             new OWLNamedIndividual(new RDFResource("ex:concept5"))));
 
@@ -510,39 +510,39 @@ public class SKOSHelperTest
     public void ShouldCheckAndGetNarrowMatchConcepts()
     {
         OWLOntology ontology = new OWLOntology(new Uri("ex:ontology"));
-        ontology.DeclareEntity(new OWLClass(RDFVocabulary.SKOS.CONCEPT));
-        ontology.DeclareEntity(new OWLObjectProperty(RDFVocabulary.SKOS.BROAD_MATCH));
-        ontology.DeclareEntity(new OWLObjectProperty(RDFVocabulary.SKOS.NARROW_MATCH));
+        ontology.DeclareEntity(RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>());
+        ontology.DeclareEntity(RDFVocabulary.SKOS.BROAD_MATCH.ToEntity<OWLObjectProperty>());
+        ontology.DeclareEntity(RDFVocabulary.SKOS.NARROW_MATCH.ToEntity<OWLObjectProperty>());
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept1")));
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept2")));
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept3")));
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept4")));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept1"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept2"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept3"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept4"))));
         ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-            new OWLObjectProperty(RDFVocabulary.SKOS.NARROW_MATCH),
+            RDFVocabulary.SKOS.NARROW_MATCH.ToEntity<OWLObjectProperty>(),
             new OWLNamedIndividual(new RDFResource("ex:concept1")),
             new OWLNamedIndividual(new RDFResource("ex:concept2"))));
         ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-            new OWLObjectProperty(RDFVocabulary.SKOS.BROAD_MATCH),
+            RDFVocabulary.SKOS.BROAD_MATCH.ToEntity<OWLObjectProperty>(),
             new OWLNamedIndividual(new RDFResource("ex:concept3")),
             new OWLNamedIndividual(new RDFResource("ex:concept1"))));
         ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-            new OWLObjectProperty(RDFVocabulary.SKOS.NARROW_MATCH),
+            RDFVocabulary.SKOS.NARROW_MATCH.ToEntity<OWLObjectProperty>(),
             new OWLNamedIndividual(new RDFResource("ex:concept2")),
             new OWLNamedIndividual(new RDFResource("ex:concept4"))));
         ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-            new OWLObjectProperty(RDFVocabulary.SKOS.NARROW_MATCH),
+            RDFVocabulary.SKOS.NARROW_MATCH.ToEntity<OWLObjectProperty>(),
             new OWLNamedIndividual(new RDFResource("ex:concept3")),
             new OWLNamedIndividual(new RDFResource("ex:concept5"))));
 
@@ -563,42 +563,42 @@ public class SKOSHelperTest
     public void ShouldCheckAndGetCloseMatchConcepts()
     {
         OWLOntology ontology = new OWLOntology(new Uri("ex:ontology"));
-        ontology.DeclareEntity(new OWLClass(RDFVocabulary.SKOS.CONCEPT));
-        ontology.DeclareEntity(new OWLObjectProperty(RDFVocabulary.SKOS.CLOSE_MATCH));
+        ontology.DeclareEntity(RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>());
+        ontology.DeclareEntity(RDFVocabulary.SKOS.CLOSE_MATCH.ToEntity<OWLObjectProperty>());
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept1")));
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept2")));
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept3")));
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept4")));
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept5")));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept1"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept2"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept3"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept4"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept5"))));
         ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-            new OWLObjectProperty(RDFVocabulary.SKOS.CLOSE_MATCH),
+            RDFVocabulary.SKOS.CLOSE_MATCH.ToEntity<OWLObjectProperty>(),
             new OWLNamedIndividual(new RDFResource("ex:concept1")),
             new OWLNamedIndividual(new RDFResource("ex:concept2"))));
         ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-            new OWLObjectProperty(RDFVocabulary.SKOS.CLOSE_MATCH),
+            RDFVocabulary.SKOS.CLOSE_MATCH.ToEntity<OWLObjectProperty>(),
             new OWLNamedIndividual(new RDFResource("ex:concept3")),
             new OWLNamedIndividual(new RDFResource("ex:concept1"))));
         ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-            new OWLObjectProperty(RDFVocabulary.SKOS.CLOSE_MATCH),
+            RDFVocabulary.SKOS.CLOSE_MATCH.ToEntity<OWLObjectProperty>(),
             new OWLNamedIndividual(new RDFResource("ex:concept2")),
             new OWLNamedIndividual(new RDFResource("ex:concept4"))));
         ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-            new OWLObjectProperty(RDFVocabulary.SKOS.CLOSE_MATCH),
+            RDFVocabulary.SKOS.CLOSE_MATCH.ToEntity<OWLObjectProperty>(),
             new OWLNamedIndividual(new RDFResource("ex:concept3")),
             new OWLNamedIndividual(new RDFResource("ex:concept5"))));
 
@@ -619,42 +619,42 @@ public class SKOSHelperTest
     public void ShouldCheckAndGetExactMatchConcepts()
     {
         OWLOntology ontology = new OWLOntology(new Uri("ex:ontology"));
-        ontology.DeclareEntity(new OWLClass(RDFVocabulary.SKOS.CONCEPT));
-        ontology.DeclareEntity(new OWLObjectProperty(RDFVocabulary.SKOS.EXACT_MATCH));
+        ontology.DeclareEntity(RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>());
+        ontology.DeclareEntity(RDFVocabulary.SKOS.EXACT_MATCH.ToEntity<OWLObjectProperty>());
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept1")));
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept2")));
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept3")));
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept4")));
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept5")));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept1"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept2"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept3"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept4"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept5"))));
         ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-            new OWLObjectProperty(RDFVocabulary.SKOS.EXACT_MATCH),
+            RDFVocabulary.SKOS.EXACT_MATCH.ToEntity<OWLObjectProperty>(),
             new OWLNamedIndividual(new RDFResource("ex:concept1")),
             new OWLNamedIndividual(new RDFResource("ex:concept2"))));
         ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-            new OWLObjectProperty(RDFVocabulary.SKOS.EXACT_MATCH),
+            RDFVocabulary.SKOS.EXACT_MATCH.ToEntity<OWLObjectProperty>(),
             new OWLNamedIndividual(new RDFResource("ex:concept2")),
             new OWLNamedIndividual(new RDFResource("ex:concept3"))));
         ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-            new OWLObjectProperty(RDFVocabulary.SKOS.EXACT_MATCH),
+            RDFVocabulary.SKOS.EXACT_MATCH.ToEntity<OWLObjectProperty>(),
             new OWLNamedIndividual(new RDFResource("ex:concept3")),
             new OWLNamedIndividual(new RDFResource("ex:concept4"))));
         ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-            new OWLObjectProperty(RDFVocabulary.SKOS.EXACT_MATCH),
+            RDFVocabulary.SKOS.EXACT_MATCH.ToEntity<OWLObjectProperty>(),
             new OWLNamedIndividual(new RDFResource("ex:concept5")),
             new OWLNamedIndividual(new RDFResource("ex:concept4"))));
 
@@ -677,7 +677,7 @@ public class SKOSHelperTest
     public void ShouldCheckAndGetRelatedMatchConcepts()
     {
         OWLOntology ontology = new OWLOntology(new Uri("ex:ontology"));
-        ontology.DeclareEntity(new OWLClass(RDFVocabulary.SKOS.CONCEPT));
+        ontology.DeclareEntity(RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>());
         ontology.DeclareEntity(new OWLObjectProperty(RDFVocabulary.SKOS.RELATED_MATCH));
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept1")));
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept2")));
@@ -685,19 +685,19 @@ public class SKOSHelperTest
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept4")));
         ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept5")));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept1"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept2"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept3"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept4"))));
         ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:concept5"))));
         ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(RDFVocabulary.SKOS.RELATED_MATCH),

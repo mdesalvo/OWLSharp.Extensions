@@ -31,17 +31,17 @@ public class SKOSXLLiteralFormAnalysisRuleTest
         OWLOntology ontology = new OWLOntology
         {
             DeclarationAxioms = [
-                new OWLDeclaration(new OWLClass(RDFVocabulary.SKOS.SKOSXL.LABEL)),
+                new OWLDeclaration(RDFVocabulary.SKOS.SKOSXL.LABEL.ToEntity<OWLClass>()),
                 new OWLDeclaration(new OWLObjectProperty(RDFVocabulary.SKOS.SKOSXL.LITERAL_FORM)),
                 new OWLDeclaration(new OWLNamedIndividual(new RDFResource("ex:LabelA"))),
                 new OWLDeclaration(new OWLNamedIndividual(new RDFResource("ex:LabelB")))
             ],
             AssertionAxioms = [
                 new OWLClassAssertion(
-                    new OWLClass(RDFVocabulary.SKOS.SKOSXL.LABEL),
+                    RDFVocabulary.SKOS.SKOSXL.LABEL.ToEntity<OWLClass>(),
                     new OWLNamedIndividual(new RDFResource("ex:LabelA"))),
                 new OWLClassAssertion(
-                    new OWLClass(RDFVocabulary.SKOS.SKOSXL.LABEL),
+                    RDFVocabulary.SKOS.SKOSXL.LABEL.ToEntity<OWLClass>(),
                     new OWLNamedIndividual(new RDFResource("ex:LabelB"))),
                 new OWLDataPropertyAssertion(
                     new OWLDataProperty(RDFVocabulary.SKOS.SKOSXL.LITERAL_FORM),

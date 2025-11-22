@@ -44,19 +44,19 @@ namespace OWLSharp.Extensions.TIME
         {
             #region Guards
             if (years < 0)
-                throw new OWLException("Cannot create temporal extent because given \"years\" parameter is negative");
+                throw new OWLException($"Cannot create temporal extent because given \"years\" parameter is negative");
             if (months < 0)
-                throw new OWLException("Cannot create temporal extent because given \"months\" parameter is negative");
+                throw new OWLException($"Cannot create temporal extent because given \"months\" parameter is negative");
             if (weeks < 0)
-                throw new OWLException("Cannot create temporal extent because given \"weeks\" parameter is negative");
+                throw new OWLException($"Cannot create temporal extent because given \"weeks\" parameter is negative");
             if (days < 0)
-                throw new OWLException("Cannot create temporal extent because given \"days\" parameter is negative");
+                throw new OWLException($"Cannot create temporal extent because given \"days\" parameter is negative");
             if (hours < 0)
-                throw new OWLException("Cannot create temporal extent because given \"hours\" parameter is negative");
+                throw new OWLException($"Cannot create temporal extent because given \"hours\" parameter is negative");
             if (minutes < 0)
-                throw new OWLException("Cannot create temporal extent because given \"minutes\" parameter is negative");
+                throw new OWLException($"Cannot create temporal extent because given \"minutes\" parameter is negative");
             if (seconds < 0)
-                throw new OWLException("Cannot create temporal extent because given \"seconds\" parameter is negative");
+                throw new OWLException($"Cannot create temporal extent because given \"seconds\" parameter is negative");
             #endregion
 
             Years = years;
@@ -150,7 +150,7 @@ namespace OWLSharp.Extensions.TIME
         internal TIMEExtentMetadata() { }
 
         public TIMEExtentMetadata(RDFResource trsUri)
-            => TRS = trsUri ?? throw new OWLException("Cannot create extent metadata because given \"trsUri\" parameter is null");
+            => TRS = trsUri ?? throw new OWLException($"Cannot create extent metadata because given \"trsUri\" parameter is null");
         #endregion
     }
 }

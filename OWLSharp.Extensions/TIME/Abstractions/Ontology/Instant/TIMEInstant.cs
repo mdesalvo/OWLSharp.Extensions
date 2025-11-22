@@ -34,10 +34,10 @@ namespace OWLSharp.Extensions.TIME
             => DateTime = dateTime.ToUniversalTime();
 
         public TIMEInstant(RDFResource timeInstantUri, TIMEInstantDescription timeInstantDescription) : base(timeInstantUri)
-            => Description = timeInstantDescription ?? throw new OWLException("Cannot create time instant because given \"timeInstantDescription\" parameter is null");
+            => Description = timeInstantDescription ?? throw new OWLException($"Cannot create time instant because given \"timeInstantDescription\" parameter is null");
 
         public TIMEInstant(RDFResource timeInstantUri, TIMEInstantPosition timeInstantPosition) : base(timeInstantUri)
-            => Position = timeInstantPosition ?? throw new OWLException("Cannot create time instant because given \"timeInstantPosition\" parameter is null");
+            => Position = timeInstantPosition ?? throw new OWLException($"Cannot create time instant because given \"timeInstantPosition\" parameter is null");
         #endregion
     }
 }

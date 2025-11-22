@@ -26,7 +26,7 @@ namespace OWLSharp.Extensions.TIME
         {
             #region Guards
             if (positionTRS == null)
-                throw new OWLException("Cannot convert position to coordinate because given \"positionTRS\" parameter is null");
+                throw new OWLException($"Cannot convert position to coordinate because given \"positionTRS\" parameter is null");
 
             if (calendarTRS == null)
                 calendarTRS = TIMECalendarReferenceSystem.Gregorian;
@@ -93,7 +93,7 @@ namespace OWLSharp.Extensions.TIME
         {
             #region Guards
             if (timeCoordinate == null)
-                throw new OWLException("Cannot normalize coordinate because given \"timeExtent\" parameter is null");
+                throw new OWLException($"Cannot normalize coordinate because given \"timeExtent\" parameter is null");
 
             if (calendarTRS == null)
                 calendarTRS = TIMECalendarReferenceSystem.Gregorian;
@@ -177,9 +177,9 @@ namespace OWLSharp.Extensions.TIME
         {
             #region Guards
             if (timeDuration < 0)
-                throw new OWLException("Cannot convert duration to extent because given \"timeDuration\" parameter must be greater or equal than zero");
+                throw new OWLException($"Cannot convert duration to extent because given \"timeDuration\" parameter must be greater or equal than zero");
             if (unitType == null)
-                throw new OWLException("Cannot convert duration to extent because given \"unitType\" parameter is null");
+                throw new OWLException($"Cannot convert duration to extent because given \"unitType\" parameter is null");
 
             if (calendarTRS == null)
                 calendarTRS = TIMECalendarReferenceSystem.Gregorian;
@@ -223,7 +223,7 @@ namespace OWLSharp.Extensions.TIME
         {
             #region Guards
             if (timeExtent == null)
-                throw new OWLException("Cannot normalize extent because given \"timeExtent\" parameter is null");
+                throw new OWLException($"Cannot normalize extent because given \"timeExtent\" parameter is null");
 
             if (calendarTRS == null)
                 calendarTRS = TIMECalendarReferenceSystem.Gregorian;
@@ -253,9 +253,9 @@ namespace OWLSharp.Extensions.TIME
         {
             #region Guards
             if (timeCoordinateStart == null)
-                throw new OWLException("Cannot get extent because given \"timeCoordinateStart\" parameter is null");
+                throw new OWLException($"Cannot get extent because given \"timeCoordinateStart\" parameter is null");
             if (timeCoordinateEnd == null)
-                throw new OWLException("Cannot get extent because given \"timeCoordinateEnd\" parameter is null");
+                throw new OWLException($"Cannot get extent because given \"timeCoordinateEnd\" parameter is null");
 
             if (calendarTRS == null)
                 calendarTRS = TIMECalendarReferenceSystem.Gregorian;

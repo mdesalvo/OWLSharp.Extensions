@@ -51,10 +51,10 @@ namespace OWLSharp.Extensions.SKOS
                     Atoms = new List<SWRLAtom>
                     {
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?C1"))),
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?C2"))),
                         new SWRLObjectPropertyAtom(
                             new OWLObjectProperty(RDFVocabulary.SKOS.BROADER),
@@ -101,10 +101,10 @@ namespace OWLSharp.Extensions.SKOS
                     Atoms = new List<SWRLAtom>
                     {
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?C1"))),
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?C2"))),
                         new SWRLObjectPropertyAtom(
                             new OWLObjectProperty(RDFVocabulary.SKOS.BROADER_TRANSITIVE),
@@ -151,17 +151,17 @@ namespace OWLSharp.Extensions.SKOS
                     Atoms = new List<SWRLAtom>
                     {
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?C1"))),
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?C2"))),
                         new SWRLObjectPropertyAtom(
                             new OWLObjectProperty(RDFVocabulary.SKOS.BROADER),
                             new SWRLVariableArgument(new RDFVariable("?C1")),
                             new SWRLVariableArgument(new RDFVariable("?C2"))),
                         new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(RDFVocabulary.SKOS.RELATED),
+                            RDFVocabulary.SKOS.RELATED.ToEntity<OWLObjectProperty>(),
                             new SWRLVariableArgument(new RDFVariable("?C1")),
                             new SWRLVariableArgument(new RDFVariable("?C2")))
                     },
@@ -201,17 +201,17 @@ namespace OWLSharp.Extensions.SKOS
                     Atoms = new List<SWRLAtom>
                     {
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?C1"))),
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?C2"))),
                         new SWRLObjectPropertyAtom(
                             new OWLObjectProperty(RDFVocabulary.SKOS.BROADER_TRANSITIVE),
                             new SWRLVariableArgument(new RDFVariable("?C1")),
                             new SWRLVariableArgument(new RDFVariable("?C2"))),
                         new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(RDFVocabulary.SKOS.RELATED),
+                            RDFVocabulary.SKOS.RELATED.ToEntity<OWLObjectProperty>(),
                             new SWRLVariableArgument(new RDFVariable("?C1")),
                             new SWRLVariableArgument(new RDFVariable("?C2")))
                     },
@@ -251,17 +251,17 @@ namespace OWLSharp.Extensions.SKOS
                     Atoms = new List<SWRLAtom>
                     {
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?C1"))),
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?C2"))),
                         new SWRLObjectPropertyAtom(
                             new OWLObjectProperty(RDFVocabulary.SKOS.BROADER),
                             new SWRLVariableArgument(new RDFVariable("?C1")),
                             new SWRLVariableArgument(new RDFVariable("?C2"))),
                         new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(RDFVocabulary.SKOS.NARROW_MATCH),
+                            RDFVocabulary.SKOS.NARROW_MATCH.ToEntity<OWLObjectProperty>(),
                             new SWRLVariableArgument(new RDFVariable("?C1")),
                             new SWRLVariableArgument(new RDFVariable("?C2")))
                     },
@@ -301,17 +301,17 @@ namespace OWLSharp.Extensions.SKOS
                     Atoms = new List<SWRLAtom>
                     {
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?C1"))),
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?C2"))),
                         new SWRLObjectPropertyAtom(
                             new OWLObjectProperty(RDFVocabulary.SKOS.BROADER_TRANSITIVE),
                             new SWRLVariableArgument(new RDFVariable("?C1")),
                             new SWRLVariableArgument(new RDFVariable("?C2"))),
                         new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(RDFVocabulary.SKOS.NARROW_MATCH),
+                            RDFVocabulary.SKOS.NARROW_MATCH.ToEntity<OWLObjectProperty>(),
                             new SWRLVariableArgument(new RDFVariable("?C1")),
                             new SWRLVariableArgument(new RDFVariable("?C2")))
                     },
@@ -351,17 +351,17 @@ namespace OWLSharp.Extensions.SKOS
                     Atoms = new List<SWRLAtom>
                     {
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?C1"))),
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?C2"))),
                         new SWRLObjectPropertyAtom(
                             new OWLObjectProperty(RDFVocabulary.SKOS.BROADER),
                             new SWRLVariableArgument(new RDFVariable("?C1")),
                             new SWRLVariableArgument(new RDFVariable("?C2"))),
                         new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(RDFVocabulary.SKOS.CLOSE_MATCH),
+                            RDFVocabulary.SKOS.CLOSE_MATCH.ToEntity<OWLObjectProperty>(),
                             new SWRLVariableArgument(new RDFVariable("?C1")),
                             new SWRLVariableArgument(new RDFVariable("?C2")))
                     },
@@ -401,17 +401,17 @@ namespace OWLSharp.Extensions.SKOS
                     Atoms = new List<SWRLAtom>
                     {
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?C1"))),
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?C2"))),
                         new SWRLObjectPropertyAtom(
                             new OWLObjectProperty(RDFVocabulary.SKOS.BROADER_TRANSITIVE),
                             new SWRLVariableArgument(new RDFVariable("?C1")),
                             new SWRLVariableArgument(new RDFVariable("?C2"))),
                         new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(RDFVocabulary.SKOS.CLOSE_MATCH),
+                            RDFVocabulary.SKOS.CLOSE_MATCH.ToEntity<OWLObjectProperty>(),
                             new SWRLVariableArgument(new RDFVariable("?C1")),
                             new SWRLVariableArgument(new RDFVariable("?C2")))
                     },
@@ -451,17 +451,17 @@ namespace OWLSharp.Extensions.SKOS
                     Atoms = new List<SWRLAtom>
                     {
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?C1"))),
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?C2"))),
                         new SWRLObjectPropertyAtom(
                             new OWLObjectProperty(RDFVocabulary.SKOS.BROADER),
                             new SWRLVariableArgument(new RDFVariable("?C1")),
                             new SWRLVariableArgument(new RDFVariable("?C2"))),
                         new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(RDFVocabulary.SKOS.EXACT_MATCH),
+                            RDFVocabulary.SKOS.EXACT_MATCH.ToEntity<OWLObjectProperty>(),
                             new SWRLVariableArgument(new RDFVariable("?C1")),
                             new SWRLVariableArgument(new RDFVariable("?C2")))
                     },
@@ -501,17 +501,17 @@ namespace OWLSharp.Extensions.SKOS
                     Atoms = new List<SWRLAtom>
                     {
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?C1"))),
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?C2"))),
                         new SWRLObjectPropertyAtom(
                             new OWLObjectProperty(RDFVocabulary.SKOS.BROADER_TRANSITIVE),
                             new SWRLVariableArgument(new RDFVariable("?C1")),
                             new SWRLVariableArgument(new RDFVariable("?C2"))),
                         new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(RDFVocabulary.SKOS.EXACT_MATCH),
+                            RDFVocabulary.SKOS.EXACT_MATCH.ToEntity<OWLObjectProperty>(),
                             new SWRLVariableArgument(new RDFVariable("?C1")),
                             new SWRLVariableArgument(new RDFVariable("?C2")))
                     },
@@ -551,10 +551,10 @@ namespace OWLSharp.Extensions.SKOS
                     Atoms = new List<SWRLAtom>
                     {
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?C1"))),
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?C2"))),
                         new SWRLObjectPropertyAtom(
                             new OWLObjectProperty(RDFVocabulary.SKOS.BROADER),
@@ -601,10 +601,10 @@ namespace OWLSharp.Extensions.SKOS
                     Atoms = new List<SWRLAtom>
                     {
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?C1"))),
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?C2"))),
                         new SWRLObjectPropertyAtom(
                             new OWLObjectProperty(RDFVocabulary.SKOS.BROADER_TRANSITIVE),

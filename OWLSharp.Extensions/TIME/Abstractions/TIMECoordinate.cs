@@ -45,15 +45,15 @@ namespace OWLSharp.Extensions.TIME
         {
             #region Guards
             if (month < 0)
-                throw new OWLException("Cannot create temporal coordinate because given \"month\" parameter is negative");
+                throw new OWLException($"Cannot create temporal coordinate because given \"month\" parameter is negative");
             if (day < 0)
-                throw new OWLException("Cannot create temporal coordinate because given \"day\" parameter is negative");
+                throw new OWLException($"Cannot create temporal coordinate because given \"day\" parameter is negative");
             if (hour < 0)
-                throw new OWLException("Cannot create temporal coordinate because given \"hour\" parameter is negative");
+                throw new OWLException($"Cannot create temporal coordinate because given \"hour\" parameter is negative");
             if (minute < 0)
-                throw new OWLException("Cannot create temporal coordinate because given \"minute\" parameter is negative");
+                throw new OWLException($"Cannot create temporal coordinate because given \"minute\" parameter is negative");
             if (second < 0)
-                throw new OWLException("Cannot create temporal coordinate because given \"second\" parameter is negative");
+                throw new OWLException($"Cannot create temporal coordinate because given \"second\" parameter is negative");
             #endregion
 
             Year = year;
@@ -159,8 +159,8 @@ namespace OWLSharp.Extensions.TIME
         public TIMECoordinateMetadata(RDFResource trsUri, RDFResource unitTypeUri,
             RDFResource monthOfYear=null, RDFResource dayOfWeek=null, uint? dayOfYear=null)
         {
-            TRS = trsUri ?? throw new OWLException("Cannot create coordinate metadata because given \"trsUri\" parameter is null");
-            UnitType = unitTypeUri ?? throw new OWLException("Cannot create coordinate metadata because given \"unitTypeUri\" parameter is null");
+            TRS = trsUri ?? throw new OWLException($"Cannot create coordinate metadata because given \"trsUri\" parameter is null");
+            UnitType = unitTypeUri ?? throw new OWLException($"Cannot create coordinate metadata because given \"unitTypeUri\" parameter is null");
             MonthOfYear = monthOfYear;
             DayOfWeek = dayOfWeek;
             DayOfYear = dayOfYear;

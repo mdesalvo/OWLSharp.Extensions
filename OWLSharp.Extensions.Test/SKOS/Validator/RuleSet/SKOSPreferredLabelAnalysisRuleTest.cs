@@ -31,7 +31,7 @@ public class SKOSPreferredLabelAnalysisRuleTest
         OWLOntology ontology = new OWLOntology
         {
             DeclarationAxioms = [
-                new OWLDeclaration(new OWLClass(RDFVocabulary.SKOS.CONCEPT)),
+                new OWLDeclaration(RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>()),
                 new OWLDeclaration(new OWLAnnotationProperty(RDFVocabulary.SKOS.PREF_LABEL)),
                 new OWLDeclaration(new OWLNamedIndividual(new RDFResource("ex:ConceptA"))),
                 new OWLDeclaration(new OWLNamedIndividual(new RDFResource("ex:ConceptB"))),
@@ -61,13 +61,13 @@ public class SKOSPreferredLabelAnalysisRuleTest
             ],
             AssertionAxioms = [
                 new OWLClassAssertion(
-                    new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+                    RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
                     new OWLNamedIndividual(new RDFResource("ex:ConceptA"))),
                 new OWLClassAssertion(
-                    new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+                    RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
                     new OWLNamedIndividual(new RDFResource("ex:ConceptB"))),
                 new OWLClassAssertion(
-                    new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+                    RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
                     new OWLNamedIndividual(new RDFResource("ex:ConceptC")))
             ]
         };
@@ -87,8 +87,8 @@ public class SKOSPreferredLabelAnalysisRuleTest
         OWLOntology ontology = new OWLOntology
         {
             DeclarationAxioms = [
-                new OWLDeclaration(new OWLClass(RDFVocabulary.SKOS.CONCEPT)),
-                new OWLDeclaration(new OWLClass(RDFVocabulary.SKOS.SKOSXL.LABEL)),
+                new OWLDeclaration(RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>()),
+                new OWLDeclaration(RDFVocabulary.SKOS.SKOSXL.LABEL.ToEntity<OWLClass>()),
                 new OWLDeclaration(new OWLObjectProperty(RDFVocabulary.SKOS.SKOSXL.PREF_LABEL)),
                 new OWLDeclaration(new OWLDataProperty(RDFVocabulary.SKOS.SKOSXL.LITERAL_FORM)),
                 new OWLDeclaration(new OWLNamedIndividual(new RDFResource("ex:ConceptA"))),
@@ -102,28 +102,28 @@ public class SKOSPreferredLabelAnalysisRuleTest
             ],
             AssertionAxioms = [
                 new OWLClassAssertion(
-                    new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+                    RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
                     new OWLNamedIndividual(new RDFResource("ex:ConceptA"))),
                 new OWLClassAssertion(
-                    new OWLClass(RDFVocabulary.SKOS.SKOSXL.LABEL),
+                    RDFVocabulary.SKOS.SKOSXL.LABEL.ToEntity<OWLClass>(),
                     new OWLNamedIndividual(new RDFResource("ex:LabelA"))),
                 new OWLClassAssertion(
-                    new OWLClass(RDFVocabulary.SKOS.SKOSXL.LABEL),
+                    RDFVocabulary.SKOS.SKOSXL.LABEL.ToEntity<OWLClass>(),
                     new OWLNamedIndividual(new RDFResource("ex:LabelA2"))),
                 new OWLClassAssertion(
-                    new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+                    RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
                     new OWLNamedIndividual(new RDFResource("ex:ConceptB"))),
                 new OWLClassAssertion(
-                    new OWLClass(RDFVocabulary.SKOS.SKOSXL.LABEL),
+                    RDFVocabulary.SKOS.SKOSXL.LABEL.ToEntity<OWLClass>(),
                     new OWLNamedIndividual(new RDFResource("ex:LabelB"))),
                 new OWLClassAssertion(
-                    new OWLClass(RDFVocabulary.SKOS.SKOSXL.LABEL),
+                    RDFVocabulary.SKOS.SKOSXL.LABEL.ToEntity<OWLClass>(),
                     new OWLNamedIndividual(new RDFResource("ex:LabelB2"))),
                 new OWLClassAssertion(
-                    new OWLClass(RDFVocabulary.SKOS.CONCEPT),
+                    RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
                     new OWLNamedIndividual(new RDFResource("ex:ConceptC"))),
                 new OWLClassAssertion(
-                    new OWLClass(RDFVocabulary.SKOS.SKOSXL.LABEL),
+                    RDFVocabulary.SKOS.SKOSXL.LABEL.ToEntity<OWLClass>(),
                     new OWLNamedIndividual(new RDFResource("ex:LabelC"))),
                 new OWLObjectPropertyAssertion(
                     new OWLObjectProperty(RDFVocabulary.SKOS.SKOSXL.PREF_LABEL),

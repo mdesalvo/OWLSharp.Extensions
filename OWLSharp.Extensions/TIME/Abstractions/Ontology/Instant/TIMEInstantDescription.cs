@@ -29,7 +29,7 @@ namespace OWLSharp.Extensions.TIME
             => Coordinate = new TIMECoordinate(dateTime.ToUniversalTime());
 
         public TIMEInstantDescription(RDFResource timeInstantDescriptionUri, TIMECoordinate timeInstantCoordinate) : this(timeInstantDescriptionUri)
-            => Coordinate = timeInstantCoordinate ?? throw new OWLException("Cannot create description of time instant because given \"timeInstantCoordinate\" parameter is null");
+            => Coordinate = timeInstantCoordinate ?? throw new OWLException($"Cannot create description of time instant because given \"timeInstantCoordinate\" parameter is null");
         #endregion
 
         #region Interfaces
