@@ -26,13 +26,37 @@ namespace OWLSharp.Extensions.GEO
         /// </summary>
         public enum GeoDirections
         {
+            /// <summary>
+            /// Will search for features located north of the starting feature
+            /// </summary>
             North = 1,
+            /// <summary>
+            /// Will search for features located east of the starting feature
+            /// </summary>
             East = 2,
+            /// <summary>
+            /// Will search for features located south of the starting feature
+            /// </summary>
             South = 3,
+            /// <summary>
+            /// Will search for features located west of the starting feature
+            /// </summary>
             West = 4,
+            /// <summary>
+            /// Will search for features located north-east of the starting feature
+            /// </summary>
             NorthEast = 5,
+            /// <summary>
+            /// Will search for features located north-west of the starting feature
+            /// </summary>
             NorthWest = 6,
+            /// <summary>
+            /// Will search for features located south-east of the starting feature
+            /// </summary>
             SouthEast = 7,
+            /// <summary>
+            /// Will search for features located south-west of the starting feature
+            /// </summary>
             SouthWest = 8
         }
 
