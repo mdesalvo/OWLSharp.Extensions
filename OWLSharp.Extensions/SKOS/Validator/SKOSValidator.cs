@@ -14,6 +14,7 @@
 #if !NET8_0_OR_GREATER
 using Dasync.Collections;
 #endif
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,21 +24,49 @@ using RDFSharp.Model;
 
 namespace OWLSharp.Extensions.SKOS
 {
+    /// <summary>
+    /// SKOSValidator OWLValidator is an analysis engine that checks that a SKOS vocabulary
+    /// conforms to the SKOS data model specification. It verifies structural integrity by
+    /// ensuring that concepts have required properties (like preferred labels),
+    /// validates semantic consistency of hierarchical relationships (broader/narrower),
+    /// detects logical issues like concept scheme violations or orphaned concepts,
+    /// and checks for SKOS-specific constraints such as label conflicts or invalid
+    /// documentation properties. It helps at maintaining quality and interoperability
+    /// of controlled vocabularies by identifying violations of SKOS integrity rules defined
+    /// in the W3C recommendation.
+    /// </summary>
     public sealed class SKOSValidator
     {
         #region Properties
         internal static readonly RDFResource ViolationIRI = new RDFResource("urn:owlsharp:swrl:hasViolations");
 
+        /// <summary>
+        /// A predefined validator including all available SKOS/SKOS-XL validator rules
+        /// </summary>
+        public static readonly SKOSValidator Default = new SKOSValidator {
+            Rules = Enum.GetValues(typeof(SKOSEnums.SKOSValidatorRules)).Cast<SKOSEnums.SKOSValidatorRules>().ToList() };
+
+        /// <summary>
+        /// The set of rules to be applied by the validator
+        /// </summary>
         public List<SKOSEnums.SKOSValidatorRules> Rules { get; internal set; } = new List<SKOSEnums.SKOSValidatorRules>();
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Adds the given rule to the validator
+        /// </summary>
+        /// <returns>The validator itself</returns>
         public SKOSValidator AddRule(SKOSEnums.SKOSValidatorRules rule)
         {
             Rules.Add(rule);
             return this;
         }
 
+        /// <summary>
+        /// Applies the validator on the given ontology
+        /// </summary>
+        /// <returns>The list of detected issues</returns>
         public async Task<List<OWLIssue>> ApplyToOntologyAsync(OWLOntology ontology)
         {
             List<OWLIssue> issues = new List<OWLIssue>();
@@ -45,10 +74,10 @@ namespace OWLSharp.Extensions.SKOS
             if (ontology != null)
             {
                 OWLEvents.RaiseInfo($"Launching SKOS validator on ontology '{ontology.IRI}'...");
-                Rules = Rules.Distinct().ToList();
 
                 //Initialize issue registry
                 Dictionary<string, List<OWLIssue>> issueRegistry = new Dictionary<string, List<OWLIssue>>(Rules.Count);
+                Rules = Rules.Distinct().ToList();
                 Rules.ForEach(rule => issueRegistry.Add(rule.ToString(), null));
 
                 //Execute validator rules
