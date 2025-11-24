@@ -51,13 +51,13 @@ public class TIMEValidatorTest : TIMETestOntology
         ]);
         ontology.AssertionAxioms.AddRange([
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INSTANT),
+                RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:InstantA"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INSTANT),
+                RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:InstantB"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INSTANT),
+                RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:InstantC"))),
             new OWLObjectPropertyAssertion(
                 new OWLObjectProperty(RDFVocabulary.TIME.AFTER),
@@ -101,13 +101,13 @@ public class TIMEValidatorTest : TIMETestOntology
         ]);
         ontology.AssertionAxioms.AddRange([
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INSTANT),
+                RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:InstantA"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INSTANT),
+                RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:InstantB"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INSTANT),
+                RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:InstantC"))),
             new OWLObjectPropertyAssertion(
                 new OWLObjectProperty(RDFVocabulary.TIME.BEFORE),
@@ -151,13 +151,13 @@ public class TIMEValidatorTest : TIMETestOntology
         ]);
         ontology.AssertionAxioms.AddRange([
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalA"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalB"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalC"))),
             new OWLObjectPropertyAssertion(
                 new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_AFTER),
@@ -203,13 +203,13 @@ public class TIMEValidatorTest : TIMETestOntology
         ]);
         ontology.AssertionAxioms.AddRange([
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalA"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalB"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalC"))),
             new OWLObjectPropertyAssertion(
                 new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_BEFORE),
@@ -255,13 +255,13 @@ public class TIMEValidatorTest : TIMETestOntology
         ]);
         ontology.AssertionAxioms.AddRange([
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalA"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalB"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalC"))),
             new OWLObjectPropertyAssertion(
                 new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_CONTAINS),
@@ -307,13 +307,13 @@ public class TIMEValidatorTest : TIMETestOntology
         ]);
         ontology.AssertionAxioms.AddRange([
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalA"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalB"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalC"))),
             new OWLObjectPropertyAssertion(
                 new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_DISJOINT),
@@ -355,13 +355,13 @@ public class TIMEValidatorTest : TIMETestOntology
         ]);
         ontology.AssertionAxioms.AddRange([
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalA"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalB"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalC"))),
             new OWLObjectPropertyAssertion(
                 new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_DURING),
@@ -407,13 +407,13 @@ public class TIMEValidatorTest : TIMETestOntology
         ]);
         ontology.AssertionAxioms.AddRange([
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalA"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalB"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalC"))),
             new OWLObjectPropertyAssertion(
                 new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_EQUALS),
@@ -455,13 +455,13 @@ public class TIMEValidatorTest : TIMETestOntology
         ]);
         ontology.AssertionAxioms.AddRange([
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalA"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalB"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalC"))),
             new OWLObjectPropertyAssertion(
                 new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_FINISHES),
@@ -503,13 +503,13 @@ public class TIMEValidatorTest : TIMETestOntology
         ]);
         ontology.AssertionAxioms.AddRange([
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalA"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalB"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalC"))),
             new OWLObjectPropertyAssertion(
                 new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_FINISHED_BY),
@@ -551,13 +551,13 @@ public class TIMEValidatorTest : TIMETestOntology
         ]);
         ontology.AssertionAxioms.AddRange([
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalA"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalB"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalC"))),
             new OWLObjectPropertyAssertion(
                 new OWLObjectProperty(RDFVocabulary.TIME.HAS_INSIDE),
@@ -599,13 +599,13 @@ public class TIMEValidatorTest : TIMETestOntology
         ]);
         ontology.AssertionAxioms.AddRange([
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalA"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalB"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalC"))),
             new OWLObjectPropertyAssertion(
                 new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_IN),
@@ -647,13 +647,13 @@ public class TIMEValidatorTest : TIMETestOntology
         ]);
         ontology.AssertionAxioms.AddRange([
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalA"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalB"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalC"))),
             new OWLObjectPropertyAssertion(
                 new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_MEETS),
@@ -695,13 +695,13 @@ public class TIMEValidatorTest : TIMETestOntology
         ]);
         ontology.AssertionAxioms.AddRange([
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalA"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalB"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalC"))),
             new OWLObjectPropertyAssertion(
                 new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_MET_BY),
@@ -743,13 +743,13 @@ public class TIMEValidatorTest : TIMETestOntology
         ]);
         ontology.AssertionAxioms.AddRange([
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalA"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalB"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalC"))),
             new OWLObjectPropertyAssertion(
                 new OWLObjectProperty(RDFVocabulary.TIME.NOT_DISJOINT),
@@ -791,13 +791,13 @@ public class TIMEValidatorTest : TIMETestOntology
         ]);
         ontology.AssertionAxioms.AddRange([
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalA"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalB"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalC"))),
             new OWLObjectPropertyAssertion(
                 new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_OVERLAPS),
@@ -839,13 +839,13 @@ public class TIMEValidatorTest : TIMETestOntology
         ]);
         ontology.AssertionAxioms.AddRange([
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalA"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalB"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalC"))),
             new OWLObjectPropertyAssertion(
                 new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_OVERLAPPED_BY),
@@ -887,13 +887,13 @@ public class TIMEValidatorTest : TIMETestOntology
         ]);
         ontology.AssertionAxioms.AddRange([
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalA"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalB"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalC"))),
             new OWLObjectPropertyAssertion(
                 new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_STARTS),
@@ -935,13 +935,13 @@ public class TIMEValidatorTest : TIMETestOntology
         ]);
         ontology.AssertionAxioms.AddRange([
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalA"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalB"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:IntervalC"))),
             new OWLObjectPropertyAssertion(
                 new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_STARTED_BY),

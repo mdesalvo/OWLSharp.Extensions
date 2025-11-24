@@ -45,7 +45,7 @@ public class TIMEHelperTest : TIMETestOntology
             new OWLNamedIndividual(new RDFResource("ex:feat")),
             new OWLNamedIndividual(new RDFResource("ex:timeInst")))));
         Assert.IsTrue(timeOntology.CheckHasAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:timeInst")))));
         Assert.IsTrue(timeOntology.CheckHasAssertionAxiom(new OWLDataPropertyAssertion(
             new OWLDataProperty(RDFVocabulary.TIME.IN_XSD_DATETIMESTAMP),
@@ -83,7 +83,7 @@ public class TIMEHelperTest : TIMETestOntology
             new OWLNamedIndividual(new RDFResource("ex:feat")),
             new OWLNamedIndividual(new RDFResource("ex:timeInst")))));
         Assert.IsTrue(timeOntology.CheckHasAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:timeInst")))));
         Assert.IsTrue(timeOntology.CheckHasAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(RDFVocabulary.TIME.IN_DATETIME),
@@ -158,7 +158,7 @@ public class TIMEHelperTest : TIMETestOntology
             new OWLNamedIndividual(new RDFResource("ex:feat")),
             new OWLNamedIndividual(new RDFResource("ex:timeInst")))));
         Assert.IsTrue(timeOntology.CheckHasAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:timeInst")))));
         Assert.IsTrue(timeOntology.CheckHasAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(RDFVocabulary.TIME.IN_DATETIME),
@@ -224,7 +224,7 @@ public class TIMEHelperTest : TIMETestOntology
             new OWLNamedIndividual(new RDFResource("ex:feat")),
             new OWLNamedIndividual(new RDFResource("ex:timeInst")))));
         Assert.IsTrue(timeOntology.CheckHasAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:timeInst")))));
         Assert.IsTrue(timeOntology.CheckHasAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(RDFVocabulary.TIME.IN_TIME_POSITION),
@@ -273,7 +273,7 @@ public class TIMEHelperTest : TIMETestOntology
             new OWLNamedIndividual(new RDFResource("ex:feat")),
             new OWLNamedIndividual(new RDFResource("ex:timeInst")))));
         Assert.IsTrue(timeOntology.CheckHasAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:timeInst")))));
         Assert.IsTrue(timeOntology.CheckHasAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(RDFVocabulary.TIME.IN_TIME_POSITION),
@@ -331,7 +331,7 @@ public class TIMEHelperTest : TIMETestOntology
             new OWLNamedIndividual(new RDFResource("ex:feat")),
             new OWLNamedIndividual(new RDFResource("ex:timeInst")))));
         Assert.IsTrue(timeOntology.CheckHasAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:timeInst")))));
         Assert.IsTrue(timeOntology.CheckHasAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(RDFVocabulary.TIME.IN_TIME_POSITION),
@@ -376,7 +376,7 @@ public class TIMEHelperTest : TIMETestOntology
             new OWLNamedIndividual(new RDFResource("ex:feat")),
             new OWLNamedIndividual(new RDFResource("ex:timeIntv")))));
         Assert.IsTrue(timeOntology.CheckHasAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:timeIntv")))));
         Assert.IsTrue(timeOntology.CheckHasAssertionAxiom(new OWLDataPropertyAssertion(
             new OWLDataProperty(RDFVocabulary.TIME.HAS_XSD_DURATION),
@@ -402,14 +402,14 @@ public class TIMEHelperTest : TIMETestOntology
             new OWLNamedIndividual(new RDFResource("ex:feat")),
             new OWLNamedIndividual(new RDFResource("ex:timeIntv")))));
         Assert.IsTrue(timeOntology.CheckHasAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:timeIntv")))));
         Assert.IsTrue(timeOntology.CheckHasAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(RDFVocabulary.TIME.HAS_BEGINNING),
             new OWLNamedIndividual(new RDFResource("ex:timeIntv")),
             new OWLNamedIndividual(new RDFResource("ex:timeIntvBegin")))));
         Assert.IsTrue(timeOntology.CheckHasAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:timeIntvBegin")))));
         Assert.IsTrue(timeOntology.CheckHasAssertionAxiom(new OWLDataPropertyAssertion(
             new OWLDataProperty(RDFVocabulary.TIME.IN_XSD_DATETIMESTAMP),
@@ -435,14 +435,14 @@ public class TIMEHelperTest : TIMETestOntology
             new OWLNamedIndividual(new RDFResource("ex:feat")),
             new OWLNamedIndividual(new RDFResource("ex:timeIntv")))));
         Assert.IsTrue(timeOntology.CheckHasAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:timeIntv")))));
         Assert.IsTrue(timeOntology.CheckHasAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(RDFVocabulary.TIME.HAS_END),
             new OWLNamedIndividual(new RDFResource("ex:timeIntv")),
             new OWLNamedIndividual(new RDFResource("ex:timeIntvEnd")))));
         Assert.IsTrue(timeOntology.CheckHasAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:timeIntvEnd")))));
         Assert.IsTrue(timeOntology.CheckHasAssertionAxiom(new OWLDataPropertyAssertion(
             new OWLDataProperty(RDFVocabulary.TIME.IN_XSD_DATETIMESTAMP),
@@ -470,14 +470,14 @@ public class TIMEHelperTest : TIMETestOntology
             new OWLNamedIndividual(new RDFResource("ex:feat")),
             new OWLNamedIndividual(new RDFResource("ex:timeIntv")))));
         Assert.IsTrue(timeOntology.CheckHasAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:timeIntv")))));
         Assert.IsTrue(timeOntology.CheckHasAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(RDFVocabulary.TIME.HAS_BEGINNING),
             new OWLNamedIndividual(new RDFResource("ex:timeIntv")),
             new OWLNamedIndividual(new RDFResource("ex:timeIntvBegin")))));
         Assert.IsTrue(timeOntology.CheckHasAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:timeIntvBegin")))));
         Assert.IsTrue(timeOntology.CheckHasAssertionAxiom(new OWLDataPropertyAssertion(
             new OWLDataProperty(RDFVocabulary.TIME.IN_XSD_DATETIMESTAMP),
@@ -488,7 +488,7 @@ public class TIMEHelperTest : TIMETestOntology
             new OWLNamedIndividual(new RDFResource("ex:timeIntv")),
             new OWLNamedIndividual(new RDFResource("ex:timeIntvEnd")))));
         Assert.IsTrue(timeOntology.CheckHasAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:timeIntvEnd")))));
         Assert.IsTrue(timeOntology.CheckHasAssertionAxiom(new OWLDataPropertyAssertion(
             new OWLDataProperty(RDFVocabulary.TIME.IN_XSD_DATETIMESTAMP),
@@ -516,7 +516,7 @@ public class TIMEHelperTest : TIMETestOntology
             new OWLNamedIndividual(new RDFResource("ex:feat")),
             new OWLNamedIndividual(new RDFResource("ex:timeIntv")))));
         Assert.IsTrue(timeOntology.CheckHasAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:timeIntv")))));
         Assert.IsTrue(timeOntology.CheckHasAssertionAxiom(new OWLClassAssertion(
             new OWLClass(RDFVocabulary.TIME.GENERAL_DURATION_DESCRIPTION),
@@ -579,7 +579,7 @@ public class TIMEHelperTest : TIMETestOntology
             new OWLNamedIndividual(new RDFResource("ex:feat")),
             new OWLNamedIndividual(new RDFResource("ex:timeIntv")))));
         Assert.IsTrue(timeOntology.CheckHasAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:timeIntv")))));
         Assert.IsTrue(timeOntology.CheckHasAssertionAxiom(new OWLClassAssertion(
             new OWLClass(RDFVocabulary.TIME.GENERAL_DURATION_DESCRIPTION),
@@ -626,7 +626,7 @@ public class TIMEHelperTest : TIMETestOntology
             new OWLNamedIndividual(new RDFResource("ex:feat")),
             new OWLNamedIndividual(new RDFResource("ex:timeIntv")))));
         Assert.IsTrue(timeOntology.CheckHasAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:timeIntv")))));
         Assert.IsTrue(timeOntology.CheckHasAssertionAxiom(new OWLClassAssertion(
             new OWLClass(RDFVocabulary.TIME.DURATION),
@@ -680,7 +680,7 @@ public class TIMEHelperTest : TIMETestOntology
             new OWLNamedIndividual(new RDFResource("ex:WorldWarII")),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
             new OWLDataProperty(new RDFResource(timeProperty)),
@@ -721,7 +721,7 @@ public class TIMEHelperTest : TIMETestOntology
             new OWLNamedIndividual(new RDFResource("ex:WorldWarII")),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
             new OWLDataProperty(new RDFResource(timeProperty)),
@@ -751,7 +751,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionDescription")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(TIMECalendarReferenceSystem.Gregorian));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             new OWLClass(RDFVocabulary.TIME.DATETIME_DESCRIPTION),
@@ -848,7 +848,7 @@ public class TIMEHelperTest : TIMETestOntology
             new OWLObjectProperty(new RDFResource("ex:hasTemporalExtent")),
             new OWLObjectProperty(RDFVocabulary.TIME.HAS_TIME)));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             new OWLClass(RDFVocabulary.TIME.DATETIME_DESCRIPTION),
@@ -941,7 +941,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:AbbyBirthdayTemporalExtentDescription")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("http://dbpedia.org/resource/Hebrew_calendar")));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:AbbyBirthdayTemporalExtent"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             new OWLClass(RDFVocabulary.TIME.GENERAL_DATETIME_DESCRIPTION),
@@ -1028,7 +1028,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionPosition")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             new OWLClass(RDFVocabulary.TIME.TIME_POSITION),
@@ -1079,7 +1079,7 @@ public class TIMEHelperTest : TIMETestOntology
             new OWLObjectProperty(new RDFResource("ex:hasTemporalExtent")),
             new OWLObjectProperty(RDFVocabulary.TIME.HAS_TIME)));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             new OWLClass(RDFVocabulary.TIME.TIME_POSITION),
@@ -1127,7 +1127,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:September1939")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             new OWLClass(RDFVocabulary.TIME.TIME_POSITION),
@@ -1172,7 +1172,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarII")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension")));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(RDFVocabulary.TIME.HAS_TIME),
@@ -1210,7 +1210,7 @@ public class TIMEHelperTest : TIMETestOntology
             new OWLObjectProperty(new RDFResource("ex:hasTemporalExtent")),
             new OWLObjectProperty(RDFVocabulary.TIME.HAS_TIME)));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(new RDFResource("ex:hasTemporalExtent")),
@@ -1245,7 +1245,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionDescription")));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             new OWLClass(RDFVocabulary.TIME.DURATION_DESCRIPTION),
@@ -1328,7 +1328,7 @@ public class TIMEHelperTest : TIMETestOntology
             new OWLObjectProperty(new RDFResource("ex:hasTemporalExtent")),
             new OWLObjectProperty(RDFVocabulary.TIME.HAS_TIME)));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             new OWLClass(RDFVocabulary.TIME.DURATION_DESCRIPTION),
@@ -1407,7 +1407,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionDescription")));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             new OWLClass(RDFVocabulary.TIME.GENERAL_DURATION_DESCRIPTION),
@@ -1486,7 +1486,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionDuration")));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             new OWLClass(RDFVocabulary.TIME.DURATION),
@@ -1538,7 +1538,7 @@ public class TIMEHelperTest : TIMETestOntology
             new OWLObjectProperty(new RDFResource("ex:hasTemporalExtent")),
             new OWLObjectProperty(RDFVocabulary.TIME.HAS_TIME)));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             new OWLClass(RDFVocabulary.TIME.DURATION),
@@ -1586,10 +1586,10 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionBeginning")));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionBeginning"))));
         timeOntology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(RDFVocabulary.TIME.HAS_TIME),
@@ -1636,10 +1636,10 @@ public class TIMEHelperTest : TIMETestOntology
             new OWLObjectProperty(new RDFResource("ex:hasTemporalExtent")),
             new OWLObjectProperty(RDFVocabulary.TIME.HAS_TIME)));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionBeginning"))));
         timeOntology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(new RDFResource("ex:hasTemporalExtent")),
@@ -1682,10 +1682,10 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionEnd")));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionEnd"))));
         timeOntology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(RDFVocabulary.TIME.HAS_TIME),
@@ -1732,10 +1732,10 @@ public class TIMEHelperTest : TIMETestOntology
             new OWLObjectProperty(new RDFResource("ex:hasTemporalExtent")),
             new OWLObjectProperty(RDFVocabulary.TIME.HAS_TIME)));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionEnd"))));
         timeOntology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(new RDFResource("ex:hasTemporalExtent")),
@@ -1779,13 +1779,13 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionBeginning")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionEnd")));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionBeginning"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionEnd"))));
         timeOntology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(RDFVocabulary.TIME.HAS_TIME),
@@ -1853,7 +1853,7 @@ public class TIMEHelperTest : TIMETestOntology
             new OWLNamedIndividual(new RDFResource("ex:WorldWarII")),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
             new OWLDataProperty(new RDFResource(timeProperty)),
@@ -1879,7 +1879,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionDescription")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(TIMECalendarReferenceSystem.Gregorian));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             new OWLClass(RDFVocabulary.TIME.DATETIME_DESCRIPTION),
@@ -1945,7 +1945,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionDescription")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(TIMECalendarReferenceSystem.Gregorian));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             new OWLClass(RDFVocabulary.TIME.DATETIME_DESCRIPTION),
@@ -2015,7 +2015,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionPosition")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             new OWLClass(RDFVocabulary.TIME.TIME_POSITION),
@@ -2057,7 +2057,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionPosition")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             new OWLClass(RDFVocabulary.TIME.TIME_POSITION),
@@ -2091,7 +2091,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionPosition")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             new OWLClass(RDFVocabulary.TIME.TIME_POSITION),
@@ -2130,16 +2130,16 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:September1939Beginning")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:September1939End")));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:September1939"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:September1939Beginning"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:September1939End"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             new OWLClass(RDFVocabulary.TIME.TIME_POSITION),
@@ -2199,7 +2199,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarII")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension")));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(RDFVocabulary.TIME.HAS_TIME),
@@ -2229,7 +2229,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionDescription")));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             new OWLClass(RDFVocabulary.TIME.DURATION_DESCRIPTION),
@@ -2294,7 +2294,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionDuration")));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             new OWLClass(RDFVocabulary.TIME.DURATION),
@@ -2336,7 +2336,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionDuration")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:UnknownUnitType")));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             new OWLClass(RDFVocabulary.TIME.DURATION),
@@ -2370,13 +2370,13 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionBeginning")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionEnd")));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionBeginning"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionEnd"))));
         timeOntology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(RDFVocabulary.TIME.HAS_TIME),
@@ -2418,10 +2418,10 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionBeginning")));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionBeginning"))));
         timeOntology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(RDFVocabulary.TIME.HAS_TIME),
@@ -2450,10 +2450,10 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIIBeginningPosition")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIIBeginning"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             new OWLClass(RDFVocabulary.TIME.TIME_POSITION),
@@ -2499,10 +2499,10 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIIBeginningPosition")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIIBeginning"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             new OWLClass(RDFVocabulary.TIME.TIME_POSITION),
@@ -2539,13 +2539,13 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDImensionBeginningInstantPosition")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionBeginning"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDImensionBeginningInstant"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             new OWLClass(RDFVocabulary.TIME.TIME_POSITION),
@@ -2596,13 +2596,13 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDImensionBeginningInstantPosition")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionBeginning"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDImensionBeginningInstant"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             new OWLClass(RDFVocabulary.TIME.TIME_POSITION),
@@ -2643,13 +2643,13 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:PrecedingWorldWarIITemporalDimensionEndInstantPosition")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:PrecedingWorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:PrecedingWorldWarIITemporalDimensionEndInstant"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             new OWLClass(RDFVocabulary.TIME.TIME_POSITION),
@@ -2701,13 +2701,13 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:PrecedingWorldWarIITemporalDimensionEndInstantPosition")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:PrecedingWorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:PrecedingWorldWarIITemporalDimensionEndInstant"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             new OWLClass(RDFVocabulary.TIME.TIME_POSITION),
@@ -2748,10 +2748,10 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIIEndPosition")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIIEnd"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             new OWLClass(RDFVocabulary.TIME.TIME_POSITION),
@@ -2797,10 +2797,10 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIIEndPosition")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIIEnd"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             new OWLClass(RDFVocabulary.TIME.TIME_POSITION),
@@ -2837,13 +2837,13 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDImensionEndInstantPosition")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionEnd"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDImensionEndInstant"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             new OWLClass(RDFVocabulary.TIME.TIME_POSITION),
@@ -2894,13 +2894,13 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDImensionEndInstantPosition")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionEnd"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDImensionEndInstant"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             new OWLClass(RDFVocabulary.TIME.TIME_POSITION),
@@ -2941,13 +2941,13 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:FollowingWorldWarIITemporalDimensionBeginningInstantPosition")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:FollowingWorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:FollowingWorldWarIITemporalDimensionBeginningInstant"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             new OWLClass(RDFVocabulary.TIME.TIME_POSITION),
@@ -2999,13 +2999,13 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:FollowingWorldWarIITemporalDimensionBeginningInstantPosition")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:FollowingWorldWarIITemporalDimension"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
-            new OWLClass(RDFVocabulary.TIME.INSTANT),
+            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:FollowingWorldWarIITemporalDimensionBeginningInstant"))));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             new OWLClass(RDFVocabulary.TIME.TIME_POSITION),

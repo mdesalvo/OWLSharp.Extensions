@@ -84,7 +84,7 @@ namespace OWLSharp.Extensions.GEO
                 RDFVocabulary.GEOSPARQL.GEOMETRY.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(geoPoint)));
             ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.GEOSPARQL.SF.POINT),
+                RDFVocabulary.GEOSPARQL.SF.POINT.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(geoPoint)));
             ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
                 isDefaultGeometry ? RDFVocabulary.GEOSPARQL.DEFAULT_GEOMETRY.ToEntity<OWLObjectProperty>()
@@ -125,7 +125,7 @@ namespace OWLSharp.Extensions.GEO
                 RDFVocabulary.GEOSPARQL.GEOMETRY.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(geoLine)));
             ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.GEOSPARQL.SF.LINESTRING),
+                RDFVocabulary.GEOSPARQL.SF.LINESTRING.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(geoLine)));
             ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
                 isDefaultGeometry ? RDFVocabulary.GEOSPARQL.DEFAULT_GEOMETRY.ToEntity<OWLObjectProperty>()
@@ -166,7 +166,7 @@ namespace OWLSharp.Extensions.GEO
                 RDFVocabulary.GEOSPARQL.GEOMETRY.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(geoArea)));
             ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.GEOSPARQL.SF.POLYGON),
+                RDFVocabulary.GEOSPARQL.SF.POLYGON.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(geoArea)));
             ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
                 isDefaultGeometry ? RDFVocabulary.GEOSPARQL.DEFAULT_GEOMETRY.ToEntity<OWLObjectProperty>()

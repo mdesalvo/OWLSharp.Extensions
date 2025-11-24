@@ -33,9 +33,9 @@ namespace OWLSharp.Extensions.TIME
                 {
                     Atoms = new List<SWRLAtom>
                     {
-                        new SWRLClassAtom(new OWLClass(RDFVocabulary.TIME.INSTANT), new SWRLVariableArgument(new RDFVariable("?I1"))),
-                        new SWRLClassAtom(new OWLClass(RDFVocabulary.TIME.INSTANT), new SWRLVariableArgument(new RDFVariable("?I2"))),
-                        new SWRLClassAtom(new OWLClass(RDFVocabulary.TIME.INSTANT), new SWRLVariableArgument(new RDFVariable("?I3"))),
+                        new SWRLClassAtom(RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(), new SWRLVariableArgument(new RDFVariable("?I1"))),
+                        new SWRLClassAtom(RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(), new SWRLVariableArgument(new RDFVariable("?I2"))),
+                        new SWRLClassAtom(RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(), new SWRLVariableArgument(new RDFVariable("?I3"))),
                         new SWRLObjectPropertyAtom(new OWLObjectProperty(RDFVocabulary.TIME.BEFORE), new SWRLVariableArgument(new RDFVariable("?I1")), new SWRLVariableArgument(new RDFVariable("?I2"))),
                         new SWRLObjectPropertyAtom(new OWLObjectProperty(RDFVocabulary.TIME.BEFORE), new SWRLVariableArgument(new RDFVariable("?I2")), new SWRLVariableArgument(new RDFVariable("?I3")))
                     },
@@ -62,9 +62,9 @@ namespace OWLSharp.Extensions.TIME
                 {
                     Atoms = new List<SWRLAtom>
                     {
-                        new SWRLClassAtom(new OWLClass(RDFVocabulary.TIME.INTERVAL), new SWRLVariableArgument(new RDFVariable("?I1"))),
-                        new SWRLClassAtom(new OWLClass(RDFVocabulary.TIME.INTERVAL), new SWRLVariableArgument(new RDFVariable("?I2"))),
-                        new SWRLClassAtom(new OWLClass(RDFVocabulary.TIME.INTERVAL), new SWRLVariableArgument(new RDFVariable("?I3"))),
+                        new SWRLClassAtom(RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(), new SWRLVariableArgument(new RDFVariable("?I1"))),
+                        new SWRLClassAtom(RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(), new SWRLVariableArgument(new RDFVariable("?I2"))),
+                        new SWRLClassAtom(RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(), new SWRLVariableArgument(new RDFVariable("?I3"))),
                         new SWRLObjectPropertyAtom(new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_BEFORE), new SWRLVariableArgument(new RDFVariable("?I1")), new SWRLVariableArgument(new RDFVariable("?I2"))),
                         new SWRLObjectPropertyAtom(new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_BEFORE), new SWRLVariableArgument(new RDFVariable("?I3")), new SWRLVariableArgument(new RDFVariable("?I1")))
                     },

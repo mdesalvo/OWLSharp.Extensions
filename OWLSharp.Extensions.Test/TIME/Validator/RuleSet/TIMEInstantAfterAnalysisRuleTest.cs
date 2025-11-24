@@ -36,13 +36,13 @@ public class TIMEInstantAfterAnalysisRuleTest : TIMETestOntology
         ]);
         ontology.AssertionAxioms.AddRange([
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INSTANT),
+                RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:InstantA"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INSTANT),
+                RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:InstantB"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INSTANT),
+                RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:InstantC"))),
             new OWLObjectPropertyAssertion(
                 new OWLObjectProperty(RDFVocabulary.TIME.AFTER),
@@ -80,13 +80,13 @@ public class TIMEInstantAfterAnalysisRuleTest : TIMETestOntology
         ]);
         ontology.AssertionAxioms.AddRange([
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INSTANT),
+                RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:InstantA"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INSTANT),
+                RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:InstantB"))),
             new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INSTANT),
+                RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(new RDFResource("ex:InstantC"))),
             new OWLObjectPropertyAssertion(
                 new OWLObjectProperty(RDFVocabulary.TIME.AFTER),

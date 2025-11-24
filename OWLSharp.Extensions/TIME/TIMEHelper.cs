@@ -61,13 +61,13 @@ namespace OWLSharp.Extensions.TIME
         {
             ontology.DeclareEntity(new OWLNamedIndividual(timeInstant));
             ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INSTANT),
+                RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(timeInstant)));
 
             //Add knowledge to the A-BOX (time:inXSDDateTimeStamp)
             if (timeInstant.DateTime.HasValue)
                 ontology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
-                    new OWLDataProperty(RDFVocabulary.TIME.IN_XSD_DATETIMESTAMP),
+                    RDFVocabulary.TIME.IN_XSD_DATETIMESTAMP.ToEntity<OWLDataProperty>(),
                     new OWLNamedIndividual(timeInstant),
                     new OWLLiteral(new RDFTypedLiteral(XmlConvert.ToString(timeInstant.DateTime.Value.ToUniversalTime(), "yyyy-MM-ddTHH:mm:ssZ"), RDFModelEnums.RDFDatatypes.XSD_DATETIMESTAMP))));
 
@@ -78,55 +78,55 @@ namespace OWLSharp.Extensions.TIME
                 ontology.DeclareEntity(new OWLNamedIndividual(timeInstant.Description.Coordinate.Metadata.UnitType));
                 ontology.DeclareEntity(new OWLNamedIndividual(timeInstant.Description.Coordinate.Metadata.TRS));
                 ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-                    new OWLObjectProperty(RDFVocabulary.TIME.IN_DATETIME),
+                    RDFVocabulary.TIME.IN_DATETIME.ToEntity<OWLObjectProperty>(),
                     new OWLNamedIndividual(timeInstant),
                     new OWLNamedIndividual(timeInstant.Description)));
                 ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-                    new OWLClass(RDFVocabulary.TIME.GENERAL_DATETIME_DESCRIPTION),
+                    RDFVocabulary.TIME.GENERAL_DATETIME_DESCRIPTION.ToEntity<OWLClass>(),
                     new OWLNamedIndividual(timeInstant.Description)));
                 ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-                    new OWLObjectProperty(RDFVocabulary.TIME.UNIT_TYPE),
+                    RDFVocabulary.TIME.UNIT_TYPE.ToEntity<OWLObjectProperty>(),
                     new OWLNamedIndividual(timeInstant.Description),
                     new OWLNamedIndividual(timeInstant.Description.Coordinate.Metadata.UnitType)));
                 ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-                    new OWLObjectProperty(RDFVocabulary.TIME.HAS_TRS),
+                    RDFVocabulary.TIME.HAS_TRS.ToEntity<OWLObjectProperty>(),
                     new OWLNamedIndividual(timeInstant.Description),
                     new OWLNamedIndividual(timeInstant.Description.Coordinate.Metadata.TRS)));
                 ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-                    new OWLClass(RDFVocabulary.TIME.TEMPORAL_UNIT),
+                    RDFVocabulary.TIME.TEMPORAL_UNIT.ToEntity<OWLClass>(),
                     new OWLNamedIndividual(timeInstant.Description.Coordinate.Metadata.UnitType)));
                 ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-                    new OWLClass(RDFVocabulary.TIME.TRS),
+                    RDFVocabulary.TIME.TRS.ToEntity<OWLClass>(),
                     new OWLNamedIndividual(timeInstant.Description.Coordinate.Metadata.TRS)));
 
                 if (timeInstant.Description.Coordinate.Year.HasValue)
                     ontology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
-                        new OWLDataProperty(RDFVocabulary.TIME.YEAR),
+                        RDFVocabulary.TIME.YEAR.ToEntity<OWLDataProperty>(),
                         new OWLNamedIndividual(timeInstant.Description),
                         new OWLLiteral(new RDFTypedLiteral($"{Convert.ToString(timeInstant.Description.Coordinate.Year, CultureInfo.InvariantCulture)}", RDFModelEnums.RDFDatatypes.XSD_DECIMAL))));
                 if (timeInstant.Description.Coordinate.Month.HasValue)
                     ontology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
-                        new OWLDataProperty(RDFVocabulary.TIME.MONTH),
+                        RDFVocabulary.TIME.MONTH.ToEntity<OWLDataProperty>(),
                         new OWLNamedIndividual(timeInstant.Description),
                         new OWLLiteral(new RDFTypedLiteral($"{Convert.ToString(timeInstant.Description.Coordinate.Month, CultureInfo.InvariantCulture)}", RDFModelEnums.RDFDatatypes.XSD_DECIMAL))));
                 if (timeInstant.Description.Coordinate.Day.HasValue)
                     ontology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
-                        new OWLDataProperty(RDFVocabulary.TIME.DAY),
+                        RDFVocabulary.TIME.DAY.ToEntity<OWLDataProperty>(),
                         new OWLNamedIndividual(timeInstant.Description),
                         new OWLLiteral(new RDFTypedLiteral($"{Convert.ToString(timeInstant.Description.Coordinate.Day, CultureInfo.InvariantCulture)}", RDFModelEnums.RDFDatatypes.XSD_DECIMAL))));
                 if (timeInstant.Description.Coordinate.Hour.HasValue)
                     ontology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
-                        new OWLDataProperty(RDFVocabulary.TIME.HOUR),
+                        RDFVocabulary.TIME.HOUR.ToEntity<OWLDataProperty>(),
                         new OWLNamedIndividual(timeInstant.Description),
                         new OWLLiteral(new RDFTypedLiteral($"{Convert.ToString(timeInstant.Description.Coordinate.Hour, CultureInfo.InvariantCulture)}", RDFModelEnums.RDFDatatypes.XSD_DECIMAL))));
                 if (timeInstant.Description.Coordinate.Minute.HasValue)
                     ontology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
-                        new OWLDataProperty(RDFVocabulary.TIME.MINUTE),
+                        RDFVocabulary.TIME.MINUTE.ToEntity<OWLDataProperty>(),
                         new OWLNamedIndividual(timeInstant.Description),
                         new OWLLiteral(new RDFTypedLiteral($"{Convert.ToString(timeInstant.Description.Coordinate.Minute, CultureInfo.InvariantCulture)}", RDFModelEnums.RDFDatatypes.XSD_DECIMAL))));
                 if (timeInstant.Description.Coordinate.Second.HasValue)
                     ontology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
-                        new OWLDataProperty(RDFVocabulary.TIME.SECOND),
+                        RDFVocabulary.TIME.SECOND.ToEntity<OWLDataProperty>(),
                         new OWLNamedIndividual(timeInstant.Description),
                         new OWLLiteral(new RDFTypedLiteral($"{Convert.ToString(timeInstant.Description.Coordinate.Second, CultureInfo.InvariantCulture)}", RDFModelEnums.RDFDatatypes.XSD_DECIMAL))));
 
@@ -134,7 +134,7 @@ namespace OWLSharp.Extensions.TIME
                 {
                     ontology.DeclareEntity(new OWLNamedIndividual(timeInstant.Description.Coordinate.Metadata.MonthOfYear));
                     ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-                        new OWLObjectProperty(RDFVocabulary.TIME.MONTH_OF_YEAR),
+                        RDFVocabulary.TIME.MONTH_OF_YEAR.ToEntity<OWLObjectProperty>(),
                         new OWLNamedIndividual(timeInstant.Description),
                         new OWLNamedIndividual(timeInstant.Description.Coordinate.Metadata.MonthOfYear)));
                 }
@@ -142,13 +142,13 @@ namespace OWLSharp.Extensions.TIME
                 {
                     ontology.DeclareEntity(new OWLNamedIndividual(timeInstant.Description.Coordinate.Metadata.DayOfWeek));
                     ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-                        new OWLObjectProperty(RDFVocabulary.TIME.DAY_OF_WEEK),
+                        RDFVocabulary.TIME.DAY_OF_WEEK.ToEntity<OWLObjectProperty>(),
                         new OWLNamedIndividual(timeInstant.Description),
                         new OWLNamedIndividual(timeInstant.Description.Coordinate.Metadata.DayOfWeek)));
                 }
                 if (timeInstant.Description.Coordinate.Metadata.DayOfYear.HasValue)
                     ontology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
-                        new OWLDataProperty(RDFVocabulary.TIME.DAY_OF_YEAR),
+                        RDFVocabulary.TIME.DAY_OF_YEAR.ToEntity<OWLDataProperty>(),
                         new OWLNamedIndividual(timeInstant.Description),
                         new OWLLiteral(new RDFTypedLiteral($"{Convert.ToString(timeInstant.Description.Coordinate.Metadata.DayOfYear, CultureInfo.InvariantCulture)}", RDFModelEnums.RDFDatatypes.XSD_NONNEGATIVEINTEGER))));
             }
@@ -159,17 +159,17 @@ namespace OWLSharp.Extensions.TIME
                 ontology.DeclareEntity(new OWLNamedIndividual(timeInstant.Position));
                 ontology.DeclareEntity(new OWLNamedIndividual(timeInstant.Position.TRS));
                 ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-                    new OWLObjectProperty(RDFVocabulary.TIME.IN_TIME_POSITION),
+                    RDFVocabulary.TIME.IN_TIME_POSITION.ToEntity<OWLObjectProperty>(),
                     new OWLNamedIndividual(timeInstant),
                     new OWLNamedIndividual(timeInstant.Position)));
                 ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-                    new OWLClass(RDFVocabulary.TIME.TIME_POSITION),
+                    RDFVocabulary.TIME.TIME_POSITION.ToEntity<OWLClass>(),
                     new OWLNamedIndividual(timeInstant.Position)));
                 ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-                    new OWLClass(RDFVocabulary.TIME.TRS),
+                    RDFVocabulary.TIME.TRS.ToEntity<OWLClass>(),
                     new OWLNamedIndividual(timeInstant.Position.TRS)));
                 ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-                    new OWLObjectProperty(RDFVocabulary.TIME.HAS_TRS),
+                    RDFVocabulary.TIME.HAS_TRS.ToEntity<OWLObjectProperty>(),
                     new OWLNamedIndividual(timeInstant.Position),
                     new OWLNamedIndividual(timeInstant.Position.TRS)));
 
@@ -177,14 +177,14 @@ namespace OWLSharp.Extensions.TIME
                 {
                     ontology.DeclareEntity(new OWLNamedIndividual(timeInstant.Position.NominalValue));
                     ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-                        new OWLObjectProperty(RDFVocabulary.TIME.NOMINAL_POSITION),
+                        RDFVocabulary.TIME.NOMINAL_POSITION.ToEntity<OWLObjectProperty>(),
                         new OWLNamedIndividual(timeInstant.Position),
                         new OWLNamedIndividual(timeInstant.Position.NominalValue)));
                 }
                 else
                 {
                     ontology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
-                        new OWLDataProperty(RDFVocabulary.TIME.NUMERIC_POSITION),
+                        RDFVocabulary.TIME.NUMERIC_POSITION.ToEntity<OWLDataProperty>(),
                         new OWLNamedIndividual(timeInstant.Position),
                         new OWLLiteral(new RDFTypedLiteral($"{Convert.ToString(timeInstant.Position.NumericValue, CultureInfo.InvariantCulture)}", RDFModelEnums.RDFDatatypes.XSD_DOUBLE))));
                 }
@@ -194,21 +194,21 @@ namespace OWLSharp.Extensions.TIME
                     ontology.DeclareEntity(new OWLNamedIndividual(timeInstant.Position.PositionalUncertainty));
                     ontology.DeclareEntity(new OWLNamedIndividual(timeInstant.Position.PositionalUncertainty.UnitType));
                     ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-                        new OWLClass(RDFVocabulary.TIME.DURATION),
+                        RDFVocabulary.TIME.DURATION.ToEntity<OWLClass>(),
                         new OWLNamedIndividual(timeInstant.Position.PositionalUncertainty)));
                     ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-                        new OWLClass(RDFVocabulary.TIME.TEMPORAL_UNIT),
+                        RDFVocabulary.TIME.TEMPORAL_UNIT.ToEntity<OWLClass>(),
                         new OWLNamedIndividual(timeInstant.Position.PositionalUncertainty.UnitType)));
                     ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-                        new OWLObjectProperty(RDFVocabulary.TIME.THORS.POSITIONAL_UNCERTAINTY),
+                        RDFVocabulary.TIME.THORS.POSITIONAL_UNCERTAINTY.ToEntity<OWLObjectProperty>(),
                         new OWLNamedIndividual(timeInstant.Position),
                         new OWLNamedIndividual(timeInstant.Position.PositionalUncertainty)));
                     ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-                        new OWLObjectProperty(RDFVocabulary.TIME.UNIT_TYPE),
+                        RDFVocabulary.TIME.UNIT_TYPE.ToEntity<OWLObjectProperty>(),
                         new OWLNamedIndividual(timeInstant.Position.PositionalUncertainty),
                         new OWLNamedIndividual(timeInstant.Position.PositionalUncertainty.UnitType)));
                     ontology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
-                        new OWLDataProperty(RDFVocabulary.TIME.NUMERIC_DURATION),
+                        RDFVocabulary.TIME.NUMERIC_DURATION.ToEntity<OWLDataProperty>(),
                         new OWLNamedIndividual(timeInstant.Position.PositionalUncertainty),
                         new OWLLiteral(new RDFTypedLiteral($"{Convert.ToString(timeInstant.Position.PositionalUncertainty.Value, CultureInfo.InvariantCulture)}", RDFModelEnums.RDFDatatypes.XSD_DOUBLE))));
                 }
@@ -229,7 +229,7 @@ namespace OWLSharp.Extensions.TIME
             //Add knowledge to the A-BOX
             ontology.DeclareEntity(new OWLNamedIndividual(featureUri));
             ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-                new OWLObjectProperty(RDFVocabulary.TIME.HAS_TIME),
+                RDFVocabulary.TIME.HAS_TIME.ToEntity<OWLObjectProperty>(),
                 new OWLNamedIndividual(featureUri),
                 new OWLNamedIndividual(timeInterval)));
             ontology.DeclareIntervalFeatureInternal(timeInterval);
@@ -241,13 +241,13 @@ namespace OWLSharp.Extensions.TIME
             //Add knowledge to the A-BOX
             ontology.DeclareEntity(new OWLNamedIndividual(timeInterval));
             ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-                new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(timeInterval)));
 
             //Add knowledge to the A-BOX (time:hasXSDDuration)
             if (timeInterval.TimeSpan.HasValue)
                 ontology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
-                    new OWLDataProperty(RDFVocabulary.TIME.HAS_XSD_DURATION),
+                    RDFVocabulary.TIME.HAS_XSD_DURATION.ToEntity<OWLDataProperty>(),
                     new OWLNamedIndividual(timeInterval),
                     new OWLLiteral(new RDFTypedLiteral($"{XmlConvert.ToString(timeInterval.TimeSpan.Value)}", RDFModelEnums.RDFDatatypes.XSD_DURATION))));
 
@@ -255,7 +255,7 @@ namespace OWLSharp.Extensions.TIME
             if (timeInterval.Beginning != null)
             {
                 ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-                    new OWLObjectProperty(RDFVocabulary.TIME.HAS_BEGINNING),
+                    RDFVocabulary.TIME.HAS_BEGINNING.ToEntity<OWLObjectProperty>(),
                     new OWLNamedIndividual(timeInterval),
                     new OWLNamedIndividual(timeInterval.Beginning)));
                 ontology.DeclareInstantFeatureInternal(timeInterval.Beginning);
@@ -265,7 +265,7 @@ namespace OWLSharp.Extensions.TIME
             if (timeInterval.End != null)
             {
                 ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-                    new OWLObjectProperty(RDFVocabulary.TIME.HAS_END),
+                    RDFVocabulary.TIME.HAS_END.ToEntity<OWLObjectProperty>(),
                     new OWLNamedIndividual(timeInterval),
                     new OWLNamedIndividual(timeInterval.End)));
                 ontology.DeclareInstantFeatureInternal(timeInterval.End);
@@ -277,53 +277,53 @@ namespace OWLSharp.Extensions.TIME
                 ontology.DeclareEntity(new OWLNamedIndividual(timeInterval.Description));
                 ontology.DeclareEntity(new OWLNamedIndividual(timeInterval.Description.Extent.Metadata.TRS));
                 ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-                    new OWLClass(RDFVocabulary.TIME.GENERAL_DURATION_DESCRIPTION),
+                    RDFVocabulary.TIME.GENERAL_DURATION_DESCRIPTION.ToEntity<OWLClass>(),
                     new OWLNamedIndividual(timeInterval.Description)));
                 ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-                    new OWLObjectProperty(RDFVocabulary.TIME.HAS_DURATION_DESCRIPTION),
+                    RDFVocabulary.TIME.HAS_DURATION_DESCRIPTION.ToEntity<OWLObjectProperty>(),
                     new OWLNamedIndividual(timeInterval),
                     new OWLNamedIndividual(timeInterval.Description)));
                 ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-                    new OWLClass(RDFVocabulary.TIME.TRS),
+                    RDFVocabulary.TIME.TRS.ToEntity<OWLClass>(),
                     new OWLNamedIndividual(timeInterval.Description.Extent.Metadata.TRS)));
                 ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-                    new OWLObjectProperty(RDFVocabulary.TIME.HAS_TRS),
+                    RDFVocabulary.TIME.HAS_TRS.ToEntity<OWLObjectProperty>(),
                     new OWLNamedIndividual(timeInterval.Description),
                     new OWLNamedIndividual(timeInterval.Description.Extent.Metadata.TRS)));
 
                 if (timeInterval.Description.Extent.Years.HasValue)
                     ontology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
-                        new OWLDataProperty(RDFVocabulary.TIME.YEARS),
+                        RDFVocabulary.TIME.YEARS.ToEntity<OWLDataProperty>(),
                         new OWLNamedIndividual(timeInterval.Description),
                         new OWLLiteral(new RDFTypedLiteral($"{Convert.ToString(timeInterval.Description.Extent.Years, CultureInfo.InvariantCulture)}", RDFModelEnums.RDFDatatypes.XSD_DECIMAL))));
                 if (timeInterval.Description.Extent.Months.HasValue)
                     ontology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
-                        new OWLDataProperty(RDFVocabulary.TIME.MONTHS),
+                        RDFVocabulary.TIME.MONTHS.ToEntity<OWLDataProperty>(),
                         new OWLNamedIndividual(timeInterval.Description),
                         new OWLLiteral(new RDFTypedLiteral($"{Convert.ToString(timeInterval.Description.Extent.Months, CultureInfo.InvariantCulture)}", RDFModelEnums.RDFDatatypes.XSD_DECIMAL))));
                 if (timeInterval.Description.Extent.Weeks.HasValue)
                     ontology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
-                        new OWLDataProperty(RDFVocabulary.TIME.WEEKS),
+                        RDFVocabulary.TIME.WEEKS.ToEntity<OWLDataProperty>(),
                         new OWLNamedIndividual(timeInterval.Description),
                         new OWLLiteral(new RDFTypedLiteral($"{Convert.ToString(timeInterval.Description.Extent.Weeks, CultureInfo.InvariantCulture)}", RDFModelEnums.RDFDatatypes.XSD_DECIMAL))));
                 if (timeInterval.Description.Extent.Days.HasValue)
                     ontology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
-                        new OWLDataProperty(RDFVocabulary.TIME.DAYS),
+                        RDFVocabulary.TIME.DAYS.ToEntity<OWLDataProperty>(),
                         new OWLNamedIndividual(timeInterval.Description),
                         new OWLLiteral(new RDFTypedLiteral($"{Convert.ToString(timeInterval.Description.Extent.Days, CultureInfo.InvariantCulture)}", RDFModelEnums.RDFDatatypes.XSD_DECIMAL))));
                 if (timeInterval.Description.Extent.Hours.HasValue)
                     ontology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
-                        new OWLDataProperty(RDFVocabulary.TIME.HOURS),
+                        RDFVocabulary.TIME.HOURS.ToEntity<OWLDataProperty>(),
                         new OWLNamedIndividual(timeInterval.Description),
                         new OWLLiteral(new RDFTypedLiteral($"{Convert.ToString(timeInterval.Description.Extent.Hours, CultureInfo.InvariantCulture)}", RDFModelEnums.RDFDatatypes.XSD_DECIMAL))));
                 if (timeInterval.Description.Extent.Minutes.HasValue)
                     ontology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
-                        new OWLDataProperty(RDFVocabulary.TIME.MINUTES),
+                        RDFVocabulary.TIME.MINUTES.ToEntity<OWLDataProperty>(),
                         new OWLNamedIndividual(timeInterval.Description),
                         new OWLLiteral(new RDFTypedLiteral($"{Convert.ToString(timeInterval.Description.Extent.Minutes, CultureInfo.InvariantCulture)}", RDFModelEnums.RDFDatatypes.XSD_DECIMAL))));
                 if (timeInterval.Description.Extent.Seconds.HasValue)
                     ontology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
-                        new OWLDataProperty(RDFVocabulary.TIME.SECONDS),
+                        RDFVocabulary.TIME.SECONDS.ToEntity<OWLDataProperty>(),
                         new OWLNamedIndividual(timeInterval.Description),
                         new OWLLiteral(new RDFTypedLiteral($"{Convert.ToString(timeInterval.Description.Extent.Seconds, CultureInfo.InvariantCulture)}", RDFModelEnums.RDFDatatypes.XSD_DECIMAL))));
             }
@@ -334,23 +334,23 @@ namespace OWLSharp.Extensions.TIME
                 ontology.DeclareEntity(new OWLNamedIndividual(timeInterval.Duration));
                 ontology.DeclareEntity(new OWLNamedIndividual(timeInterval.Duration.UnitType));
                 ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-                    new OWLClass(RDFVocabulary.TIME.DURATION),
+                    RDFVocabulary.TIME.DURATION.ToEntity<OWLClass>(),
                     new OWLNamedIndividual(timeInterval.Duration)));
                 ontology.DeclareAssertionAxiom(new OWLClassAssertion(
-                    new OWLClass(RDFVocabulary.TIME.TEMPORAL_UNIT),
+                    RDFVocabulary.TIME.TEMPORAL_UNIT.ToEntity<OWLClass>(),
                     new OWLNamedIndividual(timeInterval.Duration.UnitType)));
                 ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-                    new OWLObjectProperty(RDFVocabulary.TIME.HAS_DURATION),
+                    RDFVocabulary.TIME.HAS_DURATION.ToEntity<OWLObjectProperty>(),
                     new OWLNamedIndividual(timeInterval),
                     new OWLNamedIndividual(timeInterval.Duration)));
                 ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
-                    new OWLObjectProperty(RDFVocabulary.TIME.UNIT_TYPE),
+                    RDFVocabulary.TIME.UNIT_TYPE.ToEntity<OWLObjectProperty>(),
                     new OWLNamedIndividual(timeInterval.Duration),
                     new OWLNamedIndividual(timeInterval.Duration.UnitType)));
                 ontology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
-                        new OWLDataProperty(RDFVocabulary.TIME.NUMERIC_DURATION),
-                        new OWLNamedIndividual(timeInterval.Duration),
-                        new OWLLiteral(new RDFTypedLiteral($"{Convert.ToString(timeInterval.Duration.Value, CultureInfo.InvariantCulture)}", RDFModelEnums.RDFDatatypes.XSD_DOUBLE))));
+                    RDFVocabulary.TIME.NUMERIC_DURATION.ToEntity<OWLDataProperty>(),
+                    new OWLNamedIndividual(timeInterval.Duration),
+                    new OWLLiteral(new RDFTypedLiteral($"{Convert.ToString(timeInterval.Duration.Value, CultureInfo.InvariantCulture)}", RDFModelEnums.RDFDatatypes.XSD_DOUBLE))));
             }
 
             return ontology;
@@ -367,8 +367,8 @@ namespace OWLSharp.Extensions.TIME
 
             //Temporary working variables
             OWLObjectProperty hasTimeOP = new OWLObjectProperty(RDFVocabulary.TIME.HAS_TIME);
-            OWLClass timeInstantCLS = new OWLClass(RDFVocabulary.TIME.INSTANT);
-            OWLClass timeIntervalCLS = new OWLClass(RDFVocabulary.TIME.INTERVAL);
+            OWLClass timeInstantCLS = RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>();
+            OWLClass timeIntervalCLS = RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>();
             List<OWLDataPropertyAssertion> dtPropAsns = ontology.GetAssertionAxiomsOfType<OWLDataPropertyAssertion>();
             List<OWLObjectPropertyAssertion> objPropAsns = OWLAssertionAxiomHelper.CalibrateObjectAssertions(ontology);
             List<OWLObjectPropertyAssertion> hasTimeObjPropAsns = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, hasTimeOP);
@@ -421,7 +421,7 @@ namespace OWLSharp.Extensions.TIME
         internal static void FillValueOfInstant(OWLOntology ontology, TIMEInstant timeInstant, List<OWLDataPropertyAssertion> dtPropAsns)
         {
             //time:inXSDDateTimeStamp
-            OWLLiteral inXSDDateTimeStampLiteral = OWLAssertionAxiomHelper.SelectDataAssertionsByDPEX(dtPropAsns, new OWLDataProperty(RDFVocabulary.TIME.IN_XSD_DATETIMESTAMP))
+            OWLLiteral inXSDDateTimeStampLiteral = OWLAssertionAxiomHelper.SelectDataAssertionsByDPEX(dtPropAsns, RDFVocabulary.TIME.IN_XSD_DATETIMESTAMP.ToEntity<OWLDataProperty>())
                                                     .FirstOrDefault(asn => asn.IndividualExpression.GetIRI().Equals(timeInstant))?.Literal;
             if (inXSDDateTimeStampLiteral?.GetLiteral() is RDFTypedLiteral inXSDDateTimeStampTLiteral
                  && inXSDDateTimeStampTLiteral.Datatype.TargetDatatype.Equals(RDFModelEnums.RDFDatatypes.XSD_DATETIMESTAMP))
@@ -431,7 +431,7 @@ namespace OWLSharp.Extensions.TIME
             }
 
             //time:inXSDDateTime
-            OWLLiteral inXSDDateTimeLiteral = OWLAssertionAxiomHelper.SelectDataAssertionsByDPEX(dtPropAsns, new OWLDataProperty(RDFVocabulary.TIME.IN_XSD_DATETIME))
+            OWLLiteral inXSDDateTimeLiteral = OWLAssertionAxiomHelper.SelectDataAssertionsByDPEX(dtPropAsns, RDFVocabulary.TIME.IN_XSD_DATETIME.ToEntity<OWLDataProperty>())
                                                .FirstOrDefault(asn => asn.IndividualExpression.GetIRI().Equals(timeInstant))?.Literal;
             if (inXSDDateTimeLiteral?.GetLiteral() is RDFTypedLiteral inXSDDateTimeTLiteral
                  && inXSDDateTimeTLiteral.Datatype.TargetDatatype.Equals(RDFModelEnums.RDFDatatypes.XSD_DATETIME))
@@ -441,7 +441,7 @@ namespace OWLSharp.Extensions.TIME
             }
 
             //time:inXSDDate
-            OWLLiteral inXSDDateLiteral = OWLAssertionAxiomHelper.SelectDataAssertionsByDPEX(dtPropAsns, new OWLDataProperty(RDFVocabulary.TIME.IN_XSD_DATE))
+            OWLLiteral inXSDDateLiteral = OWLAssertionAxiomHelper.SelectDataAssertionsByDPEX(dtPropAsns, RDFVocabulary.TIME.IN_XSD_DATE.ToEntity<OWLDataProperty>())
                                            .FirstOrDefault(asn => asn.IndividualExpression.GetIRI().Equals(timeInstant))?.Literal;
             if (inXSDDateLiteral?.GetLiteral() is RDFTypedLiteral inXSDDateTLiteral
                  && inXSDDateTLiteral.Datatype.TargetDatatype.Equals(RDFModelEnums.RDFDatatypes.XSD_DATE))
@@ -451,7 +451,7 @@ namespace OWLSharp.Extensions.TIME
             }
 
             //time:inXSDgYearMonth
-            OWLLiteral inXSDGYearMonthLiteral = OWLAssertionAxiomHelper.SelectDataAssertionsByDPEX(dtPropAsns, new OWLDataProperty(RDFVocabulary.TIME.IN_XSD_GYEARMONTH))
+            OWLLiteral inXSDGYearMonthLiteral = OWLAssertionAxiomHelper.SelectDataAssertionsByDPEX(dtPropAsns, RDFVocabulary.TIME.IN_XSD_GYEARMONTH.ToEntity<OWLDataProperty>())
                                                  .FirstOrDefault(asn => asn.IndividualExpression.GetIRI().Equals(timeInstant))?.Literal;
             if (inXSDGYearMonthLiteral?.GetLiteral() is RDFTypedLiteral inXSDGYearMonthTLiteral
                  && inXSDGYearMonthTLiteral.Datatype.TargetDatatype.Equals(RDFModelEnums.RDFDatatypes.XSD_GYEARMONTH))
@@ -461,7 +461,7 @@ namespace OWLSharp.Extensions.TIME
             }
 
             //time:inXSDgYear
-            OWLLiteral inXSDGYearLiteral = OWLAssertionAxiomHelper.SelectDataAssertionsByDPEX(dtPropAsns, new OWLDataProperty(RDFVocabulary.TIME.IN_XSD_GYEAR))
+            OWLLiteral inXSDGYearLiteral = OWLAssertionAxiomHelper.SelectDataAssertionsByDPEX(dtPropAsns, RDFVocabulary.TIME.IN_XSD_GYEAR.ToEntity<OWLDataProperty>())
                                             .FirstOrDefault(asn => asn.IndividualExpression.GetIRI().Equals(timeInstant))?.Literal;
             if (inXSDGYearLiteral?.GetLiteral() is RDFTypedLiteral inXSDGYearTLiteral
                  && inXSDGYearTLiteral.Datatype.TargetDatatype.Equals(RDFModelEnums.RDFDatatypes.XSD_GYEAR))
@@ -601,8 +601,8 @@ namespace OWLSharp.Extensions.TIME
             #endregion
 
             //Temporary working variables
-            OWLObjectProperty inDateTimeOP = new OWLObjectProperty(RDFVocabulary.TIME.IN_DATETIME);
-            OWLClass timeGeneralDateTimeDescriptionCLS = new OWLClass(RDFVocabulary.TIME.GENERAL_DATETIME_DESCRIPTION);
+            OWLObjectProperty inDateTimeOP = RDFVocabulary.TIME.IN_DATETIME.ToEntity<OWLObjectProperty>();
+            OWLClass timeGeneralDateTimeDescriptionCLS = RDFVocabulary.TIME.GENERAL_DATETIME_DESCRIPTION.ToEntity<OWLClass>();
             List<OWLObjectPropertyAssertion> inDateTimeObjPropAsns = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, inDateTimeOP);
 
             //Filter assertions compatible with "time:inDateTime" object property
@@ -643,14 +643,14 @@ namespace OWLSharp.Extensions.TIME
             #region Utilities
             RDFResource GetTRSOfPosition(RDFResource temporalExtentURI)
             {
-                RDFResource trs = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, new OWLObjectProperty(RDFVocabulary.TIME.HAS_TRS))
+                RDFResource trs = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, RDFVocabulary.TIME.HAS_TRS.ToEntity<OWLObjectProperty>())
                                    .FirstOrDefault(opAsn => opAsn.SourceIndividualExpression.GetIRI().Equals(temporalExtentURI))?.TargetIndividualExpression.GetIRI();
                 //Default to Gregorian if this required information is not provided
                 return  trs ?? TIMECalendarReferenceSystem.Gregorian;
             }
             double? GetNumericValueOfPosition(RDFResource temporalExtentURI)
             {
-                OWLLiteral numericPositionPM = OWLAssertionAxiomHelper.SelectDataAssertionsByDPEX(dtPropAsns, new OWLDataProperty(RDFVocabulary.TIME.NUMERIC_POSITION))
+                OWLLiteral numericPositionPM = OWLAssertionAxiomHelper.SelectDataAssertionsByDPEX(dtPropAsns, RDFVocabulary.TIME.NUMERIC_POSITION.ToEntity<OWLDataProperty>())
                                                 .FirstOrDefault(asn => asn.IndividualExpression.GetIRI().Equals(temporalExtentURI))?.Literal;
                 if (numericPositionPM?.GetLiteral() is RDFTypedLiteral numericPositionTL && numericPositionTL.HasDecimalDatatype())
                     return Convert.ToDouble(numericPositionTL.Value, CultureInfo.InvariantCulture);
@@ -659,21 +659,21 @@ namespace OWLSharp.Extensions.TIME
             }
             RDFResource GetNominalValueOfPosition(RDFResource temporalExtentURI)
             {
-                RDFResource nominalPosition = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, new OWLObjectProperty(RDFVocabulary.TIME.NOMINAL_POSITION))
+                RDFResource nominalPosition = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, RDFVocabulary.TIME.NOMINAL_POSITION.ToEntity<OWLObjectProperty>())
                                                .FirstOrDefault(opAsn => opAsn.SourceIndividualExpression.GetIRI().Equals(temporalExtentURI))?.TargetIndividualExpression.GetIRI();
                 return nominalPosition;
             }
             RDFResource GetUncertaintyOfPosition(RDFResource temporalExtentURI)
             {
-                RDFResource positionalUncertainty = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, new OWLObjectProperty(RDFVocabulary.TIME.THORS.POSITIONAL_UNCERTAINTY))
+                RDFResource positionalUncertainty = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, RDFVocabulary.TIME.THORS.POSITIONAL_UNCERTAINTY.ToEntity<OWLObjectProperty>())
                                                      .FirstOrDefault(opAsn => opAsn.SourceIndividualExpression.GetIRI().Equals(temporalExtentURI))?.TargetIndividualExpression.GetIRI();
                 return positionalUncertainty;
             }
             #endregion
 
             //Temporary working variables
-            OWLObjectProperty inTimePositionOP = new OWLObjectProperty(RDFVocabulary.TIME.IN_TIME_POSITION);
-            OWLClass temporalPositionCLS = new OWLClass(RDFVocabulary.TIME.TEMPORAL_POSITION);
+            OWLObjectProperty inTimePositionOP = RDFVocabulary.TIME.IN_TIME_POSITION.ToEntity<OWLObjectProperty>();
+            OWLClass temporalPositionCLS = RDFVocabulary.TIME.TEMPORAL_POSITION.ToEntity<OWLClass>();
             List<OWLObjectPropertyAssertion> inTimePositionObjPropAsns = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, inTimePositionOP);
 
             //Filter assertions compatible with "time:inTimePosition" object property
@@ -731,7 +731,7 @@ namespace OWLSharp.Extensions.TIME
         internal static void FillValueOfInterval(OWLOntology ontology, TIMEInterval timeInterval, List<OWLDataPropertyAssertion> dtPropAsns)
         {
             //time:hasXSDDuration
-            OWLLiteral hasXSDDurationLiteral = OWLAssertionAxiomHelper.SelectDataAssertionsByDPEX(dtPropAsns, new OWLDataProperty(RDFVocabulary.TIME.HAS_XSD_DURATION))
+            OWLLiteral hasXSDDurationLiteral = OWLAssertionAxiomHelper.SelectDataAssertionsByDPEX(dtPropAsns, RDFVocabulary.TIME.HAS_XSD_DURATION.ToEntity<OWLDataProperty>())
                                                 .FirstOrDefault(asn => asn.IndividualExpression.GetIRI().Equals(timeInterval))?.Literal;
             if (hasXSDDurationLiteral?.GetLiteral() is RDFTypedLiteral hasXSDDurationTLiteral
                  && hasXSDDurationTLiteral.Datatype.TargetDatatype.Equals(RDFModelEnums.RDFDatatypes.XSD_DURATION))
@@ -742,14 +742,14 @@ namespace OWLSharp.Extensions.TIME
             #region Utilities
             RDFResource GetTRSOfIntervalDescription(RDFResource durationDescriptionURI)
             {
-                RDFResource trs = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, new OWLObjectProperty(RDFVocabulary.TIME.HAS_TRS))
+                RDFResource trs = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, RDFVocabulary.TIME.HAS_TRS.ToEntity<OWLObjectProperty>())
                                    .FirstOrDefault(opAsn => opAsn.SourceIndividualExpression.GetIRI().Equals(durationDescriptionURI))?.TargetIndividualExpression.GetIRI();
                 //Default to Gregorian if this required information is not provided
                 return  trs ?? TIMECalendarReferenceSystem.Gregorian;
             }
             double? GetYearsOfIntervalDescription(RDFResource durationDescriptionURI)
             {
-                OWLLiteral years = OWLAssertionAxiomHelper.SelectDataAssertionsByDPEX(dtPropAsns, new OWLDataProperty(RDFVocabulary.TIME.YEARS))
+                OWLLiteral years = OWLAssertionAxiomHelper.SelectDataAssertionsByDPEX(dtPropAsns, RDFVocabulary.TIME.YEARS.ToEntity<OWLDataProperty>())
                                     .FirstOrDefault(asn => asn.IndividualExpression.GetIRI().Equals(durationDescriptionURI))?.Literal;
                 if (years?.GetLiteral() is RDFTypedLiteral yearsTL && yearsTL.HasDecimalDatatype())
                     return Convert.ToDouble(yearsTL.Value, CultureInfo.InvariantCulture);
@@ -758,7 +758,7 @@ namespace OWLSharp.Extensions.TIME
             }
             double? GetMonthsOfIntervalDescription(RDFResource durationDescriptionURI)
             {
-                OWLLiteral months = OWLAssertionAxiomHelper.SelectDataAssertionsByDPEX(dtPropAsns, new OWLDataProperty(RDFVocabulary.TIME.MONTHS))
+                OWLLiteral months = OWLAssertionAxiomHelper.SelectDataAssertionsByDPEX(dtPropAsns, RDFVocabulary.TIME.MONTHS.ToEntity<OWLDataProperty>())
                                      .FirstOrDefault(asn => asn.IndividualExpression.GetIRI().Equals(durationDescriptionURI))?.Literal;
                 if (months?.GetLiteral() is RDFTypedLiteral monthsTL && monthsTL.HasDecimalDatatype())
                     return Convert.ToDouble(monthsTL.Value, CultureInfo.InvariantCulture);
@@ -767,7 +767,7 @@ namespace OWLSharp.Extensions.TIME
             }
             double? GetWeeksOfIntervalDescription(RDFResource durationDescriptionURI)
             {
-                OWLLiteral weeks = OWLAssertionAxiomHelper.SelectDataAssertionsByDPEX(dtPropAsns, new OWLDataProperty(RDFVocabulary.TIME.WEEKS))
+                OWLLiteral weeks = OWLAssertionAxiomHelper.SelectDataAssertionsByDPEX(dtPropAsns, RDFVocabulary.TIME.WEEKS.ToEntity<OWLDataProperty>())
                                      .FirstOrDefault(asn => asn.IndividualExpression.GetIRI().Equals(durationDescriptionURI))?.Literal;
                 if (weeks?.GetLiteral() is RDFTypedLiteral weeksTL && weeksTL.HasDecimalDatatype())
                     return Convert.ToDouble(weeksTL.Value, CultureInfo.InvariantCulture);
@@ -776,7 +776,7 @@ namespace OWLSharp.Extensions.TIME
             }
             double? GetDaysOfIntervalDescription(RDFResource durationDescriptionURI)
             {
-                OWLLiteral days = OWLAssertionAxiomHelper.SelectDataAssertionsByDPEX(dtPropAsns, new OWLDataProperty(RDFVocabulary.TIME.DAYS))
+                OWLLiteral days = OWLAssertionAxiomHelper.SelectDataAssertionsByDPEX(dtPropAsns, RDFVocabulary.TIME.DAYS.ToEntity<OWLDataProperty>())
                                    .FirstOrDefault(asn => asn.IndividualExpression.GetIRI().Equals(durationDescriptionURI))?.Literal;
                 if (days?.GetLiteral() is RDFTypedLiteral daysTL && daysTL.HasDecimalDatatype())
                     return Convert.ToDouble(daysTL.Value, CultureInfo.InvariantCulture);
@@ -785,7 +785,7 @@ namespace OWLSharp.Extensions.TIME
             }
             double? GetHoursOfIntervalDescription(RDFResource durationDescriptionURI)
             {
-                OWLLiteral hours = OWLAssertionAxiomHelper.SelectDataAssertionsByDPEX(dtPropAsns, new OWLDataProperty(RDFVocabulary.TIME.HOURS))
+                OWLLiteral hours = OWLAssertionAxiomHelper.SelectDataAssertionsByDPEX(dtPropAsns, RDFVocabulary.TIME.HOURS.ToEntity<OWLDataProperty>())
                                     .FirstOrDefault(asn => asn.IndividualExpression.GetIRI().Equals(durationDescriptionURI))?.Literal;
                 if (hours?.GetLiteral() is RDFTypedLiteral hoursTL && hoursTL.HasDecimalDatatype())
                     return Convert.ToDouble(hoursTL.Value, CultureInfo.InvariantCulture);
@@ -794,7 +794,7 @@ namespace OWLSharp.Extensions.TIME
             }
             double? GetMinutesOfIntervalDescription(RDFResource durationDescriptionURI)
             {
-                OWLLiteral minutes = OWLAssertionAxiomHelper.SelectDataAssertionsByDPEX(dtPropAsns, new OWLDataProperty(RDFVocabulary.TIME.MINUTES))
+                OWLLiteral minutes = OWLAssertionAxiomHelper.SelectDataAssertionsByDPEX(dtPropAsns, RDFVocabulary.TIME.MINUTES.ToEntity<OWLDataProperty>())
                                       .FirstOrDefault(asn => asn.IndividualExpression.GetIRI().Equals(durationDescriptionURI))?.Literal;
                 if (minutes?.GetLiteral() is RDFTypedLiteral minutesTL && minutesTL.HasDecimalDatatype())
                     return Convert.ToDouble(minutesTL.Value, CultureInfo.InvariantCulture);
@@ -803,7 +803,7 @@ namespace OWLSharp.Extensions.TIME
             }
             double? GetSecondsOfIntervalDescription(RDFResource durationDescriptionURI)
             {
-                OWLLiteral seconds = OWLAssertionAxiomHelper.SelectDataAssertionsByDPEX(dtPropAsns, new OWLDataProperty(RDFVocabulary.TIME.SECONDS))
+                OWLLiteral seconds = OWLAssertionAxiomHelper.SelectDataAssertionsByDPEX(dtPropAsns, RDFVocabulary.TIME.SECONDS.ToEntity<OWLDataProperty>())
                                       .FirstOrDefault(asn => asn.IndividualExpression.GetIRI().Equals(durationDescriptionURI))?.Literal;
                 if (seconds?.GetLiteral() is RDFTypedLiteral secondsTL && secondsTL.HasDecimalDatatype())
                     return Convert.ToDouble(secondsTL.Value, CultureInfo.InvariantCulture);
@@ -813,8 +813,8 @@ namespace OWLSharp.Extensions.TIME
             #endregion
 
             //Temporary working variables
-            OWLObjectProperty hasDurationDescriptionOP = new OWLObjectProperty(RDFVocabulary.TIME.HAS_DURATION_DESCRIPTION);
-            OWLClass timeGeneralDurationDescriptionCLS = new OWLClass(RDFVocabulary.TIME.GENERAL_DURATION_DESCRIPTION);
+            OWLObjectProperty hasDurationDescriptionOP = RDFVocabulary.TIME.HAS_DURATION_DESCRIPTION.ToEntity<OWLObjectProperty>();
+            OWLClass timeGeneralDurationDescriptionCLS = RDFVocabulary.TIME.GENERAL_DURATION_DESCRIPTION.ToEntity<OWLClass>();
             List<OWLObjectPropertyAssertion> hasDurationDescriptionObjPropAsns = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, hasDurationDescriptionOP);
 
             //Filter assertions compatible with "time:hasDurationDescription" object property
@@ -854,14 +854,14 @@ namespace OWLSharp.Extensions.TIME
             #region Utilities
             RDFResource GetUnitTypeOfDuration(RDFResource temporalExtentURI)
             {
-                RDFResource unitType = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, new OWLObjectProperty(RDFVocabulary.TIME.UNIT_TYPE))
+                RDFResource unitType = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, RDFVocabulary.TIME.UNIT_TYPE.ToEntity<OWLObjectProperty>())
                                         .FirstOrDefault(opAsn => opAsn.SourceIndividualExpression.GetIRI().Equals(temporalExtentURI))?.TargetIndividualExpression.GetIRI();
                 //Default to Gregorian if this required information is not provided
                 return  unitType ?? TIMEUnit.Second;
             }
             double GetValueOfDuration(RDFResource temporalExtentURI)
             {
-                OWLLiteral numericDuration = OWLAssertionAxiomHelper.SelectDataAssertionsByDPEX(dtPropAsns, new OWLDataProperty(RDFVocabulary.TIME.NUMERIC_DURATION))
+                OWLLiteral numericDuration = OWLAssertionAxiomHelper.SelectDataAssertionsByDPEX(dtPropAsns, RDFVocabulary.TIME.NUMERIC_DURATION.ToEntity<OWLDataProperty>())
                                               .FirstOrDefault(asn => asn.IndividualExpression.GetIRI().Equals(temporalExtentURI))?.Literal;
                 if (numericDuration?.GetLiteral() is RDFTypedLiteral numericDurationTL && numericDurationTL.HasDecimalDatatype())
                     return Convert.ToDouble(numericDurationTL.Value, CultureInfo.InvariantCulture);
@@ -871,8 +871,8 @@ namespace OWLSharp.Extensions.TIME
             #endregion
 
             //Temporary working variables
-            OWLObjectProperty hasDurationOP = new OWLObjectProperty(RDFVocabulary.TIME.HAS_DURATION);
-            OWLObjectProperty positionalUncertaintyOP = new OWLObjectProperty(RDFVocabulary.TIME.THORS.POSITIONAL_UNCERTAINTY);
+            OWLObjectProperty hasDurationOP = RDFVocabulary.TIME.HAS_DURATION.ToEntity<OWLObjectProperty>();
+            OWLObjectProperty positionalUncertaintyOP = RDFVocabulary.TIME.THORS.POSITIONAL_UNCERTAINTY.ToEntity<OWLObjectProperty>();
             OWLClass durationCLS = new OWLClass(RDFVocabulary.TIME.DURATION);
             List<OWLObjectPropertyAssertion> hasDurationObjPropAsns = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, hasDurationOP)
                                                                        .Union(OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, positionalUncertaintyOP)).ToList();
@@ -908,8 +908,8 @@ namespace OWLSharp.Extensions.TIME
         internal static void FillBeginningOfInterval(OWLOntology ontology, TIMEInterval timeInterval, List<OWLDataPropertyAssertion> dtPropAsns, List<OWLObjectPropertyAssertion> objPropAsns)
         {
             //Temporary working variables
-            OWLObjectProperty hasBeginningOP = new OWLObjectProperty(RDFVocabulary.TIME.HAS_BEGINNING);
-            OWLClass instantCLS = new OWLClass(RDFVocabulary.TIME.INSTANT);
+            OWLObjectProperty hasBeginningOP = RDFVocabulary.TIME.HAS_BEGINNING.ToEntity<OWLObjectProperty>();
+            OWLClass instantCLS = RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>();
             List<OWLObjectPropertyAssertion> hasBeginningObjPropAsns = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, hasBeginningOP);
 
             //Filter assertions compatible with "time:hasBeginning" object property
@@ -942,8 +942,8 @@ namespace OWLSharp.Extensions.TIME
         internal static void FillEndOfInterval(OWLOntology ontology, TIMEInterval timeInterval, List<OWLDataPropertyAssertion> dtPropAsns, List<OWLObjectPropertyAssertion> objPropAsns)
         {
             //Temporary working variables
-            OWLObjectProperty hasEndOP = new OWLObjectProperty(RDFVocabulary.TIME.HAS_END);
-            OWLClass instantCLS = new OWLClass(RDFVocabulary.TIME.INSTANT);
+            OWLObjectProperty hasEndOP = RDFVocabulary.TIME.HAS_END.ToEntity<OWLObjectProperty>();
+            OWLClass instantCLS = RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>();
             List<OWLObjectPropertyAssertion> hasEndObjPropAsns = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, hasEndOP);
 
             //Filter assertions compatible with "time:hasEnd" object property
@@ -1130,9 +1130,9 @@ namespace OWLSharp.Extensions.TIME
             #region Allen
             //There's no direct representation of the time interval's beginning instant:
             //we can indirectly obtain it by exploiting specific Allen interval relations
-            OWLObjectProperty timeIntervalEqualsOP = new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_EQUALS);
-            OWLObjectProperty timeIntervalStartsOP = new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_STARTS);
-            OWLObjectProperty timeIntervalStartedByOP = new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_STARTED_BY);
+            OWLObjectProperty timeIntervalEqualsOP = RDFVocabulary.TIME.INTERVAL_EQUALS.ToEntity<OWLObjectProperty>();
+            OWLObjectProperty timeIntervalStartsOP = RDFVocabulary.TIME.INTERVAL_STARTS.ToEntity<OWLObjectProperty>();
+            OWLObjectProperty timeIntervalStartedByOP = RDFVocabulary.TIME.INTERVAL_STARTED_BY.ToEntity<OWLObjectProperty>();
             List<RDFResource> compatibleStartIntervals = RDFQueryUtilities.RemoveDuplicates(
                 OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, timeIntervalEqualsOP)
                  .Union(OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, timeIntervalStartsOP))
@@ -1150,7 +1150,7 @@ namespace OWLSharp.Extensions.TIME
                 #region MetBy
                 //There's still no direct representation of the time interval's beginning instant:
                 //we can indirectly obtain it by exploiting Allen interval-meeting relations
-                OWLObjectProperty timeIntervalMetByOP = new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_MET_BY);
+                OWLObjectProperty timeIntervalMetByOP = RDFVocabulary.TIME.INTERVAL_MET_BY.ToEntity<OWLObjectProperty>();
                 List<RDFResource> metByIntervals = RDFQueryUtilities.RemoveDuplicates(
                     OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, timeIntervalMetByOP)
                      .Where(objPropAsn  => objPropAsn.SourceIndividualExpression.GetIRI().Equals(timeIntervalURI))
@@ -1205,9 +1205,9 @@ namespace OWLSharp.Extensions.TIME
             #region Allen
             //There's no direct representation of the time interval's end instant:
             //we can indirectly obtain it by exploiting Allen interval-ending relations
-            OWLObjectProperty timeIntervalEqualsOP = new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_EQUALS);
-            OWLObjectProperty timeIntervalFinishesOP = new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_FINISHES);
-            OWLObjectProperty timeIntervalFinishedByOP = new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_FINISHED_BY);
+            OWLObjectProperty timeIntervalEqualsOP = RDFVocabulary.TIME.INTERVAL_EQUALS.ToEntity<OWLObjectProperty>();
+            OWLObjectProperty timeIntervalFinishesOP = RDFVocabulary.TIME.INTERVAL_FINISHES.ToEntity<OWLObjectProperty>();
+            OWLObjectProperty timeIntervalFinishedByOP = RDFVocabulary.TIME.INTERVAL_FINISHED_BY.ToEntity<OWLObjectProperty>();
             List<RDFResource> compatibleEndIntervals = RDFQueryUtilities.RemoveDuplicates(
                 OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, timeIntervalEqualsOP)
                  .Union(OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, timeIntervalFinishesOP))
@@ -1225,7 +1225,7 @@ namespace OWLSharp.Extensions.TIME
                 #region Meets
                 //There's still no direct representation of the time interval's end instant:
                 //we can indirectly obtain it by exploiting Allen interval-meeting relations
-                OWLObjectProperty timeIntervalMeetsOP = new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_MEETS);
+                OWLObjectProperty timeIntervalMeetsOP = RDFVocabulary.TIME.INTERVAL_MEETS.ToEntity<OWLObjectProperty>();
                 List<RDFResource> meetsIntervals = RDFQueryUtilities.RemoveDuplicates(
                     OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, timeIntervalMeetsOP)
                      .Where(objPropAsn  => objPropAsn.SourceIndividualExpression.GetIRI().Equals(timeIntervalURI))

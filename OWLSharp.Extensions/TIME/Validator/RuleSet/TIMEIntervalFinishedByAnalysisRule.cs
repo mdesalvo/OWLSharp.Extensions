@@ -42,10 +42,10 @@ namespace OWLSharp.Extensions.TIME
                     Atoms = new List<SWRLAtom>
                     {
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?I1"))),
                         new SWRLClassAtom(
-                            new OWLClass(RDFVocabulary.TIME.INTERVAL),
+                            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
                             new SWRLVariableArgument(new RDFVariable("?I2"))),
                         new SWRLObjectPropertyAtom(
                             new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_FINISHED_BY),
