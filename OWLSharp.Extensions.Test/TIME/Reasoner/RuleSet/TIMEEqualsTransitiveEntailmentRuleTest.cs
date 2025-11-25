@@ -69,7 +69,7 @@ public class TIMEEqualsTransitiveEntailmentRuleTest : TIMETestOntology
         List<OWLInference> inferences = await reasoner.ApplyToOntologyAsync(ontology);
 
         Assert.IsNotNull(inferences);
-        Assert.HasCount(2, inferences);
+        Assert.HasCount(4, inferences); //last 2 coming from iterative reasoning at OWL2 level
     }
     #endregion
 }

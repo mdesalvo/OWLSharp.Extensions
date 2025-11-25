@@ -21,16 +21,40 @@ namespace OWLSharp.Extensions.TIME
     /// </summary>
     public static class TIMEEnums
     {
+        /// <summary>
+        /// Indicates the reference OWL-TIME unit types
+        /// </summary>
         public enum TIMEUnitType
         {
+            /// <summary>
+            /// Indicates a unit type expressing years according to the metrics of the calendar TRS in use
+            /// </summary>
             Year = 1,
+            /// <summary>
+            /// Indicates a unit type expressing months according to the metrics of the calendar TRS in use
+            /// </summary>
             Month = 2,
+            /// <summary>
+            /// Indicates a unit type expressing days according to the metrics of the calendar TRS in use
+            /// </summary>
             Day = 3,
+            /// <summary>
+            /// Indicates a unit type expressing hours according to the metrics of the calendar TRS in use
+            /// </summary>
             Hour = 4,
+            /// <summary>
+            /// Indicates a unit type expressing minutes according to the metrics of the calendar TRS in use
+            /// </summary>
             Minute = 5,
+            /// <summary>
+            /// Indicates a unit type expressing seconds according to the metrics of the calendar TRS in use
+            /// </summary>
             Second = 6
         }
 
+        /// <summary>
+        /// TIMEReasonerRules represents an enumeration for supported OWL-TIME reasoner rules
+        /// </summary>
         public enum TIMEReasonerRules
         {
             AfterEqualsEntailment = 1,
@@ -59,6 +83,9 @@ namespace OWLSharp.Extensions.TIME
             StartedByEqualsEntailment = 24
         }
 
+        /// <summary>
+        /// TIMEValidatorRules represents an enumeration for supported OWL-TIME validator rules
+        /// </summary>
         public enum TIMEValidatorRules
         {
             InstantAfterAnalysis = 1,

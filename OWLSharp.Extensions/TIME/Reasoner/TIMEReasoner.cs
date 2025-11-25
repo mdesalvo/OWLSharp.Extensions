@@ -14,36 +14,57 @@
 #if !NET8_0_OR_GREATER
 using Dasync.Collections;
 #endif
+using OWLSharp.Ontology;
+using OWLSharp.Reasoner;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using OWLSharp.Ontology;
-using OWLSharp.Reasoner;
-using RDFSharp.Model;
 
 namespace OWLSharp.Extensions.TIME
 {
     public sealed class TIMEReasoner
     {
         #region Properties
+        /// <summary>
+        /// A predefined reasoner including all available OWL-TIME inference rules
+        /// </summary>
+        public static readonly TIMEReasoner Default = new TIMEReasoner {
+            Rules = Enum.GetValues(typeof(TIMEEnums.TIMEReasonerRules)).Cast<TIMEEnums.TIMEReasonerRules>().ToList() };
+
+        /// <summary>
+        /// The set of rules to be applied by the reasoner
+        /// </summary>
         public List<TIMEEnums.TIMEReasonerRules> Rules { get; internal set; } = new List<TIMEEnums.TIMEReasonerRules>();
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Adds the given rule to the reasoner
+        /// </summary>
+        /// <returns>The reasoner itself</returns>
         public TIMEReasoner AddRule(TIMEEnums.TIMEReasonerRules rule)
         {
             Rules.Add(rule);
             return this;
         }
 
-        public async Task<List<OWLInference>> ApplyToOntologyAsync(OWLOntology ontology)
+        /// <summary>
+        /// Applies the reasoner on the given ontology, using the eventually specified options
+        /// </summary>
+        /// <returns>The list of discovered inferences</returns>
+        public async Task<List<OWLInference>> ApplyToOntologyAsync(OWLOntology ontology, OWLReasonerOptions reasonerOptions=null)
         {
             List<OWLInference> inferences = new List<OWLInference>();
 
             if (ontology != null)
             {
-                OWLEvents.RaiseInfo($"Launching OWL-TIME reasoner on ontology '{ontology.IRI}'...");
+                if (reasonerOptions == null)
+                    reasonerOptions = new OWLReasonerOptions();
                 Rules = Rules.Distinct().ToList();
+
+                #region Execute
+                OWLEvents.RaiseInfo($"Launching OWL-TIME reasoner on ontology '{ontology.IRI}'...");
 
                 //Initialize inference registry
                 Dictionary<string, List<OWLInference>> inferenceRegistry = new Dictionary<string, List<OWLInference>>(Rules.Count);
@@ -144,18 +165,41 @@ namespace OWLSharp.Extensions.TIME
                 //Deduplicate inferences by analyzing explicit knowledge
                 await Task.WhenAll(dtPropAsnAxiomsTask, opPropAsnAxiomsTask);
                 foreach (KeyValuePair<string, List<OWLInference>> inferenceRegistryEntry in inferenceRegistry.Where(ir => ir.Value?.Count > 0))
+                {
                     inferenceRegistryEntry.Value.RemoveAll(inf =>
                     {
                         string infXML = inf.Axiom.GetXML();
                         return dtPropAsnAxiomsTask.Result.Contains(infXML)
                                || opPropAsnAxiomsTask.Result.Contains(infXML);
                     });
+                }
 
                 //Collect inferences
-                inferences.AddRange(inferenceRegistry.SelectMany(ir => ir.Value ?? Enumerable.Empty<OWLInference>()).Distinct());
-                inferenceRegistry.Clear();
+                IEnumerable<OWLInference> emptyInferenceSet = Enumerable.Empty<OWLInference>();
+                inferences.AddRange(inferenceRegistry.SelectMany(ir => ir.Value ?? emptyInferenceSet).Distinct());
 
                 OWLEvents.RaiseInfo($"Completed OWL-TIME reasoner on ontology {ontology.IRI} => {inferences.Count} unique inferences");
+                #endregion
+
+                #region Iterate
+                if (reasonerOptions.EnableIterativeReasoning
+                     && inferences.Count > 0)
+                {
+                    OWLEvents.RaiseInfo($"Merging OWL-TIME inferences...");
+                    foreach (IGrouping<Type, OWLInference> inferenceGroupType in inferences.GroupBy(inf => inf.Axiom.GetType()))
+                    {
+                        switch (inferenceGroupType.Key.BaseType?.Name)
+                        {
+                            case nameof(OWLAssertionAxiom):
+                                ontology.AssertionAxioms.AddRange(inferenceGroupType.Select(g => (OWLAssertionAxiom)g.Axiom));
+                                ontology.AssertionAxioms = OWLAxiomHelper.RemoveDuplicates(ontology.AssertionAxioms);
+                                break;
+                        }
+                    }
+                    reasonerOptions.CurrentIteration = 1;
+                    inferences.AddRange(await ApplyToOntologyAsync(ontology, reasonerOptions));
+                }
+                #endregion
             }
 
             return inferences;

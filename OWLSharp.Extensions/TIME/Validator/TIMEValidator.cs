@@ -14,12 +14,13 @@
 #if !NET8_0_OR_GREATER
 using Dasync.Collections;
 #endif
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using OWLSharp.Ontology;
 using OWLSharp.Validator;
 using RDFSharp.Model;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace OWLSharp.Extensions.TIME
 {
@@ -28,16 +29,33 @@ namespace OWLSharp.Extensions.TIME
         #region Properties
         internal static readonly RDFResource ViolationIRI = new RDFResource("urn:owlsharp:swrl:hasViolations");
 
+        /// <summary>
+        /// A predefined validator including all available OWL-TIME validator rules
+        /// </summary>
+        public static readonly TIMEValidator Default = new TIMEValidator {
+            Rules = Enum.GetValues(typeof(TIMEEnums.TIMEValidatorRules)).Cast<TIMEEnums.TIMEValidatorRules>().ToList() };
+
+        /// <summary>
+        /// The set of rules to be applied by the validator
+        /// </summary>
         public List<TIMEEnums.TIMEValidatorRules> Rules { get; internal set; } = new List<TIMEEnums.TIMEValidatorRules>();
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Adds the given rule to the validator
+        /// </summary>
+        /// <returns>The validator itself</returns>
         public TIMEValidator AddRule(TIMEEnums.TIMEValidatorRules rule)
         {
             Rules.Add(rule);
             return this;
         }
 
+        /// <summary>
+        /// Applies the validator on the given ontology
+        /// </summary>
+        /// <returns>The list of detected issues</returns>
         public async Task<List<OWLIssue>> ApplyToOntologyAsync(OWLOntology ontology)
         {
             List<OWLIssue> issues = new List<OWLIssue>();
