@@ -301,37 +301,59 @@ namespace OWLSharp.Extensions.TIME
         {
             uint[] metricsMonths = calendarTRS.Metrics.LeapYearRule?.Invoke(timeCoordinate.Year ?? 0)
                                     ?? calendarTRS.Metrics.Months;
-            while (secondsToConsume >= calendarTRS.Metrics.SecondsInMinute)
+            
+            // Batch process: consume complete minutes
+            if (secondsToConsume >= calendarTRS.Metrics.SecondsInMinute)
             {
-                secondsToConsume -= calendarTRS.Metrics.SecondsInMinute;
-                timeCoordinate.Minute++;
-                if (timeCoordinate.Minute < calendarTRS.Metrics.MinutesInHour)
-                    continue;
-
-                //Minute overflow => propagate to hour
-                timeCoordinate.Minute = 0;
-                timeCoordinate.Hour++;
-                if (timeCoordinate.Hour < calendarTRS.Metrics.HoursInDay)
-                    continue;
-
-                //Hour overflow => propagate to day
-                timeCoordinate.Hour = 0;
-                timeCoordinate.Day++;
-                if (timeCoordinate.Day <= metricsMonths[Convert.ToInt32(timeCoordinate.Month)-1])
-                    continue;
-
-                //Day overflow => propagate to month
-                timeCoordinate.Day = 1;
-                timeCoordinate.Month++;
-                if (timeCoordinate.Month <= calendarTRS.Metrics.MonthsInYear)
-                    continue;
-
-                //Month overflow => propagate to year, fetch new metrics
-                timeCoordinate.Month = 1;
-                timeCoordinate.Year++;
-                metricsMonths = calendarTRS.Metrics.LeapYearRule?.Invoke(timeCoordinate.Year ?? 0)
-                                 ?? calendarTRS.Metrics.Months;
+                double minutesToAdd = Math.Floor(secondsToConsume / calendarTRS.Metrics.SecondsInMinute);
+                secondsToConsume -= minutesToAdd * calendarTRS.Metrics.SecondsInMinute;
+                timeCoordinate.Minute = (timeCoordinate.Minute ?? 0) + minutesToAdd;
+                
+                // Handle minute overflow -> hours
+                if (timeCoordinate.Minute >= calendarTRS.Metrics.MinutesInHour)
+                {
+                    double hoursToAdd = Math.Floor(timeCoordinate.Minute.Value / calendarTRS.Metrics.MinutesInHour);
+                    timeCoordinate.Minute = timeCoordinate.Minute.Value % calendarTRS.Metrics.MinutesInHour;
+                    timeCoordinate.Hour = (timeCoordinate.Hour ?? 0) + hoursToAdd;
+                    
+                    // Handle hour overflow -> days
+                    if (timeCoordinate.Hour >= calendarTRS.Metrics.HoursInDay)
+                    {
+                        double daysToAdd = Math.Floor(timeCoordinate.Hour.Value / calendarTRS.Metrics.HoursInDay);
+                        timeCoordinate.Hour = timeCoordinate.Hour.Value % calendarTRS.Metrics.HoursInDay;
+                        
+                        // Handle day overflow -> months/years (this part needs iterative approach due to variable days per month)
+                        while (daysToAdd > 0)
+                        {
+                            uint daysInCurrentMonth = metricsMonths[Convert.ToInt32(timeCoordinate.Month ?? 1) - 1];
+                            double daysRemainingInMonth = daysInCurrentMonth - (timeCoordinate.Day ?? 1) + 1;
+                            
+                            if (daysToAdd < daysRemainingInMonth)
+                            {
+                                timeCoordinate.Day = (timeCoordinate.Day ?? 1) + (uint)daysToAdd;
+                                daysToAdd = 0;
+                            }
+                            else
+                            {
+                                daysToAdd -= daysRemainingInMonth;
+                                timeCoordinate.Day = 1;
+                                timeCoordinate.Month = (timeCoordinate.Month ?? 1) + 1;
+                                
+                                // Handle month overflow -> year
+                                if (timeCoordinate.Month > calendarTRS.Metrics.MonthsInYear)
+                                {
+                                    timeCoordinate.Month = 1;
+                                    timeCoordinate.Year = (timeCoordinate.Year ?? 0) + 1;
+                                    metricsMonths = calendarTRS.Metrics.LeapYearRule?.Invoke(timeCoordinate.Year ?? 0)
+                                                     ?? calendarTRS.Metrics.Months;
+                                }
+                            }
+                        }
+                    }
+                }
             }
+            
+            // Add remaining seconds
             timeCoordinate.Second = Math.Truncate(timeCoordinate.Second.Value + secondsToConsume);
         }
 
@@ -339,37 +361,58 @@ namespace OWLSharp.Extensions.TIME
         {
             uint[] metricsMonths = calendarTRS.Metrics.LeapYearRule?.Invoke(timeCoordinate.Year ?? 0)
                                     ?? calendarTRS.Metrics.Months;
-            while (secondsToConsume < 0)
+            
+            // Batch process: consume complete minutes (backwards)
+            if (secondsToConsume < 0)
             {
-                secondsToConsume += calendarTRS.Metrics.SecondsInMinute;
-                timeCoordinate.Minute--;
-                if (timeCoordinate.Minute >= 0)
-                    continue;
-
-                //Minute underflow => propagate to hour
-                timeCoordinate.Minute = calendarTRS.Metrics.MinutesInHour - 1;
-                timeCoordinate.Hour--;
-                if (timeCoordinate.Hour >= 0)
-                    continue;
-
-                //Hour underflow => propagate to day
-                timeCoordinate.Hour = calendarTRS.Metrics.HoursInDay - 1;
-                timeCoordinate.Day--;
-                if (timeCoordinate.Day >= 1)
-                    continue;
-
-                //Day underflow => propagate to month
-                timeCoordinate.Month--;
-                if (timeCoordinate.Month == 0)
+                double minutesToSubtract = Math.Ceiling(Math.Abs(secondsToConsume) / calendarTRS.Metrics.SecondsInMinute);
+                secondsToConsume += minutesToSubtract * calendarTRS.Metrics.SecondsInMinute;
+                timeCoordinate.Minute = (timeCoordinate.Minute ?? 0) - minutesToSubtract;
+                
+                // Handle minute underflow -> hours
+                if (timeCoordinate.Minute < 0)
                 {
-                    //Month underflow => propagate to year, fetch new metrics
-                    timeCoordinate.Month = calendarTRS.Metrics.MonthsInYear;
-                    timeCoordinate.Year--;
-                    metricsMonths = calendarTRS.Metrics.LeapYearRule?.Invoke(timeCoordinate.Year ?? 0)
-                                     ?? calendarTRS.Metrics.Months;
+                    double hoursToSubtract = Math.Ceiling(Math.Abs(timeCoordinate.Minute.Value) / calendarTRS.Metrics.MinutesInHour);
+                    timeCoordinate.Minute = timeCoordinate.Minute.Value + (hoursToSubtract * calendarTRS.Metrics.MinutesInHour);
+                    timeCoordinate.Hour = (timeCoordinate.Hour ?? 0) - hoursToSubtract;
+                    
+                    // Handle hour underflow -> days
+                    if (timeCoordinate.Hour < 0)
+                    {
+                        double daysToSubtract = Math.Ceiling(Math.Abs(timeCoordinate.Hour.Value) / calendarTRS.Metrics.HoursInDay);
+                        timeCoordinate.Hour = timeCoordinate.Hour.Value + (daysToSubtract * calendarTRS.Metrics.HoursInDay);
+                        
+                        // Handle day underflow -> months/years (iterative due to variable days per month)
+                        while (daysToSubtract > 0)
+                        {
+                            double currentDay = timeCoordinate.Day ?? 1;
+                            if (daysToSubtract < currentDay)
+                            {
+                                timeCoordinate.Day = currentDay - (uint)daysToSubtract;
+                                daysToSubtract = 0;
+                            }
+                            else
+                            {
+                                daysToSubtract -= currentDay;
+                                timeCoordinate.Month = (timeCoordinate.Month ?? 1) - 1;
+                                
+                                // Handle month underflow -> year
+                                if (timeCoordinate.Month == 0)
+                                {
+                                    timeCoordinate.Month = calendarTRS.Metrics.MonthsInYear;
+                                    timeCoordinate.Year = (timeCoordinate.Year ?? 0) - 1;
+                                    metricsMonths = calendarTRS.Metrics.LeapYearRule?.Invoke(timeCoordinate.Year ?? 0)
+                                                     ?? calendarTRS.Metrics.Months;
+                                }
+                                
+                                timeCoordinate.Day = metricsMonths[Convert.ToInt32(timeCoordinate.Month ?? 1) - 1];
+                            }
+                        }
+                    }
                 }
-                timeCoordinate.Day = metricsMonths[Convert.ToInt32(timeCoordinate.Month)-1];
             }
+            
+            // Add remaining seconds (which should be >= 0 at this point)
             timeCoordinate.Second = Math.Truncate(timeCoordinate.Second.Value + secondsToConsume);
         }
         #endregion
