@@ -18,6 +18,14 @@ using RDFSharp.Model;
 
 namespace OWLSharp.Extensions.TIME
 {
+    /// <summary>
+    /// In OWL-TIME, a TRS (Temporal Reference System) represents a coordinate system or framework used to identify
+    /// and locate temporal positions. It provides the context and rules for assigning temporal coordinates to instants
+    /// and intervals, similar to how a spatial coordinate system locates points in space. A TRS includes specifications
+    /// such as the origin point (epoch), the temporal unit used for measurement, and the calendar or clock system employed.
+    /// Examples include the Gregorian calendar, Unix time, or geological time scales.
+    /// Different TRS can be used depending on the application domain's requirements for temporal precision and granularity.
+    /// </summary>
     public class TIMEReferenceSystem : RDFResource
     {
         #region Ctors

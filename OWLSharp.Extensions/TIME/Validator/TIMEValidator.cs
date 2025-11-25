@@ -63,10 +63,10 @@ namespace OWLSharp.Extensions.TIME
             if (ontology != null)
             {
                 OWLEvents.RaiseInfo($"Launching OWL-TIME validator on ontology '{ontology.IRI}'...");
-                Rules = Rules.Distinct().ToList();
 
                 //Initialize issue registry
                 Dictionary<string, List<OWLIssue>> issueRegistry = new Dictionary<string, List<OWLIssue>>(Rules.Count);
+                Rules = Rules.Distinct().ToList();
                 Rules.ForEach(rule => issueRegistry.Add(rule.ToString(), null));
 
                 //Execute validator rules
@@ -144,7 +144,6 @@ namespace OWLSharp.Extensions.TIME
 
                 //Process issues
                 issues.AddRange(issueRegistry.SelectMany(ir => ir.Value ?? Enumerable.Empty<OWLIssue>()));
-                issueRegistry.Clear();
 
                 OWLEvents.RaiseInfo($"Completed OWL-TIME validator on ontology {ontology.IRI} => {issues.Count} issues");
             }

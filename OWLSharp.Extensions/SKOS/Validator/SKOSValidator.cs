@@ -125,7 +125,6 @@ namespace OWLSharp.Extensions.SKOS
 
                 //Process issues
                 issues.AddRange(issueRegistry.SelectMany(ir => ir.Value ?? Enumerable.Empty<OWLIssue>()));
-                issueRegistry.Clear();
 
                 OWLEvents.RaiseInfo($"Completed SKOS validator on ontology {ontology.IRI} => {issues.Count} issues");
             }
