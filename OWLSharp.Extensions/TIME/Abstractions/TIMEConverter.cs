@@ -301,33 +301,33 @@ namespace OWLSharp.Extensions.TIME
         {
             uint[] metricsMonths = calendarTRS.Metrics.LeapYearRule?.Invoke(timeCoordinate.Year ?? 0)
                                     ?? calendarTRS.Metrics.Months;
-            
+
             // Batch process: consume complete minutes
             if (secondsToConsume >= calendarTRS.Metrics.SecondsInMinute)
             {
                 double minutesToAdd = Math.Floor(secondsToConsume / calendarTRS.Metrics.SecondsInMinute);
                 secondsToConsume -= minutesToAdd * calendarTRS.Metrics.SecondsInMinute;
                 timeCoordinate.Minute = (timeCoordinate.Minute ?? 0) + minutesToAdd;
-                
+
                 // Handle minute overflow -> hours
                 if (timeCoordinate.Minute >= calendarTRS.Metrics.MinutesInHour)
                 {
                     double hoursToAdd = Math.Floor(timeCoordinate.Minute.Value / calendarTRS.Metrics.MinutesInHour);
                     timeCoordinate.Minute = timeCoordinate.Minute.Value % calendarTRS.Metrics.MinutesInHour;
                     timeCoordinate.Hour = (timeCoordinate.Hour ?? 0) + hoursToAdd;
-                    
+
                     // Handle hour overflow -> days
                     if (timeCoordinate.Hour >= calendarTRS.Metrics.HoursInDay)
                     {
                         double daysToAdd = Math.Floor(timeCoordinate.Hour.Value / calendarTRS.Metrics.HoursInDay);
                         timeCoordinate.Hour = timeCoordinate.Hour.Value % calendarTRS.Metrics.HoursInDay;
-                        
+
                         // Handle day overflow -> months/years (this part needs iterative approach due to variable days per month)
                         while (daysToAdd > 0)
                         {
                             uint daysInCurrentMonth = metricsMonths[Convert.ToInt32(timeCoordinate.Month ?? 1) - 1];
                             double daysRemainingInMonth = daysInCurrentMonth - (timeCoordinate.Day ?? 1) + 1;
-                            
+
                             if (daysToAdd < daysRemainingInMonth)
                             {
                                 timeCoordinate.Day = (timeCoordinate.Day ?? 1) + (uint)daysToAdd;
@@ -338,7 +338,7 @@ namespace OWLSharp.Extensions.TIME
                                 daysToAdd -= daysRemainingInMonth;
                                 timeCoordinate.Day = 1;
                                 timeCoordinate.Month = (timeCoordinate.Month ?? 1) + 1;
-                                
+
                                 // Handle month overflow -> year
                                 if (timeCoordinate.Month > calendarTRS.Metrics.MonthsInYear)
                                 {
@@ -352,7 +352,7 @@ namespace OWLSharp.Extensions.TIME
                     }
                 }
             }
-            
+
             // Add remaining seconds
             timeCoordinate.Second = Math.Truncate(timeCoordinate.Second.Value + secondsToConsume);
         }
@@ -361,27 +361,27 @@ namespace OWLSharp.Extensions.TIME
         {
             uint[] metricsMonths = calendarTRS.Metrics.LeapYearRule?.Invoke(timeCoordinate.Year ?? 0)
                                     ?? calendarTRS.Metrics.Months;
-            
+
             // Batch process: consume complete minutes (backwards)
             if (secondsToConsume < 0)
             {
                 double minutesToSubtract = Math.Ceiling(Math.Abs(secondsToConsume) / calendarTRS.Metrics.SecondsInMinute);
                 secondsToConsume += minutesToSubtract * calendarTRS.Metrics.SecondsInMinute;
                 timeCoordinate.Minute = (timeCoordinate.Minute ?? 0) - minutesToSubtract;
-                
+
                 // Handle minute underflow -> hours
                 if (timeCoordinate.Minute < 0)
                 {
                     double hoursToSubtract = Math.Ceiling(Math.Abs(timeCoordinate.Minute.Value) / calendarTRS.Metrics.MinutesInHour);
                     timeCoordinate.Minute = timeCoordinate.Minute.Value + (hoursToSubtract * calendarTRS.Metrics.MinutesInHour);
                     timeCoordinate.Hour = (timeCoordinate.Hour ?? 0) - hoursToSubtract;
-                    
+
                     // Handle hour underflow -> days
                     if (timeCoordinate.Hour < 0)
                     {
                         double daysToSubtract = Math.Ceiling(Math.Abs(timeCoordinate.Hour.Value) / calendarTRS.Metrics.HoursInDay);
                         timeCoordinate.Hour = timeCoordinate.Hour.Value + (daysToSubtract * calendarTRS.Metrics.HoursInDay);
-                        
+
                         // Handle day underflow -> months/years (iterative due to variable days per month)
                         while (daysToSubtract > 0)
                         {
@@ -395,7 +395,7 @@ namespace OWLSharp.Extensions.TIME
                             {
                                 daysToSubtract -= currentDay;
                                 timeCoordinate.Month = (timeCoordinate.Month ?? 1) - 1;
-                                
+
                                 // Handle month underflow -> year
                                 if (timeCoordinate.Month == 0)
                                 {
@@ -404,14 +404,14 @@ namespace OWLSharp.Extensions.TIME
                                     metricsMonths = calendarTRS.Metrics.LeapYearRule?.Invoke(timeCoordinate.Year ?? 0)
                                                      ?? calendarTRS.Metrics.Months;
                                 }
-                                
+
                                 timeCoordinate.Day = metricsMonths[Convert.ToInt32(timeCoordinate.Month ?? 1) - 1];
                             }
                         }
                     }
                 }
             }
-            
+
             // Add remaining seconds (which should be >= 0 at this point)
             timeCoordinate.Second = Math.Truncate(timeCoordinate.Second.Value + secondsToConsume);
         }

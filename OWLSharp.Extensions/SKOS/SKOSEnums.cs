@@ -59,7 +59,7 @@ namespace OWLSharp.Extensions.SKOS
             /// </summary>
             RelatedConceptAnalysis = 8,
             /// <summary>
-            /// Labels should not assume more than one literal form (SKOS-XL) 
+            /// Labels should not assume more than one literal form (SKOS-XL)
             /// </summary>
             LiteralFormAnalysis = 9
         }
