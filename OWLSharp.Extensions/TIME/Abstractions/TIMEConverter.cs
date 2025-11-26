@@ -16,17 +16,31 @@
 
 using RDFSharp.Model;
 using System;
+using System.Linq;
 
 namespace OWLSharp.Extensions.TIME
 {
+    /// <summary>
+    /// TIMEConverter is a utility class that provides conversion and normalization operations for temporal entities
+    /// within the OWL-TIME framework. It enables bidirectional transformations between positional time representations
+    /// (numeric values in a TRS) and coordinate-based representations (decomposed calendar components),
+    /// handles temporal extent calculations from durations, and ensures coordinate normalization according to specific
+    /// calendar system metrics. The class acts as the computational engine for temporal arithmetic and coordinate
+    /// manipulation across different temporal reference systems.
+    /// </summary>
     public static class TIMEConverter
     {
         #region Methods
+        /// <summary>
+        /// Converts a numeric time position (expressed in a positional TRS) into a calendar coordinate representation (expressed in a calendar TRS),
+        /// handling both large-scale (year-level) and little-scale (second-level) temporal granularities through appropriate scaling and clock emulation
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
         public static TIMECoordinate CoordinateFromPosition(double timePosition, TIMEPositionReferenceSystem positionTRS, TIMECalendarReferenceSystem calendarTRS=null)
         {
             #region Guards
             if (positionTRS == null)
-                throw new OWLException($"Cannot convert position to coordinate because given \"positionTRS\" parameter is null");
+                throw new OWLException($"Cannot convert position to coordinate because given '{nameof(positionTRS)}' parameter is null");
 
             if (calendarTRS == null)
                 calendarTRS = TIMECalendarReferenceSystem.Gregorian;
@@ -89,11 +103,123 @@ namespace OWLSharp.Extensions.TIME
             return coordinate;
         }
 
+        /// <summary>
+        /// Converts a temporal coordinate (expressed in a calendar TRS) into a numeric time position (expressed in a positional TRS).
+        /// This method performs the inverse operation of CoordinateFromPosition, calculating the temporal distance between the coordinate and the positional TRS origin,
+        /// scaled according to the positional TRS unit.
+        /// </summary>
+        public static double PositionFromCoordinate(TIMECoordinate timeCoordinate, TIMEPositionReferenceSystem positionTRS, TIMECalendarReferenceSystem calendarTRS=null)
+        {
+            #region Guards
+            if (timeCoordinate == null)
+                throw new OWLException($"Cannot convert coordinate to position because given '{nameof(timeCoordinate)}' parameter is null");
+            if (positionTRS == null)
+                throw new OWLException($"Cannot convert coordinate to position because given '{nameof(positionTRS)}' parameter is null");
+
+            if (calendarTRS == null)
+                calendarTRS = TIMECalendarReferenceSystem.Gregorian;
+            #endregion
+
+            #region Utility
+            double ConvertCoordinateToSeconds(TIMECoordinate coordinate)
+            {
+                double totalSeconds = 0;
+    
+                // Add years (traverse each year to handle leap years correctly)
+                double currentYear = 0;
+                double targetYear = coordinate.Year ?? 0;
+    
+                while (currentYear < targetYear)
+                {
+                    uint[] monthsInYear = calendarTRS.Metrics.LeapYearRule?.Invoke(currentYear) ?? calendarTRS.Metrics.Months;
+                    double daysInYear = monthsInYear.Sum(m => m);
+                    totalSeconds += daysInYear * calendarTRS.Metrics.HoursInDay * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.SecondsInMinute;
+                    currentYear++;
+                }
+    
+                // Add months (traverse each month in the target year)
+                uint[] monthsInTargetYear = calendarTRS.Metrics.LeapYearRule?.Invoke(targetYear) ?? calendarTRS.Metrics.Months;
+                for (int month = 1; month < (coordinate.Month ?? 1); month++)
+                {
+                    totalSeconds += monthsInTargetYear[month - 1] * calendarTRS.Metrics.HoursInDay * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.SecondsInMinute;
+                }
+    
+                // Add remaining time components
+                totalSeconds += ((coordinate.Day ?? 0) * calendarTRS.Metrics.HoursInDay * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.SecondsInMinute);
+                totalSeconds += ((coordinate.Hour ?? 0) * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.SecondsInMinute);
+                totalSeconds += ((coordinate.Minute ?? 0) * calendarTRS.Metrics.SecondsInMinute);
+                totalSeconds += (coordinate.Second ?? 0);
+    
+                return totalSeconds;
+            }
+            #endregion
+
+            // Normalize both origin and input coordinate according to the metrics of the given calendar TRS
+            TIMECoordinate normalizedOrigin = NormalizeCoordinate(positionTRS.Origin, calendarTRS);
+            TIMECoordinate normalizedCoordinate = NormalizeCoordinate(timeCoordinate, calendarTRS);
+
+            #region Large-Scale
+            if (positionTRS.HasLargeScaleSemantic)
+            {
+                // For large-scale, we work only at year level - use arithmetic calculation
+                double originYear = normalizedOrigin.Year ?? 0;
+                double coordinateYear = normalizedCoordinate.Year ?? 0;
+                double yearsDifference = coordinateYear - originYear;
+    
+                // Convert years difference to the unit of the positional TRS
+                double positionInTargetUnit =
+                    positionTRS.Unit.UnitType == TIMEEnums.TIMEUnitType.Year   ? yearsDifference :
+                    positionTRS.Unit.UnitType == TIMEEnums.TIMEUnitType.Month  ? yearsDifference * calendarTRS.Metrics.MonthsInYear :
+                    positionTRS.Unit.UnitType == TIMEEnums.TIMEUnitType.Day    ? yearsDifference * calendarTRS.Metrics.DaysInYear :
+                    positionTRS.Unit.UnitType == TIMEEnums.TIMEUnitType.Hour   ? yearsDifference * calendarTRS.Metrics.DaysInYear * calendarTRS.Metrics.HoursInDay :
+                    positionTRS.Unit.UnitType == TIMEEnums.TIMEUnitType.Minute ? yearsDifference * calendarTRS.Metrics.DaysInYear * calendarTRS.Metrics.HoursInDay * calendarTRS.Metrics.MinutesInHour :
+                    positionTRS.Unit.UnitType == TIMEEnums.TIMEUnitType.Second ? yearsDifference * calendarTRS.Metrics.DaysInYear * calendarTRS.Metrics.HoursInDay * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.SecondsInMinute :
+                    0;
+
+                // Scale by the inverse of the unit's scale factor
+                return positionInTargetUnit / positionTRS.Unit.ScaleFactor;
+            }
+            #endregion
+
+            #region Little-Scale
+            else
+            {
+                // Convert origin coordinate to total seconds from year 0
+                double originSeconds = ConvertCoordinateToSeconds(normalizedOrigin);
+    
+                // Convert input coordinate to total seconds from year 0
+                double coordinateSeconds = ConvertCoordinateToSeconds(normalizedCoordinate);
+    
+                // Calculate the difference in seconds
+                double secondsDifference = coordinateSeconds - originSeconds;
+    
+                // Convert seconds difference to the unit of the positional TRS
+                double positionInTargetUnit =
+                    positionTRS.Unit.UnitType == TIMEEnums.TIMEUnitType.Second ? secondsDifference :
+                    positionTRS.Unit.UnitType == TIMEEnums.TIMEUnitType.Minute ? secondsDifference / calendarTRS.Metrics.SecondsInMinute :
+                    positionTRS.Unit.UnitType == TIMEEnums.TIMEUnitType.Hour ? secondsDifference / (calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour) :
+                    positionTRS.Unit.UnitType == TIMEEnums.TIMEUnitType.Day ? secondsDifference / (calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay) :
+                    positionTRS.Unit.UnitType == TIMEEnums.TIMEUnitType.Month ? secondsDifference / (calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * (calendarTRS.Metrics.DaysInYear / calendarTRS.Metrics.MonthsInYear)) :
+                    positionTRS.Unit.UnitType == TIMEEnums.TIMEUnitType.Year ? secondsDifference / (calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * calendarTRS.Metrics.DaysInYear) :
+                    0;
+    
+                // Scale by the inverse of the unit's scale factor
+                return positionInTargetUnit / positionTRS.Unit.ScaleFactor;
+            }
+            #endregion
+        }
+
+        /// <summary>
+        /// Ensures a temporal coordinate has valid component values according to the metrics of a given calendar TRS,
+        /// propagating overflows across all six dimensions (seconds → minutes → hours → days → months → years)
+        /// to produce a canonicalized representation.
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
         public static TIMECoordinate NormalizeCoordinate(TIMECoordinate timeCoordinate, TIMECalendarReferenceSystem calendarTRS=null)
         {
             #region Guards
             if (timeCoordinate == null)
-                throw new OWLException($"Cannot normalize coordinate because given \"timeExtent\" parameter is null");
+                throw new OWLException($"Cannot normalize coordinate because given '{nameof(timeCoordinate)}' parameter is null");
 
             if (calendarTRS == null)
                 calendarTRS = TIMECalendarReferenceSystem.Gregorian;
@@ -173,13 +299,18 @@ namespace OWLSharp.Extensions.TIME
                 normalizedSecond) { Metadata = new TIMECoordinateMetadata(calendarTRS, RDFVocabulary.TIME.UNIT_SECOND) };
         }
 
+        /// <summary>
+        /// Converts a numeric temporal duration (expressed with a specific unit type) into a structured temporal extent
+        /// with decomposed components (years, months, weeks, days, hours, minutes, seconds) according to calendar TRS metrics
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
         public static TIMEExtent ExtentFromDuration(double timeDuration, TIMEUnit unitType, TIMECalendarReferenceSystem calendarTRS=null)
         {
             #region Guards
             if (timeDuration < 0)
-                throw new OWLException($"Cannot convert duration to extent because given \"timeDuration\" parameter must be greater or equal than zero");
+                throw new OWLException($"Cannot convert duration to extent because given '{nameof(timeDuration)}' parameter must be greater or equal than zero");
             if (unitType == null)
-                throw new OWLException($"Cannot convert duration to extent because given \"unitType\" parameter is null");
+                throw new OWLException($"Cannot convert duration to extent because given '{nameof(unitType)}' parameter is null");
 
             if (calendarTRS == null)
                 calendarTRS = TIMECalendarReferenceSystem.Gregorian;
@@ -219,11 +350,17 @@ namespace OWLSharp.Extensions.TIME
             return extent;
         }
 
+        /// <summary>
+        /// Reduces a temporal extent to its canonical form by converting all components to seconds,
+        /// then redistributing them into normalized components, suppressing inexact calendar units
+        /// (years, months, weeks) that cannot be precisely represented
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
         public static TIMEExtent NormalizeExtent(TIMEExtent timeExtent, TIMECalendarReferenceSystem calendarTRS=null)
         {
             #region Guards
             if (timeExtent == null)
-                throw new OWLException($"Cannot normalize extent because given \"timeExtent\" parameter is null");
+                throw new OWLException($"Cannot normalize extent because given '{nameof(timeExtent)}' parameter is null");
 
             if (calendarTRS == null)
                 calendarTRS = TIMECalendarReferenceSystem.Gregorian;
@@ -249,13 +386,19 @@ namespace OWLSharp.Extensions.TIME
             return ExtentFromDuration(timeExtentSeconds, TIMEUnit.Second, inexactCalendarTRS);
         }
 
+        /// <summary>
+        /// Calculates the temporal extent (duration) between two temporal coordinates by normalizing both,
+        /// converting them to seconds, computing the difference, and returning the result as a structured extent
+        /// according to calendar TRS metrics
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
         public static TIMEExtent ExtentBetweenCoordinates(TIMECoordinate timeCoordinateStart, TIMECoordinate timeCoordinateEnd, TIMECalendarReferenceSystem calendarTRS=null)
         {
             #region Guards
             if (timeCoordinateStart == null)
-                throw new OWLException($"Cannot get extent because given \"timeCoordinateStart\" parameter is null");
+                throw new OWLException($"Cannot get extent between coordinates because given '{nameof(timeCoordinateStart)}' parameter is null");
             if (timeCoordinateEnd == null)
-                throw new OWLException($"Cannot get extent because given \"timeCoordinateEnd\" parameter is null");
+                throw new OWLException($"Cannot get extent between coordinates because given '{nameof(timeCoordinateEnd)}' parameter is null");
 
             if (calendarTRS == null)
                 calendarTRS = TIMECalendarReferenceSystem.Gregorian;
@@ -297,6 +440,11 @@ namespace OWLSharp.Extensions.TIME
         #endregion
 
         #region Utilities
+        /// <summary>
+        /// Advances a temporal coordinate forward by a specified number of seconds using optimized batch processing,
+        /// handling overflows across time dimensions (minutes → hours → days → months → years)
+        /// with special consideration for variable month lengths
+        /// </summary>
         internal static void TickForward(double secondsToConsume, TIMECoordinate timeCoordinate, TIMECalendarReferenceSystem calendarTRS)
         {
             uint[] metricsMonths = calendarTRS.Metrics.LeapYearRule?.Invoke(timeCoordinate.Year ?? 0)
@@ -357,6 +505,11 @@ namespace OWLSharp.Extensions.TIME
             timeCoordinate.Second = Math.Truncate(timeCoordinate.Second.Value + secondsToConsume);
         }
 
+        /// <summary>
+        /// Moves a temporal coordinate backward by a specified number of seconds using optimized batch processing,
+        /// handling underflows across time dimensions (minutes → hours → days → months → years)
+        /// with special consideration for variable month lengths
+        /// </summary>
         internal static void TickBackward(double secondsToConsume, TIMECoordinate timeCoordinate, TIMECalendarReferenceSystem calendarTRS)
         {
             uint[] metricsMonths = calendarTRS.Metrics.LeapYearRule?.Invoke(timeCoordinate.Year ?? 0)

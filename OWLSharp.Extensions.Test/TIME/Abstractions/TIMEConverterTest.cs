@@ -201,6 +201,61 @@ public class TIMEConverterTest
     }
 
     [TestMethod]
+    public void ShouldThrowExceptionOnGettingPositionFromCalendarBecauseNullCoordinate()
+        => Assert.ThrowsExactly<OWLException>(() => _ = TIMEConverter.PositionFromCoordinate(null, TIMEPositionReferenceSystem.UnixTime));
+
+    [TestMethod]
+    public void ShouldThrowExceptionOnGettingPositionFromCalendarBecauseNullPositionTRS()
+        => Assert.ThrowsExactly<OWLException>(() => _ = TIMEConverter.PositionFromCoordinate(TIMECoordinate.UnixTime, null));
+
+    [TestMethod]
+    [DataRow(-413733672, 1956, 11, 21, 9, 58, 48)]
+    [DataRow(-413733600, 1956, 11, 21, 10, 0, 0)]
+    [DataRow(-3675, 1969, 12, 31, 22, 58, 45)]
+    [DataRow(-625, 1969, 12, 31, 23, 49, 35)]
+    [DataRow(-600, 1969, 12, 31, 23, 50, 0)]
+    [DataRow(-117, 1969, 12, 31, 23, 58, 3)]
+    [DataRow(-60, 1969, 12, 31, 23, 59, 0)]
+    [DataRow(-34, 1969, 12, 31, 23, 59, 26)]
+    [DataRow(-1, 1969, 12, 31, 23, 59, 59)]
+    [DataRow(0, 1970, 1, 1, 0, 0, 0)]
+    [DataRow(1, 1970, 1, 1, 0, 0, 1)]
+    [DataRow(34, 1970, 1, 1, 0, 0, 34)]
+    [DataRow(600, 1970, 1, 1, 0, 10, 0)]
+    [DataRow(625, 1970, 1, 1, 0, 10, 25)]
+    [DataRow(3675, 1970, 1, 1, 1, 1, 15)]
+    [DataRow(413733685, 1983, 2, 10, 14, 1, 25)]
+    [DataRow(413733671, 1983, 2, 10, 14, 1, 11)]
+    [DataRow(1682520568, 2023, 4, 26, 14, 49, 28)]
+    [DataRow(1764185400, 2025, 11, 26, 19, 30, 0)]
+    public void ShouldGetUnixTRSFromCalendar(double expectedPosition, int year, int month,
+        int day, int hour, int minute, int second)
+    {
+        TIMECoordinate tc = new TIMECoordinate(year, month, day, hour, minute, second);
+        double position = TIMEConverter.PositionFromCoordinate(tc, TIMEPositionReferenceSystem.UnixTime, TIMECalendarReferenceSystem.Gregorian);
+
+        Assert.AreEqual(expectedPosition, position);
+    }
+
+    [TestMethod]
+    [DataRow(-66.5, 66501950d, null, null, null, null, null)]
+    [DataRow(-0.001, 2950d, null, null, null, null, null)]
+    [DataRow(-0.000001, 1951d, null, null, null, null, null)]
+    [DataRow(-0.00000025, 1950d, null, null, null, null, null)]
+    [DataRow(0, 1950d, null, null, null, null, null)]
+    [DataRow(0.000001, 1949d, null, null, null, null, null)]
+    [DataRow(0.001, 950d, null, null, null, null, null)]
+    [DataRow(66.5, -66498050d, null, null, null, null, null)]
+    public void ShouldGetGeologicTRSFromCalendar(double expectedPosition, double? year, double? month, double? day,
+        double? hour, double? minute, double? second)
+    {
+        TIMECoordinate tc = new TIMECoordinate(year, month, day, hour, minute, second);
+        double position = TIMEConverter.PositionFromCoordinate(tc, TIMEPositionReferenceSystem.GeologicTime, TIMECalendarReferenceSystem.Gregorian);
+
+        Assert.AreEqual(expectedPosition, position, 0.000001); // Tolerance for floating point comparisons at geologic scale
+    }
+
+    [TestMethod]
     public void ShouldThrowExceptionOnNormalizingCoordinateBecauseNullCoordinate()
         => Assert.ThrowsExactly<OWLException>(() => _ = TIMEConverter.NormalizeCoordinate(null, TIMECalendarReferenceSystem.Gregorian));
 
