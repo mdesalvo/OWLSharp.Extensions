@@ -586,6 +586,122 @@ public class TIMEConverterTest
     }
 
     [TestMethod]
+    public void ShouldThrowExceptionOnGettingDurationFromExtentBecauseNullExtent()
+        => Assert.ThrowsExactly<OWLException>(() => _ = TIMEConverter.DurationFromExtent(null, TIMEUnit.Second, TIMECalendarReferenceSystem.Gregorian));
+
+    [TestMethod]
+    public void ShouldThrowExceptionOnGettingDurationFromExtentBecauseNullUnitType()
+        => Assert.ThrowsExactly<OWLException>(() => _ = TIMEConverter.DurationFromExtent(TIMEExtent.Zero, null, TIMECalendarReferenceSystem.Gregorian));
+
+    [TestMethod]
+    //seconds
+    [DataRow(0, "http://www.w3.org/2006/time#second", TIMEUnitType.Second, 1, 0d, 0d, 0d, 0d, 0d, 0d, 0d)]
+    [DataRow(59, "http://www.w3.org/2006/time#second", TIMEUnitType.Second, 1, 0d, 0d, 0d, 0d, 0d, 0d, 59d)]
+    [DataRow(60, "http://www.w3.org/2006/time#second", TIMEUnitType.Second, 1, 0d, 0d, 0d, 0d, 0d, 1d, 0d)]
+    [DataRow(61, "http://www.w3.org/2006/time#second", TIMEUnitType.Second, 1, 0d, 0d, 0d, 0d, 0d, 1d, 1d)]
+    [DataRow(3599, "http://www.w3.org/2006/time#second", TIMEUnitType.Second, 1, 0d, 0d, 0d, 0d, 0d, 59d, 59d)]
+    [DataRow(3600, "http://www.w3.org/2006/time#second", TIMEUnitType.Second, 1, 0d, 0d, 0d, 0d, 1d, 0d, 0d)]
+    [DataRow(3660, "http://www.w3.org/2006/time#second", TIMEUnitType.Second, 1, 0d, 0d, 0d, 0d, 1d, 1d, 0d)]
+    [DataRow(3661, "http://www.w3.org/2006/time#second", TIMEUnitType.Second, 1, 0d, 0d, 0d, 0d, 1d, 1d, 1d)]
+    [DataRow(86399, "http://www.w3.org/2006/time#second", TIMEUnitType.Second, 1, 0d, 0d, 0d, 0d, 23d, 59d, 59d)]
+    [DataRow(86400, "http://www.w3.org/2006/time#second", TIMEUnitType.Second, 1, 0d, 0d, 0d, 1d, 0d, 0d, 0d)]
+    [DataRow(90000, "http://www.w3.org/2006/time#second", TIMEUnitType.Second, 1, 0d, 0d, 0d, 1d, 1d, 0d, 0d)]
+    [DataRow(90060, "http://www.w3.org/2006/time#second", TIMEUnitType.Second, 1, 0d, 0d, 0d, 1d, 1d, 1d, 0d)]
+    [DataRow(90061, "http://www.w3.org/2006/time#second", TIMEUnitType.Second, 1, 0d, 0d, 0d, 1d, 1d, 1d, 1d)]
+    [DataRow(2591999, "http://www.w3.org/2006/time#second", TIMEUnitType.Second, 1, 0d, 0d, 0d, 29d, 23d, 59d, 59d)]
+    [DataRow(2592000, "http://www.w3.org/2006/time#second", TIMEUnitType.Second, 1, 0d, 0d, 0d, 30d, 0d, 0d, 0d)]
+    [DataRow(2595600, "http://www.w3.org/2006/time#second", TIMEUnitType.Second, 1, 0d, 0d, 0d, 30d, 1d, 0d, 0d)]
+    [DataRow(2595660, "http://www.w3.org/2006/time#second", TIMEUnitType.Second, 1, 0d, 0d, 0d, 30d, 1d, 1d, 0d)]
+    [DataRow(2595661, "http://www.w3.org/2006/time#second", TIMEUnitType.Second, 1, 0d, 0d, 0d, 30d, 1d, 1d, 1d)]
+    [DataRow(2678400, "http://www.w3.org/2006/time#second", TIMEUnitType.Second, 1, 0d, 0d, 0d, 31d, 0d, 0d, 0d)]
+    [DataRow(26784000, "http://www.w3.org/2006/time#second", TIMEUnitType.Second, 1, 0d, 0d, 0d, 310d, 0d, 0d, 0d)]
+    //minutes
+    [DataRow(0, "http://www.w3.org/2006/time#minute", TIMEUnitType.Minute, 1, 0d, 0d, 0d, 0d, 0d, 0d, 0d)]
+    [DataRow(0.5, "http://www.w3.org/2006/time#minute", TIMEUnitType.Minute, 1, 0d, 0d, 0d, 0d, 0d, 0d, 30d)]
+    [DataRow(59, "http://www.w3.org/2006/time#minute", TIMEUnitType.Minute, 1, 0d, 0d, 0d, 0d, 0d, 59d, 0d)]
+    [DataRow(60, "http://www.w3.org/2006/time#minute", TIMEUnitType.Minute, 1, 0d, 0d, 0d, 0d, 1d, 0d, 0d)]
+    [DataRow(60.25, "http://www.w3.org/2006/time#minute", TIMEUnitType.Minute, 1, 0d, 0d, 0d, 0d, 1d, 0d, 15d)]
+    [DataRow(61, "http://www.w3.org/2006/time#minute", TIMEUnitType.Minute, 1, 0d, 0d, 0d, 0d, 1d, 1d, 0d)]
+    [DataRow(1439, "http://www.w3.org/2006/time#minute", TIMEUnitType.Minute, 1, 0d, 0d, 0d, 0d, 23d, 59d, 0d)]
+    [DataRow(1440, "http://www.w3.org/2006/time#minute", TIMEUnitType.Minute, 1, 0d, 0d, 0d, 1d, 0d, 0d, 0d)]
+    [DataRow(1440.75, "http://www.w3.org/2006/time#minute", TIMEUnitType.Minute, 1, 0d, 0d, 0d, 1d, 0d, 0d, 45d)]
+    [DataRow(1441, "http://www.w3.org/2006/time#minute", TIMEUnitType.Minute, 1, 0d, 0d, 0d, 1d, 0d, 1d, 0d)]
+    [DataRow(1500, "http://www.w3.org/2006/time#minute", TIMEUnitType.Minute, 1, 0d, 0d, 0d, 1d, 1d, 0d, 0d)]
+    [DataRow(1501, "http://www.w3.org/2006/time#minute", TIMEUnitType.Minute, 1, 0d, 0d, 0d, 1d, 1d, 1d, 0d)]
+    [DataRow(43199, "http://www.w3.org/2006/time#minute", TIMEUnitType.Minute, 1, 0d, 0d, 0d, 29d, 23d, 59d, 0d)]
+    [DataRow(43200, "http://www.w3.org/2006/time#minute", TIMEUnitType.Minute, 1, 0d, 0d, 0d, 30d, 0d, 0d, 0d)]
+    [DataRow(43201, "http://www.w3.org/2006/time#minute", TIMEUnitType.Minute, 1, 0d, 0d, 0d, 30d, 0d, 1d, 0d)]
+    [DataRow(43260, "http://www.w3.org/2006/time#minute", TIMEUnitType.Minute, 1, 0d, 0d, 0d, 30d, 1d, 0d, 0d)]
+    [DataRow(43267, "http://www.w3.org/2006/time#minute", TIMEUnitType.Minute, 1, 0d, 0d, 0d, 30d, 1d, 7d, 0d)]
+    [DataRow(43201.1, "http://www.w3.org/2006/time#minute", TIMEUnitType.Minute, 1, 0d, 0d, 0d, 30d, 0d, 1d, 6d)]
+    [DataRow(432600, "http://www.w3.org/2006/time#minute", TIMEUnitType.Minute, 1, 0d, 0d, 0d, 300d, 10d, 0d, 0d)]
+    //hours
+    [DataRow(0, "http://www.w3.org/2006/time#hour", TIMEUnitType.Hour, 1, 0d, 0d, 0d, 0d, 0d, 0d, 0d)]
+    [DataRow(0.5, "http://www.w3.org/2006/time#hour", TIMEUnitType.Hour, 1, 0d, 0d, 0d, 0d, 0d, 30d, 0d)]
+    [DataRow(0.55, "http://www.w3.org/2006/time#hour", TIMEUnitType.Hour, 1, 0d, 0d, 0d, 0d, 0d, 33d, 0d)]
+    [DataRow(0.550285, "http://www.w3.org/2006/time#hour", TIMEUnitType.Hour, 1, 0d, 0d, 0d, 0d, 0d, 33d, 1d)]
+    [DataRow(1, "http://www.w3.org/2006/time#hour", TIMEUnitType.Hour, 1, 0d, 0d, 0d, 0d, 1d, 0d, 0d)]
+    [DataRow(23.5, "http://www.w3.org/2006/time#hour", TIMEUnitType.Hour, 1, 0d, 0d, 0d, 0d, 23d, 30d, 0d)]
+    [DataRow(23.550285, "http://www.w3.org/2006/time#hour", TIMEUnitType.Hour, 1, 0d, 0d, 0d, 0d, 23d, 33d, 1d)]
+    [DataRow(24, "http://www.w3.org/2006/time#hour", TIMEUnitType.Hour, 1, 0d, 0d, 0d, 1d, 0d, 0d, 0d)]
+    [DataRow(24.5, "http://www.w3.org/2006/time#hour", TIMEUnitType.Hour, 1, 0d, 0d, 0d, 1d, 0d, 30d, 0d)]
+    [DataRow(35.550285, "http://www.w3.org/2006/time#hour", TIMEUnitType.Hour, 1, 0d, 0d, 0d, 1d, 11d, 33d, 1d)]
+    [DataRow(719, "http://www.w3.org/2006/time#hour", TIMEUnitType.Hour, 1, 0d, 0d, 0d, 29d, 23d, 0d, 0d)]
+    [DataRow(720, "http://www.w3.org/2006/time#hour", TIMEUnitType.Hour, 1, 0d, 0d, 0d, 30d, 0d, 0d, 0d)]
+    [DataRow(744, "http://www.w3.org/2006/time#hour", TIMEUnitType.Hour, 1, 0d, 0d, 0d, 31d, 0d, 0d, 0d)]
+    [DataRow(745, "http://www.w3.org/2006/time#hour", TIMEUnitType.Hour, 1, 0d, 0d, 0d, 31d, 1d, 0d, 0d)]
+    [DataRow(745.5, "http://www.w3.org/2006/time#hour", TIMEUnitType.Hour, 1, 0d, 0d, 0d, 31d, 1d, 30d, 0d)]
+    [DataRow(745.550285, "http://www.w3.org/2006/time#hour", TIMEUnitType.Hour, 1, 0d, 0d, 0d, 31d, 1d, 33d, 1d)]
+    [DataRow(8759, "http://www.w3.org/2006/time#hour", TIMEUnitType.Hour, 1, 0d, 0d, 0d, 364d, 23d, 0d, 0d)]
+    [DataRow(8760, "http://www.w3.org/2006/time#hour", TIMEUnitType.Hour, 1, 0d, 0d, 0d, 365d, 0d, 0d, 0d)]
+    [DataRow(87602, "http://www.w3.org/2006/time#hour", TIMEUnitType.Hour, 1, 0d, 0d, 0d, 3650d, 2d, 0d, 0d)]
+    //days
+    [DataRow(0, "http://www.w3.org/2006/time#day", TIMEUnitType.Day, 1, 0d, 0d, 0d, 0d, 0d, 0d, 0d)]
+    [DataRow(0.005, "http://www.w3.org/2006/time#day", TIMEUnitType.Day, 1, 0d, 0d, 0d, 0d, 0d, 7d, 12d)]
+    [DataRow(0.5, "http://www.w3.org/2006/time#day", TIMEUnitType.Day, 1, 0d, 0d, 0d, 0d, 12d, 0d, 0d)]
+    [DataRow(0.55, "http://www.w3.org/2006/time#day", TIMEUnitType.Day, 1, 0d, 0d, 0d, 0d, 13d, 12d, 0d)]
+    [DataRow(0.550285, "http://www.w3.org/2006/time#day", TIMEUnitType.Day, 1, 0d, 0d, 0d, 0d, 13d, 12d, 24d)]
+    [DataRow(1, "http://www.w3.org/2006/time#day", TIMEUnitType.Day, 1, 0d, 0d, 0d, 1d, 0d, 0d, 0d)]
+    [DataRow(29.95, "http://www.w3.org/2006/time#day", TIMEUnitType.Day, 1, 0d, 0d, 0d, 29d, 22d, 48d, 0d)]
+    [DataRow(30, "http://www.w3.org/2006/time#day", TIMEUnitType.Day, 1, 0d, 0d, 0d, 30d, 0d, 0d, 0d)]
+    [DataRow(365.2422, "http://www.w3.org/2006/time#day", TIMEUnitType.Day, 1, 0d, 0d, 0d, 365d, 5d, 48d, 46d)]
+    //weeks (Gregorian calendar TRS has not exact metric, so this component maps to equivalent days)
+    [DataRow(0, "http://www.w3.org/2006/time#day", TIMEUnitType.Day, 7, 0d, 0d, 0d, 0d, 0d, 0d, 0d)]
+    [DataRow(0.5, "http://www.w3.org/2006/time#day", TIMEUnitType.Day, 7, 0d, 0d, 0d, 3d, 12d, 0d, 0d)]
+    [DataRow(1, "http://www.w3.org/2006/time#day", TIMEUnitType.Day, 7, 0d, 0d, 0d, 7d, 0d, 0d, 0d)]
+    [DataRow(52.142857, "http://www.w3.org/2006/time#day", TIMEUnitType.Day, 7, 0d, 0d, 0d, 364d, 23d, 59d, 59d)]
+    //months (Gregorian calendar TRS has not exact metric, so this component maps to equivalent days)
+    [DataRow(0, "http://www.w3.org/2006/time#month", TIMEUnitType.Month, 1, 0d, 0d, 0d, 0d, 0d, 0d, 0d)]
+    [DataRow(0.5, "http://www.w3.org/2006/time#month", TIMEUnitType.Month, 1, 0d, 0d, 0d, 15d, 0d, 0d, 0d)]
+    [DataRow(1, "http://www.w3.org/2006/time#month", TIMEUnitType.Month, 1, 0d, 0d, 0d, 30d, 0d, 0d, 0d)]
+    [DataRow(2.5, "http://www.w3.org/2006/time#month", TIMEUnitType.Month, 1, 0d, 0d, 0d, 75d, 0d, 0d, 0d)]
+    [DataRow(8.2425, "http://www.w3.org/2006/time#month", TIMEUnitType.Month, 1, 0d, 0d, 0d, 247d, 6d, 35d, 59d)]
+    [DataRow(45.965, "http://www.w3.org/2006/time#month", TIMEUnitType.Month, 1, 0d, 0d, 0d, 1378d, 22d, 48d, 0d)]
+    //years (Gregorian calendar TRS has not exact metric, so this component maps to equivalent days)
+    [DataRow(0, "http://www.w3.org/2006/time#year", TIMEUnitType.Year, 1, 0d, 0d, 0d, 0d, 0d, 0d, 0d)]
+    [DataRow(0.5, "http://www.w3.org/2006/time#year", TIMEUnitType.Year, 1, 0d, 0d, 0d, 182d, 12d, 0d, 0d)]
+    [DataRow(1, "http://www.w3.org/2006/time#year", TIMEUnitType.Year, 1, 0d, 0d, 0d, 365d, 0d, 0d, 0d)]
+    [DataRow(9.272501, "http://www.w3.org/2006/time#year", TIMEUnitType.Year, 1, 0d, 0d, 0d, 3384d, 11d, 6d, 31d)]
+    public void ShouldGetDurationFromExtent(double expectedDuration, string unitTypeURI, TIMEUnitType unitTypeEnum, double scaleFactor,
+        double? years, double? months, double? weeks, double? days, double? hours, double? minutes, double? seconds)
+    {
+        TIMEExtent te = new TIMEExtent
+        {
+            Years = years,
+            Months = months,
+            Weeks = weeks,
+            Days = days,
+            Hours = hours,
+            Minutes = minutes,
+            Seconds = seconds
+        };
+
+        double duration = TIMEConverter.DurationFromExtent(te, new TIMEUnit(new RDFResource(unitTypeURI), unitTypeEnum, scaleFactor), TIMECalendarReferenceSystem.Gregorian);
+
+        Assert.AreEqual(expectedDuration, duration, 0.00001); // Tolerance for floating point comparisons
+    }
+
+    [TestMethod]
     public void ShouldThrowExceptionOnNormalizingExtentBecauseNullExtent()
         => Assert.ThrowsExactly<OWLException>(() => _ = TIMEConverter.NormalizeExtent(null, TIMECalendarReferenceSystem.Gregorian));
 

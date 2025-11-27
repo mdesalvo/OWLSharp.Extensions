@@ -106,7 +106,7 @@ namespace OWLSharp.Extensions.TIME
         /// <summary>
         /// Converts a temporal coordinate (expressed in a calendar TRS) into a numeric time position (expressed in a positional TRS).
         /// This method performs the inverse operation of CoordinateFromPosition, calculating the temporal distance between the coordinate and the positional TRS origin,
-        /// scaled according to the positional TRS unit.
+        /// scaled according to the positional TRS unit
         /// </summary>
         public static double PositionFromCoordinate(TIMECoordinate timeCoordinate, TIMEPositionReferenceSystem positionTRS, TIMECalendarReferenceSystem calendarTRS=null)
         {
@@ -212,7 +212,7 @@ namespace OWLSharp.Extensions.TIME
         /// <summary>
         /// Ensures a temporal coordinate has valid component values according to the metrics of a given calendar TRS,
         /// propagating overflows across all six dimensions (seconds → minutes → hours → days → months → years)
-        /// to produce a canonicalized representation.
+        /// to produce a canonicalized representation
         /// </summary>
         /// <exception cref="OWLException"></exception>
         public static TIMECoordinate NormalizeCoordinate(TIMECoordinate timeCoordinate, TIMECalendarReferenceSystem calendarTRS=null)
@@ -351,6 +351,47 @@ namespace OWLSharp.Extensions.TIME
         }
 
         /// <summary>
+        /// Converts a temporal extent (with decomposed components) into a numeric temporal duration expressed in a specific unit type.
+        /// This method performs the inverse operation of ExtentFromDuration, aggregating all extent components into a single duration
+        /// value scaled according to the specified unit.
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        public static double DurationFromExtent(TIMEExtent timeExtent, TIMEUnit unitType, TIMECalendarReferenceSystem calendarTRS=null)
+        {
+            #region Guards
+            if (timeExtent == null)
+                throw new OWLException($"Cannot get duration from extent because given '{nameof(timeExtent)}' parameter is null");
+            if (unitType == null)
+                throw new OWLException($"Cannot get duration from extent because given '{nameof(unitType)}' parameter is null");
+
+            if (calendarTRS == null)
+                calendarTRS = TIMECalendarReferenceSystem.Gregorian;
+            #endregion
+
+            //Transform the components to seconds (since duration works at this level of detail)
+            double totalSeconds = timeExtent.Seconds ?? 0;
+            totalSeconds += ((timeExtent.Minutes     ?? 0) * calendarTRS.Metrics.SecondsInMinute);
+            totalSeconds += ((timeExtent.Hours       ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour);
+            totalSeconds += ((timeExtent.Days        ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay);
+            totalSeconds += ((timeExtent.Weeks       ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * TIMEUnit.Week.ScaleFactor);
+            totalSeconds += ((timeExtent.Months      ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * (calendarTRS.Metrics.DaysInYear / calendarTRS.Metrics.MonthsInYear));
+            totalSeconds += ((timeExtent.Years       ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * calendarTRS.Metrics.DaysInYear);
+
+            //Convert seconds to the target unit type
+            double durationInTargetUnit =
+                unitType.UnitType == TIMEEnums.TIMEUnitType.Second ? totalSeconds :
+                unitType.UnitType == TIMEEnums.TIMEUnitType.Minute ? totalSeconds / calendarTRS.Metrics.SecondsInMinute :
+                unitType.UnitType == TIMEEnums.TIMEUnitType.Hour   ? totalSeconds / (calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour) :
+                unitType.UnitType == TIMEEnums.TIMEUnitType.Day    ? totalSeconds / (calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay) :
+                unitType.UnitType == TIMEEnums.TIMEUnitType.Month  ? totalSeconds / (calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * (calendarTRS.Metrics.DaysInYear / calendarTRS.Metrics.MonthsInYear)) :
+                unitType.UnitType == TIMEEnums.TIMEUnitType.Year   ? totalSeconds / (calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * calendarTRS.Metrics.DaysInYear) :
+                0;
+
+            //Scale by the inverse of the unit's scale factor
+            return durationInTargetUnit / unitType.ScaleFactor;
+        }
+
+        /// <summary>
         /// Reduces a temporal extent to its canonical form by converting all components to seconds,
         /// then redistributing them into normalized components, suppressing inexact calendar units
         /// (years, months, weeks) that cannot be precisely represented
@@ -368,12 +409,12 @@ namespace OWLSharp.Extensions.TIME
 
             //Transform the components to seconds (since duration works at this level of detail)
             double timeExtentSeconds = timeExtent.Seconds ?? 0;
-            timeExtentSeconds += ((timeExtent.Minutes ?? 0) * calendarTRS.Metrics.SecondsInMinute);
-            timeExtentSeconds += ((timeExtent.Hours ?? 0)   * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour);
-            timeExtentSeconds += ((timeExtent.Days ?? 0)    * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay);
-            timeExtentSeconds += ((timeExtent.Weeks ?? 0)   * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * TIMEUnit.Week.ScaleFactor);
-            timeExtentSeconds += ((timeExtent.Months ?? 0)  * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * (calendarTRS.Metrics.DaysInYear / calendarTRS.Metrics.MonthsInYear));
-            timeExtentSeconds += ((timeExtent.Years ?? 0)   * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * calendarTRS.Metrics.DaysInYear);
+            timeExtentSeconds += ((timeExtent.Minutes     ?? 0) * calendarTRS.Metrics.SecondsInMinute);
+            timeExtentSeconds += ((timeExtent.Hours       ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour);
+            timeExtentSeconds += ((timeExtent.Days        ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay);
+            timeExtentSeconds += ((timeExtent.Weeks       ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * TIMEUnit.Week.ScaleFactor);
+            timeExtentSeconds += ((timeExtent.Months      ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * (calendarTRS.Metrics.DaysInYear / calendarTRS.Metrics.MonthsInYear));
+            timeExtentSeconds += ((timeExtent.Years       ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * calendarTRS.Metrics.DaysInYear);
 
             //Obtain an equivalent calendar TRS with forced inexact metrics: this is needed to suppress
             //eventual representation of Years, Months and Weeks (which all cumulate into Days)
