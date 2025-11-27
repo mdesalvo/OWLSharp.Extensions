@@ -27,7 +27,7 @@ public class TIMEConverterTest
     #region Tests
     [TestMethod]
     public void ShouldThrowExceptionOnGettingCalendarFromPositionBecauseNullPositionTRS()
-        => Assert.ThrowsExactly<OWLException>(() => _ = TIMEConverter.CoordinateFromPosition(25226354, null));
+        => Assert.ThrowsExactly<OWLException>(() => _ = TIMEConverter.PositionToCoordinate(25226354, null));
 
     [TestMethod]
     [DataRow(-413733671.4, 1956, 11, 21, 9, 58, 48)]
@@ -51,7 +51,7 @@ public class TIMEConverterTest
     public void ShouldGetCalendarFromUnixTRS(double timePosition, int expectedYear, int expectedMonth,
         int expectedDay, int expectedHour, int expectedMinute, int expectedSecond)
     {
-        TIMECoordinate tc = TIMEConverter.CoordinateFromPosition(timePosition, TIMEPositionReferenceSystem.UnixTime, TIMECalendarReferenceSystem.Gregorian);
+        TIMECoordinate tc = TIMEConverter.PositionToCoordinate(timePosition, TIMEPositionReferenceSystem.UnixTime, TIMECalendarReferenceSystem.Gregorian);
 
         Assert.IsNotNull(tc);
         Assert.AreEqual(expectedYear, tc.Year);
@@ -80,7 +80,7 @@ public class TIMEConverterTest
             new RDFResource("ex:CustomTRS"),
             TIMEPositionReferenceSystem.UnixTime.Origin,
             new TIMEUnit(new RDFResource("ex:CustomUnit"), unitType, unitScale));
-        TIMECoordinate tc = TIMEConverter.CoordinateFromPosition(timePosition, unixModifiedTRS, TIMECalendarReferenceSystem.Gregorian);
+        TIMECoordinate tc = TIMEConverter.PositionToCoordinate(timePosition, unixModifiedTRS, TIMECalendarReferenceSystem.Gregorian);
 
         Assert.IsNotNull(tc);
         Assert.AreEqual(expectedYear, tc.Year);
@@ -107,7 +107,7 @@ public class TIMEConverterTest
             new RDFResource("ex:CustomTRS"),
             new TIMECoordinate(originYear, originMonth, originDay, originHour, originMinute, originSecond),
             new TIMEUnit(new RDFResource("ex:CustomUnit"), unitType, unitScale));
-        TIMECoordinate tc = TIMEConverter.CoordinateFromPosition(timePosition, unixModifiedTRS, TIMECalendarReferenceSystem.Gregorian);
+        TIMECoordinate tc = TIMEConverter.PositionToCoordinate(timePosition, unixModifiedTRS, TIMECalendarReferenceSystem.Gregorian);
 
         Assert.IsNotNull(tc);
         Assert.AreEqual(expectedYear, tc.Year);
@@ -135,7 +135,7 @@ public class TIMEConverterTest
             new RDFResource("ex:CustomPositionTRS"),
             TIMEPositionReferenceSystem.UnixTime.Origin,
             new TIMEUnit(new RDFResource("ex:CustomUnit"), unitType, unitScale));
-        TIMECoordinate tc = TIMEConverter.CoordinateFromPosition(
+        TIMECoordinate tc = TIMEConverter.PositionToCoordinate(
             timePosition,
             unixModifiedTRS,
             new TIMECalendarReferenceSystem(
@@ -166,7 +166,7 @@ public class TIMEConverterTest
     public void ShouldGetCalendarFromGeologicTRS(double timePosition, double? expectedYear, double? expectedMonth, double? expectedDay,
         double? expectedHour, double? expectedMinute, double? expectedSecond)
     {
-        TIMECoordinate tc = TIMEConverter.CoordinateFromPosition(timePosition, TIMEPositionReferenceSystem.GeologicTime, TIMECalendarReferenceSystem.Gregorian);
+        TIMECoordinate tc = TIMEConverter.PositionToCoordinate(timePosition, TIMEPositionReferenceSystem.GeologicTime, TIMECalendarReferenceSystem.Gregorian);
 
         Assert.IsNotNull(tc);
         Assert.AreEqual(expectedYear, tc.Year);
@@ -189,7 +189,7 @@ public class TIMEConverterTest
             new RDFResource("ex:CustomLargeScaleTRS"),
             new TIMECoordinate(originYear, originMonth, originDay, originHour, originMinute, originSecond),
             new TIMEUnit(new RDFResource("ex:CustomUnit"), unitType, unitScale), true);
-        TIMECoordinate tc = TIMEConverter.CoordinateFromPosition(timePosition, geologicModifiedTRS, TIMECalendarReferenceSystem.Gregorian);
+        TIMECoordinate tc = TIMEConverter.PositionToCoordinate(timePosition, geologicModifiedTRS, TIMECalendarReferenceSystem.Gregorian);
 
         Assert.IsNotNull(tc);
         Assert.AreEqual(expectedYear, tc.Year);
@@ -202,11 +202,11 @@ public class TIMEConverterTest
 
     [TestMethod]
     public void ShouldThrowExceptionOnGettingPositionFromCalendarBecauseNullCoordinate()
-        => Assert.ThrowsExactly<OWLException>(() => _ = TIMEConverter.PositionFromCoordinate(null, TIMEPositionReferenceSystem.UnixTime));
+        => Assert.ThrowsExactly<OWLException>(() => _ = TIMEConverter.CoordinateToPosition(null, TIMEPositionReferenceSystem.UnixTime));
 
     [TestMethod]
     public void ShouldThrowExceptionOnGettingPositionFromCalendarBecauseNullPositionTRS()
-        => Assert.ThrowsExactly<OWLException>(() => _ = TIMEConverter.PositionFromCoordinate(TIMECoordinate.UnixTime, null));
+        => Assert.ThrowsExactly<OWLException>(() => _ = TIMEConverter.CoordinateToPosition(TIMECoordinate.UnixTime, null));
 
     [TestMethod]
     [DataRow(-413733672, 1956, 11, 21, 9, 58, 48)]
@@ -232,7 +232,7 @@ public class TIMEConverterTest
         int day, int hour, int minute, int second)
     {
         TIMECoordinate tc = new TIMECoordinate(year, month, day, hour, minute, second);
-        double position = TIMEConverter.PositionFromCoordinate(tc, TIMEPositionReferenceSystem.UnixTime, TIMECalendarReferenceSystem.Gregorian);
+        double position = TIMEConverter.CoordinateToPosition(tc, TIMEPositionReferenceSystem.UnixTime, TIMECalendarReferenceSystem.Gregorian);
 
         Assert.AreEqual(expectedPosition, position);
     }
@@ -250,7 +250,7 @@ public class TIMEConverterTest
         double? hour, double? minute, double? second)
     {
         TIMECoordinate tc = new TIMECoordinate(year, month, day, hour, minute, second);
-        double position = TIMEConverter.PositionFromCoordinate(tc, TIMEPositionReferenceSystem.GeologicTime, TIMECalendarReferenceSystem.Gregorian);
+        double position = TIMEConverter.CoordinateToPosition(tc, TIMEPositionReferenceSystem.GeologicTime, TIMECalendarReferenceSystem.Gregorian);
 
         Assert.AreEqual(expectedPosition, position, 0.000001); // Tolerance for floating point comparisons at geologic scale
     }
@@ -348,11 +348,11 @@ public class TIMEConverterTest
 
     [TestMethod]
     public void ShouldThrowExceptionOnGettingExtentFromDurationBecauseNegativeDuration()
-        => Assert.ThrowsExactly<OWLException>(() => _ = TIMEConverter.ExtentFromDuration(-25226354, TIMEUnit.Second, TIMECalendarReferenceSystem.Gregorian));
+        => Assert.ThrowsExactly<OWLException>(() => _ = TIMEConverter.DurationToExtent(-25226354, TIMEUnit.Second, TIMECalendarReferenceSystem.Gregorian));
 
     [TestMethod]
     public void ShouldThrowExceptionOnGettingExtentFromDurationBecauseNullUnitType()
-        => Assert.ThrowsExactly<OWLException>(() => _ = TIMEConverter.ExtentFromDuration(25226354, null, TIMECalendarReferenceSystem.Gregorian));
+        => Assert.ThrowsExactly<OWLException>(() => _ = TIMEConverter.DurationToExtent(25226354, null, TIMECalendarReferenceSystem.Gregorian));
 
     [TestMethod]
     //seconds
@@ -446,7 +446,7 @@ public class TIMEConverterTest
     public void ShouldGetExtentFromDuration(double timeDuration, string unitTypeURI, TIMEUnitType unitTypeEnum, double scaleFactor,
         double? expectedYears, double? expectedMonths, double? expectedWeeks, double? expectedDays, double? expectedHours, double? expectedMinutes, double? expectedSeconds)
     {
-        TIMEExtent te = TIMEConverter.ExtentFromDuration(timeDuration, new TIMEUnit(new RDFResource(unitTypeURI), unitTypeEnum, scaleFactor), TIMECalendarReferenceSystem.Gregorian);
+        TIMEExtent te = TIMEConverter.DurationToExtent(timeDuration, new TIMEUnit(new RDFResource(unitTypeURI), unitTypeEnum, scaleFactor), TIMECalendarReferenceSystem.Gregorian);
 
         Assert.IsNotNull(te);
         Assert.AreEqual(expectedYears, te.Years);
@@ -570,7 +570,7 @@ public class TIMEConverterTest
     public void ShouldGetExtentFromDurationWithExactMetricCalendar(double timeDuration, string unitTypeURI, TIMEUnitType unitTypeEnum, double scaleFactor,
         double? expectedYears, double? expectedMonths, double? expectedWeeks, double? expectedDays, double? expectedHours, double? expectedMinutes, double? expectedSeconds)
     {
-        TIMEExtent te = TIMEConverter.ExtentFromDuration(timeDuration, new TIMEUnit(new RDFResource(unitTypeURI), unitTypeEnum, scaleFactor),
+        TIMEExtent te = TIMEConverter.DurationToExtent(timeDuration, new TIMEUnit(new RDFResource(unitTypeURI), unitTypeEnum, scaleFactor),
             new TIMECalendarReferenceSystem(
                 new RDFResource("https://en.wikipedia.org/wiki/360-day_calendar"),
                 new TIMECalendarReferenceSystemMetrics(60, 60, 24, [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30])));
@@ -587,11 +587,11 @@ public class TIMEConverterTest
 
     [TestMethod]
     public void ShouldThrowExceptionOnGettingDurationFromExtentBecauseNullExtent()
-        => Assert.ThrowsExactly<OWLException>(() => _ = TIMEConverter.DurationFromExtent(null, TIMEUnit.Second, TIMECalendarReferenceSystem.Gregorian));
+        => Assert.ThrowsExactly<OWLException>(() => _ = TIMEConverter.ExtentToDuration(null, TIMEUnit.Second, TIMECalendarReferenceSystem.Gregorian));
 
     [TestMethod]
     public void ShouldThrowExceptionOnGettingDurationFromExtentBecauseNullUnitType()
-        => Assert.ThrowsExactly<OWLException>(() => _ = TIMEConverter.DurationFromExtent(TIMEExtent.Zero, null, TIMECalendarReferenceSystem.Gregorian));
+        => Assert.ThrowsExactly<OWLException>(() => _ = TIMEConverter.ExtentToDuration(TIMEExtent.Zero, null, TIMECalendarReferenceSystem.Gregorian));
 
     [TestMethod]
     //seconds
@@ -696,7 +696,7 @@ public class TIMEConverterTest
             Seconds = seconds
         };
 
-        double duration = TIMEConverter.DurationFromExtent(te, new TIMEUnit(new RDFResource(unitTypeURI), unitTypeEnum, scaleFactor), TIMECalendarReferenceSystem.Gregorian);
+        double duration = TIMEConverter.ExtentToDuration(te, new TIMEUnit(new RDFResource(unitTypeURI), unitTypeEnum, scaleFactor), TIMECalendarReferenceSystem.Gregorian);
 
         Assert.AreEqual(expectedDuration, duration, 0.00001); // Tolerance for floating point comparisons
     }

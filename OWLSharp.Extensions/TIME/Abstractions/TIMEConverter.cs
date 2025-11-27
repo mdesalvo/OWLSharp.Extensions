@@ -36,7 +36,7 @@ namespace OWLSharp.Extensions.TIME
         /// handling both large-scale (year-level) and little-scale (second-level) temporal granularities through appropriate scaling and clock emulation
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static TIMECoordinate CoordinateFromPosition(double timePosition, TIMEPositionReferenceSystem positionTRS, TIMECalendarReferenceSystem calendarTRS=null)
+        public static TIMECoordinate PositionToCoordinate(double timePosition, TIMEPositionReferenceSystem positionTRS, TIMECalendarReferenceSystem calendarTRS=null)
         {
             #region Guards
             if (positionTRS == null)
@@ -108,7 +108,7 @@ namespace OWLSharp.Extensions.TIME
         /// This method performs the inverse operation of CoordinateFromPosition, calculating the temporal distance between the coordinate and the positional TRS origin,
         /// scaled according to the positional TRS unit
         /// </summary>
-        public static double PositionFromCoordinate(TIMECoordinate timeCoordinate, TIMEPositionReferenceSystem positionTRS, TIMECalendarReferenceSystem calendarTRS=null)
+        public static double CoordinateToPosition(TIMECoordinate timeCoordinate, TIMEPositionReferenceSystem positionTRS, TIMECalendarReferenceSystem calendarTRS=null)
         {
             #region Guards
             if (timeCoordinate == null)
@@ -210,7 +210,7 @@ namespace OWLSharp.Extensions.TIME
         }
 
         /// <summary>
-        /// Ensures a temporal coordinate has valid component values according to the metrics of a given calendar TRS,
+        /// Ensures that a temporal coordinate has valid component values according to the metrics of a given calendar TRS,
         /// propagating overflows across all six dimensions (seconds → minutes → hours → days → months → years)
         /// to produce a canonicalized representation
         /// </summary>
@@ -304,7 +304,7 @@ namespace OWLSharp.Extensions.TIME
         /// with decomposed components (years, months, weeks, days, hours, minutes, seconds) according to calendar TRS metrics
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static TIMEExtent ExtentFromDuration(double timeDuration, TIMEUnit unitType, TIMECalendarReferenceSystem calendarTRS=null)
+        public static TIMEExtent DurationToExtent(double timeDuration, TIMEUnit unitType, TIMECalendarReferenceSystem calendarTRS=null)
         {
             #region Guards
             if (timeDuration < 0)
@@ -356,7 +356,7 @@ namespace OWLSharp.Extensions.TIME
         /// value scaled according to the specified unit.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static double DurationFromExtent(TIMEExtent timeExtent, TIMEUnit unitType, TIMECalendarReferenceSystem calendarTRS=null)
+        public static double ExtentToDuration(TIMEExtent timeExtent, TIMEUnit unitType, TIMECalendarReferenceSystem calendarTRS=null)
         {
             #region Guards
             if (timeExtent == null)
@@ -424,7 +424,7 @@ namespace OWLSharp.Extensions.TIME
                     Metrics = { LeapYearRule = null }
                 };
 
-            return ExtentFromDuration(timeExtentSeconds, TIMEUnit.Second, inexactCalendarTRS);
+            return DurationToExtent(timeExtentSeconds, TIMEUnit.Second, inexactCalendarTRS);
         }
 
         /// <summary>
@@ -476,7 +476,7 @@ namespace OWLSharp.Extensions.TIME
                                              + (normalizedEnd.Year.Value     * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * calendarTRS.Metrics.DaysInYear);
 
             //Return extent between start/end coordinates
-            return ExtentFromDuration(normalizedEndSeconds - normalizedStartSeconds, TIMEUnit.Second, calendarTRS);
+            return DurationToExtent(normalizedEndSeconds - normalizedStartSeconds, TIMEUnit.Second, calendarTRS);
         }
         #endregion
 
