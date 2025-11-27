@@ -22,14 +22,27 @@ using System.Linq;
 
 namespace OWLSharp.Extensions.TIME
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public sealed class TIMEOrdinalReferenceSystem : TIMEReferenceSystem
     {
         #region Properties
+        /// <summary>
+        /// 
+        /// </summary>
         internal static OWLOntology THORSOntology { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public OWLOntology Ontology { get; }
         #endregion
 
         #region Ctors
+        /// <summary>
+        /// 
+        /// </summary>
         public TIMEOrdinalReferenceSystem(RDFResource trsIRI) : base(trsIRI)
         {
             #region Initialize
@@ -43,22 +56,30 @@ namespace OWLSharp.Extensions.TIME
             Ontology = new OWLOntology(THORSOntology) { IRI = trsIRI.ToString()};
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
         public TIMEOrdinalReferenceSystem(RDFResource trsIRI, TIMEOrdinalReferenceSystem ordinalTRS) : base(trsIRI)
-            => Ontology = ordinalTRS?.Ontology ?? throw new OWLException($"Cannot create ordinal TRS because given \"ordinalTRS\" parameter is null");
+            => Ontology = ordinalTRS?.Ontology ?? throw new OWLException($"Cannot create ordinal TRS because given '{nameof(ordinalTRS)}' parameter is null");
         #endregion
 
         #region Methods
 
         #region Declarer
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
         public TIMEOrdinalReferenceSystem DeclareEra(RDFResource era, TIMEInstant eraBeginning, TIMEInstant eraEnd)
         {
             #region Guards
             if (era == null)
-                throw new OWLException($"Cannot declare era to ordinal TRS because given \"era\" parameter is null");
+                throw new OWLException($"Cannot declare era to ordinal TRS because given '{nameof(era)}' parameter is null");
             if (eraBeginning == null)
-                throw new OWLException($"Cannot declare era to ordinal TRS because given \"referencePoint\" parameter is null");
+                throw new OWLException($"Cannot declare era to ordinal TRS because given '{nameof(eraBeginning)}'parameter is null");
             if (eraEnd == null)
-                throw new OWLException($"Cannot declare era to ordinal TRS because given \"eraEnd\" parameter is null");
+                throw new OWLException($"Cannot declare era to ordinal TRS because given '{nameof(eraEnd)}' parameter is null");
             #endregion
 
             //Add knowledge to the A-BOX (era)
@@ -106,15 +127,19 @@ namespace OWLSharp.Extensions.TIME
             return this;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
         public TIMEOrdinalReferenceSystem DeclareSubEra(RDFResource subEra, RDFResource superEra)
         {
             #region Guards
             if (subEra == null)
-                throw new OWLException($"Cannot declare sub-era to ordinal TRS because given \"subEra\" parameter is null");
+                throw new OWLException($"Cannot declare sub-era to ordinal TRS because given '{nameof(subEra)}' parameter is null");
             if (superEra == null)
-                throw new OWLException($"Cannot declare sub-era to ordinal TRS because given \"superEra\" parameter is null");
+                throw new OWLException($"Cannot declare sub-era to ordinal TRS because given '{nameof(superEra)}' parameter is null");
             if (CheckIsSubEraOf(superEra, subEra))
-                throw new OWLException($"Cannot declare sub-era to ordinal TRS because given \"superEra\" parameter is already defined as sub-era of the given \"subEra\" parameter!");
+                throw new OWLException($"Cannot declare sub-era to ordinal TRS because given '{nameof(superEra)}' parameter is already defined as sub-era of the given '{nameof(subEra)}' parameter!");
             #endregion
 
             //Add knowledge to the A-BOX
@@ -134,15 +159,19 @@ namespace OWLSharp.Extensions.TIME
             return this;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
         public TIMEOrdinalReferenceSystem DeclareReferencePoints(TIMEInstant[] referencePoints)
         {
             #region Guards
             if (referencePoints == null)
-                throw new OWLException($"Cannot declare reference points to ordinal TRS because given \"referencePoints\" parameter is null");
+                throw new OWLException($"Cannot declare reference points to ordinal TRS because given '{nameof(referencePoints)}' parameter is null");
             if (referencePoints.Any(rp => rp == null))
-                throw new OWLException($"Cannot declare reference points to ordinal TRS because given \"referencePoints\" parameter contains null elements");
+                throw new OWLException($"Cannot declare reference points to ordinal TRS because given '{nameof(referencePoints)}' parameter contains null elements");
             if (referencePoints.Length < 2)
-                throw new OWLException($"Cannot declare reference points to ordinal TRS because given \"referencePoints\" parameter must contain at least 2 elements");
+                throw new OWLException($"Cannot declare reference points to ordinal TRS because given '{nameof(referencePoints)}' parameter must contain at least 2 elements");
             #endregion
 
             //Add knowledge to the A-BOX
@@ -163,46 +192,67 @@ namespace OWLSharp.Extensions.TIME
         #endregion
 
         #region Analyzer
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
         public bool CheckHasEra(RDFResource era)
         {
             #region Guards
             if (era == null)
-                throw new OWLException($"Cannot check if ordinal TRS has era because given \"era\" parameter is null");
+                throw new OWLException($"Cannot check if ordinal TRS has era because given '{nameof(era)}' parameter is null");
             #endregion
 
             return Ontology.GetIndividualsOf(new OWLClass(RDFVocabulary.TIME.THORS.ERA))
-                    .Any(idv => idv.GetIRI().Equals(era));
+                           .Any(idv => idv.GetIRI().Equals(era));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
         public bool CheckHasEraBoundary(RDFResource eraBoundary)
         {
             #region Guards
             if (eraBoundary == null)
-                throw new OWLException($"Cannot check if ordinal TRS has era boundary because given \"eraBoundary\" parameter is null");
+                throw new OWLException($"Cannot check if ordinal TRS has era boundary because given '{nameof(eraBoundary)}' parameter is null");
             #endregion
 
             return Ontology.GetIndividualsOf(new OWLClass(RDFVocabulary.TIME.THORS.ERA_BOUNDARY))
-                    .Any(idv => idv.GetIRI().Equals(eraBoundary));
+                           .Any(idv => idv.GetIRI().Equals(eraBoundary));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
         public bool CheckHasReferencePoint(RDFResource referencePoint)
         {
             #region Guards
             if (referencePoint == null)
-                throw new OWLException($"Cannot check if ordinal TRS has reference point because given \"referencePoint\" parameter is null");
+                throw new OWLException($"Cannot check if ordinal TRS has reference point because given '{nameof(referencePoint)}' parameter is null");
             #endregion
 
             return Ontology.GetIndividualsOf(new OWLClass(RDFVocabulary.TIME.THORS.ERA_BOUNDARY))
-                    .Any(idv => Ontology.CheckHasAssertionAxiom(new OWLObjectPropertyAssertion(new OWLObjectProperty(RDFVocabulary.TIME.THORS.REFERENCE_POINT), new OWLNamedIndividual(this), idv))
-                                 && idv.GetIRI().Equals(referencePoint));
+                           .Any(idv => Ontology.CheckHasAssertionAxiom(new OWLObjectPropertyAssertion(new OWLObjectProperty(RDFVocabulary.TIME.THORS.REFERENCE_POINT), new OWLNamedIndividual(this), idv))
+                                        && idv.GetIRI().Equals(referencePoint));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public bool CheckIsSubEraOf(RDFResource subEra, RDFResource superEra, bool enableReasoning=true)
             => subEra != null && superEra != null && GetSubErasOf(superEra, enableReasoning).Any(e => e.Equals(subEra));
 
+        /// <summary>
+        /// 
+        /// </summary>
         public bool CheckIsSuperEraOf(RDFResource superEra, RDFResource subEra, bool enableReasoning=true)
             => superEra != null && subEra != null && GetSuperErasOf(subEra, enableReasoning).Any(e => e.Equals(superEra));
 
+        /// <summary>
+        /// 
+        /// </summary>
         public List<RDFResource> GetSubErasOf(RDFResource era, bool enableReasoning=true)
         {
             List<RDFResource> subEras = new List<RDFResource>();
@@ -247,6 +297,9 @@ namespace OWLSharp.Extensions.TIME
             return subEras;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public List<RDFResource> GetSuperErasOf(RDFResource era, bool enableReasoning=true)
         {
             List<RDFResource> superEras = new List<RDFResource>();
@@ -291,13 +344,17 @@ namespace OWLSharp.Extensions.TIME
             return superEras;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
         public (TIMECoordinate,TIMECoordinate) GetEraCoordinates(RDFResource era, TIMECalendarReferenceSystem calendarTRS=null)
         {
             #region Guards
             if (era == null)
-                throw new OWLException($"Cannot get coordinates of era because given \"era\" parameter is null");
+                throw new OWLException($"Cannot get coordinates of era because given '{nameof(era)}' parameter is null");
             if (!CheckHasEra(era))
-                throw new OWLException($"Cannot get coordinates of era because given \"era\" parameter is not a component of this ordinal TRS");
+                throw new OWLException($"Cannot get coordinates of era because given '{nameof(era)}' parameter is not declared as era of this ordinal TRS");
 
             if (calendarTRS == null)
                 calendarTRS = TIMECalendarReferenceSystem.Gregorian;
@@ -325,13 +382,17 @@ namespace OWLSharp.Extensions.TIME
             return (eraBeginBoundaryCoordinate, eraEndBoundaryCoordinate);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
         public TIMEExtent GetEraExtent(RDFResource era, TIMECalendarReferenceSystem calendarTRS=null)
         {
             #region Guards
             if (era == null)
-                throw new OWLException($"Cannot get extent of era because given \"era\" parameter is null");
+                throw new OWLException($"Cannot get extent of era because given '{nameof(era)}' parameter is null");
             if (!CheckHasEra(era))
-                throw new OWLException($"Cannot get extent of era because given \"era\" parameter is not a component of this ordinal TRS");
+                throw new OWLException($"Cannot get extent of era because given '{nameof(era)}' parameter is not declared as era of this ordinal TRS");
 
             if (calendarTRS == null)
                 calendarTRS = TIMECalendarReferenceSystem.Gregorian;

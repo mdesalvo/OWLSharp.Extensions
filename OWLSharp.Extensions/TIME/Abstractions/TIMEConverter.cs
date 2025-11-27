@@ -53,7 +53,7 @@ namespace OWLSharp.Extensions.TIME
             double scaledTimePosition = timePosition * positionTRS.Unit.ScaleFactor;
 
             #region Large-Scale
-            if (positionTRS.HasLargeScaleSemantic)
+            if (positionTRS.HasLargeScale)
             {
                 coordinate.Metadata = new TIMECoordinateMetadata(calendarTRS, RDFVocabulary.TIME.UNIT_YEAR);
 
@@ -159,7 +159,7 @@ namespace OWLSharp.Extensions.TIME
             TIMECoordinate normalizedCoordinate = NormalizeCoordinate(timeCoordinate, calendarTRS);
 
             #region Large-Scale
-            if (positionTRS.HasLargeScaleSemantic)
+            if (positionTRS.HasLargeScale)
             {
                 // For large-scale, we work only at year level - use arithmetic calculation
                 double originYear = normalizedOrigin.Year ?? 0;

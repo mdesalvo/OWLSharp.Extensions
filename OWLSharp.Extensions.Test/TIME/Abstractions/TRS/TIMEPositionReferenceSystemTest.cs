@@ -44,7 +44,7 @@ public class TIMEPositionReferenceSystemTest
         Assert.IsNotNull(MillenniumTimeTRS.Unit);
         Assert.AreEqual(TIMEEnums.TIMEUnitType.Day, MillenniumTimeTRS.Unit.UnitType);
         Assert.AreEqual(1, MillenniumTimeTRS.Unit.ScaleFactor);
-        Assert.IsFalse(MillenniumTimeTRS.HasLargeScaleSemantic);
+        Assert.IsFalse(MillenniumTimeTRS.HasLargeScale);
     }
 
     [TestMethod]

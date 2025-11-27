@@ -18,31 +18,53 @@ using RDFSharp.Model;
 
 namespace OWLSharp.Extensions.TIME
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public sealed class TIMEPositionReferenceSystem : TIMEReferenceSystem
     {
         #region Built-Ins
+        /// <summary>
+        /// 
+        /// </summary>
         public static readonly TIMEPositionReferenceSystem UnixTime = new TIMEPositionReferenceSystem(
             new RDFResource("https://en.wikipedia.org/wiki/Unix_time"), TIMECoordinate.UnixTime, TIMEUnit.Second);
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static readonly TIMEPositionReferenceSystem GeologicTime = new TIMEPositionReferenceSystem(
             new RDFResource("http://www.opengis.net/def/crs/OGC/0/ChronometricGeologicTime"), TIMECoordinate.GeologicTime, TIMEUnit.MillionYearsAgo, true);
         #endregion
 
         #region Properties
+        /// <summary>
+        /// 
+        /// </summary>
         public TIMECoordinate Origin { get; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public TIMEUnit Unit { get; }
 
-        public bool HasLargeScaleSemantic { get; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool HasLargeScale { get; }
         #endregion
 
         #region Ctors
-        public TIMEPositionReferenceSystem(RDFResource trsUri, TIMECoordinate trsOrigin, TIMEUnit trsUnit, bool hasLargeScaleSemantic=false)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        public TIMEPositionReferenceSystem(RDFResource trsUri, TIMECoordinate trsOrigin, TIMEUnit trsUnit, bool hasLargeScale=false)
             : base(trsUri)
         {
-            Origin = trsOrigin ?? throw new OWLException($"Cannot create PositionReferenceSystem because given \"trsOrigin\" parameter is null");
-            Unit = trsUnit ?? throw new OWLException($"Cannot create PositionReferenceSystem because given \"trsUnit\" parameter is null");
-            HasLargeScaleSemantic = hasLargeScaleSemantic;
+            Origin = trsOrigin ?? throw new OWLException($"Cannot create PositionReferenceSystem because given '{nameof(trsOrigin)}' parameter is null");
+            Unit = trsUnit ?? throw new OWLException($"Cannot create PositionReferenceSystem because given '{nameof(trsUnit)}' parameter is null");
+            HasLargeScale = hasLargeScale;
         }
         #endregion
     }

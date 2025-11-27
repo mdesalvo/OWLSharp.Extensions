@@ -20,9 +20,15 @@ using System.Linq;
 
 namespace OWLSharp.Extensions.TIME
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public sealed class TIMECalendarReferenceSystem : TIMEReferenceSystem
     {
         #region Built-Ins
+        /// <summary>
+        /// 
+        /// </summary>
         public static readonly TIMECalendarReferenceSystem Gregorian = new TIMECalendarReferenceSystem(
             new RDFResource("https://en.wikipedia.org/wiki/Gregorian_calendar"),
             new TIMECalendarReferenceSystemMetrics(60, 60, 24, new uint[] { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 })
@@ -34,53 +40,91 @@ namespace OWLSharp.Extensions.TIME
         #endregion
 
         #region Properties
+        /// <summary>
+        /// 
+        /// </summary>
         public TIMECalendarReferenceSystemMetrics Metrics { get; }
         #endregion
 
         #region Ctors
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
         public TIMECalendarReferenceSystem(RDFResource trsUri, TIMECalendarReferenceSystemMetrics trsMetrics) : base(trsUri)
-            => Metrics = trsMetrics ?? throw new OWLException($"Cannot create calendar-based TRS because given \"trsMetrics\" parameter is null");
+            => Metrics = trsMetrics ?? throw new OWLException($"Cannot create calendar-based TRS because given '{nameof(trsMetrics)}' parameter is null");
         #endregion
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public sealed class TIMECalendarReferenceSystemMetrics
     {
         #region Properties
+        /// <summary>
+        /// 
+        /// </summary>
         public uint SecondsInMinute { get; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public uint MinutesInHour { get; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public uint HoursInDay { get; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public uint[] Months { get; }
 
         //Derived
 
+        /// <summary>
+        /// 
+        /// </summary>
         public uint DaysInYear { get; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public uint MonthsInYear { get; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public bool HasExactMetric { get; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public Func<double,uint[]> LeapYearRule { get; internal set; }
         #endregion
 
         #region Ctors
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
         public TIMECalendarReferenceSystemMetrics(uint secondsInMinute, uint minutesInHour, uint hoursInDay, uint[] months)
         {
             #region Guards
             if (secondsInMinute == 0)
-                throw new OWLException($"Cannot build calendar metrics because given \"secondsInMinute\" parameter must be greater than zero");
+                throw new OWLException($"Cannot build calendar metrics because given '{nameof(secondsInMinute)}' parameter must be greater than zero");
             if (minutesInHour == 0)
-                throw new OWLException($"Cannot build calendar metrics because given \"minutesInHour\" parameter must be greater than zero");
+                throw new OWLException($"Cannot build calendar metrics because given '{nameof(minutesInHour)}' parameter must be greater than zero");
             if (hoursInDay == 0)
-                throw new OWLException($"Cannot build calendar metrics because given \"hoursInDay\" parameter must be greater than zero");
+                throw new OWLException($"Cannot build calendar metrics because given '{nameof(hoursInDay)}' parameter must be greater than zero");
             if (months == null)
-                throw new OWLException($"Cannot build calendar metrics because given \"months\" parameter is null");
+                throw new OWLException($"Cannot build calendar metrics because given '{nameof(months)}' parameter is null");
             if (months.Length == 0)
-                throw new OWLException($"Cannot build calendar metrics because given \"months\" parameter must contain at least one element");
+                throw new OWLException($"Cannot build calendar metrics because given '{nameof(months)}' parameter must contain at least one element");
             if (months.Contains<uint>(0))
-                throw new OWLException($"Cannot build calendar metrics because given \"months\" parameter must contain all elements greater than zerp");
+                throw new OWLException($"Cannot build calendar metrics because given '{nameof(months)}' parameter must contain all elements greater than zerp");
             #endregion
 
             SecondsInMinute = secondsInMinute;
@@ -96,6 +140,9 @@ namespace OWLSharp.Extensions.TIME
         #endregion
 
         #region Methods
+        /// <summary>
+        /// 
+        /// </summary>
         public TIMECalendarReferenceSystemMetrics SetLeapYearRule(Func<double,uint[]> leapYearRule)
         {
             LeapYearRule = leapYearRule;
