@@ -43,6 +43,7 @@ namespace OWLSharp.Extensions.TIME
                 {
                     //Calendar TRS
                     { TIMECalendarReferenceSystem.Gregorian.ToString(), TIMECalendarReferenceSystem.Gregorian },
+                    { TIMECalendarReferenceSystem.Julian.ToString(), TIMECalendarReferenceSystem.Julian },
                     //Position TRS
                     { TIMEPositionReferenceSystem.UnixTime.ToString(), TIMEPositionReferenceSystem.UnixTime },
                     { TIMEPositionReferenceSystem.GeologicTime.ToString(), TIMEPositionReferenceSystem.GeologicTime }

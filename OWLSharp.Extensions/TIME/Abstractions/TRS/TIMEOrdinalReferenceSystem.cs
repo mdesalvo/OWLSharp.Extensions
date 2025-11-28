@@ -23,25 +23,32 @@ using System.Linq;
 namespace OWLSharp.Extensions.TIME
 {
     /// <summary>
-    /// 
+    /// Represents an ordinal temporal reference system that organizes time through ordered, named temporal eras or periods
+    /// rather than numeric coordinates, following the THORS (Temporal Hierarchical Ordinal Reference System) ontology.
+    /// It defines sequences of discrete temporal intervals (epochs, geological eras, dynasties, reigns)
+    /// where positions are identified by their ordinal placement and hierarchical relationships within the sequence
+    /// rather than by numeric measurement. THORS provides the semantic framework for expressing these ordered temporal
+    /// structures and their inter-relationships.
     /// </summary>
     public sealed class TIMEOrdinalReferenceSystem : TIMEReferenceSystem
     {
         #region Properties
         /// <summary>
-        /// 
+        /// Singleton instance of the THORS ontology, to be available whenever
+        /// any new instance of an ordinal TRS is going to be created
         /// </summary>
         internal static OWLOntology THORSOntology { get; set; }
 
         /// <summary>
-        /// 
+        /// The ontology mapping the T-BOX and A-BOX of this ordinal TRS
         /// </summary>
         public OWLOntology Ontology { get; }
         #endregion
 
         #region Ctors
         /// <summary>
-        /// 
+        /// Builds an ordinal TRS with the given name. It automatically
+        /// includes the T-BOX and A-BOX of the THORS ontology.
         /// </summary>
         public TIMEOrdinalReferenceSystem(RDFResource trsIRI) : base(trsIRI)
         {
@@ -57,7 +64,7 @@ namespace OWLSharp.Extensions.TIME
         }
 
         /// <summary>
-        /// 
+        /// Builds an ordinal TRS with the given name and cloning the ontology knowledge from the given one
         /// </summary>
         /// <exception cref="OWLException"></exception>
         public TIMEOrdinalReferenceSystem(RDFResource trsIRI, TIMEOrdinalReferenceSystem ordinalTRS) : base(trsIRI)
@@ -68,7 +75,8 @@ namespace OWLSharp.Extensions.TIME
 
         #region Declarer
         /// <summary>
-        /// 
+        /// Injects the A-BOX axioms for declaring the existence of a thors:Era individual with the given name
+        /// and the given time:Instant individuals being the temporal coordinates indicating its formal begin/end
         /// </summary>
         /// <exception cref="OWLException"></exception>
         public TIMEOrdinalReferenceSystem DeclareEra(RDFResource era, TIMEInstant eraBeginning, TIMEInstant eraEnd)
@@ -128,7 +136,8 @@ namespace OWLSharp.Extensions.TIME
         }
 
         /// <summary>
-        /// 
+        /// Injects the A-BOX axioms for declaring the formal thors:Member hierarchical relationship
+        /// between the given thors:Era individuals of this ordinal TRS
         /// </summary>
         /// <exception cref="OWLException"></exception>
         public TIMEOrdinalReferenceSystem DeclareSubEra(RDFResource subEra, RDFResource superEra)
@@ -160,7 +169,10 @@ namespace OWLSharp.Extensions.TIME
         }
 
         /// <summary>
-        /// 
+        /// Injects the A-BOX axioms for giving a set of thors:EraBoundary individuals (at least 2) to this ordinal TRS.
+        /// Reference points enable ordinal systems to be anchored to absolute time (via numeric dates) while maintaining
+        /// their hierarchical ordinal structure. They bridge the gap between ordinal sequences (named eras)
+        /// and positional/calendar systems (numeric dates).
         /// </summary>
         /// <exception cref="OWLException"></exception>
         public TIMEOrdinalReferenceSystem DeclareReferencePoints(TIMEInstant[] referencePoints)
@@ -193,7 +205,7 @@ namespace OWLSharp.Extensions.TIME
 
         #region Analyzer
         /// <summary>
-        /// 
+        /// Checks if this ordinal TRS contains a thors:Era individual with the given name
         /// </summary>
         /// <exception cref="OWLException"></exception>
         public bool CheckHasEra(RDFResource era)
@@ -208,7 +220,7 @@ namespace OWLSharp.Extensions.TIME
         }
 
         /// <summary>
-        /// 
+        /// Checks if this ordinal TRS contains a thors:EraBoundary individual with the given name
         /// </summary>
         /// <exception cref="OWLException"></exception>
         public bool CheckHasEraBoundary(RDFResource eraBoundary)
@@ -223,7 +235,8 @@ namespace OWLSharp.Extensions.TIME
         }
 
         /// <summary>
-        /// 
+        /// Checks if this ordinal TRS contains a thors:EraBoundary individual with the given name,
+        /// which is so notable to be also declared as one of its thors:referencePoint instants
         /// </summary>
         /// <exception cref="OWLException"></exception>
         public bool CheckHasReferencePoint(RDFResource referencePoint)
@@ -239,19 +252,22 @@ namespace OWLSharp.Extensions.TIME
         }
 
         /// <summary>
-        /// 
+        /// Checks if this ordinal TRS contains the given thors:Era individuals and that
+        /// the have a formal thors:Member hierarchical relationship
         /// </summary>
         public bool CheckIsSubEraOf(RDFResource subEra, RDFResource superEra, bool enableReasoning=true)
             => subEra != null && superEra != null && GetSubErasOf(superEra, enableReasoning).Any(e => e.Equals(subEra));
 
         /// <summary>
-        /// 
+        /// Checks if this ordinal TRS contains the given thors:Era individuals and that
+        /// the have a formal thors:Member hierarchical relationship
         /// </summary>
         public bool CheckIsSuperEraOf(RDFResource superEra, RDFResource subEra, bool enableReasoning=true)
             => superEra != null && subEra != null && GetSuperErasOf(subEra, enableReasoning).Any(e => e.Equals(superEra));
 
         /// <summary>
-        /// 
+        /// Enlists the thors:Era individuals having a formal thors:Member hierarchical relationship with the given one
+        /// in this ordinal TRS (in this case they must be sub-eras of it)
         /// </summary>
         public List<RDFResource> GetSubErasOf(RDFResource era, bool enableReasoning=true)
         {
@@ -298,7 +314,8 @@ namespace OWLSharp.Extensions.TIME
         }
 
         /// <summary>
-        /// 
+        /// Enlists the thors:Era individuals having a formal thors:Member hierarchical relationship with the given one
+        /// in this ordinal TRS (in this case they must be super-eras of it)
         /// </summary>
         public List<RDFResource> GetSuperErasOf(RDFResource era, bool enableReasoning=true)
         {
@@ -345,7 +362,7 @@ namespace OWLSharp.Extensions.TIME
         }
 
         /// <summary>
-        /// 
+        /// Gets the temporal coordinates of the begin/end instants of the given thors:Era individual in this ordinal TRS
         /// </summary>
         /// <exception cref="OWLException"></exception>
         public (TIMECoordinate,TIMECoordinate) GetEraCoordinates(RDFResource era, TIMECalendarReferenceSystem calendarTRS=null)
@@ -383,7 +400,8 @@ namespace OWLSharp.Extensions.TIME
         }
 
         /// <summary>
-        /// 
+        /// Gets the temporal extent of the given thors:Era individual in this ordinal TRS.
+        /// It is based on the computation of its coordinates (see GetEraCoordinates).
         /// </summary>
         /// <exception cref="OWLException"></exception>
         public TIMEExtent GetEraExtent(RDFResource era, TIMECalendarReferenceSystem calendarTRS=null)

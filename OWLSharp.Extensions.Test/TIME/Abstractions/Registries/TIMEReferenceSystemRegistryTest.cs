@@ -35,8 +35,9 @@ public class TIMEReferenceSystemRegistryTest
     public void ShouldOperateOnRegistry()
     {
         //Test initial configuration (built-in TRS)
-        Assert.IsGreaterThanOrEqualTo(3, TIMEReferenceSystemRegistry.TRSCount);
+        Assert.IsGreaterThanOrEqualTo(4, TIMEReferenceSystemRegistry.TRSCount);
         Assert.IsTrue(TIMEReferenceSystemRegistry.ContainsTRS(TIMECalendarReferenceSystem.Gregorian));
+        Assert.IsTrue(TIMEReferenceSystemRegistry.ContainsTRS(TIMECalendarReferenceSystem.Julian));
         Assert.IsTrue(TIMEReferenceSystemRegistry.ContainsTRS(TIMEPositionReferenceSystem.UnixTime));
         Assert.IsTrue(TIMEReferenceSystemRegistry.ContainsTRS(TIMEPositionReferenceSystem.GeologicTime));
 
@@ -53,7 +54,7 @@ public class TIMEReferenceSystemRegistryTest
         Assert.IsFalse(TIMEReferenceSystemRegistry.ContainsTRS(millenniumTRS));
         TIMEReferenceSystemRegistry.AddTRS(millenniumTRS);
         TIMEReferenceSystemRegistry.AddTRS(millenniumTRS); //Duplicates are avoided
-        Assert.IsGreaterThanOrEqualTo(4, TIMEReferenceSystemRegistry.TRSCount);
+        Assert.IsGreaterThanOrEqualTo(5, TIMEReferenceSystemRegistry.TRSCount);
         Assert.IsTrue(TIMEReferenceSystemRegistry.ContainsTRS(millenniumTRS));
     }
     #endregion
