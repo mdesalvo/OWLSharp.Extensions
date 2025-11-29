@@ -18,20 +18,40 @@ using RDFSharp.Model;
 
 namespace OWLSharp.Extensions.TIME
 {
+    /// <summary>
+    /// Represents the measurable length or extent of a temporal interval, expressed as a numeric duration value
+    /// with an associated temporal unit. It quantifies how long an interval lasts without specifying when it occurs,
+    /// providing a scalar measurement of temporal extent that can be expressed in various units
+    /// (seconds, minutes, hours, days, years) and converted between different temporal reference systems.
+    /// This duration-based representation enables temporal arithmetic, interval comparisons, and the calculation
+    /// of elapsed time between temporal boundaries
+    /// </summary>
     public sealed class TIMEIntervalDuration : RDFResource
     {
         #region Properties
+        /// <summary>
+        /// Gets or sets the temporal unit (IRI) used to express this interval's duration,
+        /// defining the measurement granularity such as seconds, minutes, hours, days, months, or years
+        /// </summary>
         public RDFResource UnitType { get; set; }
 
+        /// <summary>
+        /// Gets or sets the numeric scalar value representing the magnitude of this interval's duration,
+        /// expressed in the units specified by the UnitType property
+        /// </summary>
         public double Value { get; set; }
         #endregion
 
         #region Ctors
         internal TIMEIntervalDuration(RDFResource timeIntervalDurationUri) : base(timeIntervalDurationUri?.ToString()) { }
 
+        /// <summary>
+        /// Builds an interval duration with the given name, scalar value and associated unit type
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
         public TIMEIntervalDuration(RDFResource timeIntervalDurationUri, RDFResource unitTypeURI, double value) : this(timeIntervalDurationUri)
         {
-            UnitType = unitTypeURI ?? throw new OWLException($"Cannot create duration of time interval because given \"unitTypeURI\" parameter is null");
+            UnitType = unitTypeURI ?? throw new OWLException($"Cannot create duration of time interval because given '{nameof(unitTypeURI)}' parameter is null");
             Value = value;
         }
         #endregion
