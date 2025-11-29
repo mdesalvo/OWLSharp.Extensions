@@ -72,7 +72,7 @@ namespace OWLSharp.Extensions.GEO
             if (featureUri == null)
                 throw new OWLException($"Cannot declare point feature because given '{nameof(featureUri)}' parameter is null");
             if (geoPoint == null)
-                throw new OWLException($"Cannot declare point feature because given '{nameof(featureUri)}' parameter is null");
+                throw new OWLException($"Cannot declare point feature because given '{nameof(geoPoint)}' parameter is null");
             #endregion
 
             ontology.DeclareEntity(new OWLNamedIndividual(featureUri));

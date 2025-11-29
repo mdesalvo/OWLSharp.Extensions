@@ -25,7 +25,7 @@ using RDFSharp.Model;
 namespace OWLSharp.Extensions.SKOS
 {
     /// <summary>
-    /// SKOSValidator OWLValidator is an analysis engine that checks that a SKOS vocabulary
+    /// SKOSValidator is an analysis engine that checks that a SKOS vocabulary
     /// conforms to the SKOS data model specification. It verifies structural integrity by
     /// ensuring that concepts have required properties (like preferred labels),
     /// validates semantic consistency of hierarchical relationships (broader/narrower),

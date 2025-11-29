@@ -24,6 +24,11 @@ using System.Threading.Tasks;
 
 namespace OWLSharp.Extensions.TIME
 {
+    /// <summary>
+    /// Provides validation capabilities for OWL-TIME ontologies and temporal entities, ensuring structural integrity,
+    /// semantic consistency and compliance with temporal specifications including proper TRS configurations,
+    /// coordinate validity, interval boundaries, and temporal relationship constraints
+    /// </summary>
     public sealed class TIMEValidator
     {
         #region Properties

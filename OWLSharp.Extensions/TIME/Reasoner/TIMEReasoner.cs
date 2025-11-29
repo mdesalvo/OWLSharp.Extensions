@@ -23,6 +23,12 @@ using System.Threading.Tasks;
 
 namespace OWLSharp.Extensions.TIME
 {
+    /// <summary>
+    /// Provides reasoning and inference capabilities for OWL-TIME ontologies, enabling automatic derivation of
+    /// temporal relationships (before, after, during, overlaps), calculation of temporal distances,
+    /// interval intersections, temporal constraint propagation, and consistency checking of temporal assertions
+    /// across different temporal reference systems
+    /// </summary>
     public sealed class TIMEReasoner
     {
         #region Properties
@@ -185,7 +191,7 @@ namespace OWLSharp.Extensions.TIME
                 if (reasonerOptions.EnableIterativeReasoning
                      && inferences.Count > 0)
                 {
-                    OWLEvents.RaiseInfo($"Merging OWL-TIME inferences...");
+                    OWLEvents.RaiseInfo("Merging OWL-TIME inferences...");
                     foreach (IGrouping<Type, OWLInference> inferenceGroupType in inferences.GroupBy(inf => inf.Axiom.GetType()))
                     {
                         switch (inferenceGroupType.Key.BaseType?.Name)
