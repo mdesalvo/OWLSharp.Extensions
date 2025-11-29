@@ -16,6 +16,9 @@ using RDFSharp.Model;
 
 namespace OWLSharp.Extensions.TIME
 {
+    /// <summary>
+    /// Helps at comparing and correlating temporal instants (eveng against temporal intervals)
+    /// </summary>
     public static class TIMEInstantHelper
     {
         #region Methods
@@ -24,9 +27,9 @@ namespace OWLSharp.Extensions.TIME
         {
             #region Guards
             if (aTimeInstantURI == null)
-                throw new OWLException($"Cannot check if aInstant is after bInstant because given \"aTimeInstantURI\" parameter is null");
+                throw new OWLException($"Cannot check if aInstant is after bInstant because given '{nameof(aTimeInstantURI)}' parameter is null");
             if (bTimeInstantURI == null)
-                throw new OWLException($"Cannot check if aInstant is after bInstant because given \"bTimeInstantURI\" parameter is null");
+                throw new OWLException($"Cannot check if aInstant is after bInstant because given '{nameof(bTimeInstantURI)}' parameter is null");
 
             if (calendarTRS == null)
                 calendarTRS = TIMECalendarReferenceSystem.Gregorian;
@@ -51,9 +54,9 @@ namespace OWLSharp.Extensions.TIME
         {
             #region Guards
             if (timeInstantURI == null)
-                throw new OWLException($"Cannot check if instant is after interval because given \"timeInstantURI\" parameter is null");
+                throw new OWLException($"Cannot check if instant is after interval because given '{nameof(timeInstantURI)}' parameter is null");
             if (timeIntervalURI == null)
-                throw new OWLException($"Cannot check if instant is after interval because given \"timeIntervalURI\" parameter is null");
+                throw new OWLException($"Cannot check if instant is after interval because given '{nameof(timeIntervalURI)}' parameter is null");
 
             if (calendarTRS == null)
                 calendarTRS = TIMECalendarReferenceSystem.Gregorian;
@@ -78,9 +81,9 @@ namespace OWLSharp.Extensions.TIME
         {
             #region Guards
             if (aTimeInstantURI == null)
-                throw new OWLException($"Cannot check if aInstant is before bInstant because given \"aTimeInstantURI\" parameter is null");
+                throw new OWLException($"Cannot check if aInstant is before bInstant because given '{nameof(aTimeInstantURI)}' parameter is null");
             if (bTimeInstantURI == null)
-                throw new OWLException($"Cannot check if aInstant is before bInstant because given \"bTimeInstantURI\" parameter is null");
+                throw new OWLException($"Cannot check if aInstant is before bInstant because given '{nameof(bTimeInstantURI)}' parameter is null");
 
             if (calendarTRS == null)
                 calendarTRS = TIMECalendarReferenceSystem.Gregorian;
@@ -105,9 +108,9 @@ namespace OWLSharp.Extensions.TIME
         {
             #region Guards
             if (timeInstantURI == null)
-                throw new OWLException($"Cannot check if instant is before interval because given \"timeInstantURI\" parameter is null");
+                throw new OWLException($"Cannot check if instant is before interval because given '{nameof(timeInstantURI)}' parameter is null");
             if (timeIntervalURI == null)
-                throw new OWLException($"Cannot check if instant is before interval because given \"timeIntervalURI\" parameter is null");
+                throw new OWLException($"Cannot check if instant is before interval because given '{nameof(timeIntervalURI)}' parameter is null");
 
             if (calendarTRS == null)
                 calendarTRS = TIMECalendarReferenceSystem.Gregorian;
@@ -132,9 +135,9 @@ namespace OWLSharp.Extensions.TIME
         {
             #region Guards
             if (timeInstantURI == null)
-                throw new OWLException($"Cannot check if instant is inside interval because given \"timeInstantURI\" parameter is null");
+                throw new OWLException($"Cannot check if instant is inside interval because given '{nameof(timeInstantURI)}' parameter is null");
             if (timeIntervalURI == null)
-                throw new OWLException($"Cannot check if instant is inside interval because given \"timeIntervalURI\" parameter is null");
+                throw new OWLException($"Cannot check if instant is inside interval because given '{nameof(timeIntervalURI)}' parameter is null");
 
             if (calendarTRS == null)
                 calendarTRS = TIMECalendarReferenceSystem.Gregorian;
