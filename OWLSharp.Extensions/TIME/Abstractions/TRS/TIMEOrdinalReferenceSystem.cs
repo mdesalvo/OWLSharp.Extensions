@@ -37,7 +37,7 @@ namespace OWLSharp.Extensions.TIME
         /// Singleton instance of the THORS ontology, to be available whenever
         /// any new instance of an ordinal TRS is going to be created
         /// </summary>
-        internal static OWLOntology THORSOntology { get; set; }
+        private static OWLOntology THORSOntology { get; set; }
 
         /// <summary>
         /// The ontology mapping the T-BOX and A-BOX of this ordinal TRS
