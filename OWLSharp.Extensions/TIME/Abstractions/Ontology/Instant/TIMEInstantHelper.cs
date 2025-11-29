@@ -17,11 +17,16 @@ using RDFSharp.Model;
 namespace OWLSharp.Extensions.TIME
 {
     /// <summary>
-    /// Helps at comparing and correlating temporal instants (eveng against temporal intervals)
+    /// Helps at comparing and correlating temporal instants (even against temporal intervals)
     /// </summary>
     public static class TIMEInstantHelper
     {
         #region Methods
+        /// <summary>
+        /// Checks if the given time:Instant individuals are in a "time:after" relation (a->b),
+        /// according to the given calendar TRS
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
         public static bool CheckAfter(OWLOntology timeOntology, RDFResource aTimeInstantURI, RDFResource bTimeInstantURI,
             TIMECalendarReferenceSystem calendarTRS=null)
         {
@@ -49,6 +54,11 @@ namespace OWLSharp.Extensions.TIME
             return aTimeInstantCoordinate.CompareTo(bTimeInstantCoordinate) == 1;
         }
 
+        /// <summary>
+        /// Checks if the given time:Instant individual is in a "time:after" relation with the given time:Interval individual,
+        /// according to the given calendar TRS
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
         public static bool CheckAfterInterval(OWLOntology timeOntology, RDFResource timeInstantURI, RDFResource timeIntervalURI,
             TIMECalendarReferenceSystem calendarTRS=null)
         {
@@ -76,6 +86,11 @@ namespace OWLSharp.Extensions.TIME
             return timeInstantCoordinate.CompareTo(timeIntervalEndCoordinate) == 1;
         }
 
+        /// <summary>
+        /// Checks if the given time:Instant individuals are in a "time:before" relation (a->b),
+        /// according to the given calendar TRS
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
         public static bool CheckBefore(OWLOntology timeOntology, RDFResource aTimeInstantURI, RDFResource bTimeInstantURI,
             TIMECalendarReferenceSystem calendarTRS=null)
         {
@@ -103,6 +118,11 @@ namespace OWLSharp.Extensions.TIME
             return aTimeInstantCoordinate.CompareTo(bTimeInstantCoordinate) == -1;
         }
 
+        /// <summary>
+        /// Checks if the given time:Instant individual is in a "time:before" relation with the given time:Interval individual,
+        /// according to the given calendar TRS
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
         public static bool CheckBeforeInterval(OWLOntology timeOntology, RDFResource timeInstantURI, RDFResource timeIntervalURI,
             TIMECalendarReferenceSystem calendarTRS=null)
         {
@@ -130,6 +150,11 @@ namespace OWLSharp.Extensions.TIME
             return timeInstantCoordinate.CompareTo(timeIntervalBeginningCoordinate) == -1;
         }
 
+        /// <summary>
+        /// Checks if the given time:Instant individual is in a "time:inside" relation with the given time:Interval individual,
+        /// according to the given calendar TRS
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
         public static bool CheckInsideInterval(OWLOntology timeOntology, RDFResource timeInstantURI, RDFResource timeIntervalURI,
             TIMECalendarReferenceSystem calendarTRS=null)
         {
