@@ -143,16 +143,6 @@ public class TIMEOrdinalReferenceSystemTest
             .DeclareEra(null, new TIMEInstant(new RDFResource("ex:begin")), new TIMEInstant(new RDFResource("ex:end"))));
 
     [TestMethod]
-    public void ShouldThrowExceptionOnDeclaringEraBecauseNullBegin()
-        => Assert.ThrowsExactly<OWLException>(() => _ = new TIMEOrdinalReferenceSystem(new RDFResource("ex:Thors2"), TestTRS)
-            .DeclareEra(new RDFResource("ex:era"), null, new TIMEInstant(new RDFResource("ex:end"))));
-
-    [TestMethod]
-    public void ShouldThrowExceptionOnDeclaringEraBecauseNullEnd()
-        => Assert.ThrowsExactly<OWLException>(() => _ = new TIMEOrdinalReferenceSystem(new RDFResource("ex:Thors2"), TestTRS)
-            .DeclareEra(new RDFResource("ex:era"), new TIMEInstant(new RDFResource("ex:begin")), null));
-
-    [TestMethod]
     public void ShouldDeclareSubEra()
     {
         TIMEOrdinalReferenceSystem thors = new TIMEOrdinalReferenceSystem(new RDFResource("ex:Thors2"), TestTRS);
