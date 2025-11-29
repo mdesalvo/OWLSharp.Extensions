@@ -15,9 +15,21 @@ using RDFSharp.Model;
 
 namespace OWLSharp.Extensions.TIME
 {
+    /// <summary>
+    /// In OWL-TIME, a temporal entity represents any abstract or concrete element that exists in time or describes temporal phenomena.
+    /// It serves as the foundational concept from which all temporal constructs derive, encompassing instants (zero-dimensional temporal points),
+    /// intervals (one-dimensional temporal extents with duration), and their combinations.
+    /// Temporal entities can represent specific moments in history, durations of events, temporal relationships between occurrences,
+    /// or any other time-bounded phenomenon. They are characterized by their position within one or more temporal reference systems
+    /// and can be related to domain entities (events, processes, states) to provide temporal context and enable temporal reasoning
+    /// within knowledge graphs and semantic applications
+    /// </summary>
     public class TIMEEntity : RDFResource
     {
         #region Ctors
+        /// <summary>
+        /// Builds a temporal entity with the given name
+        /// </summary>
         internal TIMEEntity(RDFResource timeEntityUri)
             : base(timeEntityUri?.ToString()) { }
         #endregion
