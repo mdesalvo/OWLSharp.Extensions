@@ -77,7 +77,7 @@ namespace OWLSharp.Extensions.TIME
         /// <summary>
         /// Injects the A-BOX axioms for declaring the existence of a thors:Era individual with the given name
         /// and the given time:Instant individuals being the temporal coordinates indicating its formal begin/end.
-        /// An era can have so uncertain beginning or ending temporal coordinates that it can leave them null.
+        /// An era may have so uncertain beginning or ending temporal coordinates that it can leave them null.
         /// </summary>
         /// <exception cref="OWLException"></exception>
         public TIMEOrdinalReferenceSystem DeclareEra(RDFResource era, TIMEInstant eraBeginning=null, TIMEInstant eraEnd=null)
