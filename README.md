@@ -1,4 +1,4 @@
-# OWLSharp.Extensions <a href="https://www.nuget.org/packages/OWLSharp.Extensions"><img src="https://img.shields.io/nuget/dt/OWLSharp.Extensions?style=flat&color=abcdef&logo=nuget&label=downloads"/></a> [![codecov](https://codecov.io/gh/mdesalvo/OWLSharp.Extensions/graph/badge.svg?token=28Al9b371D)](https://codecov.io/gh/mdesalvo/OWLSharp.Extensions)
+# OWLSharp.Extensions <a href="https://www.nuget.org/packages/OWLSharp.Extensions"><img src="https://img.shields.io/nuget/dt/OWLSharp.Extensions?style=flat&color=9f7aea&logo=nuget&label=downloads"/></a> [![codecov](https://codecov.io/gh/mdesalvo/OWLSharp.Extensions/graph/badge.svg?token=28Al9b371D)](https://codecov.io/gh/mdesalvo/OWLSharp.Extensions)
 
 This is an extension of <a href="https://github.com/mdesalvo/OWLSharp">OWLSharp</a> suited for helping productivity with common <b>LinkedData ontologies</b>:
 <ul>
