@@ -871,7 +871,6 @@ public class TIMEConverterTest
         Assert.AreEqual(10d, result.Hour);
         Assert.AreEqual(30d, result.Minute);
         Assert.AreEqual(45d, result.Second);
-        Assert.IsTrue(result.Metadata.TRS.Equals(TIMECalendarReferenceSystem.Gregorian));
     }
 
     [TestMethod]

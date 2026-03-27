@@ -57,5 +57,31 @@ public class TIMEReferenceSystemRegistryTest
         Assert.IsGreaterThanOrEqualTo(5, TIMEReferenceSystemRegistry.TRSCount);
         Assert.IsTrue(TIMEReferenceSystemRegistry.ContainsTRS(millenniumTRS));
     }
+
+    [TestMethod]
+    public void ShouldGetRegisteredTRS()
+    {
+        TIMEReferenceSystem gregorian = TIMEReferenceSystemRegistry.GetTRS(TIMECalendarReferenceSystem.Gregorian);
+        Assert.IsNotNull(gregorian);
+        Assert.IsTrue(gregorian.Equals(TIMECalendarReferenceSystem.Gregorian));
+
+        TIMEReferenceSystem julian = TIMEReferenceSystemRegistry.GetTRS(TIMECalendarReferenceSystem.Julian);
+        Assert.IsNotNull(julian);
+        Assert.IsTrue(julian.Equals(TIMECalendarReferenceSystem.Julian));
+    }
+
+    [TestMethod]
+    public void ShouldReturnNullForUnregisteredTRS()
+    {
+        TIMEReferenceSystem unknown = TIMEReferenceSystemRegistry.GetTRS(new RDFResource("ex:unknownTRS"));
+        Assert.IsNull(unknown);
+    }
+
+    [TestMethod]
+    public void ShouldReturnNullForNullTRS()
+    {
+        TIMEReferenceSystem result = TIMEReferenceSystemRegistry.GetTRS(null);
+        Assert.IsNull(result);
+    }
     #endregion
 }

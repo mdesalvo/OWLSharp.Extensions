@@ -75,5 +75,21 @@ public class TIMECalendarReferenceSystemTest
     public void ShouldThrowExceptionOnCreatimeCalendarTRSBecauseInvalidMetrics6()
         => Assert.ThrowsExactly<OWLException>(() => _ = new TIMECalendarReferenceSystem(new RDFResource("ex:ModifiedGregorian"),
             new TIMECalendarReferenceSystemMetrics(60, 60, 24, [30, 30, 0, 31])));
+    //SecondsPerDay
+    [TestMethod]
+    public void ShouldHaveCorrectSecondsPerDay()
+    {
+        Assert.AreEqual(86400, TIMECalendarReferenceSystem.Gregorian.Metrics.SecondsPerDay);
+        Assert.AreEqual(86400, TIMECalendarReferenceSystem.Julian.Metrics.SecondsPerDay);
+    }
+
+    [TestMethod]
+    public void ShouldHaveCustomSecondsPerDay()
+    {
+        //A calendar with 100 seconds/minute, 100 minutes/hour, 10 hours/day
+        TIMECalendarReferenceSystemMetrics metrics = new TIMECalendarReferenceSystemMetrics(100, 100, 10, [30, 30, 30]);
+        Assert.AreEqual(100000, metrics.SecondsPerDay);
+    }
+
     #endregion
 }

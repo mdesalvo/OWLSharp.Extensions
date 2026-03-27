@@ -117,7 +117,7 @@ namespace OWLSharp.Extensions.TIME
                 throw new OWLException($"Cannot convert coordinate to position because given '{nameof(positionTRS)}' parameter is null");
 
             if (calendarTRS == null)
-                calendarTRS = TIMECalendarReferenceSystem.Gregorian;
+                calendarTRS = TIMEReferenceSystemRegistry.GetTRS(timeCoordinate.Metadata?.TRS) as TIMECalendarReferenceSystem ?? TIMECalendarReferenceSystem.Gregorian;
             #endregion
 
             #region Utility
@@ -222,7 +222,7 @@ namespace OWLSharp.Extensions.TIME
                 throw new OWLException($"Cannot normalize coordinate because given '{nameof(timeCoordinate)}' parameter is null");
 
             if (calendarTRS == null)
-                calendarTRS = TIMECalendarReferenceSystem.Gregorian;
+                calendarTRS = TIMEReferenceSystemRegistry.GetTRS(timeCoordinate.Metadata?.TRS) as TIMECalendarReferenceSystem ?? TIMECalendarReferenceSystem.Gregorian;
             #endregion
 
             //Normalize second
@@ -365,7 +365,7 @@ namespace OWLSharp.Extensions.TIME
                 throw new OWLException($"Cannot get duration from extent because given '{nameof(unitType)}' parameter is null");
 
             if (calendarTRS == null)
-                calendarTRS = TIMECalendarReferenceSystem.Gregorian;
+                calendarTRS = TIMEReferenceSystemRegistry.GetTRS(timeExtent.Metadata?.TRS) as TIMECalendarReferenceSystem ?? TIMECalendarReferenceSystem.Gregorian;
             #endregion
 
             //Transform the components to seconds (since duration works at this level of detail)
@@ -404,7 +404,7 @@ namespace OWLSharp.Extensions.TIME
                 throw new OWLException($"Cannot normalize extent because given '{nameof(timeExtent)}' parameter is null");
 
             if (calendarTRS == null)
-                calendarTRS = TIMECalendarReferenceSystem.Gregorian;
+                calendarTRS = TIMEReferenceSystemRegistry.GetTRS(timeExtent.Metadata?.TRS) as TIMECalendarReferenceSystem ?? TIMECalendarReferenceSystem.Gregorian;
             #endregion
 
             //Transform the components to seconds (since duration works at this level of detail)
@@ -430,7 +430,7 @@ namespace OWLSharp.Extensions.TIME
         /// <summary>
         /// Converts a temporal coordinate from one calendar TRS to another by computing absolute seconds
         /// in the source calendar and reconstructing the equivalent coordinate in the target calendar.
-        /// This enables cross-calendar conversions (e.g., Gregorian to Julian or vice versa).
+        /// Short-circuits to normalization when source and target are the same TRS.
         /// </summary>
         /// <exception cref="OWLException"></exception>
         public static TIMECoordinate ConvertCoordinate(TIMECoordinate timeCoordinate, TIMECalendarReferenceSystem sourceCalendarTRS, TIMECalendarReferenceSystem targetCalendarTRS)
@@ -478,7 +478,7 @@ namespace OWLSharp.Extensions.TIME
                 throw new OWLException($"Cannot get extent between coordinates because given '{nameof(timeCoordinateEnd)}' parameter is null");
 
             if (calendarTRS == null)
-                calendarTRS = TIMECalendarReferenceSystem.Gregorian;
+                calendarTRS = TIMEReferenceSystemRegistry.GetTRS(timeCoordinateStart.Metadata?.TRS) as TIMECalendarReferenceSystem ?? TIMECalendarReferenceSystem.Gregorian;
             #endregion
 
             //Normalize the given coordinates according to the metrics of the given calendar TRS
@@ -512,7 +512,7 @@ namespace OWLSharp.Extensions.TIME
         internal static double CoordinateToAbsoluteSeconds(TIMECoordinate coordinate, TIMECalendarReferenceSystem calendarTRS)
         {
             double totalSeconds = 0;
-            double secondsPerDay = calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay;
+            double secondsPerDay = calendarTRS.Metrics.SecondsPerDay;
 
             // Add years (traverse each year to handle leap years correctly)
             double currentYear = 0;
@@ -531,7 +531,8 @@ namespace OWLSharp.Extensions.TIME
                 totalSeconds += monthsInTargetYear[month - 1] * secondsPerDay;
 
             // Add remaining time components
-            totalSeconds += (coordinate.Day ?? 0) * secondsPerDay;
+            // Day is 1-based (Day=1 means first day, 0 complete days elapsed)
+            totalSeconds += Math.Max(0, (coordinate.Day ?? 1) - 1) * secondsPerDay;
             totalSeconds += (coordinate.Hour ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour;
             totalSeconds += (coordinate.Minute ?? 0) * calendarTRS.Metrics.SecondsInMinute;
             totalSeconds += coordinate.Second ?? 0;
@@ -544,7 +545,7 @@ namespace OWLSharp.Extensions.TIME
         /// </summary>
         internal static double SubYearSeconds(TIMECoordinate coordinate, TIMECalendarReferenceSystem calendarTRS)
         {
-            double secondsPerDay = calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay;
+            double secondsPerDay = calendarTRS.Metrics.SecondsPerDay;
             double totalSeconds = 0;
 
             uint[] months = calendarTRS.Metrics.LeapYearRule?.Invoke(coordinate.Year ?? 0) ?? calendarTRS.Metrics.Months;
@@ -567,7 +568,7 @@ namespace OWLSharp.Extensions.TIME
         /// </summary>
         internal static double SecondsBetweenCoordinates(TIMECoordinate start, TIMECoordinate end, TIMECalendarReferenceSystem calendarTRS)
         {
-            double secondsPerDay = calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay;
+            double secondsPerDay = calendarTRS.Metrics.SecondsPerDay;
             double startYear = start.Year ?? 0;
             double endYear = end.Year ?? 0;
             double yearDiff = endYear - startYear;

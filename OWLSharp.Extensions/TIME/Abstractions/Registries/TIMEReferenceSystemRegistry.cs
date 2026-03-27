@@ -100,6 +100,16 @@ namespace OWLSharp.Extensions.TIME
         /// </summary>
         public static bool ContainsTRS(RDFResource trsURI)
             => trsURI != null && Instance.TRS.ContainsKey(trsURI.ToString());
+
+        /// <summary>
+        /// Gets the registered temporal reference system (TRS) matching the given URI, or null if not found
+        /// </summary>
+        public static TIMEReferenceSystem GetTRS(RDFResource trsURI)
+        {
+            if (trsURI != null && Instance.TRS.TryGetValue(trsURI.ToString(), out TIMEReferenceSystem trs))
+                return trs;
+            return null;
+        }
         #endregion
     }
 }

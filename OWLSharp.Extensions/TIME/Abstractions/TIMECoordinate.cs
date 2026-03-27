@@ -142,18 +142,33 @@ namespace OWLSharp.Extensions.TIME
 
         #region Interfaces
         /// <summary>
-        /// Compares this temporal coordinate to the given one
+        /// Compares this temporal coordinate to the given one.
+        /// When both coordinates have different non-null TRS metadata, attempts cross-TRS comparison
+        /// by projecting both onto the universal timeline via their registered TRS.
         /// </summary>
-        /// <exception cref="OWLException">Thrown when both coordinates have non-null TRS metadata that differ</exception>
+        /// <exception cref="OWLException">Thrown when both coordinates have different non-null TRS that cannot be resolved from the registry</exception>
         public int CompareTo(TIMECoordinate other)
         {
             if (other == null)
                 return 1;
 
-            //Guard: coordinates must belong to the same TRS (when both have TRS metadata)
+            //Cross-TRS comparison: when both coordinates have different non-null TRS,
+            //resolve calendar TRS from registry and compare via absolute seconds
             if (Metadata?.TRS != null && other.Metadata?.TRS != null
                 && !Metadata.TRS.Equals(other.Metadata.TRS))
-                throw new OWLException("Cannot compare temporal coordinates because they belong to different temporal reference systems");
+            {
+                TIMECalendarReferenceSystem thisCalendarTRS = TIMEReferenceSystemRegistry.GetTRS(Metadata.TRS) as TIMECalendarReferenceSystem;
+                TIMECalendarReferenceSystem otherCalendarTRS = TIMEReferenceSystemRegistry.GetTRS(other.Metadata.TRS) as TIMECalendarReferenceSystem;
+
+                if (thisCalendarTRS == null || otherCalendarTRS == null)
+                    throw new OWLException("Cannot compare temporal coordinates because their temporal reference systems cannot be resolved from the registry");
+
+                double thisSeconds = TIMEConverter.CoordinateToAbsoluteSeconds(
+                    TIMEConverter.NormalizeCoordinate(this, thisCalendarTRS), thisCalendarTRS);
+                double otherSeconds = TIMEConverter.CoordinateToAbsoluteSeconds(
+                    TIMEConverter.NormalizeCoordinate(other, otherCalendarTRS), otherCalendarTRS);
+                return thisSeconds.CompareTo(otherSeconds);
+            }
 
             //Compare year
             double thisYear = Year ?? Zero.Year.Value;

@@ -126,6 +126,11 @@ namespace OWLSharp.Extensions.TIME
         /// Derived property that returns the total number of months in the calendar year (the length of the Months array)
         /// </summary>
         public uint MonthsInYear { get; }
+        
+        /// <summary>
+        /// Derived property that calculates the total number of seconds in one day for this calendar system
+        /// </summary>
+        public double SecondsPerDay { get; }
 
         /// <summary>
         /// Derived property indicating whether the calendar has fixed, non-variable metrics,
@@ -171,6 +176,7 @@ namespace OWLSharp.Extensions.TIME
             DaysInYear = Convert.ToUInt32(months.Sum(m => m));
             MonthsInYear = Convert.ToUInt32(months.Length);
             HasExactMetric = months.Distinct().Count() == 1;
+            SecondsPerDay = (double)secondsInMinute * minutesInHour * hoursInDay;
         }
         #endregion
 

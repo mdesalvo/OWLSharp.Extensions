@@ -192,14 +192,29 @@ public class TIMECoordinateTest
         Assert.AreEqual(expectedComparison, leftCoordinate.CompareTo(rightCoordinate));
     }
 
-    //Fix #2: TRS mismatch guard in CompareTo
+    //Fix #2 evolved: cross-TRS comparison via universal timeline
     [TestMethod]
-    public void ShouldThrowExceptionOnComparingCoordinatesWithDifferentTRS()
+    public void ShouldCompareCoordinatesWithDifferentRegisteredTRS()
     {
+        //Same numeric coordinates in Gregorian vs Julian: Gregorian 2024-01-01 is later on the universal
+        //timeline than Julian 2024-01-01 because Gregorian has fewer leap years (century exception)
         TIMECoordinate leftCoordinate = new TIMECoordinate(2024, 1, 1, 0, 0, 0,
             new TIMECoordinateMetadata(TIMECalendarReferenceSystem.Gregorian, RDFVocabulary.TIME.UNIT_SECOND));
         TIMECoordinate rightCoordinate = new TIMECoordinate(2024, 1, 1, 0, 0, 0,
             new TIMECoordinateMetadata(TIMECalendarReferenceSystem.Julian, RDFVocabulary.TIME.UNIT_SECOND));
+
+        //Gregorian has fewer leap years than Julian, so same date in Gregorian is earlier
+        int result = leftCoordinate.CompareTo(rightCoordinate);
+        Assert.AreEqual(-1, result);
+    }
+
+    [TestMethod]
+    public void ShouldThrowExceptionOnComparingCoordinatesWithUnresolvableTRS()
+    {
+        TIMECoordinate leftCoordinate = new TIMECoordinate(2024, 1, 1, 0, 0, 0,
+            new TIMECoordinateMetadata(new RDFResource("ex:unknownTRS1"), RDFVocabulary.TIME.UNIT_SECOND));
+        TIMECoordinate rightCoordinate = new TIMECoordinate(2024, 1, 1, 0, 0, 0,
+            new TIMECoordinateMetadata(new RDFResource("ex:unknownTRS2"), RDFVocabulary.TIME.UNIT_SECOND));
 
         Assert.ThrowsExactly<OWLException>(() => leftCoordinate.CompareTo(rightCoordinate));
     }
