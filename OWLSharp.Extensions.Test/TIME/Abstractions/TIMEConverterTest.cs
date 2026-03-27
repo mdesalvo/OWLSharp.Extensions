@@ -72,7 +72,7 @@ public class TIMEConverterTest
     [DataRow(61.25, TIMEUnitType.Day, 1, 1970, 3, 3, 6, 0, 0)]
     [DataRow(601.5, TIMEUnitType.Second, 30, 1970, 1, 1, 5, 0, 45)]
     [DataRow(10, TIMEUnitType.Year, 1, 1979, 12, 30, 0, 0, 0)] //2 leap years encountered (1972,1976)
-    [DataRow(16, TIMEUnitType.Month, 1, 1971, 4, 26, 0, 0, 0)] //Gregorian offset (P5D)
+    [DataRow(16, TIMEUnitType.Month, 1, 1971, 5, 2, 16, 0, 0)] //Gregorian offset (P5D)
     public void ShouldGetCalendarFromUnixTRSHavingDerivateUnit(double timePosition, TIMEUnitType unitType, double unitScale, int expectedYear, int expectedMonth,
         int expectedDay, int expectedHour, int expectedMinute, int expectedSecond)
     {
@@ -98,7 +98,7 @@ public class TIMEConverterTest
     [DataRow(717.5, 2000, 1, 1, 0, 0, 0, TIMEUnitType.Day, 1, 2001, 12, 18, 12, 0, 0)] //1 leap year encountered
     [DataRow(0, 2000, 1, 1, 0, 0, 0, TIMEUnitType.Month, 1, 2000, 1, 1, 0, 0, 0)]
     [DataRow(-717, 2000, 1, 1, 0, 0, 0, TIMEUnitType.Day, 1, 1998, 1, 14, 0, 0, 0)]
-    [DataRow(2, 2000, 11, 27, 0, 0, 0, TIMEUnitType.Month, 2, 2001, 3, 27, 0, 0, 0)]
+    [DataRow(2, 2000, 11, 27, 0, 0, 0, TIMEUnitType.Month, 2, 2001, 3, 28, 16, 0, 0)]
     public void ShouldGetCalendarFromCustomTRSHavingDerivateUnit(double timePosition, double originYear, double originMonth, double originDay,
         double originHour, double originMinute, double originSecond, TIMEUnitType unitType, double unitScale,
         int expectedYear, int expectedMonth, int expectedDay, int expectedHour, int expectedMinute, int expectedSecond)
@@ -433,11 +433,11 @@ public class TIMEConverterTest
     [DataRow(52.142857, "http://www.w3.org/2006/time#day", TIMEUnitType.Day, 7, 0d, 0d, 0d, 364d, 23d, 59d, 59d)]
     //months (Gregorian calendar TRS has not exact metric, so this component maps to equivalent days)
     [DataRow(0, "http://www.w3.org/2006/time#month", TIMEUnitType.Month, 1, 0d, 0d, 0d, 0d, 0d, 0d, 0d)]
-    [DataRow(0.5, "http://www.w3.org/2006/time#month", TIMEUnitType.Month, 1, 0d, 0d, 0d, 15d, 0d, 0d, 0d)]
-    [DataRow(1, "http://www.w3.org/2006/time#month", TIMEUnitType.Month, 1, 0d, 0d, 0d, 30d, 0d, 0d, 0d)]
-    [DataRow(2.5, "http://www.w3.org/2006/time#month", TIMEUnitType.Month, 1, 0d, 0d, 0d, 75d, 0d, 0d, 0d)]
-    [DataRow(8.2425, "http://www.w3.org/2006/time#month", TIMEUnitType.Month, 1, 0d, 0d, 0d, 247d, 6d, 35d, 59d)]
-    [DataRow(45.965, "http://www.w3.org/2006/time#month", TIMEUnitType.Month, 1, 0d, 0d, 0d, 1378d, 22d, 48d, 0d)]
+    [DataRow(0.5, "http://www.w3.org/2006/time#month", TIMEUnitType.Month, 1, 0d, 0d, 0d, 15d, 5d, 0d, 0d)]
+    [DataRow(1, "http://www.w3.org/2006/time#month", TIMEUnitType.Month, 1, 0d, 0d, 0d, 30d, 10d, 0d, 0d)]
+    [DataRow(2.5, "http://www.w3.org/2006/time#month", TIMEUnitType.Month, 1, 0d, 0d, 0d, 76d, 1d, 0d, 0d)]
+    [DataRow(8.2425, "http://www.w3.org/2006/time#month", TIMEUnitType.Month, 1, 0d, 0d, 0d, 250d, 17d, 1d, 29d)]
+    [DataRow(45.965, "http://www.w3.org/2006/time#month", TIMEUnitType.Month, 1, 0d, 0d, 0d, 1398d, 2d, 27d, 0d)]
     //years (Gregorian calendar TRS has not exact metric, so this component maps to equivalent days)
     [DataRow(0, "http://www.w3.org/2006/time#year", TIMEUnitType.Year, 1, 0d, 0d, 0d, 0d, 0d, 0d, 0d)]
     [DataRow(0.5, "http://www.w3.org/2006/time#year", TIMEUnitType.Year, 1, 0d, 0d, 0d, 182d, 12d, 0d, 0d)]
@@ -672,11 +672,11 @@ public class TIMEConverterTest
     [DataRow(52.142857, "http://www.w3.org/2006/time#day", TIMEUnitType.Day, 7, 0d, 0d, 0d, 364d, 23d, 59d, 59d)]
     //months (Gregorian calendar TRS has not exact metric, so this component maps to equivalent days)
     [DataRow(0, "http://www.w3.org/2006/time#month", TIMEUnitType.Month, 1, 0d, 0d, 0d, 0d, 0d, 0d, 0d)]
-    [DataRow(0.5, "http://www.w3.org/2006/time#month", TIMEUnitType.Month, 1, 0d, 0d, 0d, 15d, 0d, 0d, 0d)]
-    [DataRow(1, "http://www.w3.org/2006/time#month", TIMEUnitType.Month, 1, 0d, 0d, 0d, 30d, 0d, 0d, 0d)]
-    [DataRow(2.5, "http://www.w3.org/2006/time#month", TIMEUnitType.Month, 1, 0d, 0d, 0d, 75d, 0d, 0d, 0d)]
-    [DataRow(8.2425, "http://www.w3.org/2006/time#month", TIMEUnitType.Month, 1, 0d, 0d, 0d, 247d, 6d, 35d, 59d)]
-    [DataRow(45.965, "http://www.w3.org/2006/time#month", TIMEUnitType.Month, 1, 0d, 0d, 0d, 1378d, 22d, 48d, 0d)]
+    [DataRow(0.5, "http://www.w3.org/2006/time#month", TIMEUnitType.Month, 1, 0d, 0d, 0d, 15d, 5d, 0d, 0d)]
+    [DataRow(1, "http://www.w3.org/2006/time#month", TIMEUnitType.Month, 1, 0d, 0d, 0d, 30d, 10d, 0d, 0d)]
+    [DataRow(2.5, "http://www.w3.org/2006/time#month", TIMEUnitType.Month, 1, 0d, 0d, 0d, 76d, 1d, 0d, 0d)]
+    [DataRow(8.2425, "http://www.w3.org/2006/time#month", TIMEUnitType.Month, 1, 0d, 0d, 0d, 250d, 17d, 1d, 29d)]
+    [DataRow(45.965, "http://www.w3.org/2006/time#month", TIMEUnitType.Month, 1, 0d, 0d, 0d, 1398d, 2d, 27d, 0d)]
     //years (Gregorian calendar TRS has not exact metric, so this component maps to equivalent days)
     [DataRow(0, "http://www.w3.org/2006/time#year", TIMEUnitType.Year, 1, 0d, 0d, 0d, 0d, 0d, 0d, 0d)]
     [DataRow(0.5, "http://www.w3.org/2006/time#year", TIMEUnitType.Year, 1, 0d, 0d, 0d, 182d, 12d, 0d, 0d)]
@@ -771,23 +771,23 @@ public class TIMEConverterTest
     [DataRow(0, 0, 36, 0, 0, 0, 0, 0, 0, 0, 252, 0, 0, 0)]
     [DataRow(0, 0, 52.1, 0, 0, 0, 0, 0, 0, 0, 364, 16, 48, 0)]
     //months
-    [DataRow(0, 0.00505, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 38, 9)]
-    [DataRow(0, 0.005, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 36, 0)]
-    [DataRow(0, 0.05, 0, 0, 0, 0, 0, 0, 0, 0, 1, 12, 0, 0)]
-    [DataRow(0, 0.5, 0, 0, 0, 0, 0, 0, 0, 0, 15, 0, 0, 0)]
-    [DataRow(0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0)]
-    [DataRow(0, 1.2, 0, 0, 0, 0, 0, 0, 0, 0, 36, 0, 0, 0)]
-    [DataRow(0, 1.25, 0, 0, 0, 0, 0, 0, 0, 0, 37, 12, 0, 0)]
-    [DataRow(0, 1.255, 0, 0, 0, 0, 0, 0, 0, 0, 37, 15, 36, 0)]
-    [DataRow(0, 1.25502, 0, 0, 0, 0, 0, 0, 0, 0, 37, 15, 36, 51)]
-    [DataRow(0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 360, 0, 0, 0)]
+    [DataRow(0, 0.00505, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 41, 11)]
+    [DataRow(0, 0.005, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 39, 0)]
+    [DataRow(0, 0.05, 0, 0, 0, 0, 0, 0, 0, 0, 1, 12, 30, 0)]
+    [DataRow(0, 0.5, 0, 0, 0, 0, 0, 0, 0, 0, 15, 5, 0, 0)]
+    [DataRow(0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 30, 10, 0, 0)]
+    [DataRow(0, 1.2, 0, 0, 0, 0, 0, 0, 0, 0, 36, 12, 0, 0)]
+    [DataRow(0, 1.25, 0, 0, 0, 0, 0, 0, 0, 0, 38, 0, 30, 0)]
+    [DataRow(0, 1.255, 0, 0, 0, 0, 0, 0, 0, 0, 38, 4, 9, 0)]
+    [DataRow(0, 1.25502, 0, 0, 0, 0, 0, 0, 0, 0, 38, 4, 9, 52)]
+    [DataRow(0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 365, 0, 0, 0)]
     //years
     [DataRow(0.052, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18, 23, 31, 11)]
     [DataRow(0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 182, 12, 0, 0)]
     [DataRow(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 365, 0, 0, 0)]
     [DataRow(1.2425, 0, 0, 0, 0, 0, 0, 0, 0, 0, 453, 12, 18, 0)]
     //mixed components
-    [DataRow(1, 1, 1, 40, 25, 64, 62, 0, 0, 0, 443, 2, 5, 2)]
+    [DataRow(1, 1, 1, 40, 25, 64, 62, 0, 0, 0, 443, 12, 5, 2)]
     public void ShouldNormalizeExtentToGregorianCalendar(double originYears, double originMonths, double originWeeks,
         double originDays, double originHours, double originMinutes, double originSeconds, double expectedYears,
         double expectedMonths, double expectedWeeks, double expectedDays, double expectedHours,
@@ -808,9 +808,9 @@ public class TIMEConverterTest
     }
 
     [TestMethod]
-    [DataRow(-2023, null, null, null, null, null, 2023, 4, 29, 11, 38, 10, 0, 0, 0, 1476908, 11, 38, 10)]
-    [DataRow(null, null, null, null, null, null, 2023, 4, 29, 11, 38, 10, 0, 0, 0, 738513, 11, 38, 10)]
-    [DataRow(2023, 4, 29, 11, 38, 10, null, null, null, null, null, null, 0, 0, 0, 738513, 11, 38, 10)] //swap
+    [DataRow(-2023, null, null, null, null, null, 2023, 4, 29, 11, 38, 10, 0, 0, 0, 1477015, 11, 38, 10)]
+    [DataRow(null, null, null, null, null, null, 2023, 4, 29, 11, 38, 10, 0, 0, 0, 738620, 11, 38, 10)]
+    [DataRow(2023, 4, 29, 11, 38, 10, null, null, null, null, null, null, 0, 0, 0, 738620, 11, 38, 10)] //swap
     [DataRow(2023, null, null, null, null, null, 2023, 4, 29, 11, 38, 10, 0, 0, 0, 118, 11, 38, 10)]
     [DataRow(2023, 4, 29, 11, 38, 10, 2023, 4, 29, 11, 38, 10, 0, 0, 0, 0, 0, 0, 0)]
     [DataRow(2023, 4, 29, 11, 38, 11, 2023, 4, 29, 11, 38, 10, 0, 0, 0, 0, 0, 0, 1)]
@@ -818,12 +818,12 @@ public class TIMEConverterTest
     [DataRow(2023, 4, 29, 12, 39, 11, 2023, 4, 29, 11, 38, 10, 0, 0, 0, 0, 1, 1, 1)]
     [DataRow(2023, 4, 30, 12, 39, 11, 2023, 4, 29, 11, 38, 10, 0, 0, 0, 1, 1, 1, 1)]
     [DataRow(2023, 5, 30, 12, 39, 11, 2023, 4, 29, 11, 38, 10, 0, 0, 0, 31, 1, 1, 1)]
-    [DataRow(2024, 5, 30, 12, 39, 11, 2023, 4, 29, 11, 38, 10, 0, 0, 0, 396, 1, 1, 1)]
-    [DataRow(1983, 2, 10, 15, 30, 30, 2023, 4, 29, 11, 38, 10, 0, 0, 0, 14678, 20, 7, 40)]
-    [DataRow(2023, 4, 29, 11, 38, 10, 1983, 2, 10, 15, 30, 30, 0, 0, 0, 14678, 20, 7, 40)] //swap
-    [DataRow(1983, 2, 10, 15, 30, 30, 1997, 7, 14, 10, 30, 00, 0, 0, 0, 5263, 18, 59, 30)]
+    [DataRow(2024, 5, 30, 12, 39, 11, 2023, 4, 29, 11, 38, 10, 0, 0, 0, 397, 1, 1, 1)]
+    [DataRow(1983, 2, 10, 15, 30, 30, 2023, 4, 29, 11, 38, 10, 0, 0, 0, 14687, 20, 7, 40)]
+    [DataRow(2023, 4, 29, 11, 38, 10, 1983, 2, 10, 15, 30, 30, 0, 0, 0, 14687, 20, 7, 40)] //swap
+    [DataRow(1983, 2, 10, 15, 30, 30, 1997, 7, 14, 10, 30, 00, 0, 0, 0, 5267, 18, 59, 30)]
     [DataRow(2025, 1, 1, 0, 0, 0, 2024, 12, 31, 24, 0, 0, 0, 0, 0, 0, 0, 0, 0)]
-    [DataRow(2025, 1, 31, 0, 0, 0, 2024, 10, 7, 24, 0, 0, 0, 0, 0, 118, 0, 0, 0)]
+    [DataRow(2025, 1, 31, 0, 0, 0, 2024, 10, 7, 24, 0, 0, 0, 0, 0, 115, 0, 0, 0)]
     public void ShouldCalculateExtentBetweenCoordinates(double startYear, double startMonth, double startDay, double startHour, double startMinute, double startSecond,
         double endYear, double endMonth, double endDay, double endHour, double endMinute, double endSecond,
         double expectedYears, double expectedMonths, double expectedWeeks, double expectedDays, double expectedHours, double expectedMinutes, double expectedSeconds)
@@ -842,6 +842,82 @@ public class TIMEConverterTest
         Assert.AreEqual(expectedHours, te.Hours);
         Assert.AreEqual(expectedMinutes, te.Minutes);
         Assert.AreEqual(expectedSeconds, te.Seconds);
+    }
+
+    //ConvertCoordinate (Calendar-to-Calendar)
+
+    [TestMethod]
+    public void ShouldThrowExceptionOnConvertCoordinateBecauseNullCoordinate()
+        => Assert.ThrowsExactly<OWLException>(() => _ = TIMEConverter.ConvertCoordinate(null, TIMECalendarReferenceSystem.Gregorian, TIMECalendarReferenceSystem.Julian));
+
+    [TestMethod]
+    public void ShouldThrowExceptionOnConvertCoordinateBecauseNullSourceTRS()
+        => Assert.ThrowsExactly<OWLException>(() => _ = TIMEConverter.ConvertCoordinate(new TIMECoordinate(2000, 1, 1, 0, 0, 0), null, TIMECalendarReferenceSystem.Julian));
+
+    [TestMethod]
+    public void ShouldThrowExceptionOnConvertCoordinateBecauseNullTargetTRS()
+        => Assert.ThrowsExactly<OWLException>(() => _ = TIMEConverter.ConvertCoordinate(new TIMECoordinate(2000, 1, 1, 0, 0, 0), TIMECalendarReferenceSystem.Gregorian, null));
+
+    [TestMethod]
+    public void ShouldConvertCoordinateSameTRS()
+    {
+        TIMECoordinate source = new TIMECoordinate(2024, 3, 15, 10, 30, 45);
+        TIMECoordinate result = TIMEConverter.ConvertCoordinate(source, TIMECalendarReferenceSystem.Gregorian, TIMECalendarReferenceSystem.Gregorian);
+
+        Assert.IsNotNull(result);
+        Assert.AreEqual(2024d, result.Year);
+        Assert.AreEqual(3d, result.Month);
+        Assert.AreEqual(15d, result.Day);
+        Assert.AreEqual(10d, result.Hour);
+        Assert.AreEqual(30d, result.Minute);
+        Assert.AreEqual(45d, result.Second);
+        Assert.IsTrue(result.Metadata.TRS.Equals(TIMECalendarReferenceSystem.Gregorian));
+    }
+
+    [TestMethod]
+    public void ShouldConvertCoordinateGregorianToJulian()
+    {
+        TIMECoordinate source = new TIMECoordinate(2024, 3, 15, 12, 0, 0);
+        TIMECoordinate result = TIMEConverter.ConvertCoordinate(source, TIMECalendarReferenceSystem.Gregorian, TIMECalendarReferenceSystem.Julian);
+
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Metadata.TRS.Equals(TIMECalendarReferenceSystem.Julian));
+        //The Julian calendar has more leap years, so the same absolute time from year 0
+        //maps to a different (earlier) calendar date in Julian
+        Assert.IsNotNull(result.Year);
+        Assert.IsNotNull(result.Month);
+        Assert.IsNotNull(result.Day);
+        Assert.AreEqual(12d, result.Hour);
+        Assert.AreEqual(0d, result.Minute);
+        Assert.AreEqual(0d, result.Second);
+    }
+
+    [TestMethod]
+    public void ShouldConvertCoordinateWithSmallDateRange()
+    {
+        //Use a date in a range where both calendars have identical leap year behavior (before year 100)
+        //to verify the conversion round-trip is exact
+        TIMECoordinate source = new TIMECoordinate(50, 6, 15, 10, 30, 0);
+        TIMECoordinate result = TIMEConverter.ConvertCoordinate(source, TIMECalendarReferenceSystem.Julian, TIMECalendarReferenceSystem.Julian);
+
+        Assert.AreEqual(50d, result.Year);
+        Assert.AreEqual(6d, result.Month);
+        Assert.AreEqual(15d, result.Day);
+        Assert.AreEqual(10d, result.Hour);
+        Assert.AreEqual(30d, result.Minute);
+        Assert.AreEqual(0d, result.Second);
+    }
+
+    [TestMethod]
+    public void ShouldConvertCoordinatePreservesTimeComponents()
+    {
+        TIMECoordinate source = new TIMECoordinate(100, 6, 15, 23, 59, 59);
+        TIMECoordinate result = TIMEConverter.ConvertCoordinate(source, TIMECalendarReferenceSystem.Gregorian, TIMECalendarReferenceSystem.Julian);
+
+        Assert.IsNotNull(result);
+        Assert.AreEqual(23d, result.Hour);
+        Assert.AreEqual(59d, result.Minute);
+        Assert.AreEqual(59d, result.Second);
     }
     #endregion
 }

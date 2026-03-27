@@ -65,6 +65,18 @@ namespace OWLSharp.Extensions.TIME
         /// </summary>
         public bool Equals(TIMEInstantDescription other)
             => CompareTo(other) == 0;
+
+        /// <summary>
+        /// Compares this instant description to the given object for equality
+        /// </summary>
+        public override bool Equals(object obj)
+            => obj is TIMEInstantDescription other && Equals(other);
+
+        /// <summary>
+        /// Gets the hash code of this instant description based on its coordinate
+        /// </summary>
+        public override int GetHashCode()
+            => Coordinate?.ToString().GetHashCode() ?? 0;
         #endregion
     }
 }

@@ -2280,8 +2280,8 @@ public class TIMEHelperTest : TIMETestOntology
         Assert.AreEqual(0, timeExtent.Years);
         Assert.AreEqual(0, timeExtent.Months);
         Assert.AreEqual(0, timeExtent.Weeks);
-        Assert.AreEqual(2299, timeExtent.Days);
-        Assert.AreEqual(9, timeExtent.Hours);
+        Assert.AreEqual(2300, timeExtent.Days);
+        Assert.AreEqual(15, timeExtent.Hours);
         Assert.AreEqual(8, timeExtent.Minutes);
         Assert.AreEqual(1, timeExtent.Seconds);
     }
@@ -2404,7 +2404,7 @@ public class TIMEHelperTest : TIMETestOntology
         Assert.AreEqual(0, timeExtent.Years);
         Assert.AreEqual(0, timeExtent.Months);
         Assert.AreEqual(0, timeExtent.Weeks);
-        Assert.AreEqual(2191, timeExtent.Days);
+        Assert.AreEqual(2193, timeExtent.Days);
         Assert.AreEqual(0, timeExtent.Hours);
         Assert.AreEqual(0, timeExtent.Minutes);
         Assert.AreEqual(0, timeExtent.Seconds);

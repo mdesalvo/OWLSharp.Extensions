@@ -180,6 +180,18 @@ namespace OWLSharp.Extensions.TIME
         /// </summary>
         public bool Equals(TIMEExtent other)
             => CompareTo(other) == 0;
+
+        /// <summary>
+        /// Compares this temporal extent to the given object for equality
+        /// </summary>
+        public override bool Equals(object obj)
+            => obj is TIMEExtent other && Equals(other);
+
+        /// <summary>
+        /// Gets the hash code of this temporal extent
+        /// </summary>
+        public override int GetHashCode()
+            => ToString().GetHashCode();
         #endregion
 
         #region Methods

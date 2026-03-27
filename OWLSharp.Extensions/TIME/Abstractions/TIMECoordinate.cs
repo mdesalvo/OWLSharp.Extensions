@@ -144,10 +144,16 @@ namespace OWLSharp.Extensions.TIME
         /// <summary>
         /// Compares this temporal coordinate to the given one
         /// </summary>
+        /// <exception cref="OWLException">Thrown when both coordinates have non-null TRS metadata that differ</exception>
         public int CompareTo(TIMECoordinate other)
         {
             if (other == null)
                 return 1;
+
+            //Guard: coordinates must belong to the same TRS (when both have TRS metadata)
+            if (Metadata?.TRS != null && other.Metadata?.TRS != null
+                && !Metadata.TRS.Equals(other.Metadata.TRS))
+                throw new OWLException("Cannot compare temporal coordinates because they belong to different temporal reference systems");
 
             //Compare year
             double thisYear = Year ?? Zero.Year.Value;
@@ -193,6 +199,18 @@ namespace OWLSharp.Extensions.TIME
         /// </summary>
         public bool Equals(TIMECoordinate other)
             => CompareTo(other) == 0;
+
+        /// <summary>
+        /// Compares this temporal coordinate to the given object for equality
+        /// </summary>
+        public override bool Equals(object obj)
+            => obj is TIMECoordinate other && Equals(other);
+
+        /// <summary>
+        /// Gets the hash code of this temporal coordinate
+        /// </summary>
+        public override int GetHashCode()
+            => ToString().GetHashCode();
         #endregion
 
         #region Methods

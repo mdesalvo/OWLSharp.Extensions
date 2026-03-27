@@ -16,6 +16,7 @@
 
 using RDFSharp.Model;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace OWLSharp.Extensions.TIME
@@ -46,7 +47,7 @@ namespace OWLSharp.Extensions.TIME
         /// <summary>
         /// Internal dictionary of registered temporal reference systems (TRS)
         /// </summary>
-        internal Dictionary<string,TIMEReferenceSystem> TRS { get; set; }
+        internal ConcurrentDictionary<string,TIMEReferenceSystem> TRS { get; set; }
         #endregion
 
         #region Ctors
@@ -57,7 +58,7 @@ namespace OWLSharp.Extensions.TIME
         {
             Instance = new TIMEReferenceSystemRegistry
             {
-                TRS = new Dictionary<string, TIMEReferenceSystem>
+                TRS = new ConcurrentDictionary<string, TIMEReferenceSystem>(new Dictionary<string, TIMEReferenceSystem>
                 {
                     //Calendar TRS
                     { TIMECalendarReferenceSystem.Gregorian.ToString(), TIMECalendarReferenceSystem.Gregorian },
@@ -65,7 +66,7 @@ namespace OWLSharp.Extensions.TIME
                     //Position TRS
                     { TIMEPositionReferenceSystem.UnixTime.ToString(), TIMEPositionReferenceSystem.UnixTime },
                     { TIMEPositionReferenceSystem.GeologicTime.ToString(), TIMEPositionReferenceSystem.GeologicTime }
-                }
+                })
             };
         }
         #endregion
@@ -90,8 +91,8 @@ namespace OWLSharp.Extensions.TIME
         /// </summary>
         public static void AddTRS(TIMEReferenceSystem trs)
         {
-            if (trs != null && !Instance.TRS.ContainsKey(trs.ToString()))
-                Instance.TRS.Add(trs.ToString(), trs);
+            if (trs != null)
+                Instance.TRS.TryAdd(trs.ToString(), trs);
         }
 
         /// <summary>

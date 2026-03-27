@@ -16,6 +16,7 @@
 
 using RDFSharp.Model;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace OWLSharp.Extensions.TIME
@@ -46,7 +47,7 @@ namespace OWLSharp.Extensions.TIME
         /// <summary>
         /// Internal dictionary of registered temporal unit types
         /// </summary>
-        internal Dictionary<string,TIMEUnit> UnitTypes { get; set; }
+        internal ConcurrentDictionary<string,TIMEUnit> UnitTypes { get; set; }
         #endregion
 
         #region Ctors
@@ -57,7 +58,7 @@ namespace OWLSharp.Extensions.TIME
         {
             Instance = new TIMEUnitTypeRegistry
             {
-                UnitTypes = new Dictionary<string, TIMEUnit>
+                UnitTypes = new ConcurrentDictionary<string, TIMEUnit>(new Dictionary<string, TIMEUnit>
                 {
                     //Built-Ins
                     { TIMEUnit.Millennium.ToString(), TIMEUnit.Millennium },
@@ -74,7 +75,7 @@ namespace OWLSharp.Extensions.TIME
                     { TIMEUnit.BillionYearsAgo.ToString(), TIMEUnit.BillionYearsAgo },
                     { TIMEUnit.MillionYearsAgo.ToString(), TIMEUnit.MillionYearsAgo },
                     { TIMEUnit.MarsSol.ToString(), TIMEUnit.MarsSol }
-                }
+                })
             };
         }
         #endregion
@@ -99,8 +100,8 @@ namespace OWLSharp.Extensions.TIME
         /// </summary>
         public static void AddUnitType(TIMEUnit unitType)
         {
-            if (unitType != null && !Instance.UnitTypes.ContainsKey(unitType.ToString()))
-                Instance.UnitTypes.Add(unitType.ToString(), unitType);
+            if (unitType != null)
+                Instance.UnitTypes.TryAdd(unitType.ToString(), unitType);
         }
 
         /// <summary>

@@ -158,5 +158,38 @@ public class TIMEExtentTest
 
         Assert.AreEqual(expectedComparison, leftExtent.CompareTo(rightExtent));
     }
+
+    //Fix #10: Equals/GetHashCode contract
+    [TestMethod]
+    public void ShouldEqualsObjectWork()
+    {
+        TIMEExtent extent1 = new TIMEExtent(1, 2, 3, 4, 5, 6, 7);
+        TIMEExtent extent2 = new TIMEExtent(1, 2, 3, 4, 5, 6, 7);
+        object extent2AsObject = extent2;
+
+        Assert.IsTrue(extent1.Equals(extent2AsObject));
+        Assert.IsFalse(extent1.Equals("not an extent"));
+        Assert.IsFalse(extent1.Equals((object)null));
+    }
+
+    [TestMethod]
+    public void ShouldGetHashCodeConsistentWithEquals()
+    {
+        TIMEExtent extent1 = new TIMEExtent(1, 2, 3, 4, 5, 6, 7);
+        TIMEExtent extent2 = new TIMEExtent(1, 2, 3, 4, 5, 6, 7);
+
+        Assert.IsTrue(extent1.Equals(extent2));
+        Assert.AreEqual(extent1.GetHashCode(), extent2.GetHashCode());
+    }
+
+    [TestMethod]
+    public void ShouldGetHashCodeDifferForDifferentExtents()
+    {
+        TIMEExtent extent1 = new TIMEExtent(1, 2, 3, 4, 5, 6, 7);
+        TIMEExtent extent2 = new TIMEExtent(1, 2, 3, 4, 5, 6, 8);
+
+        Assert.IsFalse(extent1.Equals(extent2));
+        Assert.AreNotEqual(extent1.GetHashCode(), extent2.GetHashCode());
+    }
     #endregion
 }

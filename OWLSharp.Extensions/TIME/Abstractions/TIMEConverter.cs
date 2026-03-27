@@ -59,8 +59,8 @@ namespace OWLSharp.Extensions.TIME
 
                 //Transform the scaled time position to years (since the large scale works at this level of detail)
                 double timePositionYears =
-                    positionTRS.Unit.UnitType == TIMEEnums.TIMEUnitType.Second ? scaledTimePosition / calendarTRS.Metrics.SecondsInMinute / calendarTRS.Metrics.MinutesInHour / calendarTRS.Metrics.HoursInDay  / (calendarTRS.Metrics.DaysInYear / calendarTRS.Metrics.MonthsInYear) :
-                    positionTRS.Unit.UnitType == TIMEEnums.TIMEUnitType.Minute ? scaledTimePosition / calendarTRS.Metrics.MinutesInHour   / calendarTRS.Metrics.HoursInDay    / (calendarTRS.Metrics.DaysInYear / calendarTRS.Metrics.MonthsInYear) :
+                    positionTRS.Unit.UnitType == TIMEEnums.TIMEUnitType.Second ? scaledTimePosition / calendarTRS.Metrics.SecondsInMinute / calendarTRS.Metrics.MinutesInHour / calendarTRS.Metrics.HoursInDay  / ((double)calendarTRS.Metrics.DaysInYear / calendarTRS.Metrics.MonthsInYear) :
+                    positionTRS.Unit.UnitType == TIMEEnums.TIMEUnitType.Minute ? scaledTimePosition / calendarTRS.Metrics.MinutesInHour   / calendarTRS.Metrics.HoursInDay    / ((double)calendarTRS.Metrics.DaysInYear / calendarTRS.Metrics.MonthsInYear) :
                     positionTRS.Unit.UnitType == TIMEEnums.TIMEUnitType.Hour   ? scaledTimePosition / calendarTRS.Metrics.HoursInDay      / (calendarTRS.Metrics.DaysInYear   / calendarTRS.Metrics.MonthsInYear) :
                     positionTRS.Unit.UnitType == TIMEEnums.TIMEUnitType.Day    ? scaledTimePosition / (calendarTRS.Metrics.DaysInYear     / calendarTRS.Metrics.MonthsInYear) :
                     positionTRS.Unit.UnitType == TIMEEnums.TIMEUnitType.Month  ? scaledTimePosition / calendarTRS.Metrics.MonthsInYear :
@@ -88,7 +88,7 @@ namespace OWLSharp.Extensions.TIME
                     positionTRS.Unit.UnitType == TIMEEnums.TIMEUnitType.Minute ? scaledTimePosition * calendarTRS.Metrics.SecondsInMinute :
                     positionTRS.Unit.UnitType == TIMEEnums.TIMEUnitType.Hour   ? scaledTimePosition * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour :
                     positionTRS.Unit.UnitType == TIMEEnums.TIMEUnitType.Day    ? scaledTimePosition * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay :
-                    positionTRS.Unit.UnitType == TIMEEnums.TIMEUnitType.Month  ? scaledTimePosition * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * (calendarTRS.Metrics.DaysInYear / calendarTRS.Metrics.MonthsInYear) :
+                    positionTRS.Unit.UnitType == TIMEEnums.TIMEUnitType.Month  ? scaledTimePosition * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * ((double)calendarTRS.Metrics.DaysInYear / calendarTRS.Metrics.MonthsInYear) :
                     positionTRS.Unit.UnitType == TIMEEnums.TIMEUnitType.Year   ? scaledTimePosition * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * calendarTRS.Metrics.DaysInYear :
                     0;
 
@@ -199,7 +199,7 @@ namespace OWLSharp.Extensions.TIME
                     positionTRS.Unit.UnitType == TIMEEnums.TIMEUnitType.Minute ? secondsDifference / calendarTRS.Metrics.SecondsInMinute :
                     positionTRS.Unit.UnitType == TIMEEnums.TIMEUnitType.Hour ? secondsDifference / (calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour) :
                     positionTRS.Unit.UnitType == TIMEEnums.TIMEUnitType.Day ? secondsDifference / (calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay) :
-                    positionTRS.Unit.UnitType == TIMEEnums.TIMEUnitType.Month ? secondsDifference / (calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * (calendarTRS.Metrics.DaysInYear / calendarTRS.Metrics.MonthsInYear)) :
+                    positionTRS.Unit.UnitType == TIMEEnums.TIMEUnitType.Month ? secondsDifference / (calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * ((double)calendarTRS.Metrics.DaysInYear / calendarTRS.Metrics.MonthsInYear)) :
                     positionTRS.Unit.UnitType == TIMEEnums.TIMEUnitType.Year ? secondsDifference / (calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * calendarTRS.Metrics.DaysInYear) :
                     0;
     
@@ -327,7 +327,7 @@ namespace OWLSharp.Extensions.TIME
                 unitType.UnitType == TIMEEnums.TIMEUnitType.Minute ? scaledTimeDuration * calendarTRS.Metrics.SecondsInMinute :
                 unitType.UnitType == TIMEEnums.TIMEUnitType.Hour   ? scaledTimeDuration * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour :
                 unitType.UnitType == TIMEEnums.TIMEUnitType.Day    ? scaledTimeDuration * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay :
-                unitType.UnitType == TIMEEnums.TIMEUnitType.Month  ? scaledTimeDuration * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * (calendarTRS.Metrics.DaysInYear / calendarTRS.Metrics.MonthsInYear) :
+                unitType.UnitType == TIMEEnums.TIMEUnitType.Month  ? scaledTimeDuration * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * ((double)calendarTRS.Metrics.DaysInYear / calendarTRS.Metrics.MonthsInYear) :
                 unitType.UnitType == TIMEEnums.TIMEUnitType.Year   ? scaledTimeDuration * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * calendarTRS.Metrics.DaysInYear :
                 0;
 
@@ -342,8 +342,8 @@ namespace OWLSharp.Extensions.TIME
             extent.Years   = 0;
             if (calendarTRS.Metrics.HasExactMetric)
             {
-                extent.Days %= (calendarTRS.Metrics.DaysInYear / calendarTRS.Metrics.MonthsInYear);
-                extent.Months = Math.Truncate((timeDurationSeconds / calendarTRS.Metrics.SecondsInMinute / calendarTRS.Metrics.MinutesInHour / calendarTRS.Metrics.HoursInDay / (calendarTRS.Metrics.DaysInYear / calendarTRS.Metrics.MonthsInYear)) % calendarTRS.Metrics.MonthsInYear);
+                extent.Days %= ((double)calendarTRS.Metrics.DaysInYear / calendarTRS.Metrics.MonthsInYear);
+                extent.Months = Math.Truncate((timeDurationSeconds / calendarTRS.Metrics.SecondsInMinute / calendarTRS.Metrics.MinutesInHour / calendarTRS.Metrics.HoursInDay / ((double)calendarTRS.Metrics.DaysInYear / calendarTRS.Metrics.MonthsInYear)) % calendarTRS.Metrics.MonthsInYear);
                 extent.Years = Math.Truncate((timeDurationSeconds / calendarTRS.Metrics.SecondsInMinute / calendarTRS.Metrics.MinutesInHour / calendarTRS.Metrics.HoursInDay / calendarTRS.Metrics.DaysInYear) % calendarTRS.Metrics.DaysInYear);
             }
 
@@ -374,7 +374,7 @@ namespace OWLSharp.Extensions.TIME
             totalSeconds += ((timeExtent.Hours       ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour);
             totalSeconds += ((timeExtent.Days        ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay);
             totalSeconds += ((timeExtent.Weeks       ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * TIMEUnit.Week.ScaleFactor);
-            totalSeconds += ((timeExtent.Months      ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * (calendarTRS.Metrics.DaysInYear / calendarTRS.Metrics.MonthsInYear));
+            totalSeconds += ((timeExtent.Months      ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * ((double)calendarTRS.Metrics.DaysInYear / calendarTRS.Metrics.MonthsInYear));
             totalSeconds += ((timeExtent.Years       ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * calendarTRS.Metrics.DaysInYear);
 
             //Convert seconds to the target unit type
@@ -383,7 +383,7 @@ namespace OWLSharp.Extensions.TIME
                 unitType.UnitType == TIMEEnums.TIMEUnitType.Minute ? totalSeconds / calendarTRS.Metrics.SecondsInMinute :
                 unitType.UnitType == TIMEEnums.TIMEUnitType.Hour   ? totalSeconds / (calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour) :
                 unitType.UnitType == TIMEEnums.TIMEUnitType.Day    ? totalSeconds / (calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay) :
-                unitType.UnitType == TIMEEnums.TIMEUnitType.Month  ? totalSeconds / (calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * (calendarTRS.Metrics.DaysInYear / calendarTRS.Metrics.MonthsInYear)) :
+                unitType.UnitType == TIMEEnums.TIMEUnitType.Month  ? totalSeconds / (calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * ((double)calendarTRS.Metrics.DaysInYear / calendarTRS.Metrics.MonthsInYear)) :
                 unitType.UnitType == TIMEEnums.TIMEUnitType.Year   ? totalSeconds / (calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * calendarTRS.Metrics.DaysInYear) :
                 0;
 
@@ -413,7 +413,7 @@ namespace OWLSharp.Extensions.TIME
             timeExtentSeconds += ((timeExtent.Hours       ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour);
             timeExtentSeconds += ((timeExtent.Days        ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay);
             timeExtentSeconds += ((timeExtent.Weeks       ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * TIMEUnit.Week.ScaleFactor);
-            timeExtentSeconds += ((timeExtent.Months      ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * (calendarTRS.Metrics.DaysInYear / calendarTRS.Metrics.MonthsInYear));
+            timeExtentSeconds += ((timeExtent.Months      ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * ((double)calendarTRS.Metrics.DaysInYear / calendarTRS.Metrics.MonthsInYear));
             timeExtentSeconds += ((timeExtent.Years       ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * calendarTRS.Metrics.DaysInYear);
 
             //Obtain an equivalent calendar TRS with forced inexact metrics: this is needed to suppress
@@ -425,6 +425,42 @@ namespace OWLSharp.Extensions.TIME
                 };
 
             return DurationToExtent(timeExtentSeconds, TIMEUnit.Second, inexactCalendarTRS);
+        }
+
+        /// <summary>
+        /// Converts a temporal coordinate from one calendar TRS to another by computing absolute seconds
+        /// in the source calendar and reconstructing the equivalent coordinate in the target calendar.
+        /// This enables cross-calendar conversions (e.g., Gregorian to Julian or vice versa).
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        public static TIMECoordinate ConvertCoordinate(TIMECoordinate timeCoordinate, TIMECalendarReferenceSystem sourceCalendarTRS, TIMECalendarReferenceSystem targetCalendarTRS)
+        {
+            #region Guards
+            if (timeCoordinate == null)
+                throw new OWLException($"Cannot convert coordinate because given '{nameof(timeCoordinate)}' parameter is null");
+            if (sourceCalendarTRS == null)
+                throw new OWLException($"Cannot convert coordinate because given '{nameof(sourceCalendarTRS)}' parameter is null");
+            if (targetCalendarTRS == null)
+                throw new OWLException($"Cannot convert coordinate because given '{nameof(targetCalendarTRS)}' parameter is null");
+            #endregion
+
+            //Short-circuit: if source and target are the same TRS, just normalize and return
+            if (sourceCalendarTRS.Equals(targetCalendarTRS))
+                return NormalizeCoordinate(timeCoordinate, sourceCalendarTRS);
+
+            //Normalize the coordinate in the source calendar TRS
+            TIMECoordinate normalizedSource = NormalizeCoordinate(timeCoordinate, sourceCalendarTRS);
+
+            //Compute absolute seconds from year 0 in the source calendar
+            double absoluteSeconds = CoordinateToAbsoluteSeconds(normalizedSource, sourceCalendarTRS);
+
+            //Reconstruct the coordinate in the target calendar by ticking forward from year 0
+            TIMECoordinate targetCoordinate = new TIMECoordinate(0, 1, 1, 0, 0, 0);
+            if (absoluteSeconds > 0)
+                TickForward(absoluteSeconds, targetCoordinate, targetCalendarTRS);
+
+            targetCoordinate.Metadata = new TIMECoordinateMetadata(targetCalendarTRS, RDFVocabulary.TIME.UNIT_SECOND);
+            return targetCoordinate;
         }
 
         /// <summary>
@@ -459,28 +495,107 @@ namespace OWLSharp.Extensions.TIME
                 normalizedEnd = swapCoordinate;
             }
 
-            //Reduce start coordinate to seconds
-            double normalizedStartSeconds = normalizedStart.Second.Value
-                                             + (normalizedStart.Minute.Value * calendarTRS.Metrics.SecondsInMinute)
-                                             + (normalizedStart.Hour.Value   * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour)
-                                             + (normalizedStart.Day.Value    * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay)
-                                             + (normalizedStart.Month.Value  * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * (calendarTRS.Metrics.DaysInYear / calendarTRS.Metrics.MonthsInYear))
-                                             + (normalizedStart.Year.Value   * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * calendarTRS.Metrics.DaysInYear);
-
-            //Reduce end coordinate to seconds
-            double normalizedEndSeconds =  normalizedEnd.Second.Value
-                                             + (normalizedEnd.Minute.Value   * calendarTRS.Metrics.SecondsInMinute)
-                                             + (normalizedEnd.Hour.Value     * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour)
-                                             + (normalizedEnd.Day.Value      * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay)
-                                             + (normalizedEnd.Month.Value    * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * (calendarTRS.Metrics.DaysInYear / calendarTRS.Metrics.MonthsInYear))
-                                             + (normalizedEnd.Year.Value     * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * calendarTRS.Metrics.DaysInYear);
+            //Compute seconds directly between the two coordinates (handles negative years and large ranges)
+            double secondsBetween = SecondsBetweenCoordinates(normalizedStart, normalizedEnd, calendarTRS);
 
             //Return extent between start/end coordinates
-            return DurationToExtent(normalizedEndSeconds - normalizedStartSeconds, TIMEUnit.Second, calendarTRS);
+            return DurationToExtent(secondsBetween, TIMEUnit.Second, calendarTRS);
         }
         #endregion
 
         #region Utilities
+        /// <summary>
+        /// Converts a normalized temporal coordinate into absolute seconds from year 0,
+        /// correctly handling leap years by iterating year-by-year and month-by-month.
+        /// Only suitable for non-negative years (used by ConvertCoordinate).
+        /// </summary>
+        internal static double CoordinateToAbsoluteSeconds(TIMECoordinate coordinate, TIMECalendarReferenceSystem calendarTRS)
+        {
+            double totalSeconds = 0;
+            double secondsPerDay = calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay;
+
+            // Add years (traverse each year to handle leap years correctly)
+            double currentYear = 0;
+            double targetYear = coordinate.Year ?? 0;
+            while (currentYear < targetYear)
+            {
+                uint[] monthsInYear = calendarTRS.Metrics.LeapYearRule?.Invoke(currentYear) ?? calendarTRS.Metrics.Months;
+                double daysInYear = monthsInYear.Sum(m => m);
+                totalSeconds += daysInYear * secondsPerDay;
+                currentYear++;
+            }
+
+            // Add months (traverse each month in the target year)
+            uint[] monthsInTargetYear = calendarTRS.Metrics.LeapYearRule?.Invoke(targetYear) ?? calendarTRS.Metrics.Months;
+            for (int month = 1; month < (coordinate.Month ?? 1); month++)
+                totalSeconds += monthsInTargetYear[month - 1] * secondsPerDay;
+
+            // Add remaining time components
+            totalSeconds += (coordinate.Day ?? 0) * secondsPerDay;
+            totalSeconds += (coordinate.Hour ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour;
+            totalSeconds += (coordinate.Minute ?? 0) * calendarTRS.Metrics.SecondsInMinute;
+            totalSeconds += coordinate.Second ?? 0;
+
+            return totalSeconds;
+        }
+
+        /// <summary>
+        /// Computes the sub-year portion of a coordinate in seconds (months, days, hours, minutes, seconds from Jan 1 00:00:00)
+        /// </summary>
+        internal static double SubYearSeconds(TIMECoordinate coordinate, TIMECalendarReferenceSystem calendarTRS)
+        {
+            double secondsPerDay = calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay;
+            double totalSeconds = 0;
+
+            uint[] months = calendarTRS.Metrics.LeapYearRule?.Invoke(coordinate.Year ?? 0) ?? calendarTRS.Metrics.Months;
+            for (int m = 1; m < (coordinate.Month ?? 1); m++)
+                totalSeconds += months[m - 1] * secondsPerDay;
+
+            totalSeconds += (coordinate.Day ?? 0) * secondsPerDay;
+            totalSeconds += (coordinate.Hour ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour;
+            totalSeconds += (coordinate.Minute ?? 0) * calendarTRS.Metrics.SecondsInMinute;
+            totalSeconds += coordinate.Second ?? 0;
+
+            return totalSeconds;
+        }
+
+        /// <summary>
+        /// Computes the total seconds between two normalized coordinates directly,
+        /// handling negative years and large year ranges efficiently.
+        /// For year ranges up to 10,000 years, iterates year-by-year for leap year accuracy.
+        /// For larger ranges, uses flat DaysInYear for performance.
+        /// </summary>
+        internal static double SecondsBetweenCoordinates(TIMECoordinate start, TIMECoordinate end, TIMECalendarReferenceSystem calendarTRS)
+        {
+            double secondsPerDay = calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay;
+            double startYear = start.Year ?? 0;
+            double endYear = end.Year ?? 0;
+            double yearDiff = endYear - startYear;
+
+            double yearSeconds;
+            if (calendarTRS.Metrics.LeapYearRule != null && Math.Abs(yearDiff) <= 10000)
+            {
+                // Iterate year-by-year for leap year accuracy
+                yearSeconds = 0;
+                for (double y = startYear; y < endYear; y++)
+                {
+                    uint[] months = calendarTRS.Metrics.LeapYearRule.Invoke(y) ?? calendarTRS.Metrics.Months;
+                    yearSeconds += months.Sum(m => (double)m) * secondsPerDay;
+                }
+            }
+            else
+            {
+                // Use flat formula for large ranges or calendars without leap year rules
+                yearSeconds = yearDiff * calendarTRS.Metrics.DaysInYear * secondsPerDay;
+            }
+
+            // Adjust for sub-year portions: subtract start's, add end's
+            double startSubYear = SubYearSeconds(start, calendarTRS);
+            double endSubYear = SubYearSeconds(end, calendarTRS);
+
+            return yearSeconds - startSubYear + endSubYear;
+        }
+
         /// <summary>
         /// Advances a temporal coordinate forward by a specified number of seconds using optimized batch processing,
         /// handling overflows across time dimensions (minutes → hours → days → months → years)

@@ -191,5 +191,72 @@ public class TIMECoordinateTest
 
         Assert.AreEqual(expectedComparison, leftCoordinate.CompareTo(rightCoordinate));
     }
+
+    //Fix #2: TRS mismatch guard in CompareTo
+    [TestMethod]
+    public void ShouldThrowExceptionOnComparingCoordinatesWithDifferentTRS()
+    {
+        TIMECoordinate leftCoordinate = new TIMECoordinate(2024, 1, 1, 0, 0, 0,
+            new TIMECoordinateMetadata(TIMECalendarReferenceSystem.Gregorian, RDFVocabulary.TIME.UNIT_SECOND));
+        TIMECoordinate rightCoordinate = new TIMECoordinate(2024, 1, 1, 0, 0, 0,
+            new TIMECoordinateMetadata(TIMECalendarReferenceSystem.Julian, RDFVocabulary.TIME.UNIT_SECOND));
+
+        Assert.ThrowsExactly<OWLException>(() => leftCoordinate.CompareTo(rightCoordinate));
+    }
+
+    [TestMethod]
+    public void ShouldCompareCoordinatesWithSameTRS()
+    {
+        TIMECoordinate leftCoordinate = new TIMECoordinate(2024, 6, 15, 12, 0, 0,
+            new TIMECoordinateMetadata(TIMECalendarReferenceSystem.Gregorian, RDFVocabulary.TIME.UNIT_SECOND));
+        TIMECoordinate rightCoordinate = new TIMECoordinate(2024, 1, 1, 0, 0, 0,
+            new TIMECoordinateMetadata(TIMECalendarReferenceSystem.Gregorian, RDFVocabulary.TIME.UNIT_SECOND));
+
+        Assert.AreEqual(1, leftCoordinate.CompareTo(rightCoordinate));
+    }
+
+    [TestMethod]
+    public void ShouldCompareCoordinatesWhenOnlyOneTRSIsSet()
+    {
+        TIMECoordinate leftCoordinate = new TIMECoordinate(2024, 6, 15, 12, 0, 0,
+            new TIMECoordinateMetadata(TIMECalendarReferenceSystem.Gregorian, RDFVocabulary.TIME.UNIT_SECOND));
+        TIMECoordinate rightCoordinate = new TIMECoordinate(2024, 1, 1, 0, 0, 0);
+
+        //When only one TRS is set, comparison should proceed without exception
+        Assert.AreEqual(1, leftCoordinate.CompareTo(rightCoordinate));
+    }
+
+    //Fix #10: Equals/GetHashCode contract
+    [TestMethod]
+    public void ShouldEqualsObjectWork()
+    {
+        TIMECoordinate coord1 = new TIMECoordinate(2024, 1, 1, 0, 0, 0);
+        TIMECoordinate coord2 = new TIMECoordinate(2024, 1, 1, 0, 0, 0);
+        object coord2AsObject = coord2;
+
+        Assert.IsTrue(coord1.Equals(coord2AsObject));
+        Assert.IsFalse(coord1.Equals("not a coordinate"));
+        Assert.IsFalse(coord1.Equals((object)null));
+    }
+
+    [TestMethod]
+    public void ShouldGetHashCodeConsistentWithEquals()
+    {
+        TIMECoordinate coord1 = new TIMECoordinate(2024, 6, 15, 12, 30, 45);
+        TIMECoordinate coord2 = new TIMECoordinate(2024, 6, 15, 12, 30, 45);
+
+        Assert.IsTrue(coord1.Equals(coord2));
+        Assert.AreEqual(coord1.GetHashCode(), coord2.GetHashCode());
+    }
+
+    [TestMethod]
+    public void ShouldGetHashCodeDifferForDifferentCoordinates()
+    {
+        TIMECoordinate coord1 = new TIMECoordinate(2024, 6, 15, 12, 30, 45);
+        TIMECoordinate coord2 = new TIMECoordinate(2024, 6, 15, 12, 30, 46);
+
+        Assert.IsFalse(coord1.Equals(coord2));
+        Assert.AreNotEqual(coord1.GetHashCode(), coord2.GetHashCode());
+    }
     #endregion
 }

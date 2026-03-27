@@ -17,8 +17,10 @@
 using OWLSharp.Ontology;
 using RDFSharp.Model;
 using RDFSharp.Query;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace OWLSharp.Extensions.TIME
 {
@@ -34,10 +36,15 @@ namespace OWLSharp.Extensions.TIME
     {
         #region Properties
         /// <summary>
-        /// Singleton instance of the THORS ontology, to be available whenever
+        /// Thread-safe lazy singleton instance of the THORS ontology, to be available whenever
         /// any new instance of an ordinal TRS is going to be created
         /// </summary>
-        private static OWLOntology THORSOntology { get; set; }
+        private static readonly Lazy<OWLOntology> THORSOntologyLazy = new Lazy<OWLOntology>(() =>
+        {
+            OWLOntology ontology = new OWLOntology();
+            ontology.InitializeTIMEAsync(30000).GetAwaiter().GetResult();
+            return ontology;
+        }, LazyThreadSafetyMode.ExecutionAndPublication);
 
         /// <summary>
         /// The ontology mapping the T-BOX and A-BOX of this ordinal TRS
@@ -52,15 +59,7 @@ namespace OWLSharp.Extensions.TIME
         /// </summary>
         public TIMEOrdinalReferenceSystem(RDFResource trsIRI) : base(trsIRI)
         {
-            #region Initialize
-            if (THORSOntology == null)
-            {
-                THORSOntology = new OWLOntology();
-                THORSOntology.InitializeTIMEAsync(30000).GetAwaiter().GetResult();
-            }
-            #endregion
-
-            Ontology = new OWLOntology(THORSOntology) { IRI = trsIRI.ToString()};
+            Ontology = new OWLOntology(THORSOntologyLazy.Value) { IRI = trsIRI.ToString()};
         }
 
         /// <summary>
