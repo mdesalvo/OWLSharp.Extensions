@@ -1992,7 +1992,7 @@ public class TIMEHelperTest : TIMETestOntology
             new OWLLiteral(new RDFTypedLiteral("01", RDFModelEnums.RDFDatatypes.XSD_NONNEGATIVEINTEGER))));
         TIMECalendarReferenceSystem myCalendarTRS = new TIMECalendarReferenceSystem(
             new RDFResource("ex:MyCalendarTRS"),
-            new TIMECalendarReferenceSystemMetrics(100, 100, 50, [20, 20, 12, 18]));
+            new TIMECalendarReferenceSystemMetrics(100, 100, 50, 10, [20, 20, 12, 18]));
         TIMEReferenceSystemRegistry.AddTRS(myCalendarTRS);
 
         TIMECoordinate timeCoordinate = timeOntology.GetCoordinateOfInstant(new RDFResource("ex:WorldWarIITemporalDimension"), myCalendarTRS);
@@ -2114,7 +2114,7 @@ public class TIMEHelperTest : TIMETestOntology
             new OWLLiteral(new RDFTypedLiteral("-957315600", RDFModelEnums.RDFDatatypes.XSD_INTEGER))));
         TIMEReferenceSystemRegistry.AddTRS(new TIMECalendarReferenceSystem(
             new RDFResource("ex:MyCalendarTRS"),
-            new TIMECalendarReferenceSystemMetrics(100, 100, 50, [20, 20, 12, 18])));
+            new TIMECalendarReferenceSystemMetrics(100, 100, 50, 10, [20, 20, 12, 18])));
 
         Assert.ThrowsExactly<OWLException>(() => _ = timeOntology.GetCoordinateOfInstant(new RDFResource("ex:WorldWarIITemporalDimension")));
     }

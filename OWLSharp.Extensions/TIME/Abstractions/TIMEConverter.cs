@@ -373,7 +373,7 @@ namespace OWLSharp.Extensions.TIME
             totalSeconds += ((timeExtent.Minutes     ?? 0) * calendarTRS.Metrics.SecondsInMinute);
             totalSeconds += ((timeExtent.Hours       ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour);
             totalSeconds += ((timeExtent.Days        ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay);
-            totalSeconds += ((timeExtent.Weeks       ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * TIMEUnit.Week.ScaleFactor);
+            totalSeconds += ((timeExtent.Weeks       ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * calendarTRS.Metrics.DaysInWeek);
             totalSeconds += ((timeExtent.Months      ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * ((double)calendarTRS.Metrics.DaysInYear / calendarTRS.Metrics.MonthsInYear));
             totalSeconds += ((timeExtent.Years       ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * calendarTRS.Metrics.DaysInYear);
 
@@ -412,14 +412,14 @@ namespace OWLSharp.Extensions.TIME
             timeExtentSeconds += ((timeExtent.Minutes     ?? 0) * calendarTRS.Metrics.SecondsInMinute);
             timeExtentSeconds += ((timeExtent.Hours       ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour);
             timeExtentSeconds += ((timeExtent.Days        ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay);
-            timeExtentSeconds += ((timeExtent.Weeks       ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * TIMEUnit.Week.ScaleFactor);
+            timeExtentSeconds += ((timeExtent.Weeks       ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * calendarTRS.Metrics.DaysInWeek);
             timeExtentSeconds += ((timeExtent.Months      ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * ((double)calendarTRS.Metrics.DaysInYear / calendarTRS.Metrics.MonthsInYear));
             timeExtentSeconds += ((timeExtent.Years       ?? 0) * calendarTRS.Metrics.SecondsInMinute * calendarTRS.Metrics.MinutesInHour * calendarTRS.Metrics.HoursInDay * calendarTRS.Metrics.DaysInYear);
 
             //Obtain an equivalent calendar TRS with forced inexact metrics: this is needed to suppress
             //eventual representation of Years, Months and Weeks (which all cumulate into Days)
             TIMECalendarReferenceSystem inexactCalendarTRS = new TIMECalendarReferenceSystem(calendarTRS,
-                new TIMECalendarReferenceSystemMetrics(calendarTRS.Metrics.SecondsInMinute, calendarTRS.Metrics.MinutesInHour, calendarTRS.Metrics.HoursInDay, calendarTRS.Metrics.Months))
+                new TIMECalendarReferenceSystemMetrics(calendarTRS.Metrics.SecondsInMinute, calendarTRS.Metrics.MinutesInHour, calendarTRS.Metrics.HoursInDay, calendarTRS.Metrics.DaysInWeek, calendarTRS.Metrics.Months))
                 {
                     Metrics = { LeapYearRule = null }
                 };

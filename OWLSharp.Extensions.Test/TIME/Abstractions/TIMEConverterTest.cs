@@ -140,7 +140,7 @@ public class TIMEConverterTest
             unixModifiedTRS,
             new TIMECalendarReferenceSystem(
                 new RDFResource("https://en.wikipedia.org/wiki/360-day_calendar"),
-                new TIMECalendarReferenceSystemMetrics(60, 60, 24, [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30])
+                new TIMECalendarReferenceSystemMetrics(60, 60, 24, 7, [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30])
                     .SetLeapYearRule(year => year >= 1985 && year % 2 == 0
                         ? [31, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30]
                         : [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30])));
@@ -334,7 +334,7 @@ public class TIMEConverterTest
             new TIMECoordinate(originYear, originMonth, originDay, originHour, originMinute, originSecond),
             new TIMECalendarReferenceSystem(
                 new RDFResource("ex:MyStrangeCalendar"),
-                new TIMECalendarReferenceSystemMetrics(10, 10, 10, [10, 10, 10, 10, 10, 10])
+                new TIMECalendarReferenceSystemMetrics(10, 10, 10, 5, [10, 10, 10, 10, 10, 10])
                     .SetLeapYearRule(year => year % 2 == 0 ? [10, 10, 10, 10, 10, 11] : [10, 10, 10, 10, 10, 10])));
 
         Assert.IsNotNull(tc);
@@ -573,7 +573,7 @@ public class TIMEConverterTest
         TIMEExtent te = TIMEConverter.DurationToExtent(timeDuration, new TIMEUnit(new RDFResource(unitTypeURI), unitTypeEnum, scaleFactor),
             new TIMECalendarReferenceSystem(
                 new RDFResource("https://en.wikipedia.org/wiki/360-day_calendar"),
-                new TIMECalendarReferenceSystemMetrics(60, 60, 24, [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30])));
+                new TIMECalendarReferenceSystemMetrics(60, 60, 24, 7, [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30])));
 
         Assert.IsNotNull(te);
         Assert.AreEqual(expectedYears, te.Years);

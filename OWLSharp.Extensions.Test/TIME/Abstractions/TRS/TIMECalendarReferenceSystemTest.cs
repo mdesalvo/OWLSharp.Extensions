@@ -29,7 +29,7 @@ public class TIMECalendarReferenceSystemTest
     {
         TIMECalendarReferenceSystem ModifiedGregorianTRS = new TIMECalendarReferenceSystem(
             new RDFResource("ex:ModifiedGregorian"),
-            new TIMECalendarReferenceSystemMetrics(60, 60, 24, [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30]));
+            new TIMECalendarReferenceSystemMetrics(60, 60, 24, 7, [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30]));
 
         Assert.IsNotNull(ModifiedGregorianTRS);
         Assert.IsTrue(ModifiedGregorianTRS.Equals(new RDFResource("ex:ModifiedGregorian")));
@@ -49,32 +49,32 @@ public class TIMECalendarReferenceSystemTest
     [TestMethod]
     public void ShouldThrowExceptionOnCreatimeCalendarTRSBecauseInvalidMetrics1()
         => Assert.ThrowsExactly<OWLException>(() => _ = new TIMECalendarReferenceSystem(new RDFResource("ex:ModifiedGregorian"),
-            new TIMECalendarReferenceSystemMetrics(0, 60, 24, [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30])));
+            new TIMECalendarReferenceSystemMetrics(0, 60, 24, 7, [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30])));
 
     [TestMethod]
     public void ShouldThrowExceptionOnCreatimeCalendarTRSBecauseInvalidMetrics2()
         => Assert.ThrowsExactly<OWLException>(() => _ = new TIMECalendarReferenceSystem(new RDFResource("ex:ModifiedGregorian"),
-            new TIMECalendarReferenceSystemMetrics(60, 0, 24, [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30])));
+            new TIMECalendarReferenceSystemMetrics(60, 0, 24, 7, [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30])));
 
     [TestMethod]
     public void ShouldThrowExceptionOnCreatimeCalendarTRSBecauseInvalidMetrics3()
         => Assert.ThrowsExactly<OWLException>(() => _ = new TIMECalendarReferenceSystem(new RDFResource("ex:ModifiedGregorian"),
-            new TIMECalendarReferenceSystemMetrics(60, 60, 0, [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30])));
+            new TIMECalendarReferenceSystemMetrics(60, 60, 0, 7, [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30])));
 
     [TestMethod]
     public void ShouldThrowExceptionOnCreatimeCalendarTRSBecauseInvalidMetrics4()
         => Assert.ThrowsExactly<OWLException>(() => _ = new TIMECalendarReferenceSystem(new RDFResource("ex:ModifiedGregorian"),
-            new TIMECalendarReferenceSystemMetrics(60, 60, 24, null)));
+            new TIMECalendarReferenceSystemMetrics(60, 60, 24, 7, null)));
 
     [TestMethod]
     public void ShouldThrowExceptionOnCreatimeCalendarTRSBecauseInvalidMetrics5()
         => Assert.ThrowsExactly<OWLException>(() => _ = new TIMECalendarReferenceSystem(new RDFResource("ex:ModifiedGregorian"),
-            new TIMECalendarReferenceSystemMetrics(60, 60, 24, [])));
+            new TIMECalendarReferenceSystemMetrics(60, 60, 24, 7, [])));
 
     [TestMethod]
     public void ShouldThrowExceptionOnCreatimeCalendarTRSBecauseInvalidMetrics6()
         => Assert.ThrowsExactly<OWLException>(() => _ = new TIMECalendarReferenceSystem(new RDFResource("ex:ModifiedGregorian"),
-            new TIMECalendarReferenceSystemMetrics(60, 60, 24, [30, 30, 0, 31])));
+            new TIMECalendarReferenceSystemMetrics(60, 60, 24, 7, [30, 30, 0, 31])));
     //SecondsPerDay
     [TestMethod]
     public void ShouldHaveCorrectSecondsPerDay()
@@ -87,7 +87,7 @@ public class TIMECalendarReferenceSystemTest
     public void ShouldHaveCustomSecondsPerDay()
     {
         //A calendar with 100 seconds/minute, 100 minutes/hour, 10 hours/day
-        TIMECalendarReferenceSystemMetrics metrics = new TIMECalendarReferenceSystemMetrics(100, 100, 10, [30, 30, 30]);
+        TIMECalendarReferenceSystemMetrics metrics = new TIMECalendarReferenceSystemMetrics(100, 100, 10, 5, [30, 30, 30]);
         Assert.AreEqual(100000, metrics.SecondsPerDay);
     }
 

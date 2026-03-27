@@ -38,7 +38,7 @@ namespace OWLSharp.Extensions.TIME
         /// </summary>
         public static readonly TIMECalendarReferenceSystem Gregorian = new TIMECalendarReferenceSystem(
             new RDFResource("https://en.wikipedia.org/wiki/Gregorian_calendar"),
-            new TIMECalendarReferenceSystemMetrics(60, 60, 24, new uint[] { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 })
+            new TIMECalendarReferenceSystemMetrics(60, 60, 24, 7, new uint[] { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 })
                 .SetLeapYearRule(year => {
                     return year >= 1582 && ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0)
                         ? new uint[] { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
@@ -55,7 +55,7 @@ namespace OWLSharp.Extensions.TIME
         /// </summary>
         public static readonly TIMECalendarReferenceSystem Julian = new TIMECalendarReferenceSystem(
             new RDFResource("https://en.wikipedia.org/wiki/Julian_calendar"),
-            new TIMECalendarReferenceSystemMetrics(60, 60, 24, new uint[] { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 })
+            new TIMECalendarReferenceSystemMetrics(60, 60, 24, 7, new uint[] { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 })
                 .SetLeapYearRule(year => {
                     return year % 4 == 0
                         ? new uint[] { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
@@ -110,6 +110,11 @@ namespace OWLSharp.Extensions.TIME
         public uint HoursInDay { get; }
 
         /// <summary>
+        /// The number of days in one week for this calendar system (e.g., 7 in most Earth-based calendars)
+        /// </summary>
+        public uint DaysInWeek { get; }
+
+        /// <summary>
         /// An array defining the number of days in each month of a standard (non-leap) year,
         /// with array length determining the number of months in the calendar
         /// </summary>
@@ -150,7 +155,7 @@ namespace OWLSharp.Extensions.TIME
         /// Builds the metrics for a calendar TRS with the given specifications
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public TIMECalendarReferenceSystemMetrics(uint secondsInMinute, uint minutesInHour, uint hoursInDay, uint[] months)
+        public TIMECalendarReferenceSystemMetrics(uint secondsInMinute, uint minutesInHour, uint hoursInDay, uint daysInWeek, uint[] months)
         {
             #region Guards
             if (secondsInMinute == 0)
@@ -170,6 +175,7 @@ namespace OWLSharp.Extensions.TIME
             SecondsInMinute = secondsInMinute;
             MinutesInHour = minutesInHour;
             HoursInDay = hoursInDay;
+            DaysInWeek = daysInWeek;
             Months = months;
 
             //Derived
