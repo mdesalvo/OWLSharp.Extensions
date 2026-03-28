@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
@@ -38,10 +39,14 @@ namespace OWLSharp.Extensions.GEO
         // LON => X (West/East,  -180->180)
         // LAT => Y (North/South, -90->90)
 
-        internal static readonly WKTReader WKTReader = new WKTReader();
-        internal static readonly WKTWriter WKTWriter = new WKTWriter();
-        internal static readonly GMLReader GMLReader = new GMLReader();
-        internal static readonly GMLWriter GMLWriter = new GMLWriter();
+        internal static readonly ThreadLocal<WKTReader> WKTReaderTLS = new ThreadLocal<WKTReader>(() => new WKTReader());
+        internal static readonly ThreadLocal<WKTWriter> WKTWriterTLS = new ThreadLocal<WKTWriter>(() => new WKTWriter());
+        internal static readonly ThreadLocal<GMLReader> GMLReaderTLS = new ThreadLocal<GMLReader>(() => new GMLReader());
+        internal static readonly ThreadLocal<GMLWriter> GMLWriterTLS = new ThreadLocal<GMLWriter>(() => new GMLWriter());
+        internal static WKTReader WKTReader => WKTReaderTLS.Value;
+        internal static WKTWriter WKTWriter => WKTWriterTLS.Value;
+        internal static GMLReader GMLReader => GMLReaderTLS.Value;
+        internal static GMLWriter GMLWriter => GMLWriterTLS.Value;
         private static readonly RDFResource AsWKT = new RDFResource("urn:swrl:geosparql:asWKT");
         private static readonly RDFResource AsGML = new RDFResource("urn:swrl:geosparql:asGML");
 
@@ -1133,6 +1138,110 @@ namespace OWLSharp.Extensions.GEO
             }
 
             return RDFQueryUtilities.RemoveDuplicates(featuresDirectionOf);
+        }
+
+        /// <summary>
+        /// Gets the features interacting with the given GeoSPARQL feature (intersectedBy) from the working ontology.
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        public static async Task<List<RDFResource>> GetFeaturesIntersectedByAsync(OWLOntology ontology, RDFResource featureUri)
+        {
+            #region Guards
+            if (ontology == null)
+                throw new OWLException($"Cannot get features interaction because given '{nameof(ontology)}' parameter is null");
+            if (featureUri == null)
+                throw new OWLException($"Cannot get features interaction because given '{nameof(featureUri)}' parameter is null");
+            #endregion
+
+            //Analyze default geometry of feature
+            (Geometry, Geometry) defaultGeometry = await ontology.GetDefaultGeometryOfFeatureAsync(featureUri);
+            if (defaultGeometry.Item1 != null && defaultGeometry.Item2 != null)
+            {
+                //Retrieve WKT/GML serialization of features
+                Dictionary<string, List<(Geometry, Geometry)>> featuresWithGeometry = await ontology.GetFeaturesWithGeometriesAsync();
+
+                //Perform spatial analysis between collected geometries
+                List<RDFResource> featuresInteraction = new List<RDFResource>();
+                foreach (KeyValuePair<string, List<(Geometry, Geometry)>> featureWithGeometry in featuresWithGeometry)
+                {
+                    //Obviously exclude the given feature itself
+                    if (string.Equals(featureWithGeometry.Key, featureUri.ToString()))
+                        continue;
+
+                    foreach ((Geometry, Geometry) geometryOfFeature in featureWithGeometry.Value)
+                    {
+                        if (defaultGeometry.Item2.Intersects(geometryOfFeature.Item2))
+                            featuresInteraction.Add(new RDFResource(featureWithGeometry.Key));
+                    }
+                }
+
+                return RDFQueryUtilities.RemoveDuplicates(featuresInteraction);
+            }
+
+            //Analyze secondary geometries of feature
+            List<(Geometry, Geometry)> secondaryGeometries = await ontology.GetSecondaryGeometriesOfFeatureAsync(featureUri);
+            if (secondaryGeometries.Count > 0)
+            {
+                //Retrieve WKT/GML serialization of features
+                Dictionary<string, List<(Geometry, Geometry)>> featuresWithGeometry = await ontology.GetFeaturesWithGeometriesAsync();
+
+                //Perform spatial analysis between collected geometries
+                List<RDFResource> featuresInteraction = new List<RDFResource>();
+                foreach (KeyValuePair<string, List<(Geometry, Geometry)>> featureWithGeometry in featuresWithGeometry)
+                {
+                    //Obviously exclude the given feature itself
+                    if (string.Equals(featureWithGeometry.Key, featureUri.ToString()))
+                        continue;
+
+                    foreach ((Geometry, Geometry) geometryOfFeature in featureWithGeometry.Value)
+                    {
+                        if (secondaryGeometries.Any(sg => sg.Item2.Intersects(geometryOfFeature.Item2)))
+                            featuresInteraction.Add(new RDFResource(featureWithGeometry.Key));
+                    }
+                }
+
+                return RDFQueryUtilities.RemoveDuplicates(featuresInteraction);
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the features interacting with the given GeoSPARQL literal (intersectedBy).
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        public static async Task<List<RDFResource>> GetFeaturesIntersectedByAsync(OWLOntology ontology, RDFTypedLiteral featureLiteral)
+        {
+            #region Guards
+            if (ontology == null)
+                throw new OWLException($"Cannot get features interaction because given '{nameof(ontology)}' parameter is null");
+            if (featureLiteral == null)
+                throw new OWLException($"Cannot get features interaction because given '{nameof(featureLiteral)}' parameter is null");
+            if (!featureLiteral.HasGeographicDatatype())
+                throw new OWLException($"Cannot get features interaction because given '{nameof(featureLiteral)}' parameter is not a geographic typed literal");
+            #endregion
+
+            //Transform feature into geometry
+            bool isWKT = featureLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
+            Geometry wgs84Geometry = isWKT ? WKTReader.Read(featureLiteral.Value) : GMLReader.Read(featureLiteral.Value);
+            wgs84Geometry.SRID=4326;
+            Geometry lazGeometry = RDFGeoConverter.GetLambertAzimuthalGeometryFromWGS84(wgs84Geometry);
+
+            //Retrieve WKT/GML serialization of features
+            Dictionary<string, List<(Geometry, Geometry)>> featuresWithGeometry = await ontology.GetFeaturesWithGeometriesAsync();
+
+            //Perform spatial analysis between collected geometries
+            List<RDFResource> featuresIntersectedBy = new List<RDFResource>();
+            foreach (KeyValuePair<string, List<(Geometry, Geometry)>> featureWithGeometry in featuresWithGeometry)
+            {
+                foreach ((Geometry, Geometry) geometryOfFeature in featureWithGeometry.Value)
+                {
+                    if (lazGeometry.Intersects(geometryOfFeature.Item2))
+                        featuresIntersectedBy.Add(new RDFResource(featureWithGeometry.Key));
+                }
+            }
+
+            return RDFQueryUtilities.RemoveDuplicates(featuresIntersectedBy);
         }
         #endregion
 

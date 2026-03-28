@@ -3134,5 +3134,182 @@ public class GEOHelperTest
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesWithinAsync(geoOntology,
             new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING)));
     }
+
+    [TestMethod]
+    public async Task ShouldGetFeaturesIntersectedByAsync()
+    {
+        OWLOntology geoOntology = new OWLOntology(new Uri("ex:geoOnt"))
+        {
+            DeclarationAxioms = [
+                new OWLDeclaration(new OWLClass(RDFVocabulary.GEOSPARQL.FEATURE)),
+                new OWLDeclaration(new OWLClass(RDFVocabulary.GEOSPARQL.GEOMETRY)),
+                new OWLDeclaration(new OWLObjectProperty(RDFVocabulary.GEOSPARQL.DEFAULT_GEOMETRY)),
+                new OWLDeclaration(new OWLObjectProperty(RDFVocabulary.GEOSPARQL.HAS_GEOMETRY)),
+                new OWLDeclaration(new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT)),
+                new OWLDeclaration(new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_GML)),
+                new OWLDeclaration(new OWLNamedIndividual(new RDFResource("ex:PoFT"))),
+                new OWLDeclaration(new OWLNamedIndividual(new RDFResource("ex:PoGM"))),
+                new OWLDeclaration(new OWLNamedIndividual(new RDFResource("ex:MontagnanaCentoFT"))),
+                new OWLDeclaration(new OWLNamedIndividual(new RDFResource("ex:MontagnanaCentoGM"))),
+                new OWLDeclaration(new OWLNamedIndividual(new RDFResource("ex:NogaraPortoMaggioreFT"))),
+                new OWLDeclaration(new OWLNamedIndividual(new RDFResource("ex:NogaraPortoMaggioreGM"))),
+                new OWLDeclaration(new OWLNamedIndividual(new RDFResource("ex:VeronaVillafrancaFT"))),
+                new OWLDeclaration(new OWLNamedIndividual(new RDFResource("ex:VeronaVillafrancaGM")))
+            ],
+            AssertionAxioms = [
+                new OWLClassAssertion(
+                    new OWLClass(RDFVocabulary.GEOSPARQL.FEATURE),
+                    new OWLNamedIndividual(new RDFResource("ex:PoFT"))),
+                new OWLClassAssertion(
+                    new OWLClass(RDFVocabulary.GEOSPARQL.FEATURE),
+                    new OWLNamedIndividual(new RDFResource("ex:MontagnanaCentoFT"))),
+                new OWLClassAssertion(
+                    new OWLClass(RDFVocabulary.GEOSPARQL.FEATURE),
+                    new OWLNamedIndividual(new RDFResource("ex:NogaraPortoMaggioreFT"))),
+                new OWLClassAssertion(
+                    new OWLClass(RDFVocabulary.GEOSPARQL.FEATURE),
+                    new OWLNamedIndividual(new RDFResource("ex:VeronaVillafrancaFT"))),
+                new OWLClassAssertion(
+                    new OWLClass(RDFVocabulary.GEOSPARQL.GEOMETRY),
+                    new OWLNamedIndividual(new RDFResource("ex:PoGM"))),
+                new OWLClassAssertion(
+                    new OWLClass(RDFVocabulary.GEOSPARQL.GEOMETRY),
+                    new OWLNamedIndividual(new RDFResource("ex:MontagnanaCentoGM"))),
+                new OWLClassAssertion(
+                    new OWLClass(RDFVocabulary.GEOSPARQL.GEOMETRY),
+                    new OWLNamedIndividual(new RDFResource("ex:NogaraPortoMaggioreGM"))),
+                new OWLClassAssertion(
+                    new OWLClass(RDFVocabulary.GEOSPARQL.GEOMETRY),
+                    new OWLNamedIndividual(new RDFResource("ex:VeronaVillafrancaGM"))),
+                new OWLObjectPropertyAssertion(
+                    new OWLObjectProperty(RDFVocabulary.GEOSPARQL.HAS_GEOMETRY),
+                    new OWLNamedIndividual(new RDFResource("ex:PoFT")),
+                    new OWLNamedIndividual(new RDFResource("ex:PoGM"))),
+                new OWLObjectPropertyAssertion(
+                    new OWLObjectProperty(RDFVocabulary.GEOSPARQL.HAS_GEOMETRY),
+                    new OWLNamedIndividual(new RDFResource("ex:MontagnanaCentoFT")),
+                    new OWLNamedIndividual(new RDFResource("ex:MontagnanaCentoGM"))),
+                new OWLObjectPropertyAssertion(
+                    new OWLObjectProperty(RDFVocabulary.GEOSPARQL.DEFAULT_GEOMETRY),
+                    new OWLNamedIndividual(new RDFResource("ex:NogaraPortoMaggioreFT")),
+                    new OWLNamedIndividual(new RDFResource("ex:NogaraPortoMaggioreGM"))),
+                new OWLObjectPropertyAssertion(
+                    new OWLObjectProperty(RDFVocabulary.GEOSPARQL.DEFAULT_GEOMETRY),
+                    new OWLNamedIndividual(new RDFResource("ex:VeronaVillafrancaFT")),
+                    new OWLNamedIndividual(new RDFResource("ex:VeronaVillafrancaGM"))),
+                new OWLDataPropertyAssertion(
+                    new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
+                    new OWLNamedIndividual(new RDFResource("ex:PoGM")),
+                    new OWLLiteral(new RDFTypedLiteral("LINESTRING(11.001141059265075 45.06554633935097, 11.058819281921325 45.036440377586516, 11.127483832702575 45.05972633195962, 11.262066352233825 45.05002500301712, 11.421368110046325 44.960695556664774, 11.605389106140075 44.89068838827955, 11.814129340515075 44.97624111890936, 12.069561469421325 44.98012685115769)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT))),
+                new OWLDataPropertyAssertion(
+                    new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
+                    new OWLNamedIndividual(new RDFResource("ex:MontagnanaCentoGM")),
+                    new OWLLiteral(new RDFTypedLiteral("LINESTRING(11.492779242858825 45.22633159406854, 11.514751899108825 45.0539057320877, 11.448833930358825 44.86538705476387, 11.289532172546325 44.734811449636325)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT))),
+                new OWLDataPropertyAssertion(
+                    new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
+                    new OWLNamedIndividual(new RDFResource("ex:NogaraPortoMaggioreGM")),
+                    new OWLLiteral(new RDFTypedLiteral("POLYGON((11.067059028015075 45.17020515864295, 11.794903266296325 45.06554633935097, 11.778423774108825 44.68015498753276, 10.710003363952575 44.97818401794916, 11.067059028015075 45.17020515864295))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT))),
+                new OWLDataPropertyAssertion(
+                    new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
+                    new OWLNamedIndividual(new RDFResource("ex:VeronaVillafrancaGM")),
+                    new OWLLiteral(new RDFTypedLiteral("POLYGON((11.270306098327575 45.4078781070719, 10.992901313171325 45.432939821462234, 10.866558539733825 45.338418378714074, 11.270306098327575 45.4078781070719))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)))
+            ]
+        };
+        List<RDFResource> intersectedByPoRiver = await GEOHelper.GetFeaturesIntersectedByAsync(geoOntology, new RDFResource("ex:PoFT"));
+
+        Assert.IsNotNull(intersectedByPoRiver);
+        Assert.HasCount(2, intersectedByPoRiver);
+        Assert.IsTrue(intersectedByPoRiver.Any(ft => ft.Equals(new RDFResource("ex:MontagnanaCentoFT"))));
+        Assert.IsTrue(intersectedByPoRiver.Any(ft => ft.Equals(new RDFResource("ex:NogaraPortoMaggioreFT"))));
+
+        //Unexisting features
+        Assert.IsNull(await GEOHelper.GetFeaturesIntersectedByAsync(geoOntology,
+            new RDFResource("ex:PoFT2")));
+        //Input guards
+        await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesIntersectedByAsync(null,
+            new RDFResource("ex:PoFT")));
+        await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesIntersectedByAsync(geoOntology,
+            null as RDFResource));
+    }
+
+    [TestMethod]
+    public async Task ShouldGetFeaturesIntersectedByLiteralAsync()
+    {
+        OWLOntology geoOntology = new OWLOntology(new Uri("ex:geoOnt"))
+        {
+            DeclarationAxioms = [
+                new OWLDeclaration(new OWLClass(RDFVocabulary.GEOSPARQL.FEATURE)),
+                new OWLDeclaration(new OWLClass(RDFVocabulary.GEOSPARQL.GEOMETRY)),
+                new OWLDeclaration(new OWLObjectProperty(RDFVocabulary.GEOSPARQL.DEFAULT_GEOMETRY)),
+                new OWLDeclaration(new OWLObjectProperty(RDFVocabulary.GEOSPARQL.HAS_GEOMETRY)),
+                new OWLDeclaration(new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT)),
+                new OWLDeclaration(new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_GML)),
+                new OWLDeclaration(new OWLNamedIndividual(new RDFResource("ex:MontagnanaCentoFT"))),
+                new OWLDeclaration(new OWLNamedIndividual(new RDFResource("ex:MontagnanaCentoGM"))),
+                new OWLDeclaration(new OWLNamedIndividual(new RDFResource("ex:NogaraPortoMaggioreFT"))),
+                new OWLDeclaration(new OWLNamedIndividual(new RDFResource("ex:NogaraPortoMaggioreGM"))),
+                new OWLDeclaration(new OWLNamedIndividual(new RDFResource("ex:VeronaVillafrancaFT"))),
+                new OWLDeclaration(new OWLNamedIndividual(new RDFResource("ex:VeronaVillafrancaGM")))
+            ],
+            AssertionAxioms = [
+                new OWLClassAssertion(
+                    new OWLClass(RDFVocabulary.GEOSPARQL.FEATURE),
+                    new OWLNamedIndividual(new RDFResource("ex:MontagnanaCentoFT"))),
+                new OWLClassAssertion(
+                    new OWLClass(RDFVocabulary.GEOSPARQL.FEATURE),
+                    new OWLNamedIndividual(new RDFResource("ex:NogaraPortoMaggioreFT"))),
+                new OWLClassAssertion(
+                    new OWLClass(RDFVocabulary.GEOSPARQL.FEATURE),
+                    new OWLNamedIndividual(new RDFResource("ex:VeronaVillafrancaFT"))),
+                new OWLClassAssertion(
+                    new OWLClass(RDFVocabulary.GEOSPARQL.GEOMETRY),
+                    new OWLNamedIndividual(new RDFResource("ex:MontagnanaCentoGM"))),
+                new OWLClassAssertion(
+                    new OWLClass(RDFVocabulary.GEOSPARQL.GEOMETRY),
+                    new OWLNamedIndividual(new RDFResource("ex:NogaraPortoMaggioreGM"))),
+                new OWLClassAssertion(
+                    new OWLClass(RDFVocabulary.GEOSPARQL.GEOMETRY),
+                    new OWLNamedIndividual(new RDFResource("ex:VeronaVillafrancaGM"))),
+                new OWLObjectPropertyAssertion(
+                    new OWLObjectProperty(RDFVocabulary.GEOSPARQL.HAS_GEOMETRY),
+                    new OWLNamedIndividual(new RDFResource("ex:MontagnanaCentoFT")),
+                    new OWLNamedIndividual(new RDFResource("ex:MontagnanaCentoGM"))),
+                new OWLObjectPropertyAssertion(
+                    new OWLObjectProperty(RDFVocabulary.GEOSPARQL.DEFAULT_GEOMETRY),
+                    new OWLNamedIndividual(new RDFResource("ex:NogaraPortoMaggioreFT")),
+                    new OWLNamedIndividual(new RDFResource("ex:NogaraPortoMaggioreGM"))),
+                new OWLObjectPropertyAssertion(
+                    new OWLObjectProperty(RDFVocabulary.GEOSPARQL.DEFAULT_GEOMETRY),
+                    new OWLNamedIndividual(new RDFResource("ex:VeronaVillafrancaFT")),
+                    new OWLNamedIndividual(new RDFResource("ex:VeronaVillafrancaGM"))),
+                new OWLDataPropertyAssertion(
+                    new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
+                    new OWLNamedIndividual(new RDFResource("ex:MontagnanaCentoGM")),
+                    new OWLLiteral(new RDFTypedLiteral("LINESTRING(11.492779242858825 45.22633159406854, 11.514751899108825 45.0539057320877, 11.448833930358825 44.86538705476387, 11.289532172546325 44.734811449636325)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT))),
+                new OWLDataPropertyAssertion(
+                    new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
+                    new OWLNamedIndividual(new RDFResource("ex:NogaraPortoMaggioreGM")),
+                    new OWLLiteral(new RDFTypedLiteral("POLYGON((11.067059028015075 45.17020515864295, 11.794903266296325 45.06554633935097, 11.778423774108825 44.68015498753276, 10.710003363952575 44.97818401794916, 11.067059028015075 45.17020515864295))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT))),
+                new OWLDataPropertyAssertion(
+                    new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
+                    new OWLNamedIndividual(new RDFResource("ex:VeronaVillafrancaGM")),
+                    new OWLLiteral(new RDFTypedLiteral("POLYGON((11.270306098327575 45.4078781070719, 10.992901313171325 45.432939821462234, 10.866558539733825 45.338418378714074, 11.270306098327575 45.4078781070719))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)))
+            ]
+        };
+        List<RDFResource> intersectedByPoRiver = await GEOHelper.GetFeaturesIntersectedByAsync(geoOntology, new RDFTypedLiteral("LINESTRING(11.001141059265075 45.06554633935097, 11.058819281921325 45.036440377586516, 11.127483832702575 45.05972633195962, 11.262066352233825 45.05002500301712, 11.421368110046325 44.960695556664774, 11.605389106140075 44.89068838827955, 11.814129340515075 44.97624111890936, 12.069561469421325 44.98012685115769)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
+
+        Assert.IsNotNull(intersectedByPoRiver);
+        Assert.HasCount(2, intersectedByPoRiver);
+        Assert.IsTrue(intersectedByPoRiver.Any(ft => ft.Equals(new RDFResource("ex:MontagnanaCentoFT"))));
+        Assert.IsTrue(intersectedByPoRiver.Any(ft => ft.Equals(new RDFResource("ex:NogaraPortoMaggioreFT"))));
+
+        //Input guards
+        await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesIntersectedByAsync(null,
+            new RDFTypedLiteral("LINESTRING(11.001141059265075 45.06554633935097, 11.058819281921325 45.036440377586516, 11.127483832702575 45.05972633195962, 11.262066352233825 45.05002500301712, 11.421368110046325 44.960695556664774, 11.605389106140075 44.89068838827955, 11.814129340515075 44.97624111890936, 12.069561469421325 44.98012685115769)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+        await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesIntersectedByAsync(geoOntology,
+            null as RDFTypedLiteral));
+        await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesIntersectedByAsync(geoOntology,
+            new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING)));
+    }
     #endregion
 }
