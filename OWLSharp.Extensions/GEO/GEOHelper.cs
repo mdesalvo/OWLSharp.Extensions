@@ -51,8 +51,6 @@ namespace OWLSharp.Extensions.GEO
         internal static GMLWriter GMLWriter => GMLWriterTLS.Value;
         private static readonly RDFResource AsWKT = new RDFResource("urn:swrl:geosparql:asWKT");
         private static readonly RDFResource AsGML = new RDFResource("urn:swrl:geosparql:asGML");
-        private static readonly CoordinateSystemFactory CSFactory = new CoordinateSystemFactory();
-        private static readonly CoordinateTransformationFactory CTFactory = new CoordinateTransformationFactory();
 
         #region Methods
 
@@ -1745,6 +1743,9 @@ namespace OWLSharp.Extensions.GEO
         }
 
         /* DYNAMIC LAEA PROJECTION */
+
+        private static readonly CoordinateSystemFactory CSFactory = new CoordinateSystemFactory();
+        private static readonly CoordinateTransformationFactory CTFactory = new CoordinateTransformationFactory();
 
         /// <summary>
         /// Creates forward (WGS84->LAEA) and inverse (LAEA->WGS84) transforms centered on the given WGS84 point.
