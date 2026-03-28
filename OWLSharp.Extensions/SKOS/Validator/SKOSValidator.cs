@@ -1,4 +1,4 @@
-﻿/*
+/*
    Copyright 2014-2026 Marco De Salvo
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -76,7 +76,7 @@ namespace OWLSharp.Extensions.SKOS
                 OWLEvents.RaiseInfo($"Launching SKOS validator on ontology '{ontology.IRI}'...");
 
                 //Initialize issue registry
-                Dictionary<string, List<OWLIssue>> issueRegistry = new Dictionary<string, List<OWLIssue>>(Rules.Count);
+                Dictionary<string, List<OWLIssue>> issueRegistry = new Dictionary<string, List<OWLIssue>>();
                 Rules = Rules.Distinct().ToList();
                 Rules.ForEach(rule => issueRegistry.Add(rule.ToString(), null));
 
@@ -117,6 +117,9 @@ namespace OWLSharp.Extensions.SKOS
                             break;
                         case SKOSEnums.SKOSValidatorRules.LiteralFormAnalysis:
                             issueRegistry[SKOSXLLiteralFormAnalysisRule.rulename] = await SKOSXLLiteralFormAnalysisRule.ExecuteRuleAsync(ontology);
+                            break;
+                        case SKOSEnums.SKOSValidatorRules.HierarchyCycleAnalysis:
+                            issueRegistry[SKOSHierarchyCycleAnalysisRule.rulename] = await SKOSHierarchyCycleAnalysisRule.ExecuteRuleAsync(ontology);
                             break;
                     }
 

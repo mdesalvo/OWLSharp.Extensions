@@ -12,10 +12,8 @@
 */
 
 using OWLSharp.Ontology;
-using OWLSharp.Reasoner;
 using OWLSharp.Validator;
 using RDFSharp.Model;
-using RDFSharp.Query;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -40,607 +38,66 @@ namespace OWLSharp.Extensions.SKOS
         internal static async Task<List<OWLIssue>> ExecuteRuleAsync(OWLOntology ontology)
         {
             List<OWLIssue> issues = new List<OWLIssue>();
-            List<OWLInference> violations = new List<OWLInference>();
 
             //skos:narrower VS skos:broader
-            SWRLRule clash1ARule = new SWRLRule(
-                new RDFPlainLiteral(nameof(SKOSNarrowerConceptAnalysisRule)),
-                new RDFPlainLiteral("This rule checks for skos:Concept instances clashing on their hierarchical relations (skos:narrower VS skos:broader)"),
-                new SWRLAntecedent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLClassAtom(
-                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
-                            new SWRLVariableArgument(new RDFVariable("?C1"))),
-                        new SWRLClassAtom(
-                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
-                            new SWRLVariableArgument(new RDFVariable("?C2"))),
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(RDFVocabulary.SKOS.NARROWER),
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2"))),
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(RDFVocabulary.SKOS.BROADER),
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2")))
-                    },
-                    BuiltIns = new List<SWRLBuiltIn>
-                    {
-                        SWRLBuiltIn.NotEqual(
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2")))
-                    }
-                },
-                new SWRLConsequent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(SKOSValidator.ViolationIRI),
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2")))
-                    }
-                });
-            violations.AddRange(await clash1ARule.ApplyToOntologyAsync(ontology));
-            violations.ForEach(violation => issues.Add(
-                new OWLIssue(
-                    OWLEnums.OWLIssueSeverity.Error,
-                    rulename,
-                    rulesugg1A,
-                    $"SKOS concepts '{((OWLObjectPropertyAssertion)violation.Axiom).SourceIndividualExpression.GetIRI()}' and '{((OWLObjectPropertyAssertion)violation.Axiom).TargetIndividualExpression.GetIRI()}' should be adjusted to not clash on hierarchical relations (skos:narrower VS skos:broader)"
-                )));
-            violations.Clear();
+            await SKOSHelper.CheckConceptRelationClashAsync(ontology, rulename,
+                RDFVocabulary.SKOS.NARROWER, RDFVocabulary.SKOS.BROADER, rulesugg1A,
+                "hierarchical relations (skos:narrower VS skos:broader)", issues);
 
             //skos:narrowerTransitive VS skos:broaderTransitive
-            SWRLRule clash1BRule = new SWRLRule(
-                new RDFPlainLiteral(nameof(SKOSNarrowerConceptAnalysisRule)),
-                new RDFPlainLiteral("This rule checks for skos:Concept instances clashing on their hierarchical relations (skos:narrowerTransitive VS skos:broaderTransitive)"),
-                new SWRLAntecedent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLClassAtom(
-                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
-                            new SWRLVariableArgument(new RDFVariable("?C1"))),
-                        new SWRLClassAtom(
-                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
-                            new SWRLVariableArgument(new RDFVariable("?C2"))),
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(RDFVocabulary.SKOS.NARROWER_TRANSITIVE),
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2"))),
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(RDFVocabulary.SKOS.BROADER_TRANSITIVE),
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2")))
-                    },
-                    BuiltIns = new List<SWRLBuiltIn>
-                    {
-                        SWRLBuiltIn.NotEqual(
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2")))
-                    }
-                },
-                new SWRLConsequent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(SKOSValidator.ViolationIRI),
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2")))
-                    }
-                });
-            violations.AddRange(await clash1BRule.ApplyToOntologyAsync(ontology));
-            violations.ForEach(violation => issues.Add(
-                new OWLIssue(
-                    OWLEnums.OWLIssueSeverity.Error,
-                    rulename,
-                    rulesugg1B,
-                    $"SKOS concepts '{((OWLObjectPropertyAssertion)violation.Axiom).SourceIndividualExpression.GetIRI()}' and '{((OWLObjectPropertyAssertion)violation.Axiom).TargetIndividualExpression.GetIRI()}' should be adjusted to not clash on hierarchical relations (skos:narrowerTransitive VS skos:broaderTransitive)"
-                )));
-            violations.Clear();
+            await SKOSHelper.CheckConceptRelationClashAsync(ontology, rulename,
+                RDFVocabulary.SKOS.NARROWER_TRANSITIVE, RDFVocabulary.SKOS.BROADER_TRANSITIVE, rulesugg1B,
+                "hierarchical relations (skos:narrowerTransitive VS skos:broaderTransitive)", issues);
 
             //skos:narrower VS skos:related
-            SWRLRule clash2ARule = new SWRLRule(
-                new RDFPlainLiteral(nameof(SKOSNarrowerConceptAnalysisRule)),
-                new RDFPlainLiteral("This rule checks for skos:Concept instances clashing on their hierarchical/associative relations (skos:narrower VS skos:related)"),
-                new SWRLAntecedent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLClassAtom(
-                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
-                            new SWRLVariableArgument(new RDFVariable("?C1"))),
-                        new SWRLClassAtom(
-                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
-                            new SWRLVariableArgument(new RDFVariable("?C2"))),
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(RDFVocabulary.SKOS.NARROWER),
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2"))),
-                        new SWRLObjectPropertyAtom(
-                            RDFVocabulary.SKOS.RELATED.ToEntity<OWLObjectProperty>(),
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2")))
-                    },
-                    BuiltIns = new List<SWRLBuiltIn>
-                    {
-                        SWRLBuiltIn.NotEqual(
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2")))
-                    }
-                },
-                new SWRLConsequent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(SKOSValidator.ViolationIRI),
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2")))
-                    }
-                });
-            violations.AddRange(await clash2ARule.ApplyToOntologyAsync(ontology));
-            violations.ForEach(violation => issues.Add(
-                new OWLIssue(
-                    OWLEnums.OWLIssueSeverity.Error,
-                    rulename,
-                    rulesugg2A,
-                    $"SKOS concepts '{((OWLObjectPropertyAssertion)violation.Axiom).SourceIndividualExpression.GetIRI()}' and '{((OWLObjectPropertyAssertion)violation.Axiom).TargetIndividualExpression.GetIRI()}' should be adjusted to not clash on hierarchical/associative relations (skos:narrower VS skos:related)"
-                )));
-            violations.Clear();
+            await SKOSHelper.CheckConceptRelationClashAsync(ontology, rulename,
+                RDFVocabulary.SKOS.NARROWER, RDFVocabulary.SKOS.RELATED, rulesugg2A,
+                "hierarchical/associative relations (skos:narrower VS skos:related)", issues);
 
             //skos:narrowerTransitive VS skos:related
-            SWRLRule clash2BRule = new SWRLRule(
-                new RDFPlainLiteral(nameof(SKOSNarrowerConceptAnalysisRule)),
-                new RDFPlainLiteral("This rule checks for skos:Concept instances clashing on their hierarchical/associative relations (skos:narrowerTransitive VS skos:related)"),
-                new SWRLAntecedent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLClassAtom(
-                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
-                            new SWRLVariableArgument(new RDFVariable("?C1"))),
-                        new SWRLClassAtom(
-                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
-                            new SWRLVariableArgument(new RDFVariable("?C2"))),
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(RDFVocabulary.SKOS.NARROWER_TRANSITIVE),
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2"))),
-                        new SWRLObjectPropertyAtom(
-                            RDFVocabulary.SKOS.RELATED.ToEntity<OWLObjectProperty>(),
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2")))
-                    },
-                    BuiltIns = new List<SWRLBuiltIn>
-                    {
-                        SWRLBuiltIn.NotEqual(
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2")))
-                    }
-                },
-                new SWRLConsequent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(SKOSValidator.ViolationIRI),
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2")))
-                    }
-                });
-            violations.AddRange(await clash2BRule.ApplyToOntologyAsync(ontology));
-            violations.ForEach(violation => issues.Add(
-                new OWLIssue(
-                    OWLEnums.OWLIssueSeverity.Error,
-                    rulename,
-                    rulesugg2B,
-                    $"SKOS concepts '{((OWLObjectPropertyAssertion)violation.Axiom).SourceIndividualExpression.GetIRI()}' and '{((OWLObjectPropertyAssertion)violation.Axiom).TargetIndividualExpression.GetIRI()}' should be adjusted to not clash on hierarchical/associative relations (skos:narrowerTransitive VS skos:related)"
-                )));
-            violations.Clear();
+            await SKOSHelper.CheckConceptRelationClashAsync(ontology, rulename,
+                RDFVocabulary.SKOS.NARROWER_TRANSITIVE, RDFVocabulary.SKOS.RELATED, rulesugg2B,
+                "hierarchical/associative relations (skos:narrowerTransitive VS skos:related)", issues);
 
             //skos:narrower VS skos:narrowMatch
-            SWRLRule clash3ARule = new SWRLRule(
-                new RDFPlainLiteral(nameof(SKOSNarrowerConceptAnalysisRule)),
-                new RDFPlainLiteral("This rule checks for skos:Concept instances clashing on their hierarchical/mapping relations (skos:narrower VS skos:narrowMatch)"),
-                new SWRLAntecedent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLClassAtom(
-                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
-                            new SWRLVariableArgument(new RDFVariable("?C1"))),
-                        new SWRLClassAtom(
-                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
-                            new SWRLVariableArgument(new RDFVariable("?C2"))),
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(RDFVocabulary.SKOS.NARROWER),
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2"))),
-                        new SWRLObjectPropertyAtom(
-                            RDFVocabulary.SKOS.NARROW_MATCH.ToEntity<OWLObjectProperty>(),
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2")))
-                    },
-                    BuiltIns = new List<SWRLBuiltIn>
-                    {
-                        SWRLBuiltIn.NotEqual(
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2")))
-                    }
-                },
-                new SWRLConsequent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(SKOSValidator.ViolationIRI),
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2")))
-                    }
-                });
-            violations.AddRange(await clash3ARule.ApplyToOntologyAsync(ontology));
-            violations.ForEach(violation => issues.Add(
-                new OWLIssue(
-                    OWLEnums.OWLIssueSeverity.Error,
-                    rulename,
-                    rulesugg3A,
-                    $"SKOS concepts '{((OWLObjectPropertyAssertion)violation.Axiom).SourceIndividualExpression.GetIRI()}' and '{((OWLObjectPropertyAssertion)violation.Axiom).TargetIndividualExpression.GetIRI()}' should be adjusted to not clash on hierarchical/mapping relations (skos:narrower VS skos:narrowMatch)"
-                )));
-            violations.Clear();
+            await SKOSHelper.CheckConceptRelationClashAsync(ontology, rulename,
+                RDFVocabulary.SKOS.NARROWER, RDFVocabulary.SKOS.NARROW_MATCH, rulesugg3A,
+                "hierarchical/mapping relations (skos:narrower VS skos:narrowMatch)", issues);
 
             //skos:narrowerTransitive VS skos:narrowMatch
-            SWRLRule clash3BRule = new SWRLRule(
-                new RDFPlainLiteral(nameof(SKOSNarrowerConceptAnalysisRule)),
-                new RDFPlainLiteral("This rule checks for skos:Concept instances clashing on their hierarchical/mapping relations (skos:narrowerTransitive VS skos:narrowMatch)"),
-                new SWRLAntecedent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLClassAtom(
-                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
-                            new SWRLVariableArgument(new RDFVariable("?C1"))),
-                        new SWRLClassAtom(
-                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
-                            new SWRLVariableArgument(new RDFVariable("?C2"))),
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(RDFVocabulary.SKOS.NARROWER_TRANSITIVE),
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2"))),
-                        new SWRLObjectPropertyAtom(
-                            RDFVocabulary.SKOS.NARROW_MATCH.ToEntity<OWLObjectProperty>(),
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2")))
-                    },
-                    BuiltIns = new List<SWRLBuiltIn>
-                    {
-                        SWRLBuiltIn.NotEqual(
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2")))
-                    }
-                },
-                new SWRLConsequent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(SKOSValidator.ViolationIRI),
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2")))
-                    }
-                });
-            violations.AddRange(await clash3BRule.ApplyToOntologyAsync(ontology));
-            violations.ForEach(violation => issues.Add(
-                new OWLIssue(
-                    OWLEnums.OWLIssueSeverity.Error,
-                    rulename,
-                    rulesugg3B,
-                    $"SKOS concepts '{((OWLObjectPropertyAssertion)violation.Axiom).SourceIndividualExpression.GetIRI()}' and '{((OWLObjectPropertyAssertion)violation.Axiom).TargetIndividualExpression.GetIRI()}' should be adjusted to not clash on hierarchical/mapping relations (skos:narrowerTransitive VS skos:narrowMatch)"
-                )));
-            violations.Clear();
+            await SKOSHelper.CheckConceptRelationClashAsync(ontology, rulename,
+                RDFVocabulary.SKOS.NARROWER_TRANSITIVE, RDFVocabulary.SKOS.NARROW_MATCH, rulesugg3B,
+                "hierarchical/mapping relations (skos:narrowerTransitive VS skos:narrowMatch)", issues);
 
             //skos:narrower VS skos:closeMatch
-            SWRLRule clash4ARule = new SWRLRule(
-                new RDFPlainLiteral(nameof(SKOSNarrowerConceptAnalysisRule)),
-                new RDFPlainLiteral("This rule checks for skos:Concept instances clashing on their hierarchical/mapping relations (skos:narrower VS skos:closeMatch)"),
-                new SWRLAntecedent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLClassAtom(
-                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
-                            new SWRLVariableArgument(new RDFVariable("?C1"))),
-                        new SWRLClassAtom(
-                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
-                            new SWRLVariableArgument(new RDFVariable("?C2"))),
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(RDFVocabulary.SKOS.NARROWER),
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2"))),
-                        new SWRLObjectPropertyAtom(
-                            RDFVocabulary.SKOS.CLOSE_MATCH.ToEntity<OWLObjectProperty>(),
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2")))
-                    },
-                    BuiltIns = new List<SWRLBuiltIn>
-                    {
-                        SWRLBuiltIn.NotEqual(
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2")))
-                    }
-                },
-                new SWRLConsequent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(SKOSValidator.ViolationIRI),
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2")))
-                    }
-                });
-            violations.AddRange(await clash4ARule.ApplyToOntologyAsync(ontology));
-            violations.ForEach(violation => issues.Add(
-                new OWLIssue(
-                    OWLEnums.OWLIssueSeverity.Error,
-                    rulename,
-                    rulesugg4A,
-                    $"SKOS concepts '{((OWLObjectPropertyAssertion)violation.Axiom).SourceIndividualExpression.GetIRI()}' and '{((OWLObjectPropertyAssertion)violation.Axiom).TargetIndividualExpression.GetIRI()}' should be adjusted to not clash on hierarchical/mapping relations (skos:narrower VS skos:closeMatch)"
-                )));
-            violations.Clear();
+            await SKOSHelper.CheckConceptRelationClashAsync(ontology, rulename,
+                RDFVocabulary.SKOS.NARROWER, RDFVocabulary.SKOS.CLOSE_MATCH, rulesugg4A,
+                "hierarchical/mapping relations (skos:narrower VS skos:closeMatch)", issues);
 
             //skos:narrowerTransitive VS skos:closeMatch
-            SWRLRule clash4BRule = new SWRLRule(
-                new RDFPlainLiteral(nameof(SKOSNarrowerConceptAnalysisRule)),
-                new RDFPlainLiteral("This rule checks for skos:Concept instances clashing on their hierarchical/mapping relations (skos:narrowerTransitive VS skos:closeMatch)"),
-                new SWRLAntecedent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLClassAtom(
-                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
-                            new SWRLVariableArgument(new RDFVariable("?C1"))),
-                        new SWRLClassAtom(
-                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
-                            new SWRLVariableArgument(new RDFVariable("?C2"))),
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(RDFVocabulary.SKOS.NARROWER_TRANSITIVE),
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2"))),
-                        new SWRLObjectPropertyAtom(
-                            RDFVocabulary.SKOS.CLOSE_MATCH.ToEntity<OWLObjectProperty>(),
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2")))
-                    },
-                    BuiltIns = new List<SWRLBuiltIn>
-                    {
-                        SWRLBuiltIn.NotEqual(
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2")))
-                    }
-                },
-                new SWRLConsequent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(SKOSValidator.ViolationIRI),
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2")))
-                    }
-                });
-            violations.AddRange(await clash4BRule.ApplyToOntologyAsync(ontology));
-            violations.ForEach(violation => issues.Add(
-                new OWLIssue(
-                    OWLEnums.OWLIssueSeverity.Error,
-                    rulename,
-                    rulesugg4B,
-                    $"SKOS concepts '{((OWLObjectPropertyAssertion)violation.Axiom).SourceIndividualExpression.GetIRI()}' and '{((OWLObjectPropertyAssertion)violation.Axiom).TargetIndividualExpression.GetIRI()}' should be adjusted to not clash on hierarchical/mapping relations (skos:narrowerTransitive VS skos:closeMatch)"
-                )));
-            violations.Clear();
+            await SKOSHelper.CheckConceptRelationClashAsync(ontology, rulename,
+                RDFVocabulary.SKOS.NARROWER_TRANSITIVE, RDFVocabulary.SKOS.CLOSE_MATCH, rulesugg4B,
+                "hierarchical/mapping relations (skos:narrowerTransitive VS skos:closeMatch)", issues);
 
             //skos:narrower VS skos:exactMatch
-            SWRLRule clash5ARule = new SWRLRule(
-                new RDFPlainLiteral(nameof(SKOSNarrowerConceptAnalysisRule)),
-                new RDFPlainLiteral("This rule checks for skos:Concept instances clashing on their hierarchical/mapping relations (skos:narrower VS skos:exactMatch)"),
-                new SWRLAntecedent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLClassAtom(
-                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
-                            new SWRLVariableArgument(new RDFVariable("?C1"))),
-                        new SWRLClassAtom(
-                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
-                            new SWRLVariableArgument(new RDFVariable("?C2"))),
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(RDFVocabulary.SKOS.NARROWER),
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2"))),
-                        new SWRLObjectPropertyAtom(
-                            RDFVocabulary.SKOS.EXACT_MATCH.ToEntity<OWLObjectProperty>(),
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2")))
-                    },
-                    BuiltIns = new List<SWRLBuiltIn>
-                    {
-                        SWRLBuiltIn.NotEqual(
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2")))
-                    }
-                },
-                new SWRLConsequent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(SKOSValidator.ViolationIRI),
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2")))
-                    }
-                });
-            violations.AddRange(await clash5ARule.ApplyToOntologyAsync(ontology));
-            violations.ForEach(violation => issues.Add(
-                new OWLIssue(
-                    OWLEnums.OWLIssueSeverity.Error,
-                    rulename,
-                    rulesugg5A,
-                    $"SKOS concepts '{((OWLObjectPropertyAssertion)violation.Axiom).SourceIndividualExpression.GetIRI()}' and '{((OWLObjectPropertyAssertion)violation.Axiom).TargetIndividualExpression.GetIRI()}' should be adjusted to not clash on hierarchical/mapping relations (skos:narrower VS skos:exactMatch)"
-                )));
-            violations.Clear();
+            await SKOSHelper.CheckConceptRelationClashAsync(ontology, rulename,
+                RDFVocabulary.SKOS.NARROWER, RDFVocabulary.SKOS.EXACT_MATCH, rulesugg5A,
+                "hierarchical/mapping relations (skos:narrower VS skos:exactMatch)", issues);
 
             //skos:narrowerTransitive VS skos:exactMatch
-            SWRLRule clash5BRule = new SWRLRule(
-                new RDFPlainLiteral(nameof(SKOSNarrowerConceptAnalysisRule)),
-                new RDFPlainLiteral("This rule checks for skos:Concept instances clashing on their hierarchical/mapping relations (skos:narrowerTransitive VS skos:exactMatch)"),
-                new SWRLAntecedent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLClassAtom(
-                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
-                            new SWRLVariableArgument(new RDFVariable("?C1"))),
-                        new SWRLClassAtom(
-                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
-                            new SWRLVariableArgument(new RDFVariable("?C2"))),
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(RDFVocabulary.SKOS.NARROWER_TRANSITIVE),
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2"))),
-                        new SWRLObjectPropertyAtom(
-                            RDFVocabulary.SKOS.EXACT_MATCH.ToEntity<OWLObjectProperty>(),
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2")))
-                    },
-                    BuiltIns = new List<SWRLBuiltIn>
-                    {
-                        SWRLBuiltIn.NotEqual(
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2")))
-                    }
-                },
-                new SWRLConsequent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(SKOSValidator.ViolationIRI),
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2")))
-                    }
-                });
-            violations.AddRange(await clash5BRule.ApplyToOntologyAsync(ontology));
-            violations.ForEach(violation => issues.Add(
-                new OWLIssue(
-                    OWLEnums.OWLIssueSeverity.Error,
-                    rulename,
-                    rulesugg5B,
-                    $"SKOS concepts '{((OWLObjectPropertyAssertion)violation.Axiom).SourceIndividualExpression.GetIRI()}' and '{((OWLObjectPropertyAssertion)violation.Axiom).TargetIndividualExpression.GetIRI()}' should be adjusted to not clash on hierarchical/mapping relations (skos:narrowerTransitive VS skos:exactMatch)"
-                )));
-            violations.Clear();
+            await SKOSHelper.CheckConceptRelationClashAsync(ontology, rulename,
+                RDFVocabulary.SKOS.NARROWER_TRANSITIVE, RDFVocabulary.SKOS.EXACT_MATCH, rulesugg5B,
+                "hierarchical/mapping relations (skos:narrowerTransitive VS skos:exactMatch)", issues);
 
             //skos:narrower VS skos:relatedMatch
-            SWRLRule clash6ARule = new SWRLRule(
-                new RDFPlainLiteral(nameof(SKOSNarrowerConceptAnalysisRule)),
-                new RDFPlainLiteral("This rule checks for skos:Concept instances clashing on their hierarchical/mapping relations (skos:narrower VS skos:relatedMatch)"),
-                new SWRLAntecedent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLClassAtom(
-                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
-                            new SWRLVariableArgument(new RDFVariable("?C1"))),
-                        new SWRLClassAtom(
-                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
-                            new SWRLVariableArgument(new RDFVariable("?C2"))),
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(RDFVocabulary.SKOS.NARROWER),
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2"))),
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(RDFVocabulary.SKOS.RELATED_MATCH),
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2")))
-                    },
-                    BuiltIns = new List<SWRLBuiltIn>
-                    {
-                        SWRLBuiltIn.NotEqual(
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2")))
-                    }
-                },
-                new SWRLConsequent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(SKOSValidator.ViolationIRI),
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2")))
-                    }
-                });
-            violations.AddRange(await clash6ARule.ApplyToOntologyAsync(ontology));
-            violations.ForEach(violation => issues.Add(
-                new OWLIssue(
-                    OWLEnums.OWLIssueSeverity.Error,
-                    rulename,
-                    rulesugg6A,
-                    $"SKOS concepts '{((OWLObjectPropertyAssertion)violation.Axiom).SourceIndividualExpression.GetIRI()}' and '{((OWLObjectPropertyAssertion)violation.Axiom).TargetIndividualExpression.GetIRI()}' should be adjusted to not clash on hierarchical/mapping relations (skos:narrower VS skos:relatedMatch)"
-                )));
-            violations.Clear();
+            await SKOSHelper.CheckConceptRelationClashAsync(ontology, rulename,
+                RDFVocabulary.SKOS.NARROWER, RDFVocabulary.SKOS.RELATED_MATCH, rulesugg6A,
+                "hierarchical/mapping relations (skos:narrower VS skos:relatedMatch)", issues);
 
             //skos:narrowerTransitive VS skos:relatedMatch
-            SWRLRule clash6BRule = new SWRLRule(
-                new RDFPlainLiteral(nameof(SKOSNarrowerConceptAnalysisRule)),
-                new RDFPlainLiteral("This rule checks for skos:Concept instances clashing on their hierarchical/mapping relations (skos:narrowerTransitive VS skos:relatedMatch)"),
-                new SWRLAntecedent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLClassAtom(
-                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
-                            new SWRLVariableArgument(new RDFVariable("?C1"))),
-                        new SWRLClassAtom(
-                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
-                            new SWRLVariableArgument(new RDFVariable("?C2"))),
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(RDFVocabulary.SKOS.NARROWER_TRANSITIVE),
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2"))),
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(RDFVocabulary.SKOS.RELATED_MATCH),
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2")))
-                    },
-                    BuiltIns = new List<SWRLBuiltIn>
-                    {
-                        SWRLBuiltIn.NotEqual(
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2")))
-                    }
-                },
-                new SWRLConsequent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(SKOSValidator.ViolationIRI),
-                            new SWRLVariableArgument(new RDFVariable("?C1")),
-                            new SWRLVariableArgument(new RDFVariable("?C2")))
-                    }
-                });
-            violations.AddRange(await clash6BRule.ApplyToOntologyAsync(ontology));
-            violations.ForEach(violation => issues.Add(
-                new OWLIssue(
-                    OWLEnums.OWLIssueSeverity.Error,
-                    rulename,
-                    rulesugg6B,
-                    $"SKOS concepts '{((OWLObjectPropertyAssertion)violation.Axiom).SourceIndividualExpression.GetIRI()}' and '{((OWLObjectPropertyAssertion)violation.Axiom).TargetIndividualExpression.GetIRI()}' should be adjusted to not clash on hierarchical/mapping relations (skos:narrowerTransitive VS skos:relatedMatch)"
-                )));
-            violations.Clear();
+            await SKOSHelper.CheckConceptRelationClashAsync(ontology, rulename,
+                RDFVocabulary.SKOS.NARROWER_TRANSITIVE, RDFVocabulary.SKOS.RELATED_MATCH, rulesugg6B,
+                "hierarchical/mapping relations (skos:narrowerTransitive VS skos:relatedMatch)", issues);
 
             return issues;
         }

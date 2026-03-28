@@ -61,7 +61,11 @@ namespace OWLSharp.Extensions.SKOS
             /// <summary>
             /// Labels should not assume more than one literal form (SKOS-XL)
             /// </summary>
-            LiteralFormAnalysis = 9
+            LiteralFormAnalysis = 9,
+            /// <summary>
+            /// Concepts should not have cyclic hierarchical relations (e.g., A broader B and B broader A)
+            /// </summary>
+            HierarchyCycleAnalysis = 10
         }
     }
 }

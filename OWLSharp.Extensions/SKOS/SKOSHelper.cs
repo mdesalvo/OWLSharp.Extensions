@@ -15,6 +15,8 @@
 */
 
 using OWLSharp.Ontology;
+using OWLSharp.Reasoner;
+using OWLSharp.Validator;
 using RDFSharp.Model;
 using RDFSharp.Query;
 using System;
@@ -575,6 +577,71 @@ namespace OWLSharp.Extensions.SKOS
 
             relatedMatchConcepts.RemoveAll(c => c.Equals(skosConcept));
             return RDFQueryUtilities.RemoveDuplicates(relatedMatchConcepts);
+        }
+        #endregion
+
+        #region Validator
+        /// <summary>
+        /// Checks for SKOS concepts clashing on two given object properties and collects any violations as issues
+        /// </summary>
+        internal static async Task CheckConceptRelationClashAsync(
+            OWLOntology ontology,
+            string ruleName,
+            RDFResource propertyA,
+            RDFResource propertyB,
+            string description,
+            string suggestionSuffix,
+            List<OWLIssue> issues,
+            bool invertSecondProperty = false)
+        {
+            SWRLRule clashRule = new SWRLRule(
+                new RDFPlainLiteral(ruleName),
+                new RDFPlainLiteral($"This rule checks for skos:Concept instances clashing on their relations ({suggestionSuffix})"),
+                new SWRLAntecedent
+                {
+                    Atoms = new List<SWRLAtom>
+                    {
+                        new SWRLClassAtom(
+                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
+                            new SWRLVariableArgument(new RDFVariable("?C1"))),
+                        new SWRLClassAtom(
+                            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
+                            new SWRLVariableArgument(new RDFVariable("?C2"))),
+                        new SWRLObjectPropertyAtom(
+                            new OWLObjectProperty(propertyA),
+                            new SWRLVariableArgument(new RDFVariable("?C1")),
+                            new SWRLVariableArgument(new RDFVariable("?C2"))),
+                        new SWRLObjectPropertyAtom(
+                            new OWLObjectProperty(propertyB),
+                            new SWRLVariableArgument(new RDFVariable(invertSecondProperty ? "?C2" : "?C1")),
+                            new SWRLVariableArgument(new RDFVariable(invertSecondProperty ? "?C1" : "?C2")))
+                    },
+                    BuiltIns = new List<SWRLBuiltIn>
+                    {
+                        SWRLBuiltIn.NotEqual(
+                            new SWRLVariableArgument(new RDFVariable("?C1")),
+                            new SWRLVariableArgument(new RDFVariable("?C2")))
+                    }
+                },
+                new SWRLConsequent
+                {
+                    Atoms = new List<SWRLAtom>
+                    {
+                        new SWRLObjectPropertyAtom(
+                            new OWLObjectProperty(SKOSValidator.ViolationIRI),
+                            new SWRLVariableArgument(new RDFVariable("?C1")),
+                            new SWRLVariableArgument(new RDFVariable("?C2")))
+                    }
+                });
+
+            List<OWLInference> violations = await clashRule.ApplyToOntologyAsync(ontology);
+            violations.ForEach(violation => issues.Add(
+                new OWLIssue(
+                    OWLEnums.OWLIssueSeverity.Error,
+                    ruleName,
+                    description,
+                    $"SKOS concepts '{((OWLObjectPropertyAssertion)violation.Axiom).SourceIndividualExpression.GetIRI()}' and '{((OWLObjectPropertyAssertion)violation.Axiom).TargetIndividualExpression.GetIRI()}' should be adjusted to not clash on {suggestionSuffix}"
+                )));
         }
         #endregion
     }
