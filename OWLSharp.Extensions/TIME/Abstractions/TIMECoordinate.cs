@@ -39,13 +39,28 @@ namespace OWLSharp.Extensions.TIME
         /// <summary>
         /// Represents the Unix epoch (January 1, 1970, 00:00:00 UTC), the standard reference point for Unix timestamp systems
         /// </summary>
-        public static readonly TIMECoordinate UnixTime = new TIMECoordinate(1970, 1, 1, 0, 0, 0);
+        public static readonly TIMECoordinate Unix = new TIMECoordinate(1970, 1, 1, 0, 0, 0);
 
         /// <summary>
         /// Represents the geologic time epoch (January 1, 1950, 00:00:00 UTC), commonly used as the reference point for
         /// radiocarbon dating and geological measurements
         /// </summary>
-        public static readonly TIMECoordinate GeologicTime = new TIMECoordinate(1950, 1, 1, 0, 0, 0);
+        public static readonly TIMECoordinate Geologic = new TIMECoordinate(1950, 1, 1, 0, 0, 0);
+
+        /// <summary>
+        /// Represents the GPS epoch (January 6, 1980, 00:00:00 UTC), the reference point for GPS time
+        /// </summary>
+        public static readonly TIMECoordinate GPS = new TIMECoordinate(1980, 1, 6, 0, 0, 0);
+
+        /// <summary>
+        /// Represents the TAI epoch (January 1, 1972, 00:00:00 UTC), the reference point for International Atomic Time
+        /// </summary>
+        public static readonly TIMECoordinate TAI = new TIMECoordinate(1972, 1, 1, 0, 0, 0);
+
+        /// <summary>
+        /// Represents the LORAN-C epoch (January 1, 1958, 00:00:00 UTC), the reference point for LORAN-C navigation time
+        /// </summary>
+        public static readonly TIMECoordinate LORANC = new TIMECoordinate(1958, 1, 1, 0, 0, 0);
         #endregion
 
         #region Properties

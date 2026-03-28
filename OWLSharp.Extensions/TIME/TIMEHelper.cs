@@ -482,7 +482,7 @@ namespace OWLSharp.Extensions.TIME
                         return TIMEConverter.NormalizeCoordinate(nominalPositionCoordinate, calendarTRS);
                 }
 
-                //Numeric position (e.g: seconds elapsed from 1st January 1970, which describes UnixTime Epoch)
+                //Numeric position (e.g: seconds elapsed from 1st January 1970, which describes Unix Epoch)
                 else
                 {
                     #region Guards

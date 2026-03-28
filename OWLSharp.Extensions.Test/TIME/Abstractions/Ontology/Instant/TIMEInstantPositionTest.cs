@@ -29,7 +29,7 @@ public class TIMEInstantPositionTest
     public void ShouldCreateNumericInstantPosition()
     {
         TIMEInstantPosition timeInstantPosition = new TIMEInstantPosition(
-            new RDFResource("ex:instPos"), TIMEPositionReferenceSystem.UnixTime, 121977842);
+            new RDFResource("ex:instPos"), TIMEPositionReferenceSystem.Unix, 121977842);
 
         Assert.IsNotNull(timeInstantPosition);
         Assert.IsTrue(timeInstantPosition.URI.Equals(new Uri("ex:instPos")));
@@ -42,7 +42,7 @@ public class TIMEInstantPositionTest
     public void ShouldCreateNumericInstantPositionWithUncertainty()
     {
         TIMEInstantPosition timeInstantPosition = new TIMEInstantPosition(
-            new RDFResource("ex:instPos"), TIMEPositionReferenceSystem.UnixTime, 121977842)
+            new RDFResource("ex:instPos"), TIMEPositionReferenceSystem.Unix, 121977842)
         {
             PositionalUncertainty = new TIMEIntervalDuration(
                 new RDFResource("ex:posUnc"), TIMEUnit.Second, 4.04)
@@ -61,7 +61,7 @@ public class TIMEInstantPositionTest
     public void ShouldCreateNominalInstantPosition()
     {
         TIMEInstantPosition timeInstantPosition = new TIMEInstantPosition(
-            new RDFResource("ex:instPos"), TIMEPositionReferenceSystem.GeologicTime, new RDFResource("geol:Archean"));
+            new RDFResource("ex:instPos"), TIMEPositionReferenceSystem.Geologic, new RDFResource("geol:Archean"));
 
         Assert.IsNotNull(timeInstantPosition);
         Assert.IsTrue(timeInstantPosition.URI.Equals(new Uri("ex:instPos")));
@@ -80,6 +80,6 @@ public class TIMEInstantPositionTest
 
     [TestMethod]
     public void ShouldThrowExceptionOnCreatingNominalInstantPositionBecauseNullValue()
-        => Assert.ThrowsExactly<OWLException>(() => _ = new TIMEInstantPosition(new RDFResource("ex:instPos"), TIMEPositionReferenceSystem.GeologicTime, null));
+        => Assert.ThrowsExactly<OWLException>(() => _ = new TIMEInstantPosition(new RDFResource("ex:instPos"), TIMEPositionReferenceSystem.Geologic, null));
     #endregion
 }

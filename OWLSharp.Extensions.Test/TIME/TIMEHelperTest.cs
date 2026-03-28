@@ -211,7 +211,7 @@ public class TIMEHelperTest : TIMETestOntology
         OWLOntology timeOntology = new OWLOntology(TestOntology) { IRI = "ex:timeOnt" };
         timeOntology.DeclareInstantFeature(new RDFResource("ex:feat"),
             new TIMEInstant(new RDFResource("ex:timeInst"),
-                new TIMEInstantPosition(new RDFResource("ex:timeInstPos"), TIMEPositionReferenceSystem.UnixTime, 1679477734))); //2023-03-22T09:35:34Z
+                new TIMEInstantPosition(new RDFResource("ex:timeInstPos"), TIMEPositionReferenceSystem.Unix, 1679477734))); //2023-03-22T09:35:34Z
 
         Assert.IsNotNull(timeOntology);
         Assert.IsTrue(timeOntology.IRI.Equals("ex:timeOnt"));
@@ -250,7 +250,7 @@ public class TIMEHelperTest : TIMETestOntology
             new RDFResource("ex:timeInstPosUnc"), RDFVocabulary.TIME.UNIT_SECOND, 4.04);
         TIMEInstant timeInstant = new TIMEInstant(new RDFResource("ex:timeInst"),
             new TIMEInstantPosition(new RDFResource("ex:timeInstPos"),
-                TIMEPositionReferenceSystem.UnixTime,
+                TIMEPositionReferenceSystem.Unix,
                 1679477734))
         {
             Position =
@@ -1026,7 +1026,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarII")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionPosition")));
-        timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime));
+        timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.Unix));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
@@ -1044,7 +1044,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(RDFVocabulary.TIME.HAS_TRS),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionPosition")),
-            new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime)));
+            new OWLNamedIndividual(TIMEPositionReferenceSystem.Unix)));
         timeOntology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
             new OWLDataProperty(RDFVocabulary.TIME.NUMERIC_POSITION),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionPosition")),
@@ -1062,7 +1062,7 @@ public class TIMEHelperTest : TIMETestOntology
         Assert.IsFalse(timeInstant.DateTime.HasValue);
         Assert.IsNull(timeInstant.Description);
         Assert.IsNotNull(timeInstant.Position);
-        Assert.IsTrue(timeInstant.Position.TRS.Equals(TIMEPositionReferenceSystem.UnixTime));
+        Assert.IsTrue(timeInstant.Position.TRS.Equals(TIMEPositionReferenceSystem.Unix));
         Assert.AreEqual(-957315600, timeInstant.Position.NumericValue);
     }
 
@@ -1073,7 +1073,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarII")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionPosition")));
-        timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime));
+        timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.Unix));
         timeOntology.DeclareEntity(new OWLObjectProperty(new RDFResource("ex:hasTemporalExtent")));
         timeOntology.DeclareObjectPropertyAxiom(new OWLSubObjectPropertyOf(
             new OWLObjectProperty(new RDFResource("ex:hasTemporalExtent")),
@@ -1095,7 +1095,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(RDFVocabulary.TIME.HAS_TRS),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionPosition")),
-            new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime)));
+            new OWLNamedIndividual(TIMEPositionReferenceSystem.Unix)));
         timeOntology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
             new OWLDataProperty(RDFVocabulary.TIME.NUMERIC_POSITION),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionPosition")),
@@ -1113,7 +1113,7 @@ public class TIMEHelperTest : TIMETestOntology
         Assert.IsFalse(timeInstant.DateTime.HasValue);
         Assert.IsNull(timeInstant.Description);
         Assert.IsNotNull(timeInstant.Position);
-        Assert.IsTrue(timeInstant.Position.TRS.Equals(TIMEPositionReferenceSystem.UnixTime));
+        Assert.IsTrue(timeInstant.Position.TRS.Equals(TIMEPositionReferenceSystem.Unix));
         Assert.AreEqual(-957315600, timeInstant.Position.NumericValue);
     }
 
@@ -1125,7 +1125,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionPosition")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:September1939")));
-        timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime));
+        timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.Unix));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
@@ -2013,7 +2013,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarII")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionPosition")));
-        timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime));
+        timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.Unix));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
@@ -2031,7 +2031,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(RDFVocabulary.TIME.HAS_TRS),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionPosition")),
-            new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime)));
+            new OWLNamedIndividual(TIMEPositionReferenceSystem.Unix)));
         timeOntology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
             new OWLDataProperty(RDFVocabulary.TIME.NUMERIC_POSITION),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionPosition")),
@@ -2055,7 +2055,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarII")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionPosition")));
-        timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime));
+        timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.Unix));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
@@ -2073,7 +2073,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(RDFVocabulary.TIME.HAS_TRS),
             new OWLNamedIndividual(new RDFResource("ex:MyUnregisteredTRS")),
-            new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime)));
+            new OWLNamedIndividual(TIMEPositionReferenceSystem.Unix)));
         timeOntology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
             new OWLDataProperty(RDFVocabulary.TIME.NUMERIC_POSITION),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionPosition")),
@@ -2089,7 +2089,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarII")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionPosition")));
-        timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime));
+        timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.Unix));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
@@ -2448,7 +2448,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIIBeginning")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIIBeginningPosition")));
-        timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime));
+        timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.Unix));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
@@ -2473,7 +2473,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(RDFVocabulary.TIME.HAS_TRS),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIIBeginningPosition")),
-            new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime)));
+            new OWLNamedIndividual(TIMEPositionReferenceSystem.Unix)));
         timeOntology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
             new OWLDataProperty(RDFVocabulary.TIME.NUMERIC_POSITION),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIIBeginningPosition")),
@@ -2497,7 +2497,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIIBeginning")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIIBeginningPosition")));
-        timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime));
+        timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.Unix));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
@@ -2522,7 +2522,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(RDFVocabulary.TIME.HAS_TRS),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIIBeginningPosition")),
-            new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime)));
+            new OWLNamedIndividual(TIMEPositionReferenceSystem.Unix)));
         TIMECoordinate tc = timeOntology.GetBeginningOfInterval(new RDFResource("ex:WorldWarIITemporalDimension"));
 
         Assert.IsNull(tc);
@@ -2537,7 +2537,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionBeginning")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDImensionBeginningInstant")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDImensionBeginningInstantPosition")));
-        timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime));
+        timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.Unix));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
@@ -2569,7 +2569,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(RDFVocabulary.TIME.HAS_TRS),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDImensionBeginningInstantPosition")),
-            new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime)));
+            new OWLNamedIndividual(TIMEPositionReferenceSystem.Unix)));
         timeOntology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
             new OWLDataProperty(RDFVocabulary.TIME.NUMERIC_POSITION),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDImensionBeginningInstantPosition")),
@@ -2594,7 +2594,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionBeginning")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDImensionBeginningInstant")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDImensionBeginningInstantPosition")));
-        timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime));
+        timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.Unix));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
@@ -2626,7 +2626,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(RDFVocabulary.TIME.HAS_TRS),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDImensionBeginningInstantPosition")),
-            new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime)));
+            new OWLNamedIndividual(TIMEPositionReferenceSystem.Unix)));
         TIMECoordinate tc = timeOntology.GetBeginningOfInterval(new RDFResource("ex:WorldWarIITemporalDimension"));
 
         Assert.IsNull(tc);
@@ -2641,7 +2641,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:PrecedingWorldWarIITemporalDimension")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:PrecedingWorldWarIITemporalDimensionEndInstant")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:PrecedingWorldWarIITemporalDimensionEndInstantPosition")));
-        timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime));
+        timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.Unix));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
@@ -2673,7 +2673,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(RDFVocabulary.TIME.HAS_TRS),
             new OWLNamedIndividual(new RDFResource("ex:PrecedingWorldWarIITemporalDimensionEndInstantPosition")),
-            new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime)));
+            new OWLNamedIndividual(TIMEPositionReferenceSystem.Unix)));
         timeOntology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
             new OWLDataProperty(RDFVocabulary.TIME.NUMERIC_POSITION),
             new OWLNamedIndividual(new RDFResource("ex:PrecedingWorldWarIITemporalDimensionEndInstantPosition")),
@@ -2699,7 +2699,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:PrecedingWorldWarIITemporalDimension")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:PrecedingWorldWarIITemporalDimensionEndInstant")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:PrecedingWorldWarIITemporalDimensionEndInstantPosition")));
-        timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime));
+        timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.Unix));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
@@ -2731,7 +2731,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(RDFVocabulary.TIME.HAS_TRS),
             new OWLNamedIndividual(new RDFResource("ex:PrecedingWorldWarIITemporalDimensionEndInstantPosition")),
-            new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime)));
+            new OWLNamedIndividual(TIMEPositionReferenceSystem.Unix)));
 
         TIMECoordinate tc = timeOntology.GetBeginningOfInterval(new RDFResource("ex:WorldWarIITemporalDimension"));
 
@@ -2746,7 +2746,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIIEnd")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIIEndPosition")));
-        timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime));
+        timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.Unix));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
@@ -2771,7 +2771,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(RDFVocabulary.TIME.HAS_TRS),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIIEndPosition")),
-            new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime)));
+            new OWLNamedIndividual(TIMEPositionReferenceSystem.Unix)));
         timeOntology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
             new OWLDataProperty(RDFVocabulary.TIME.NUMERIC_POSITION),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIIEndPosition")),
@@ -2795,7 +2795,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIIEnd")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIIEndPosition")));
-        timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime));
+        timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.Unix));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
@@ -2820,7 +2820,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(RDFVocabulary.TIME.HAS_TRS),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIIEndPosition")),
-            new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime)));
+            new OWLNamedIndividual(TIMEPositionReferenceSystem.Unix)));
         TIMECoordinate tc = timeOntology.GetEndOfInterval(new RDFResource("ex:WorldWarIITemporalDimension"));
 
         Assert.IsNull(tc);
@@ -2835,7 +2835,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionEnd")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDImensionEndInstant")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDImensionEndInstantPosition")));
-        timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime));
+        timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.Unix));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
@@ -2867,7 +2867,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(RDFVocabulary.TIME.HAS_TRS),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDImensionEndInstantPosition")),
-            new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime)));
+            new OWLNamedIndividual(TIMEPositionReferenceSystem.Unix)));
         timeOntology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
             new OWLDataProperty(RDFVocabulary.TIME.NUMERIC_POSITION),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDImensionEndInstantPosition")),
@@ -2892,7 +2892,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimensionEnd")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDImensionEndInstant")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDImensionEndInstantPosition")));
-        timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime));
+        timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.Unix));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
@@ -2924,7 +2924,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(RDFVocabulary.TIME.HAS_TRS),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDImensionEndInstantPosition")),
-            new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime)));
+            new OWLNamedIndividual(TIMEPositionReferenceSystem.Unix)));
         TIMECoordinate tc = timeOntology.GetEndOfInterval(new RDFResource("ex:WorldWarIITemporalDimension"));
 
         Assert.IsNull(tc);
@@ -2939,7 +2939,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:FollowingWorldWarIITemporalDimension")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:FollowingWorldWarIITemporalDimensionBeginningInstant")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:FollowingWorldWarIITemporalDimensionBeginningInstantPosition")));
-        timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime));
+        timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.Unix));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
@@ -2971,7 +2971,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(RDFVocabulary.TIME.HAS_TRS),
             new OWLNamedIndividual(new RDFResource("ex:FollowingWorldWarIITemporalDimensionBeginningInstantPosition")),
-            new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime)));
+            new OWLNamedIndividual(TIMEPositionReferenceSystem.Unix)));
         timeOntology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
             new OWLDataProperty(RDFVocabulary.TIME.NUMERIC_POSITION),
             new OWLNamedIndividual(new RDFResource("ex:FollowingWorldWarIITemporalDimensionBeginningInstantPosition")),
@@ -2997,7 +2997,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:FollowingWorldWarIITemporalDimension")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:FollowingWorldWarIITemporalDimensionBeginningInstant")));
         timeOntology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:FollowingWorldWarIITemporalDimensionBeginningInstantPosition")));
-        timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime));
+        timeOntology.DeclareEntity(new OWLNamedIndividual(TIMEPositionReferenceSystem.Unix));
         timeOntology.DeclareAssertionAxiom(new OWLClassAssertion(
             RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
             new OWLNamedIndividual(new RDFResource("ex:WorldWarIITemporalDimension"))));
@@ -3029,7 +3029,7 @@ public class TIMEHelperTest : TIMETestOntology
         timeOntology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
             new OWLObjectProperty(RDFVocabulary.TIME.HAS_TRS),
             new OWLNamedIndividual(new RDFResource("ex:FollowingWorldWarIITemporalDimensionBeginningInstantPosition")),
-            new OWLNamedIndividual(TIMEPositionReferenceSystem.UnixTime)));
+            new OWLNamedIndividual(TIMEPositionReferenceSystem.Unix)));
 
         TIMECoordinate tc = timeOntology.GetEndOfInterval(new RDFResource("ex:WorldWarIITemporalDimension"));
 

@@ -51,7 +51,7 @@ public class TIMEConverterTest
     public void ShouldGetCalendarFromUnixTRS(double timePosition, int expectedYear, int expectedMonth,
         int expectedDay, int expectedHour, int expectedMinute, int expectedSecond)
     {
-        TIMECoordinate tc = TIMEConverter.PositionToCoordinate(timePosition, TIMEPositionReferenceSystem.UnixTime, TIMECalendarReferenceSystem.Gregorian);
+        TIMECoordinate tc = TIMEConverter.PositionToCoordinate(timePosition, TIMEPositionReferenceSystem.Unix, TIMECalendarReferenceSystem.Gregorian);
 
         Assert.IsNotNull(tc);
         Assert.AreEqual(expectedYear, tc.Year);
@@ -78,7 +78,7 @@ public class TIMEConverterTest
     {
         TIMEPositionReferenceSystem unixModifiedTRS = new TIMEPositionReferenceSystem(
             new RDFResource("ex:CustomTRS"),
-            TIMEPositionReferenceSystem.UnixTime.Origin,
+            TIMEPositionReferenceSystem.Unix.Origin,
             new TIMEUnit(new RDFResource("ex:CustomUnit"), unitType, unitScale));
         TIMECoordinate tc = TIMEConverter.PositionToCoordinate(timePosition, unixModifiedTRS, TIMECalendarReferenceSystem.Gregorian);
 
@@ -133,7 +133,7 @@ public class TIMEConverterTest
     {
         TIMEPositionReferenceSystem unixModifiedTRS = new TIMEPositionReferenceSystem(
             new RDFResource("ex:CustomPositionTRS"),
-            TIMEPositionReferenceSystem.UnixTime.Origin,
+            TIMEPositionReferenceSystem.Unix.Origin,
             new TIMEUnit(new RDFResource("ex:CustomUnit"), unitType, unitScale));
         TIMECoordinate tc = TIMEConverter.PositionToCoordinate(
             timePosition,
@@ -166,7 +166,7 @@ public class TIMEConverterTest
     public void ShouldGetCalendarFromGeologicTRS(double timePosition, double? expectedYear, double? expectedMonth, double? expectedDay,
         double? expectedHour, double? expectedMinute, double? expectedSecond)
     {
-        TIMECoordinate tc = TIMEConverter.PositionToCoordinate(timePosition, TIMEPositionReferenceSystem.GeologicTime, TIMECalendarReferenceSystem.Gregorian);
+        TIMECoordinate tc = TIMEConverter.PositionToCoordinate(timePosition, TIMEPositionReferenceSystem.Geologic, TIMECalendarReferenceSystem.Gregorian);
 
         Assert.IsNotNull(tc);
         Assert.AreEqual(expectedYear, tc.Year);
@@ -202,11 +202,11 @@ public class TIMEConverterTest
 
     [TestMethod]
     public void ShouldThrowExceptionOnGettingPositionFromCalendarBecauseNullCoordinate()
-        => Assert.ThrowsExactly<OWLException>(() => _ = TIMEConverter.CoordinateToPosition(null, TIMEPositionReferenceSystem.UnixTime));
+        => Assert.ThrowsExactly<OWLException>(() => _ = TIMEConverter.CoordinateToPosition(null, TIMEPositionReferenceSystem.Unix));
 
     [TestMethod]
     public void ShouldThrowExceptionOnGettingPositionFromCalendarBecauseNullPositionTRS()
-        => Assert.ThrowsExactly<OWLException>(() => _ = TIMEConverter.CoordinateToPosition(TIMECoordinate.UnixTime, null));
+        => Assert.ThrowsExactly<OWLException>(() => _ = TIMEConverter.CoordinateToPosition(TIMECoordinate.Unix, null));
 
     [TestMethod]
     [DataRow(-413733672, 1956, 11, 21, 9, 58, 48)]
@@ -232,7 +232,7 @@ public class TIMEConverterTest
         int day, int hour, int minute, int second)
     {
         TIMECoordinate tc = new TIMECoordinate(year, month, day, hour, minute, second);
-        double position = TIMEConverter.CoordinateToPosition(tc, TIMEPositionReferenceSystem.UnixTime, TIMECalendarReferenceSystem.Gregorian);
+        double position = TIMEConverter.CoordinateToPosition(tc, TIMEPositionReferenceSystem.Unix, TIMECalendarReferenceSystem.Gregorian);
 
         Assert.AreEqual(expectedPosition, position);
     }
@@ -250,7 +250,7 @@ public class TIMEConverterTest
         double? hour, double? minute, double? second)
     {
         TIMECoordinate tc = new TIMECoordinate(year, month, day, hour, minute, second);
-        double position = TIMEConverter.CoordinateToPosition(tc, TIMEPositionReferenceSystem.GeologicTime, TIMECalendarReferenceSystem.Gregorian);
+        double position = TIMEConverter.CoordinateToPosition(tc, TIMEPositionReferenceSystem.Geologic, TIMECalendarReferenceSystem.Gregorian);
 
         Assert.AreEqual(expectedPosition, position, 0.000001); // Tolerance for floating point comparisons at geologic scale
     }

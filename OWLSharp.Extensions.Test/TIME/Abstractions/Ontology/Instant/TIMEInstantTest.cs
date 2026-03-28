@@ -88,7 +88,7 @@ public class TIMEInstantTest
     public void ShouldCreateInstantFromPosition()
     {
         TIMEInstant timeInstant = new TIMEInstant(new RDFResource("ex:inst"),
-            new TIMEInstantPosition(new RDFResource("ex:instPos"), TIMEPositionReferenceSystem.GeologicTime, 141.25));
+            new TIMEInstantPosition(new RDFResource("ex:instPos"), TIMEPositionReferenceSystem.Geologic, 141.25));
 
         Assert.IsNotNull(timeInstant);
         Assert.IsTrue(timeInstant.URI.Equals(new Uri("ex:inst")));
@@ -96,7 +96,7 @@ public class TIMEInstantTest
         Assert.IsNull(timeInstant.Description);
         Assert.IsNotNull(timeInstant.Position);
         Assert.IsTrue(timeInstant.Position.URI.Equals(new Uri("ex:instPos")));
-        Assert.IsTrue(timeInstant.Position.TRS.Equals(TIMEPositionReferenceSystem.GeologicTime));
+        Assert.IsTrue(timeInstant.Position.TRS.Equals(TIMEPositionReferenceSystem.Geologic));
         Assert.AreEqual(141.25, timeInstant.Position.NumericValue);
     }
 

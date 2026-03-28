@@ -52,6 +52,10 @@ namespace OWLSharp.Extensions.TIME
             //Scale the given time position of the factor specified by the unit of the given position TRS
             double scaledTimePosition = timePosition * positionTRS.Unit.ScaleFactor;
 
+            //Apply non-linear correction if present (e.g., leap seconds for GPS/TAI/LORAN-C)
+            if (positionTRS.CorrectionToCalendar != null)
+                scaledTimePosition = positionTRS.CorrectionToCalendar(scaledTimePosition);
+
             #region Large-Scale
             if (positionTRS.HasLargeScale)
             {
@@ -192,7 +196,11 @@ namespace OWLSharp.Extensions.TIME
     
                 // Calculate the difference in seconds
                 double secondsDifference = coordinateSeconds - originSeconds;
-    
+
+                //Apply inverse non-linear correction if present (e.g., leap seconds for GPS/TAI/LORAN-C)
+                if (positionTRS.CorrectionFromCalendar != null)
+                    secondsDifference = positionTRS.CorrectionFromCalendar(secondsDifference);
+
                 // Convert seconds difference to the unit of the positional TRS
                 double positionInTargetUnit =
                     positionTRS.Unit.UnitType == TIMEEnums.TIMEUnitType.Second ? secondsDifference :
