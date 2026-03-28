@@ -1,4 +1,4 @@
-﻿/*
+/*
    Copyright 2014-2025 Marco De Salvo
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +19,7 @@ using RDFSharp.Model;
 using RDFSharp.Query;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 
@@ -50,6 +51,23 @@ namespace OWLSharp.Extensions.TIME
         /// The ontology mapping the T-BOX and A-BOX of this ordinal TRS
         /// </summary>
         public OWLOntology Ontology { get; }
+
+        /// <summary>
+        /// Cached calibrated object property assertions from the ontology.
+        /// Invalidated when any Declare* method modifies the A-BOX.
+        /// </summary>
+        private List<OWLObjectPropertyAssertion> _cachedObjPropAsns;
+
+        /// <summary>
+        /// Cached calibrated data property assertions from the ontology (lazy, built on demand).
+        /// Invalidated together with object property assertions.
+        /// </summary>
+        private List<OWLDataPropertyAssertion> _cachedDtPropAsns;
+
+        /// <summary>
+        /// Flag indicating whether the assertion caches need to be rebuilt
+        /// </summary>
+        private bool _cacheDirty = true;
         #endregion
 
         #region Ctors
@@ -72,11 +90,48 @@ namespace OWLSharp.Extensions.TIME
 
         #region Methods
 
+        #region Cache
+        /// <summary>
+        /// Marks the assertion caches as stale, forcing recalibration on next read
+        /// </summary>
+        private void InvalidateCache()
+        {
+            _cacheDirty = true;
+        }
+
+        /// <summary>
+        /// Returns cached calibrated object property assertions, rebuilding if stale
+        /// </summary>
+        private List<OWLObjectPropertyAssertion> GetCachedObjectAssertions()
+        {
+            if (_cacheDirty || _cachedObjPropAsns == null)
+            {
+                _cachedObjPropAsns = OWLAssertionAxiomHelper.CalibrateObjectAssertions(Ontology);
+                _cachedDtPropAsns = null; // data assertions may also be stale
+                _cacheDirty = false;
+            }
+            return _cachedObjPropAsns;
+        }
+
+        /// <summary>
+        /// Returns cached calibrated data property assertions, rebuilding if stale
+        /// </summary>
+        private List<OWLDataPropertyAssertion> GetCachedDataAssertions()
+        {
+            GetCachedObjectAssertions(); // ensure object cache is fresh
+            if (_cachedDtPropAsns == null)
+                _cachedDtPropAsns = Ontology.GetAssertionAxiomsOfType<OWLDataPropertyAssertion>();
+            return _cachedDtPropAsns;
+        }
+        #endregion
+
         #region Declarer
         /// <summary>
         /// Injects the A-BOX axioms for declaring the existence of a thors:Era individual with the given name
         /// and the given time:Instant individuals being the temporal coordinates indicating its formal begin/end.
         /// An era may have so uncertain beginning or ending temporal coordinates that it can leave them null.
+        /// Adjacent eras can share the same boundary instant (e.g., the K-Pg boundary as both end of Cretaceous
+        /// and begin of Paleogene) — passing the same TIMEInstant to multiple DeclareEra calls is idempotent.
         /// </summary>
         /// <exception cref="OWLException"></exception>
         public TIMEOrdinalReferenceSystem DeclareEra(RDFResource era, TIMEInstant eraBeginning=null, TIMEInstant eraEnd=null)
@@ -134,6 +189,7 @@ namespace OWLSharp.Extensions.TIME
                     new OWLNamedIndividual(era))); //inference
             }
 
+            InvalidateCache();
             return this;
         }
 
@@ -167,6 +223,7 @@ namespace OWLSharp.Extensions.TIME
                 new OWLNamedIndividual(superEra),
                 new OWLNamedIndividual(subEra)));
 
+            InvalidateCache();
             return this;
         }
 
@@ -201,6 +258,7 @@ namespace OWLSharp.Extensions.TIME
                     new OWLNamedIndividual(referencePoint)));
             }
 
+            InvalidateCache();
             return this;
         }
         #endregion
@@ -268,17 +326,32 @@ namespace OWLSharp.Extensions.TIME
             => superEra != null && subEra != null && GetSuperErasOf(subEra, enableReasoning).Any(e => e.Equals(superEra));
 
         /// <summary>
-        /// Enlists the thors:Era individuals having a formal thors:Member hierarchical relationship with the given one
-        /// in this ordinal TRS (in this case they must be sub-eras of it)
+        /// Enlists the thors:Era individuals declared as top-level components (thors:component) of this ordinal TRS
         /// </summary>
-        public List<RDFResource> GetSubErasOf(RDFResource era, bool enableReasoning=true)
+        public List<RDFResource> GetEras()
+        {
+            List<OWLObjectPropertyAssertion> objPropAsns = GetCachedObjectAssertions();
+            List<OWLObjectPropertyAssertion> componentAsns = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(
+                objPropAsns, RDFVocabulary.TIME.THORS.COMPONENT.ToEntity<OWLObjectProperty>());
+            return componentAsns
+                .Where(asn => asn.SourceIndividualExpression.GetIRI().Equals(this))
+                .Select(asn => asn.TargetIndividualExpression.GetIRI())
+                .ToList();
+        }
+
+        /// <summary>
+        /// Enlists the thors:Era individuals having a formal thors:Member hierarchical relationship with the given one
+        /// in this ordinal TRS (in this case they must be sub-eras of it).
+        /// When chronologicalOrder is true, sub-eras are sorted by their begin coordinate (earliest first).
+        /// </summary>
+        public List<RDFResource> GetSubErasOf(RDFResource era, bool enableReasoning=true, bool chronologicalOrder=false)
         {
             List<RDFResource> subEras = new List<RDFResource>();
 
             if (era != null)
             {
                 //Temporary working variables
-                List<OWLObjectPropertyAssertion> objPropAsns = OWLAssertionAxiomHelper.CalibrateObjectAssertions(Ontology);
+                List<OWLObjectPropertyAssertion> objPropAsns = GetCachedObjectAssertions();
                 List<OWLObjectPropertyAssertion> thorsMemberObjPropAsns = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, RDFVocabulary.TIME.THORS.MEMBER.ToEntity<OWLObjectProperty>());
 
                 //Reason on the given era
@@ -288,7 +361,33 @@ namespace OWLSharp.Extensions.TIME
                 subEras.RemoveAll(cls => cls.Equals(era));
             }
 
-            return RDFQueryUtilities.RemoveDuplicates(subEras);
+            subEras = RDFQueryUtilities.RemoveDuplicates(subEras);
+
+            //Sort by begin coordinate (earliest first)
+            if (chronologicalOrder && subEras.Count > 1)
+            {
+                TIMECalendarReferenceSystem calTRS = TIMECalendarReferenceSystem.Gregorian;
+                Dictionary<string, TIMECoordinate> beginCoords = new Dictionary<string, TIMECoordinate>();
+                foreach (RDFResource subEra in subEras)
+                {
+                    (TIMECoordinate begin, TIMECoordinate _) = GetEraCoordinatesSafe(subEra, calTRS);
+                    if (begin != null)
+                        beginCoords[subEra.ToString()] = begin;
+                }
+                subEras.Sort((a, b) =>
+                {
+                    TIMECoordinate beginA;
+                    TIMECoordinate beginB;
+                    bool hasA = beginCoords.TryGetValue(a.ToString(), out beginA);
+                    bool hasB = beginCoords.TryGetValue(b.ToString(), out beginB);
+                    if (hasA && hasB) return beginA.CompareTo(beginB);
+                    if (hasA) return -1;
+                    if (hasB) return 1;
+                    return 0;
+                });
+            }
+
+            return subEras;
         }
         internal List<RDFResource> FindSubErasOf(RDFResource era, List<OWLObjectPropertyAssertion> thorsMemberObjPropAsns, Dictionary<long, RDFResource> visitContext, bool enableReasoning)
         {
@@ -326,7 +425,7 @@ namespace OWLSharp.Extensions.TIME
             if (era != null)
             {
                 //Temporary working variables
-                List<OWLObjectPropertyAssertion> objPropAsns = OWLAssertionAxiomHelper.CalibrateObjectAssertions(Ontology);
+                List<OWLObjectPropertyAssertion> objPropAsns = GetCachedObjectAssertions();
                 List<OWLObjectPropertyAssertion> thorsMemberObjPropAsns = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, RDFVocabulary.TIME.THORS.MEMBER.ToEntity<OWLObjectProperty>());
 
                 //Reason on the given era
@@ -374,13 +473,19 @@ namespace OWLSharp.Extensions.TIME
                 throw new OWLException($"Cannot get coordinates of era because given '{nameof(era)}' parameter is null");
             if (!CheckHasEra(era))
                 throw new OWLException($"Cannot get coordinates of era because given '{nameof(era)}' parameter is not declared as era of this ordinal TRS");
-
-            if (calendarTRS == null)
-                calendarTRS = TIMECalendarReferenceSystem.Gregorian;
             #endregion
 
+            return GetEraCoordinatesSafe(era, calendarTRS ?? TIMECalendarReferenceSystem.Gregorian);
+        }
+
+        /// <summary>
+        /// Internal coordinate extraction without guards, for use by internal callers that already validated the era
+        /// </summary>
+        private (TIMECoordinate eraBeginning, TIMECoordinate eraEnding) GetEraCoordinatesSafe(
+            RDFResource era, TIMECalendarReferenceSystem calendarTRS)
+        {
             //Temporary working variables
-            List<OWLObjectPropertyAssertion> objPropAsns = OWLAssertionAxiomHelper.CalibrateObjectAssertions(Ontology);
+            List<OWLObjectPropertyAssertion> objPropAsns = GetCachedObjectAssertions();
             List<OWLObjectPropertyAssertion> thorsBeginObjPropAsns = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, RDFVocabulary.TIME.THORS.BEGIN.ToEntity<OWLObjectProperty>());
             List<OWLObjectPropertyAssertion> thorsEndObjPropAsns = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, RDFVocabulary.TIME.THORS.END.ToEntity<OWLObjectProperty>());
 
@@ -426,6 +531,151 @@ namespace OWLSharp.Extensions.TIME
                 return TIMEConverter.ExtentBetweenCoordinates(eraCoordinates.eraBeginning, eraCoordinates.eraEnding, calendarTRS);
 
             return null;
+        }
+
+        /// <summary>
+        /// Gets the positional uncertainties of the begin/end boundaries of the given thors:Era individual,
+        /// reading the thors:positionalUncertainty values from the ontology graph.
+        /// Returns null for boundaries that have no declared uncertainty.
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        public (TIMEIntervalDuration beginUncertainty, TIMEIntervalDuration endUncertainty) GetEraUncertainties(RDFResource era)
+        {
+            #region Guards
+            if (era == null)
+                throw new OWLException($"Cannot get uncertainties of era because given '{nameof(era)}' parameter is null");
+            if (!CheckHasEra(era))
+                throw new OWLException($"Cannot get uncertainties of era because given '{nameof(era)}' parameter is not declared as era of this ordinal TRS");
+            #endregion
+
+            List<OWLObjectPropertyAssertion> objPropAsns = GetCachedObjectAssertions();
+
+            //Find begin boundary and read its uncertainty
+            RDFResource beginBoundary = GetBoundaryInstantIRI(era, objPropAsns, true);
+            TIMEIntervalDuration beginUncertainty = beginBoundary != null
+                ? ReadUncertaintyOfBoundary(beginBoundary, objPropAsns) : null;
+
+            //Find end boundary and read its uncertainty
+            RDFResource endBoundary = GetBoundaryInstantIRI(era, objPropAsns, false);
+            TIMEIntervalDuration endUncertainty = endBoundary != null
+                ? ReadUncertaintyOfBoundary(endBoundary, objPropAsns) : null;
+
+            return (beginUncertainty, endUncertainty);
+        }
+
+        /// <summary>
+        /// Gets the IRI of the boundary instant (thors:begin or thors:end) of the given era
+        /// </summary>
+        private RDFResource GetBoundaryInstantIRI(RDFResource era,
+            List<OWLObjectPropertyAssertion> objPropAsns, bool isBegin)
+        {
+            OWLObjectProperty boundaryProp = isBegin
+                ? RDFVocabulary.TIME.THORS.BEGIN.ToEntity<OWLObjectProperty>()
+                : RDFVocabulary.TIME.THORS.END.ToEntity<OWLObjectProperty>();
+
+            return OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, boundaryProp)
+                .FirstOrDefault(asn => asn.SourceIndividualExpression.GetIRI().Equals(era)
+                    && CheckHasEraBoundary(asn.TargetIndividualExpression.GetIRI()))
+                ?.TargetIndividualExpression.GetIRI();
+        }
+
+        /// <summary>
+        /// Reads the positional uncertainty of a boundary instant by traversing:
+        /// boundary → time:inTimePosition → position → thors:positionalUncertainty → duration
+        /// </summary>
+        private TIMEIntervalDuration ReadUncertaintyOfBoundary(RDFResource boundaryIRI,
+            List<OWLObjectPropertyAssertion> objPropAsns)
+        {
+            //Find position IRI (time:inTimePosition)
+            RDFResource positionIRI = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(
+                objPropAsns, RDFVocabulary.TIME.IN_TIME_POSITION.ToEntity<OWLObjectProperty>())
+                .FirstOrDefault(asn => asn.SourceIndividualExpression.GetIRI().Equals(boundaryIRI))
+                ?.TargetIndividualExpression.GetIRI();
+            if (positionIRI == null) return null;
+
+            //Find uncertainty IRI (thors:positionalUncertainty)
+            RDFResource uncertaintyIRI = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(
+                objPropAsns, RDFVocabulary.TIME.THORS.POSITIONAL_UNCERTAINTY.ToEntity<OWLObjectProperty>())
+                .FirstOrDefault(asn => asn.SourceIndividualExpression.GetIRI().Equals(positionIRI))
+                ?.TargetIndividualExpression.GetIRI();
+            if (uncertaintyIRI == null) return null;
+
+            //Read unit type (time:unitType)
+            RDFResource unitType = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(
+                objPropAsns, RDFVocabulary.TIME.UNIT_TYPE.ToEntity<OWLObjectProperty>())
+                .FirstOrDefault(asn => asn.SourceIndividualExpression.GetIRI().Equals(uncertaintyIRI))
+                ?.TargetIndividualExpression.GetIRI();
+
+            //Read numeric duration (time:numericDuration)
+            List<OWLDataPropertyAssertion> dtPropAsns = GetCachedDataAssertions();
+            OWLLiteral numericDuration = OWLAssertionAxiomHelper.SelectDataAssertionsByDPEX(
+                dtPropAsns, RDFVocabulary.TIME.NUMERIC_DURATION.ToEntity<OWLDataProperty>())
+                .FirstOrDefault(asn => asn.IndividualExpression.GetIRI().Equals(uncertaintyIRI))
+                ?.Literal;
+
+            if (unitType != null && numericDuration != null
+                && numericDuration.GetLiteral() is RDFTypedLiteral numericDurationTL
+                && numericDurationTL.HasDecimalDatatype())
+            {
+                double value = Convert.ToDouble(numericDurationTL.Value, CultureInfo.InvariantCulture);
+                return new TIMEIntervalDuration(uncertaintyIRI, unitType, value);
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Finds all thors:Era individuals whose temporal boundaries contain the given positional value.
+        /// Returns eras at all hierarchy levels (eon, era, period, epoch) that span the given point.
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        public List<RDFResource> FindErasAt(double position, TIMEPositionReferenceSystem positionTRS,
+            TIMECalendarReferenceSystem calendarTRS=null)
+        {
+            #region Guards
+            if (positionTRS == null)
+                throw new OWLException($"Cannot find eras at position because given '{nameof(positionTRS)}' parameter is null");
+            #endregion
+
+            if (calendarTRS == null)
+                calendarTRS = TIMECalendarReferenceSystem.Gregorian;
+
+            TIMECoordinate queryCoord = TIMEConverter.PositionToCoordinate(position, positionTRS, calendarTRS);
+            List<RDFResource> result = new List<RDFResource>();
+
+            //Iterate all declared eras and check if the query point falls within their boundaries
+            List<RDFResource> allEras = GetEras();
+            foreach (RDFResource era in allEras)
+            {
+                (TIMECoordinate begin, TIMECoordinate end) = GetEraCoordinatesSafe(era, calendarTRS);
+                if (begin != null && end != null)
+                {
+                    //Check containment: begin <= queryCoord <= end
+                    if (queryCoord.CompareTo(begin) >= 0 && queryCoord.CompareTo(end) <= 0)
+                        result.Add(era);
+                }
+            }
+
+            //Also search all sub-eras transitively (eras at deeper hierarchy levels)
+            List<RDFResource> subEras = new List<RDFResource>();
+            foreach (RDFResource era in allEras)
+                subEras.AddRange(GetSubErasOf(era, true));
+            subEras = RDFQueryUtilities.RemoveDuplicates(subEras);
+
+            foreach (RDFResource subEra in subEras)
+            {
+                if (result.Any(r => r.Equals(subEra)))
+                    continue;
+
+                (TIMECoordinate begin, TIMECoordinate end) = GetEraCoordinatesSafe(subEra, calendarTRS);
+                if (begin != null && end != null)
+                {
+                    if (queryCoord.CompareTo(begin) >= 0 && queryCoord.CompareTo(end) <= 0)
+                        result.Add(subEra);
+                }
+            }
+
+            return result;
         }
         #endregion
 
