@@ -627,10 +627,28 @@ namespace OWLSharp.Extensions.TIME
         /// <summary>
         /// Finds all thors:Era individuals whose temporal boundaries contain the given positional value.
         /// Returns eras at all hierarchy levels (eon, era, period, epoch) that span the given point.
+        /// When considerUncertainty is true, eras whose uncertainty bands overlap the query point are also included.
         /// </summary>
         /// <exception cref="OWLException"></exception>
         public List<RDFResource> FindErasAt(double position, TIMEPositionReferenceSystem positionTRS,
-            TIMECalendarReferenceSystem calendarTRS=null)
+            bool considerUncertainty=false, TIMECalendarReferenceSystem calendarTRS=null)
+        {
+            List<TIMEEraMatch> detailed = FindErasAtDetailed(position, positionTRS, considerUncertainty, calendarTRS);
+            List<RDFResource> result = new List<RDFResource>();
+            foreach (TIMEEraMatch match in detailed)
+                result.Add(match.Era);
+            return result;
+        }
+
+        /// <summary>
+        /// Finds all thors:Era individuals whose temporal boundaries contain the given positional value,
+        /// returning detailed match results that distinguish between exact containment and probable containment
+        /// within uncertainty bands. This enables callers to reason about the confidence of temporal placement
+        /// when boundary dates carry measurement uncertainty (e.g., geological GSSP boundaries with ± Ma values).
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        public List<TIMEEraMatch> FindErasAtDetailed(double position, TIMEPositionReferenceSystem positionTRS,
+            bool considerUncertainty=false, TIMECalendarReferenceSystem calendarTRS=null)
         {
             #region Guards
             if (positionTRS == null)
@@ -640,45 +658,183 @@ namespace OWLSharp.Extensions.TIME
             if (calendarTRS == null)
                 calendarTRS = TIMECalendarReferenceSystem.Gregorian;
 
-            TIMECoordinate queryCoord = TIMEConverter.PositionToCoordinate(position, positionTRS, calendarTRS);
-            List<RDFResource> result = new List<RDFResource>();
+            List<TIMEEraMatch> result = new List<TIMEEraMatch>();
 
-            //Iterate all declared eras and check if the query point falls within their boundaries
+            //Collect all eras to search (top-level + all transitive sub-eras)
             List<RDFResource> allEras = GetEras();
-            foreach (RDFResource era in allEras)
-            {
-                (TIMECoordinate begin, TIMECoordinate end) = GetEraCoordinatesSafe(era, calendarTRS);
-                if (begin != null && end != null)
-                {
-                    //Check containment: begin <= queryCoord <= end
-                    if (queryCoord.CompareTo(begin) >= 0 && queryCoord.CompareTo(end) <= 0)
-                        result.Add(era);
-                }
-            }
-
-            //Also search all sub-eras transitively (eras at deeper hierarchy levels)
             List<RDFResource> subEras = new List<RDFResource>();
             foreach (RDFResource era in allEras)
                 subEras.AddRange(GetSubErasOf(era, true));
             subEras = RDFQueryUtilities.RemoveDuplicates(subEras);
 
+            List<RDFResource> candidateEras = new List<RDFResource>(allEras);
             foreach (RDFResource subEra in subEras)
             {
-                if (result.Any(r => r.Equals(subEra)))
+                if (!candidateEras.Any(e => e.Equals(subEra)))
+                    candidateEras.Add(subEra);
+            }
+
+            //Evaluate each candidate era in position space
+            foreach (RDFResource era in candidateEras)
+            {
+                (TIMECoordinate begin, TIMECoordinate end) = GetEraCoordinatesSafe(era, calendarTRS);
+                if (begin == null || end == null)
                     continue;
 
-                (TIMECoordinate begin, TIMECoordinate end) = GetEraCoordinatesSafe(subEra, calendarTRS);
-                if (begin != null && end != null)
+                //Convert boundary coordinates to positions in the same TRS as the query
+                double beginPos = TIMEConverter.CoordinateToPosition(begin, positionTRS, calendarTRS);
+                double endPos = TIMEConverter.CoordinateToPosition(end, positionTRS, calendarTRS);
+
+                //Normalize range (negative scale factors may produce reversed order)
+                double lo = Math.Min(beginPos, endPos);
+                double hi = Math.Max(beginPos, endPos);
+
+                //Exact containment check in position space
+                if (position >= lo && position <= hi)
                 {
-                    if (queryCoord.CompareTo(begin) >= 0 && queryCoord.CompareTo(end) <= 0)
-                        result.Add(subEra);
+                    result.Add(new TIMEEraMatch(era, true));
+                    continue;
+                }
+
+                //Uncertainty-aware containment check
+                if (considerUncertainty)
+                {
+                    (TIMEIntervalDuration beginUnc, TIMEIntervalDuration endUnc) = GetEraUncertainties(era);
+
+                    //Convert uncertainties to position units and widen the range
+                    double loUnc = UncertaintyToPositionUnits(
+                        beginPos <= endPos ? beginUnc : endUnc, positionTRS, calendarTRS);
+                    double hiUnc = UncertaintyToPositionUnits(
+                        beginPos <= endPos ? endUnc : beginUnc, positionTRS, calendarTRS);
+
+                    double effectiveLo = lo - loUnc;
+                    double effectiveHi = hi + hiUnc;
+
+                    if (position >= effectiveLo && position <= effectiveHi)
+                        result.Add(new TIMEEraMatch(era, false));
                 }
             }
 
             return result;
         }
+
+        /// <summary>
+        /// Converts a positional uncertainty duration directly to position units in the given positional TRS,
+        /// operating entirely in year-space to avoid precision loss from intermediate seconds conversion.
+        /// On geological scales (hundreds of millions of years), converting to seconds would produce values
+        /// near the limits of double precision (~10^16), causing silent accuracy degradation.
+        /// Instead, both the uncertainty and the TRS unit are converted to years as a common unit,
+        /// then the ratio is scaled by the TRS scale factor.
+        /// Returns 0 when the uncertainty is null or has an unrecognized unit type.
+        /// </summary>
+        private static double UncertaintyToPositionUnits(TIMEIntervalDuration uncertainty,
+            TIMEPositionReferenceSystem positionTRS, TIMECalendarReferenceSystem calendarTRS)
+        {
+            if (uncertainty == null || uncertainty.UnitType == null)
+                return 0;
+
+            //Convert stored uncertainty value to years (common unit for large-scale-safe arithmetic)
+            double uncertaintyInYears = UnitValueToYears(
+                Math.Abs(uncertainty.Value), uncertainty.UnitType.ToString(), calendarTRS);
+
+            //Convert one TRS base unit to years
+            double trsBaseUnitInYears = TRSBaseUnitToYears(positionTRS.Unit.UnitType, calendarTRS);
+            if (trsBaseUnitInYears == 0)
+                return 0;
+
+            //Convert uncertainty from years to TRS base units, then scale by |ScaleFactor| to get position units
+            return (uncertaintyInYears / trsBaseUnitInYears) / Math.Abs(positionTRS.Unit.ScaleFactor);
+        }
+
+        /// <summary>
+        /// Converts a value in the given temporal unit (identified by IRI) to years,
+        /// using the calendar TRS metrics for unit relationships.
+        /// </summary>
+        private static double UnitValueToYears(double value, string unitIRI,
+            TIMECalendarReferenceSystem calendarTRS)
+        {
+            double daysInYear = calendarTRS.Metrics.DaysInYear;
+            double hoursInDay = calendarTRS.Metrics.HoursInDay;
+            double minutesInHour = calendarTRS.Metrics.MinutesInHour;
+            double secondsInMinute = calendarTRS.Metrics.SecondsInMinute;
+
+            if (unitIRI.Equals(RDFVocabulary.TIME.UNIT_YEAR.ToString()))
+                return value;
+            if (unitIRI.Equals(RDFVocabulary.TIME.UNIT_MONTH.ToString()))
+                return value / calendarTRS.Metrics.MonthsInYear;
+            if (unitIRI.Equals(RDFVocabulary.TIME.UNIT_WEEK.ToString()))
+                return value * calendarTRS.Metrics.DaysInWeek / daysInYear;
+            if (unitIRI.Equals(RDFVocabulary.TIME.UNIT_DAY.ToString()))
+                return value / daysInYear;
+            if (unitIRI.Equals(RDFVocabulary.TIME.UNIT_HOUR.ToString()))
+                return value / (daysInYear * hoursInDay);
+            if (unitIRI.Equals(RDFVocabulary.TIME.UNIT_MINUTE.ToString()))
+                return value / (daysInYear * hoursInDay * minutesInHour);
+            if (unitIRI.Equals(RDFVocabulary.TIME.UNIT_SECOND.ToString()))
+                return value / (daysInYear * hoursInDay * minutesInHour * secondsInMinute);
+
+            return 0;
+        }
+
+        /// <summary>
+        /// Returns how many years one base unit of the given TIMEUnitType represents,
+        /// using the calendar TRS metrics.
+        /// </summary>
+        private static double TRSBaseUnitToYears(TIMEEnums.TIMEUnitType unitType,
+            TIMECalendarReferenceSystem calendarTRS)
+        {
+            double daysInYear = calendarTRS.Metrics.DaysInYear;
+            double hoursInDay = calendarTRS.Metrics.HoursInDay;
+            double minutesInHour = calendarTRS.Metrics.MinutesInHour;
+            double secondsInMinute = calendarTRS.Metrics.SecondsInMinute;
+
+            switch (unitType)
+            {
+                case TIMEEnums.TIMEUnitType.Year:   return 1;
+                case TIMEEnums.TIMEUnitType.Month:  return 1.0 / calendarTRS.Metrics.MonthsInYear;
+                case TIMEEnums.TIMEUnitType.Day:    return 1.0 / daysInYear;
+                case TIMEEnums.TIMEUnitType.Hour:   return 1.0 / (daysInYear * hoursInDay);
+                case TIMEEnums.TIMEUnitType.Minute: return 1.0 / (daysInYear * hoursInDay * minutesInHour);
+                case TIMEEnums.TIMEUnitType.Second: return 1.0 / (daysInYear * hoursInDay * minutesInHour * secondsInMinute);
+                default: return 0;
+            }
+        }
         #endregion
 
+        #endregion
+    }
+
+    /// <summary>
+    /// Represents the result of an uncertainty-aware era search within an ordinal temporal reference system.
+    /// Each match indicates whether the query point falls within the exact boundaries of the era
+    /// or within the uncertainty band of one of its boundaries, enabling callers to distinguish
+    /// between certain and probable temporal containment.
+    /// </summary>
+    public sealed class TIMEEraMatch
+    {
+        #region Properties
+        /// <summary>
+        /// The thors:Era individual that matched the query point
+        /// </summary>
+        public RDFResource Era { get; }
+
+        /// <summary>
+        /// True when the query point is within the exact boundaries of the era (certain containment).
+        /// False when the query point is outside exact boundaries but within the uncertainty band
+        /// of one or both boundaries (probable containment).
+        /// </summary>
+        public bool IsExact { get; }
+        #endregion
+
+        #region Ctors
+        /// <summary>
+        /// Builds an era match result for the given era with the given match type
+        /// </summary>
+        internal TIMEEraMatch(RDFResource era, bool isExact)
+        {
+            Era = era;
+            IsExact = isExact;
+        }
         #endregion
     }
 }

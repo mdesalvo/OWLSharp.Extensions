@@ -1167,5 +1167,81 @@ public class TIMEOrdinalReferenceSystemTest
 
     #endregion
 
+    #region Feature Tests — Uncertainty-aware FindErasAt
+
+    [TestMethod]
+    public void ShouldFindErasAtBoundaryWithUncertainty()
+    {
+        TIMEOrdinalReferenceSystem ics = GetICS();
+
+        // 66.03 Ma is just outside the exact K-Pg boundary (66 Ma) but within its ±0.05 Ma uncertainty.
+        // Without uncertainty: should match Mesozoic (251.9→66 Ma contains 66.03) and Phanerozoic, Cretaceous
+        // but NOT Cenozoic (begin=66 Ma, 66.03 > 66 in geological time = older = outside)
+        List<TIMEEraMatch> withoutUnc = ics.FindErasAtDetailed(66.03, TIMEPositionReferenceSystem.Geologic, false);
+        List<TIMEEraMatch> withUnc = ics.FindErasAtDetailed(66.03, TIMEPositionReferenceSystem.Geologic, true);
+
+        // Without uncertainty: 66.03 Ma is inside Mesozoic/Cretaceous but outside Cenozoic
+        Assert.IsTrue(withoutUnc.Any(m => m.Era.Equals(Phanerozoic) && m.IsExact));
+        Assert.IsTrue(withoutUnc.Any(m => m.Era.Equals(Mesozoic) && m.IsExact));
+        Assert.IsTrue(withoutUnc.Any(m => m.Era.Equals(Cretaceous) && m.IsExact));
+        Assert.IsFalse(withoutUnc.Any(m => m.Era.Equals(Cenozoic)));
+
+        // With uncertainty: Cenozoic (begin=66 ±0.05 Ma, effective begin=66.05 Ma) now includes 66.03 Ma
+        Assert.IsTrue(withUnc.Count > withoutUnc.Count);
+        Assert.IsTrue(withUnc.Any(m => m.Era.Equals(Cenozoic) && !m.IsExact));
+    }
+
+    [TestMethod]
+    public void ShouldFindErasAtDeepInsideWithExactMatch()
+    {
+        TIMEOrdinalReferenceSystem ics = GetICS();
+
+        // 150 Ma is deep inside the Late Jurassic — all matches should be exact
+        List<TIMEEraMatch> matches = ics.FindErasAtDetailed(150, TIMEPositionReferenceSystem.Geologic, true);
+        Assert.IsTrue(matches.All(m => m.IsExact));
+        Assert.IsTrue(matches.Any(m => m.Era.Equals(LateJurassic)));
+        Assert.IsTrue(matches.Any(m => m.Era.Equals(Jurassic)));
+        Assert.IsTrue(matches.Any(m => m.Era.Equals(Mesozoic)));
+        Assert.IsTrue(matches.Any(m => m.Era.Equals(Phanerozoic)));
+    }
+
+    [TestMethod]
+    public void ShouldFindErasAtWithUncertaintyConsistentWithExact()
+    {
+        TIMEOrdinalReferenceSystem ics = GetICS();
+
+        // Uncertainty-aware search must be a superset of exact search
+        List<RDFResource> exact = ics.FindErasAt(30, TIMEPositionReferenceSystem.Geologic, false);
+        List<RDFResource> withUnc = ics.FindErasAt(30, TIMEPositionReferenceSystem.Geologic, true);
+
+        // Every exact match must also appear in uncertainty-aware results
+        foreach (RDFResource era in exact)
+            Assert.IsTrue(withUnc.Any(e => e.Equals(era)));
+    }
+
+    [TestMethod]
+    public void ShouldFindErasAtDetailedDistinguishesExactFromUncertain()
+    {
+        TIMEOrdinalReferenceSystem ics = GetICS();
+
+        // Query at 251.92 Ma — just inside the Paleozoic (end=251.902 ±0.024 Ma)
+        // This is 0.018 Ma above the boundary, within the ±0.024 Ma uncertainty band of the Mesozoic begin.
+        // Without uncertainty: should be in Paleozoic only (not Mesozoic)
+        // With uncertainty: should also find Mesozoic as an uncertain match
+        List<TIMEEraMatch> detailed = ics.FindErasAtDetailed(251.92, TIMEPositionReferenceSystem.Geologic, true);
+
+        Assert.IsTrue(detailed.Any(m => m.Era.Equals(Paleozoic) && m.IsExact));
+        Assert.IsTrue(detailed.Any(m => m.Era.Equals(Phanerozoic) && m.IsExact));
+        // Mesozoic begin is 251.902 Ma ±0.024 → effective begin at 251.926 Ma
+        // 251.92 < 251.926, so it falls within the uncertainty band
+        Assert.IsTrue(detailed.Any(m => m.Era.Equals(Mesozoic) && !m.IsExact));
+    }
+
+    [TestMethod]
+    public void ShouldThrowExceptionOnFindErasAtDetailedBecauseNullTRS()
+        => Assert.ThrowsExactly<OWLException>(() => _ = GetICS().FindErasAtDetailed(150, null));
+
+    #endregion
+
     #endregion
 }
