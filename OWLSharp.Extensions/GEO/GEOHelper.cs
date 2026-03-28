@@ -54,75 +54,6 @@ namespace OWLSharp.Extensions.GEO
         private static readonly CoordinateSystemFactory CSFactory = new CoordinateSystemFactory();
         private static readonly CoordinateTransformationFactory CTFactory = new CoordinateTransformationFactory();
 
-        /// <summary>
-        /// Creates forward (WGS84->LAEA) and inverse (LAEA->WGS84) transforms centered on the given WGS84 point.
-        /// </summary>
-        private static (MathTransform forward, MathTransform inverse) CreateDynamicLAEATransforms(double centerLon, double centerLat)
-        {
-            List<ProjectionParameter> parameters = new List<ProjectionParameter>
-            {
-                new ProjectionParameter("latitude_of_center", centerLat),
-                new ProjectionParameter("longitude_of_center", centerLon),
-                new ProjectionParameter("false_easting", 0),
-                new ProjectionParameter("false_northing", 0)
-            };
-            IProjection projection = CSFactory.CreateProjection("DynLAEA", "Lambert_Azimuthal_Equal_Area", parameters);
-            ProjectedCoordinateSystem projCS = CSFactory.CreateProjectedCoordinateSystem(
-                "DynLAEA", GeographicCoordinateSystem.WGS84, projection,
-                LinearUnit.Metre,
-                new AxisInfo("E", AxisOrientationEnum.East),
-                new AxisInfo("N", AxisOrientationEnum.North));
-            MathTransform forward = CTFactory.CreateFromCoordinateSystems(GeographicCoordinateSystem.WGS84, projCS).MathTransform;
-            MathTransform inverse = CTFactory.CreateFromCoordinateSystems(projCS, GeographicCoordinateSystem.WGS84).MathTransform;
-            return (forward, inverse);
-        }
-
-        /// <summary>
-        /// Applies the given math transform to a copy of the geometry, returning the projected result.
-        /// </summary>
-        private static Geometry ApplyTransform(Geometry geometry, MathTransform transform)
-        {
-            Geometry result = geometry.Copy();
-            result.Apply(new ProjectionCoordinateFilter(transform));
-            result.GeometryChanged();
-            return result;
-        }
-
-        /// <summary>
-        /// Projects a WGS84 geometry to a dynamic LAEA centered on its own centroid, for accurate metric operations.
-        /// </summary>
-        private static Geometry ProjectToDynamicLAEA(Geometry wgs84Geometry)
-        {
-            Point centroid = wgs84Geometry.Centroid;
-            (MathTransform forward, _) = CreateDynamicLAEATransforms(centroid.X, centroid.Y);
-            return ApplyTransform(wgs84Geometry, forward);
-        }
-
-        /// <summary>
-        /// Projects WGS84 geometries to a shared dynamic LAEA centered on the first geometry's centroid.
-        /// </summary>
-        private static (Geometry lazA, Geometry lazB) ProjectToDynamicLAEA(Geometry wgs84A, Geometry wgs84B)
-        {
-            Point centroid = wgs84A.Centroid;
-            (MathTransform forward, _) = CreateDynamicLAEATransforms(centroid.X, centroid.Y);
-            return (ApplyTransform(wgs84A, forward), ApplyTransform(wgs84B, forward));
-        }
-
-        private sealed class ProjectionCoordinateFilter : ICoordinateFilter
-        {
-            private readonly MathTransform _transform;
-
-            internal ProjectionCoordinateFilter(MathTransform transform)
-                => _transform = transform;
-
-            public void Filter(Coordinate coord)
-            {
-                var (x, y) = _transform.Transform(coord.X, coord.Y);
-                coord.X = Math.Round(x, 8);
-                coord.Y = Math.Round(y, 8);
-            }
-        }
-
         #region Methods
 
         #region Helper (Initializer, Declarer, Getter)
@@ -1811,6 +1742,77 @@ namespace OWLSharp.Extensions.GEO
                 computedGeometryWGS84 = RDFGeoConverter.GetWGS84GeometryFromLambertAzimuthal(computedGeometryAZ);
             }
             return Task.FromResult(new RDFTypedLiteral(WKTWriter.Write(computedGeometryWGS84).Replace("LINEARRING", "LINESTRING"), RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
+        }
+
+        /* DYNAMIC LAEA PROJECTION */
+
+        /// <summary>
+        /// Creates forward (WGS84->LAEA) and inverse (LAEA->WGS84) transforms centered on the given WGS84 point.
+        /// </summary>
+        private static (MathTransform forward, MathTransform inverse) CreateDynamicLAEATransforms(double centerLon, double centerLat)
+        {
+            List<ProjectionParameter> parameters = new List<ProjectionParameter>
+            {
+                new ProjectionParameter("latitude_of_center", centerLat),
+                new ProjectionParameter("longitude_of_center", centerLon),
+                new ProjectionParameter("false_easting", 0),
+                new ProjectionParameter("false_northing", 0)
+            };
+            IProjection projection = CSFactory.CreateProjection("DynLAEA", "Lambert_Azimuthal_Equal_Area", parameters);
+            ProjectedCoordinateSystem projCS = CSFactory.CreateProjectedCoordinateSystem(
+                "DynLAEA", GeographicCoordinateSystem.WGS84, projection,
+                LinearUnit.Metre,
+                new AxisInfo("E", AxisOrientationEnum.East),
+                new AxisInfo("N", AxisOrientationEnum.North));
+            MathTransform forward = CTFactory.CreateFromCoordinateSystems(GeographicCoordinateSystem.WGS84, projCS).MathTransform;
+            MathTransform inverse = CTFactory.CreateFromCoordinateSystems(projCS, GeographicCoordinateSystem.WGS84).MathTransform;
+            return (forward, inverse);
+        }
+
+        /// <summary>
+        /// Applies the given math transform to a copy of the geometry, returning the projected result.
+        /// </summary>
+        private static Geometry ApplyTransform(Geometry geometry, MathTransform transform)
+        {
+            Geometry result = geometry.Copy();
+            result.Apply(new ProjectionCoordinateFilter(transform));
+            result.GeometryChanged();
+            return result;
+        }
+
+        /// <summary>
+        /// Projects a WGS84 geometry to a dynamic LAEA centered on its own centroid, for accurate metric operations.
+        /// </summary>
+        private static Geometry ProjectToDynamicLAEA(Geometry wgs84Geometry)
+        {
+            Point centroid = wgs84Geometry.Centroid;
+            (MathTransform forward, _) = CreateDynamicLAEATransforms(centroid.X, centroid.Y);
+            return ApplyTransform(wgs84Geometry, forward);
+        }
+
+        /// <summary>
+        /// Projects WGS84 geometries to a shared dynamic LAEA centered on the first geometry's centroid.
+        /// </summary>
+        private static (Geometry lazA, Geometry lazB) ProjectToDynamicLAEA(Geometry wgs84A, Geometry wgs84B)
+        {
+            Point centroid = wgs84A.Centroid;
+            (MathTransform forward, _) = CreateDynamicLAEATransforms(centroid.X, centroid.Y);
+            return (ApplyTransform(wgs84A, forward), ApplyTransform(wgs84B, forward));
+        }
+
+        private sealed class ProjectionCoordinateFilter : ICoordinateFilter
+        {
+            private readonly MathTransform _transform;
+
+            internal ProjectionCoordinateFilter(MathTransform transform)
+                => _transform = transform;
+
+            public void Filter(Coordinate coord)
+            {
+                var (x, y) = _transform.Transform(coord.X, coord.Y);
+                coord.X = Math.Round(x, 8);
+                coord.Y = Math.Round(y, 8);
+            }
         }
         #endregion
     }
