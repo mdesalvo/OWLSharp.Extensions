@@ -25,6 +25,8 @@ using NetTopologySuite.IO;
 using NetTopologySuite.IO.GML2;
 using OWLSharp.Ontology;
 using OWLSharp.Reasoner;
+using ProjNet.CoordinateSystems;
+using ProjNet.CoordinateSystems.Transformations;
 using RDFSharp.Model;
 using RDFSharp.Query;
 
@@ -49,6 +51,77 @@ namespace OWLSharp.Extensions.GEO
         internal static GMLWriter GMLWriter => GMLWriterTLS.Value;
         private static readonly RDFResource AsWKT = new RDFResource("urn:swrl:geosparql:asWKT");
         private static readonly RDFResource AsGML = new RDFResource("urn:swrl:geosparql:asGML");
+        private static readonly CoordinateSystemFactory CSFactory = new CoordinateSystemFactory();
+        private static readonly CoordinateTransformationFactory CTFactory = new CoordinateTransformationFactory();
+
+        /// <summary>
+        /// Creates forward (WGS84->LAEA) and inverse (LAEA->WGS84) transforms centered on the given WGS84 point.
+        /// </summary>
+        private static (MathTransform forward, MathTransform inverse) CreateDynamicLAEATransforms(double centerLon, double centerLat)
+        {
+            List<ProjectionParameter> parameters = new List<ProjectionParameter>
+            {
+                new ProjectionParameter("latitude_of_center", centerLat),
+                new ProjectionParameter("longitude_of_center", centerLon),
+                new ProjectionParameter("false_easting", 0),
+                new ProjectionParameter("false_northing", 0)
+            };
+            IProjection projection = CSFactory.CreateProjection("DynLAEA", "Lambert_Azimuthal_Equal_Area", parameters);
+            ProjectedCoordinateSystem projCS = CSFactory.CreateProjectedCoordinateSystem(
+                "DynLAEA", GeographicCoordinateSystem.WGS84, projection,
+                LinearUnit.Metre,
+                new AxisInfo("E", AxisOrientationEnum.East),
+                new AxisInfo("N", AxisOrientationEnum.North));
+            MathTransform forward = CTFactory.CreateFromCoordinateSystems(GeographicCoordinateSystem.WGS84, projCS).MathTransform;
+            MathTransform inverse = CTFactory.CreateFromCoordinateSystems(projCS, GeographicCoordinateSystem.WGS84).MathTransform;
+            return (forward, inverse);
+        }
+
+        /// <summary>
+        /// Applies the given math transform to a copy of the geometry, returning the projected result.
+        /// </summary>
+        private static Geometry ApplyTransform(Geometry geometry, MathTransform transform)
+        {
+            Geometry result = geometry.Copy();
+            result.Apply(new ProjectionCoordinateFilter(transform));
+            result.GeometryChanged();
+            return result;
+        }
+
+        /// <summary>
+        /// Projects a WGS84 geometry to a dynamic LAEA centered on its own centroid, for accurate metric operations.
+        /// </summary>
+        private static Geometry ProjectToDynamicLAEA(Geometry wgs84Geometry)
+        {
+            Point centroid = wgs84Geometry.Centroid;
+            (MathTransform forward, _) = CreateDynamicLAEATransforms(centroid.X, centroid.Y);
+            return ApplyTransform(wgs84Geometry, forward);
+        }
+
+        /// <summary>
+        /// Projects WGS84 geometries to a shared dynamic LAEA centered on the first geometry's centroid.
+        /// </summary>
+        private static (Geometry lazA, Geometry lazB) ProjectToDynamicLAEA(Geometry wgs84A, Geometry wgs84B)
+        {
+            Point centroid = wgs84A.Centroid;
+            (MathTransform forward, _) = CreateDynamicLAEATransforms(centroid.X, centroid.Y);
+            return (ApplyTransform(wgs84A, forward), ApplyTransform(wgs84B, forward));
+        }
+
+        private sealed class ProjectionCoordinateFilter : ICoordinateFilter
+        {
+            private readonly MathTransform _transform;
+
+            internal ProjectionCoordinateFilter(MathTransform transform)
+                => _transform = transform;
+
+            public void Filter(Coordinate coord)
+            {
+                var (x, y) = _transform.Transform(coord.X, coord.Y);
+                coord.X = Math.Round(x, 8);
+                coord.Y = Math.Round(y, 8);
+            }
+        }
 
         #region Methods
 
@@ -243,25 +316,27 @@ namespace OWLSharp.Extensions.GEO
                 throw new OWLException($"Cannot get distance between features because given '{nameof(toFeatureUri)}' parameter is null");
             #endregion
 
-            //Collect geometries of "From" feature
+            //Collect WGS84 geometries of "From" feature
             (Geometry, Geometry) defaultGeometryFrom = await ontology.GetDefaultGeometryOfFeatureAsync(fromFeatureUri);
             List<(Geometry, Geometry)> geometriesFrom = await ontology.GetSecondaryGeometriesOfFeatureAsync(fromFeatureUri);
             if (defaultGeometryFrom.Item1 != null && defaultGeometryFrom.Item2 != null)
                 geometriesFrom.Insert(0, defaultGeometryFrom);
 
-            //Collect geometries of "To" feature
+            //Collect WGS84 geometries of "To" feature
             (Geometry, Geometry) defaultGeometryTo = await ontology.GetDefaultGeometryOfFeatureAsync(toFeatureUri);
             List<(Geometry, Geometry)> geometriesTo = await ontology.GetSecondaryGeometriesOfFeatureAsync(toFeatureUri);
             if (defaultGeometryTo.Item1 != null && defaultGeometryTo.Item2 != null)
                 geometriesTo.Insert(0, defaultGeometryTo);
 
             //Perform spatial analysis between collected geometries (calibrate minimum distance)
+            //using dynamic LAEA centered on first "From" geometry for accurate metric calculation
             double? featuresDistance = double.MaxValue;
             geometriesFrom.ForEach(fromGeom =>
             {
                 geometriesTo.ForEach(toGeom =>
                 {
-                    double tempDistance = fromGeom.Item2.Distance(toGeom.Item2);
+                    (Geometry lazFrom, Geometry lazTo) = ProjectToDynamicLAEA(fromGeom.Item1, toGeom.Item1);
+                    double tempDistance = lazFrom.Distance(lazTo);
                     if (tempDistance < featuresDistance)
                         featuresDistance = tempDistance;
                 });
@@ -288,23 +363,23 @@ namespace OWLSharp.Extensions.GEO
                 throw new OWLException($"Cannot get distance between features because given '{nameof(toFeatureLiteral)}' parameter is not a geographic typed literal");
             #endregion
 
-            //Collect geometries of "From" feature
+            //Collect WGS84 geometries of "From" feature
             (Geometry, Geometry) defaultGeometryFrom = await ontology.GetDefaultGeometryOfFeatureAsync(fromFeatureUri);
             List<(Geometry, Geometry)> geometriesFrom = await ontology.GetSecondaryGeometriesOfFeatureAsync(fromFeatureUri);
             if (defaultGeometryFrom.Item1 != null && defaultGeometryFrom.Item2 != null)
                 geometriesFrom.Insert(0, defaultGeometryFrom);
 
-            //Transform "To" feature into geometry
+            //Transform "To" feature into WGS84 geometry
             bool isWKT = toFeatureLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
             Geometry wgs84GeometryTo = isWKT ? WKTReader.Read(toFeatureLiteral.Value) : GMLReader.Read(toFeatureLiteral.Value);
             wgs84GeometryTo.SRID=4326;
-            Geometry lazGeometryTo = RDFGeoConverter.GetLambertAzimuthalGeometryFromWGS84(wgs84GeometryTo);
 
-            //Perform spatial analysis between collected geometries (calibrate minimum distance)
+            //Perform spatial analysis using dynamic LAEA centered on "From" geometry
             double? featuresDistance = double.MaxValue;
             geometriesFrom.ForEach(fromGeom =>
             {
-                double tempDistance = fromGeom.Item2.Distance(lazGeometryTo);
+                (Geometry lazFrom, Geometry lazTo) = ProjectToDynamicLAEA(fromGeom.Item1, wgs84GeometryTo);
+                double tempDistance = lazFrom.Distance(lazTo);
                 if (tempDistance < featuresDistance)
                     featuresDistance = tempDistance;
             });
@@ -330,20 +405,19 @@ namespace OWLSharp.Extensions.GEO
                 throw new OWLException($"Cannot get distance between features because given '{nameof(toFeatureLiteral)}' parameter is not a geographic typed literal");
             #endregion
 
-            //Transform "From" feature into geometry
+            //Transform "From" feature into WGS84 geometry
             bool fromIsWKT = fromFeatureLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
             Geometry wgs84GeometryFrom = fromIsWKT ? WKTReader.Read(fromFeatureLiteral.Value) : GMLReader.Read(fromFeatureLiteral.Value);
             wgs84GeometryFrom.SRID=4326;
-            Geometry lazGeometryFrom = RDFGeoConverter.GetLambertAzimuthalGeometryFromWGS84(wgs84GeometryFrom);
 
-            //Transform "To" feature into geometry
+            //Transform "To" feature into WGS84 geometry
             bool toIsWKT = toFeatureLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
             Geometry wgs84GeometryTo = toIsWKT ? WKTReader.Read(toFeatureLiteral.Value) : GMLReader.Read(toFeatureLiteral.Value);
             wgs84GeometryTo.SRID=4326;
-            Geometry lazGeometryTo = RDFGeoConverter.GetLambertAzimuthalGeometryFromWGS84(wgs84GeometryTo);
 
-            //Perform spatial analysis between geometries
-            return await Task.FromResult(lazGeometryFrom.Distance(lazGeometryTo));
+            //Perform spatial analysis using dynamic LAEA centered on "From" geometry
+            (Geometry lazFrom, Geometry lazTo) = ProjectToDynamicLAEA(wgs84GeometryFrom, wgs84GeometryTo);
+            return await Task.FromResult(lazFrom.Distance(lazTo));
         }
 
         /// <summary>
@@ -359,17 +433,18 @@ namespace OWLSharp.Extensions.GEO
                 throw new OWLException($"Cannot get length of feature because given '{nameof(featureUri)}' parameter is null");
             #endregion
 
-            //Collect geometries of feature
+            //Collect WGS84 geometries of feature
             (Geometry, Geometry) defaultGeometry = await ontology.GetDefaultGeometryOfFeatureAsync(featureUri);
             List<(Geometry, Geometry)> geometries = await ontology.GetSecondaryGeometriesOfFeatureAsync(featureUri);
             if (defaultGeometry.Item1 != null && defaultGeometry.Item2 != null)
                 geometries.Insert(0, defaultGeometry);
 
-            //Perform spatial analysis between collected geometries (calibrate maximum length)
+            //Perform spatial analysis using dynamic LAEA (calibrate maximum length)
             double? featureLength = double.MinValue;
             geometries.ForEach(geom =>
             {
-                double tempLength = geom.Item2.Length;
+                Geometry lazGeom = ProjectToDynamicLAEA(geom.Item1);
+                double tempLength = lazGeom.Length;
                 if (tempLength > featureLength)
                     featureLength = tempLength;
             });
@@ -391,11 +466,11 @@ namespace OWLSharp.Extensions.GEO
                 throw new OWLException($"Cannot get length of feature because given '{nameof(featureLiteral)}' parameter is not a geographic typed literal");
             #endregion
 
-            //Transform feature into geometry
+            //Transform feature into WGS84 geometry and project to dynamic LAEA
             bool isWKT = featureLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
             Geometry wgs84Geometry = isWKT ? WKTReader.Read(featureLiteral.Value) : GMLReader.Read(featureLiteral.Value);
             wgs84Geometry.SRID=4326;
-            Geometry lazGeometry = RDFGeoConverter.GetLambertAzimuthalGeometryFromWGS84(wgs84Geometry);
+            Geometry lazGeometry = ProjectToDynamicLAEA(wgs84Geometry);
 
             return await Task.FromResult(lazGeometry.Length);
         }
@@ -413,17 +488,18 @@ namespace OWLSharp.Extensions.GEO
                 throw new OWLException($"Cannot get area of feature because given '{nameof(featureUri)}' parameter is null");
             #endregion
 
-            //Collect geometries of feature
+            //Collect WGS84 geometries of feature
             (Geometry, Geometry) defaultGeometry = await ontology.GetDefaultGeometryOfFeatureAsync(featureUri);
             List<(Geometry, Geometry)> geometries = await ontology.GetSecondaryGeometriesOfFeatureAsync(featureUri);
             if (defaultGeometry.Item1 != null && defaultGeometry.Item2 != null)
                 geometries.Insert(0, defaultGeometry);
 
-            //Perform spatial analysis between collected geometries (calibrate maximum area)
+            //Perform spatial analysis using dynamic LAEA (calibrate maximum area)
             double? featureArea = double.MinValue;
             geometries.ForEach(geom =>
             {
-                double tempArea = geom.Item2.Area;
+                Geometry lazGeom = ProjectToDynamicLAEA(geom.Item1);
+                double tempArea = lazGeom.Area;
                 if (tempArea > featureArea)
                     featureArea = tempArea;
             });
@@ -433,7 +509,7 @@ namespace OWLSharp.Extensions.GEO
         }
 
         /// <summary>
-        /// Gets the spatial length, expressed in square meters, of the given GeoSPARQL literal.
+        /// Gets the spatial area, expressed in square meters, of the given GeoSPARQL literal.
         /// </summary>
         /// <exception cref="OWLException"></exception>
         public static async Task<double?> GetAreaOfFeatureAsync(RDFTypedLiteral featureLiteral)
@@ -445,11 +521,11 @@ namespace OWLSharp.Extensions.GEO
                 throw new OWLException($"Cannot get area of feature because given '{nameof(featureLiteral)}' parameter is not a geographic typed literal");
             #endregion
 
-            //Transform feature into geometry
+            //Transform feature into WGS84 geometry and project to dynamic LAEA
             bool isWKT = featureLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
             Geometry wgs84Geometry = isWKT ? WKTReader.Read(featureLiteral.Value) : GMLReader.Read(featureLiteral.Value);
             wgs84Geometry.SRID=4326;
-            Geometry lazGeometry = RDFGeoConverter.GetLambertAzimuthalGeometryFromWGS84(wgs84Geometry);
+            Geometry lazGeometry = ProjectToDynamicLAEA(wgs84Geometry);
 
             return await Task.FromResult(lazGeometry.Area);
         }
@@ -551,8 +627,9 @@ namespace OWLSharp.Extensions.GEO
             Geometry wgs84CentroidOfFeature = isWKT ? WKTReader.Read(centroidOfFeature.Value) : GMLReader.Read(centroidOfFeature.Value);
             wgs84CentroidOfFeature.SRID=4326;
 
-            //Create Lambert Azimuthal geometry from centroid of feature
-            Geometry lazCentroidOfFeature = RDFGeoConverter.GetLambertAzimuthalGeometryFromWGS84(wgs84CentroidOfFeature);
+            //Create dynamic LAEA centered on centroid of feature for accurate distance calculation
+            (MathTransform forward, _) = CreateDynamicLAEATransforms(wgs84CentroidOfFeature.Centroid.X, wgs84CentroidOfFeature.Centroid.Y);
+            Geometry lazCentroidOfFeature = ApplyTransform(wgs84CentroidOfFeature, forward);
 
             //Retrieve WKT/GML serialization of features
             Dictionary<string,List<(Geometry,Geometry)>> featuresWithGeometry = await ontology.GetFeaturesWithGeometriesAsync();
@@ -568,7 +645,8 @@ namespace OWLSharp.Extensions.GEO
 
                 foreach ((Geometry, Geometry) geometryOfFeature in featureWithGeometry.Value)
                 {
-                    if (geometryOfFeature.Item2.IsWithinDistance(lazCentroidOfFeature, distanceMeters))
+                    Geometry lazGeometryOfFeature = ApplyTransform(geometryOfFeature.Item1, forward);
+                    if (lazGeometryOfFeature.IsWithinDistance(lazCentroidOfFeature, distanceMeters))
                     {
                         featuresWithinDistance.Add(new RDFResource(featureWithGeometry.Key));
                     }
@@ -593,14 +671,15 @@ namespace OWLSharp.Extensions.GEO
                 throw new OWLException($"Cannot get features within distance because given '{nameof(featureLiteral)}' parameter is not a geographic typed literal");
             #endregion
 
-            //Transform feature into geometry
+            //Transform feature into WGS84 geometry
             bool isWKT = featureLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
             Geometry wgs84Geometry = isWKT ? WKTReader.Read(featureLiteral.Value) : GMLReader.Read(featureLiteral.Value);
             wgs84Geometry.SRID=4326;
-            Geometry lazGeometry = RDFGeoConverter.GetLambertAzimuthalGeometryFromWGS84(wgs84Geometry);
 
-            //Create Lambert Azimuthal geometry from centroid of feature
-            Geometry lazCentroidOfFeature = lazGeometry.Centroid;
+            //Create dynamic LAEA centered on centroid of feature for accurate distance calculation
+            Point wgs84Centroid = wgs84Geometry.Centroid;
+            (MathTransform forward, _) = CreateDynamicLAEATransforms(wgs84Centroid.X, wgs84Centroid.Y);
+            Geometry lazCentroidOfFeature = ApplyTransform(wgs84Centroid, forward);
 
             //Retrieve WKT/GML serialization of features
             Dictionary<string,List<(Geometry,Geometry)>> featuresWithGeometry = await ontology.GetFeaturesWithGeometriesAsync();
@@ -612,7 +691,8 @@ namespace OWLSharp.Extensions.GEO
             {
                 foreach ((Geometry, Geometry) geometryOfFeature in featureWithGeometry.Value)
                 {
-                    if (geometryOfFeature.Item2.IsWithinDistance(lazCentroidOfFeature, distanceMeters))
+                    Geometry lazGeometryOfFeature = ApplyTransform(geometryOfFeature.Item1, forward);
+                    if (lazGeometryOfFeature.IsWithinDistance(lazCentroidOfFeature, distanceMeters))
                         featuresWithinDistance.Add(new RDFResource(featureWithGeometry.Key));
                 }
             }
@@ -1631,8 +1711,22 @@ namespace OWLSharp.Extensions.GEO
             (Geometry, Geometry) defaultGeometry = await ontology.GetDefaultGeometryOfFeatureAsync(featureUri);
             if (defaultGeometry.Item1 != null && defaultGeometry.Item2 != null)
             {
-                Geometry computedGeometryAZ = AnalyzeFeature(defaultGeometry.Item2);
-                Geometry computedGeometryWGS84 = RDFGeoConverter.GetWGS84GeometryFromLambertAzimuthal(computedGeometryAZ);
+                Geometry computedGeometryWGS84;
+                if (geoAnalysis == GEOEnums.GeoAnalysis.Buffer)
+                {
+                    //Buffer uses meters: dynamic LAEA for accurate metric distance
+                    Point centroid = defaultGeometry.Item1.Centroid;
+                    (MathTransform forward, MathTransform inverse) = CreateDynamicLAEATransforms(centroid.X, centroid.Y);
+                    Geometry lazGeometry = ApplyTransform(defaultGeometry.Item1, forward);
+                    Geometry computedGeometryAZ = AnalyzeFeature(lazGeometry);
+                    computedGeometryWGS84 = ApplyTransform(computedGeometryAZ, inverse);
+                }
+                else
+                {
+                    //Topological operations: fixed LAEA is adequate
+                    Geometry computedGeometryAZ = AnalyzeFeature(defaultGeometry.Item2);
+                    computedGeometryWGS84 = RDFGeoConverter.GetWGS84GeometryFromLambertAzimuthal(computedGeometryAZ);
+                }
                 return new RDFTypedLiteral(WKTWriter.Write(computedGeometryWGS84).Replace("LINEARRING", "LINESTRING"), RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT);
             }
 
@@ -1640,8 +1734,20 @@ namespace OWLSharp.Extensions.GEO
             List<(Geometry, Geometry)> secondaryGeometries = await ontology.GetSecondaryGeometriesOfFeatureAsync(featureUri);
             if (secondaryGeometries.Count > 0)
             {
-                Geometry computedGeometryAZ = AnalyzeFeature(secondaryGeometries[0].Item2);
-                Geometry computedGeometryWGS84 = RDFGeoConverter.GetWGS84GeometryFromLambertAzimuthal(computedGeometryAZ);
+                Geometry computedGeometryWGS84;
+                if (geoAnalysis == GEOEnums.GeoAnalysis.Buffer)
+                {
+                    Point centroid = secondaryGeometries[0].Item1.Centroid;
+                    (MathTransform forward, MathTransform inverse) = CreateDynamicLAEATransforms(centroid.X, centroid.Y);
+                    Geometry lazGeometry = ApplyTransform(secondaryGeometries[0].Item1, forward);
+                    Geometry computedGeometryAZ = AnalyzeFeature(lazGeometry);
+                    computedGeometryWGS84 = ApplyTransform(computedGeometryAZ, inverse);
+                }
+                else
+                {
+                    Geometry computedGeometryAZ = AnalyzeFeature(secondaryGeometries[0].Item2);
+                    computedGeometryWGS84 = RDFGeoConverter.GetWGS84GeometryFromLambertAzimuthal(computedGeometryAZ);
+                }
                 return new RDFTypedLiteral(WKTWriter.Write(computedGeometryWGS84).Replace("LINEARRING", "LINESTRING"), RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT);
             }
 
@@ -1682,16 +1788,29 @@ namespace OWLSharp.Extensions.GEO
             }
             #endregion
 
-            //Transform feature into geometry
+            //Transform feature into WGS84 geometry
             bool isWKT = featureLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
             Geometry wgs84Geometry = isWKT ? WKTReader.Read(featureLiteral.Value) : GMLReader.Read(featureLiteral.Value);
             wgs84Geometry.SRID=4326;
-            Geometry lazGeometry = RDFGeoConverter.GetLambertAzimuthalGeometryFromWGS84(wgs84Geometry);
 
-            //Analyze geometry
-            Geometry boundaryGeometryAZ = AnalyzeFeature(lazGeometry);
-            Geometry boundaryGeometryWGS84 = RDFGeoConverter.GetWGS84GeometryFromLambertAzimuthal(boundaryGeometryAZ);
-            return Task.FromResult(new RDFTypedLiteral(WKTWriter.Write(boundaryGeometryWGS84).Replace("LINEARRING", "LINESTRING"), RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
+            Geometry computedGeometryWGS84;
+            if (geoAnalysis == GEOEnums.GeoAnalysis.Buffer)
+            {
+                //Buffer uses meters: dynamic LAEA for accurate metric distance
+                Point centroid = wgs84Geometry.Centroid;
+                (MathTransform forward, MathTransform inverse) = CreateDynamicLAEATransforms(centroid.X, centroid.Y);
+                Geometry lazGeometry = ApplyTransform(wgs84Geometry, forward);
+                Geometry computedGeometryAZ = AnalyzeFeature(lazGeometry);
+                computedGeometryWGS84 = ApplyTransform(computedGeometryAZ, inverse);
+            }
+            else
+            {
+                //Topological operations: fixed LAEA is adequate
+                Geometry lazGeometry = RDFGeoConverter.GetLambertAzimuthalGeometryFromWGS84(wgs84Geometry);
+                Geometry computedGeometryAZ = AnalyzeFeature(lazGeometry);
+                computedGeometryWGS84 = RDFGeoConverter.GetWGS84GeometryFromLambertAzimuthal(computedGeometryAZ);
+            }
+            return Task.FromResult(new RDFTypedLiteral(WKTWriter.Write(computedGeometryWGS84).Replace("LINEARRING", "LINESTRING"), RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
         }
         #endregion
     }
