@@ -69,6 +69,12 @@ namespace OWLSharp.Extensions.TIME
         /// Indicates the metadata describing the metrics of the temporal extent
         /// </summary>
         public TIMEExtentMetadata Metadata { get; internal set; }
+        /// <summary>
+        /// Optional propagated uncertainty of the temporal extent, computed via quadrature
+        /// from the boundary uncertainties when the extent is derived from an ordinal TRS era.
+        /// Null when no boundary uncertainty is available or the extent was not computed from era boundaries.
+        /// </summary>
+        public TIMEIntervalDuration Uncertainty { get; internal set; }
         #endregion
 
         #region Ctors

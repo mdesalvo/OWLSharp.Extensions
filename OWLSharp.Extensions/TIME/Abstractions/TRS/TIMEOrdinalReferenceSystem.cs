@@ -528,7 +528,29 @@ namespace OWLSharp.Extensions.TIME
 
             //Get extent of era
             if (eraCoordinates.eraBeginning != null && eraCoordinates.eraEnding != null)
-                return TIMEConverter.ExtentBetweenCoordinates(eraCoordinates.eraBeginning, eraCoordinates.eraEnding, calendarTRS);
+            {
+                TIMEExtent extent = TIMEConverter.ExtentBetweenCoordinates(eraCoordinates.eraBeginning, eraCoordinates.eraEnding, calendarTRS);
+
+                //Propagate boundary uncertainties into the extent via quadrature (√(σ_begin² + σ_end²))
+                //This is the standard propagation model for independent measurement errors (e.g., GSSP radiometric dating)
+                (TIMEIntervalDuration beginUnc, TIMEIntervalDuration endUnc) = GetEraUncertainties(era);
+                if (beginUnc != null || endUnc != null)
+                {
+                    double beginUncYears = beginUnc != null
+                        ? UnitValueToYears(Math.Abs(beginUnc.Value), beginUnc.UnitType.ToString(), calendarTRS)
+                        : 0;
+                    double endUncYears = endUnc != null
+                        ? UnitValueToYears(Math.Abs(endUnc.Value), endUnc.UnitType.ToString(), calendarTRS)
+                        : 0;
+
+                    double propagatedYears = Math.Sqrt(beginUncYears * beginUncYears + endUncYears * endUncYears);
+                    extent.Uncertainty = new TIMEIntervalDuration(
+                        new RDFResource($"bnode:uncertainty_{era.PatternMemberID}"),
+                        RDFVocabulary.TIME.UNIT_YEAR, propagatedYears);
+                }
+
+                return extent;
+            }
 
             return null;
         }

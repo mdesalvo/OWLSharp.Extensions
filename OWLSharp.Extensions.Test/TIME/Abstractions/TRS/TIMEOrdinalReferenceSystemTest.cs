@@ -1167,6 +1167,68 @@ public class TIMEOrdinalReferenceSystemTest
 
     #endregion
 
+    #region Feature Tests — Uncertainty propagation in GetEraExtent
+
+    [TestMethod]
+    public void ShouldPropagateUncertaintyInEraExtentViaQuadrature()
+    {
+        TIMEOrdinalReferenceSystem ics = GetICS();
+
+        // Jurassic: begin=251.902 ±0.2 Ma (Paleozoic_Mesozoic_boundary with 0.2 Ma unc → 200,000 years)
+        //           end=145 ±0.8 Ma (Jurassic_Cretaceous_boundary with 0.8 Ma unc → 800,000 years)
+        // Wait — Jurassic begin is the Triassic-Jurassic boundary at 201.4 ±0.2 Ma
+        // and end is the Jurassic-Cretaceous boundary at 145 ±0.8 Ma
+        // Quadrature: √(200000² + 800000²) = √(4e10 + 6.4e11) = √(6.8e11) ≈ 824,621 years
+        TIMEExtent jurassicExtent = ics.GetEraExtent(Jurassic);
+        Assert.IsNotNull(jurassicExtent);
+        Assert.IsNotNull(jurassicExtent.Uncertainty);
+        Assert.AreEqual(RDFVocabulary.TIME.UNIT_YEAR.ToString(), jurassicExtent.Uncertainty.UnitType.ToString());
+
+        // Verify quadrature: √(200000² + 800000²) ≈ 824,621
+        double expected = Math.Sqrt(200_000d * 200_000d + 800_000d * 800_000d);
+        Assert.AreEqual(expected, jurassicExtent.Uncertainty.Value, 1);
+    }
+
+    [TestMethod]
+    public void ShouldPropagateUncertaintySingleBoundary()
+    {
+        TIMEOrdinalReferenceSystem ics = GetICS();
+
+        // Phanerozoic: begin=538.8 ±0.2 Ma, end=0 Ma (no uncertainty)
+        // Only begin has uncertainty → propagated = √(200000² + 0²) = 200,000 years
+        TIMEExtent phanerozoicExtent = ics.GetEraExtent(Phanerozoic);
+        Assert.IsNotNull(phanerozoicExtent);
+        Assert.IsNotNull(phanerozoicExtent.Uncertainty);
+        Assert.AreEqual(200_000d, phanerozoicExtent.Uncertainty.Value, 1);
+    }
+
+    [TestMethod]
+    public void ShouldHaveNoUncertaintyWhenBoundariesHaveNone()
+    {
+        TIMEOrdinalReferenceSystem ics = GetICS();
+
+        // Quaternary: begin=2.58 Ma (no unc), end=0 Ma (no unc) → no propagated uncertainty
+        TIMEExtent quaternaryExtent = ics.GetEraExtent(Quaternary);
+        Assert.IsNotNull(quaternaryExtent);
+        Assert.IsNull(quaternaryExtent.Uncertainty);
+    }
+
+    [TestMethod]
+    public void ShouldProduceHigherUncertaintyForOlderEras()
+    {
+        TIMEOrdinalReferenceSystem ics = GetICS();
+
+        // Older eras generally have larger GSSP uncertainties
+        TIMEExtent mesozoicExtent = ics.GetEraExtent(Mesozoic);
+        TIMEExtent cenozoicExtent = ics.GetEraExtent(Cenozoic);
+
+        Assert.IsNotNull(mesozoicExtent.Uncertainty);
+        Assert.IsNotNull(cenozoicExtent.Uncertainty);
+        Assert.IsTrue(mesozoicExtent.Uncertainty.Value > cenozoicExtent.Uncertainty.Value);
+    }
+
+    #endregion
+
     #region Feature Tests — Uncertainty-aware FindErasAt
 
     [TestMethod]
