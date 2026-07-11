@@ -7,6 +7,11 @@ Project("{9B19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OWLSharp.Extensions", "OWLS
 EndProject
 Project("{9B19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OWLSharp.Extensions.Test", "OWLSharp.Extensions.Test\OWLSharp.Extensions.Test.csproj", "{CA5D3CC1-E769-413B-AEE7-05FF64598555}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B1F6C1B0-6E9A-4E3B-9F1D-9A3B2C4D5E6F}"
+	ProjectSection(SolutionItems) = preProject
+		CLAUDE.md = CLAUDE.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
