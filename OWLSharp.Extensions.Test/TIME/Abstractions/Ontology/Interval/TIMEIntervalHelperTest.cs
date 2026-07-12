@@ -396,6 +396,58 @@ public class TIMEIntervalHelperTest
         Assert.IsFalse(TIMEIntervalHelper.CheckDisjoint(timeOntology, new RDFResource("ex:timeIntvD"), new RDFResource("ex:timeIntvE")));
     }
 
+    //time:notDisjoint
+
+    [TestMethod]
+    public void ShouldThrowExceptionOnCheckingIntervalIsNotDisjointWithIntervalBecauseNullLeftIntervalURI()
+        => Assert.ThrowsExactly<OWLException>(() => _ = TIMEIntervalHelper.CheckNotDisjoint(new OWLOntology(new Uri("ex:timeOnt")), null, new RDFResource()));
+
+    [TestMethod]
+    public void ShouldThrowExceptionOnCheckingIntervalIsNotDisjointWithIntervalBecauseNullRightIntervalURI()
+        => Assert.ThrowsExactly<OWLException>(() => _ = TIMEIntervalHelper.CheckNotDisjoint(new OWLOntology(new Uri("ex:timeOnt")), new RDFResource(), null));
+
+    [TestMethod]
+    public void ShouldCheckIntervalIsNotDisjointWithInterval()
+    {
+        OWLOntology timeOntology = new OWLOntology(new Uri("ex:timeOnt"));
+
+        timeOntology.DeclareIntervalFeature(new RDFResource("ex:ft1"),
+            new TIMEInterval(new RDFResource("ex:timeIntvA"),
+                new TIMEInstant(new RDFResource("ex:timeIntvBeginningA"), DateTime.Parse("2020-01-01T00:00:00Z").ToUniversalTime()),
+                new TIMEInstant(new RDFResource("ex:timeIntvEndA"), DateTime.Parse("2020-12-31T23:59:59Z").ToUniversalTime())));
+        timeOntology.DeclareIntervalFeature(new RDFResource("ex:ft2"),
+            new TIMEInterval(new RDFResource("ex:timeIntvB"),
+                new TIMEInstant(new RDFResource("ex:timeIntvBeginningB"), DateTime.Parse("2025-01-01T00:00:00Z").ToUniversalTime()),
+                new TIMEInstant(new RDFResource("ex:timeIntvEndB"), DateTime.Parse("2025-12-31T23:59:59Z").ToUniversalTime())));
+        timeOntology.DeclareIntervalFeature(new RDFResource("ex:ft3"),
+            new TIMEInterval(new RDFResource("ex:timeIntvC"),
+                new TIMEInstant(new RDFResource("ex:timeIntvBeginningC"), DateTime.Parse("2023-12-31T23:59:59Z").ToUniversalTime()),
+                new TIMEInstant(new RDFResource("ex:timeIntvEndC"), DateTime.Parse("2024-12-31T23:59:59Z").ToUniversalTime())));
+        timeOntology.DeclareIntervalFeature(new RDFResource("ex:ft4"),
+            new TIMEInterval(new RDFResource("ex:timeIntvD"),
+                new TIMEInstant(new RDFResource("ex:timeIntvBeginningD"), DateTime.Parse("2020-01-01T00:00:00Z").ToUniversalTime()),
+                new TIMEInstant(new RDFResource("ex:timeIntvEndD"), DateTime.Parse("2023-01-01T00:00:00Z").ToUniversalTime())));
+        timeOntology.DeclareIntervalFeature(new RDFResource("ex:ft5"),
+            new TIMEInterval(new RDFResource("ex:timeIntvE"),
+                new TIMEInstant(new RDFResource("ex:timeIntvBeginningE"), DateTime.Parse("2023-01-01T00:00:00Z").ToUniversalTime()),
+                new TIMEInstant(new RDFResource("ex:timeIntvEndE"), DateTime.Parse("2023-12-31T23:59:59Z").ToUniversalTime())));
+
+        //Coherence with CheckDisjoint: CheckNotDisjoint(A,B) == !CheckDisjoint(A,B)
+        Assert.AreEqual(!TIMEIntervalHelper.CheckDisjoint(timeOntology, new RDFResource("ex:timeIntvA"), new RDFResource("ex:timeIntvE")),
+            TIMEIntervalHelper.CheckNotDisjoint(timeOntology, new RDFResource("ex:timeIntvA"), new RDFResource("ex:timeIntvE")));
+        Assert.AreEqual(!TIMEIntervalHelper.CheckDisjoint(timeOntology, new RDFResource("ex:timeIntvB"), new RDFResource("ex:timeIntvE")),
+            TIMEIntervalHelper.CheckNotDisjoint(timeOntology, new RDFResource("ex:timeIntvB"), new RDFResource("ex:timeIntvE")));
+        Assert.AreEqual(!TIMEIntervalHelper.CheckDisjoint(timeOntology, new RDFResource("ex:timeIntvC"), new RDFResource("ex:timeIntvE")),
+            TIMEIntervalHelper.CheckNotDisjoint(timeOntology, new RDFResource("ex:timeIntvC"), new RDFResource("ex:timeIntvE")));
+        Assert.AreEqual(!TIMEIntervalHelper.CheckDisjoint(timeOntology, new RDFResource("ex:timeIntvD"), new RDFResource("ex:timeIntvE")),
+            TIMEIntervalHelper.CheckNotDisjoint(timeOntology, new RDFResource("ex:timeIntvD"), new RDFResource("ex:timeIntvE")));
+
+        Assert.IsFalse(TIMEIntervalHelper.CheckNotDisjoint(timeOntology, new RDFResource("ex:timeIntvA"), new RDFResource("ex:timeIntvE")));
+        Assert.IsFalse(TIMEIntervalHelper.CheckNotDisjoint(timeOntology, new RDFResource("ex:timeIntvB"), new RDFResource("ex:timeIntvE")));
+        Assert.IsTrue(TIMEIntervalHelper.CheckNotDisjoint(timeOntology, new RDFResource("ex:timeIntvC"), new RDFResource("ex:timeIntvE")));
+        Assert.IsTrue(TIMEIntervalHelper.CheckNotDisjoint(timeOntology, new RDFResource("ex:timeIntvD"), new RDFResource("ex:timeIntvE")));
+    }
+
     //time:intervalDuring
 
     [TestMethod]
@@ -1244,6 +1296,58 @@ public class TIMEIntervalHelperTest
         Assert.IsFalse(TIMEIntervalHelper.CheckIn(timeOntology, new RDFResource("ex:timeIntvB"), new RDFResource("ex:timeIntvE")));
         Assert.IsFalse(TIMEIntervalHelper.CheckIn(timeOntology, new RDFResource("ex:timeIntvC"), new RDFResource("ex:timeIntvE")));
         Assert.IsFalse(TIMEIntervalHelper.CheckIn(timeOntology, new RDFResource("ex:timeIntvD"), new RDFResource("ex:timeIntvE")));
+    }
+
+    //time:hasInside
+
+    [TestMethod]
+    public void ShouldThrowExceptionOnCheckingIntervalHasInsideIntervalBecauseNullLeftIntervalURI()
+        => Assert.ThrowsExactly<OWLException>(() => _ = TIMEIntervalHelper.CheckHasInside(new OWLOntology(new Uri("ex:timeOnt")), null, new RDFResource()));
+
+    [TestMethod]
+    public void ShouldThrowExceptionOnCheckingIntervalHasInsideIntervalBecauseNullRightIntervalURI()
+        => Assert.ThrowsExactly<OWLException>(() => _ = TIMEIntervalHelper.CheckHasInside(new OWLOntology(new Uri("ex:timeOnt")), new RDFResource(), null));
+
+    [TestMethod]
+    public void ShouldCheckIntervalHasInsideInterval()
+    {
+        OWLOntology timeOntology = new OWLOntology(new Uri("ex:timeOnt"));
+
+        timeOntology.DeclareIntervalFeature(new RDFResource("ex:ft1"),
+            new TIMEInterval(new RDFResource("ex:timeIntvA"),
+                new TIMEInstant(new RDFResource("ex:timeIntvBeginningA"), DateTime.Parse("2023-05-01T00:23:59Z").ToUniversalTime()),
+                new TIMEInstant(new RDFResource("ex:timeIntvEndA"), DateTime.Parse("2023-05-01T23:59:59Z").ToUniversalTime())));
+        timeOntology.DeclareIntervalFeature(new RDFResource("ex:ft2"),
+            new TIMEInterval(new RDFResource("ex:timeIntvB"),
+                new TIMEInstant(new RDFResource("ex:timeIntvBeginningB"), DateTime.Parse("2023-04-30T20:47:15Z").ToUniversalTime()),
+                new TIMEInstant(new RDFResource("ex:timeIntvEndB"), DateTime.Parse("2023-05-02T20:47:15Z").ToUniversalTime())));
+        timeOntology.DeclareIntervalFeature(new RDFResource("ex:ft3"),
+            new TIMEInterval(new RDFResource("ex:timeIntvC"),
+                new TIMEInstant(new RDFResource("ex:timeIntvBeginningC"), DateTime.Parse("2023-05-30T20:47:15Z").ToUniversalTime()),
+                new TIMEInstant(new RDFResource("ex:timeIntvEndC"), DateTime.Parse("2023-05-02T20:47:16Z").ToUniversalTime())));
+        timeOntology.DeclareIntervalFeature(new RDFResource("ex:ft4"),
+            new TIMEInterval(new RDFResource("ex:timeIntvD"),
+                new TIMEInstant(new RDFResource("ex:timeIntvBeginningD"), DateTime.Parse("2023-04-30T20:47:14Z").ToUniversalTime()),
+                new TIMEInstant(new RDFResource("ex:timeIntvEndD"), DateTime.Parse("2023-05-02T20:47:15Z").ToUniversalTime())));
+        timeOntology.DeclareIntervalFeature(new RDFResource("ex:ft5"),
+            new TIMEInterval(new RDFResource("ex:timeIntvE"),
+                new TIMEInstant(new RDFResource("ex:timeIntvBeginningE"), DateTime.Parse("2023-04-30T20:47:15Z").ToUniversalTime()),
+                new TIMEInstant(new RDFResource("ex:timeIntvEndE"), DateTime.Parse("2023-05-02T20:47:15Z").ToUniversalTime())));
+
+        //Coherence with CheckIn: CheckHasInside(A,B) == CheckIn(B,A)
+        Assert.AreEqual(TIMEIntervalHelper.CheckIn(timeOntology, new RDFResource("ex:timeIntvE"), new RDFResource("ex:timeIntvA")),
+            TIMEIntervalHelper.CheckHasInside(timeOntology, new RDFResource("ex:timeIntvA"), new RDFResource("ex:timeIntvE")));
+        Assert.AreEqual(TIMEIntervalHelper.CheckIn(timeOntology, new RDFResource("ex:timeIntvE"), new RDFResource("ex:timeIntvB")),
+            TIMEIntervalHelper.CheckHasInside(timeOntology, new RDFResource("ex:timeIntvB"), new RDFResource("ex:timeIntvE")));
+        Assert.AreEqual(TIMEIntervalHelper.CheckIn(timeOntology, new RDFResource("ex:timeIntvE"), new RDFResource("ex:timeIntvC")),
+            TIMEIntervalHelper.CheckHasInside(timeOntology, new RDFResource("ex:timeIntvC"), new RDFResource("ex:timeIntvE")));
+        Assert.AreEqual(TIMEIntervalHelper.CheckIn(timeOntology, new RDFResource("ex:timeIntvE"), new RDFResource("ex:timeIntvD")),
+            TIMEIntervalHelper.CheckHasInside(timeOntology, new RDFResource("ex:timeIntvD"), new RDFResource("ex:timeIntvE")));
+
+        Assert.IsTrue(TIMEIntervalHelper.CheckHasInside(timeOntology, new RDFResource("ex:timeIntvE"), new RDFResource("ex:timeIntvA")));
+        Assert.IsFalse(TIMEIntervalHelper.CheckHasInside(timeOntology, new RDFResource("ex:timeIntvE"), new RDFResource("ex:timeIntvB")));
+        Assert.IsFalse(TIMEIntervalHelper.CheckHasInside(timeOntology, new RDFResource("ex:timeIntvE"), new RDFResource("ex:timeIntvC")));
+        Assert.IsFalse(TIMEIntervalHelper.CheckHasInside(timeOntology, new RDFResource("ex:timeIntvE"), new RDFResource("ex:timeIntvD")));
     }
 
     //time:intervalMeets

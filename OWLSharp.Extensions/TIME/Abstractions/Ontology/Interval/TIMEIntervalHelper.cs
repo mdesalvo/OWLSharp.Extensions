@@ -141,6 +141,15 @@ namespace OWLSharp.Extensions.TIME
                 || CheckAfter(timeOntology, aTimeIntervalURI, bTimeIntervalURI, calendarTRS);
 
         /// <summary>
+        /// Checks if the given time:Interval individuals are in a "time:notDisjoint" relation (a->b),
+        /// according to the given calendar TRS
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        public static bool CheckNotDisjoint(OWLOntology timeOntology, RDFResource aTimeIntervalURI, RDFResource bTimeIntervalURI,
+            TIMECalendarReferenceSystem calendarTRS=null)
+            => !CheckDisjoint(timeOntology, aTimeIntervalURI, bTimeIntervalURI, calendarTRS);
+
+        /// <summary>
         /// Checks if the given time:Interval individuals are in a "time:intervalDuring" relation (a->b),
         /// according to the given calendar TRS
         /// </summary>
@@ -311,6 +320,15 @@ namespace OWLSharp.Extensions.TIME
             return aTimeIntervalBeginningCoordinate.CompareTo(bTimeIntervalBeginningCoordinate) == 1
                      && aTimeIntervalEndCoordinate.CompareTo(bTimeIntervalEndCoordinate) == 0;
         }
+
+        /// <summary>
+        /// Checks if the given time:Interval individuals are in a "time:hasInside" relation (a->b),
+        /// according to the given calendar TRS
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        public static bool CheckHasInside(OWLOntology timeOntology, RDFResource aTimeIntervalURI, RDFResource bTimeIntervalURI,
+            TIMECalendarReferenceSystem calendarTRS=null)
+            => CheckIn(timeOntology, bTimeIntervalURI, aTimeIntervalURI, calendarTRS);
 
         /// <summary>
         /// Checks if the given time:Interval individuals are in a "time:intervalIn" relation (a->b),
