@@ -421,12 +421,12 @@ namespace OWLSharp.Extensions.SKOS
         /// Checks if the given SKOS concept is found in the working ontology under the given scheme
         /// </summary>
         public static bool CheckHasConcept(this OWLOntology ontology, OWLNamedIndividual conceptScheme, OWLNamedIndividual concept)
-            => conceptScheme != null && concept != null && ontology?.GetConceptsInScheme(conceptScheme).Any(c => c.Equals(concept.GetIRI())) == true;
+            => conceptScheme != null && concept != null && ontology?.GetConceptsInScheme(conceptScheme).Any(c => c.GetIRI().Equals(concept.GetIRI())) == true;
 
         /// <summary>
         /// Enlists the SKOS concepts found in the working ontology under the given scheme
         /// </summary>
-        public static List<RDFResource> GetConceptsInScheme(this OWLOntology ontology, OWLNamedIndividual skosConceptScheme)
+        public static List<OWLNamedIndividual> GetConceptsInScheme(this OWLOntology ontology, OWLNamedIndividual skosConceptScheme)
         {
             List<RDFResource> conceptsInScheme = new List<RDFResource>();
 
@@ -456,19 +456,19 @@ namespace OWLSharp.Extensions.SKOS
                                         .Select(skosTopConceptOfAsn => skosTopConceptOfAsn.SourceIndividualExpression.GetIRI()));
             }
 
-            return RDFQueryUtilities.RemoveDuplicates(conceptsInScheme);
+            return RDFQueryUtilities.RemoveDuplicates(conceptsInScheme).Select(r => new OWLNamedIndividual(r)).ToList();
         }
 
         /// <summary>
         /// Checks if the given SKOS collection is found in the working ontology under the given scheme
         /// </summary>
         public static bool CheckHasCollection(this OWLOntology ontology, OWLNamedIndividual conceptScheme, OWLNamedIndividual collection)
-            => conceptScheme != null && collection != null && ontology?.GetCollectionsInScheme(conceptScheme).Any(cl => cl.Equals(collection.GetIRI())) == true;
+            => conceptScheme != null && collection != null && ontology?.GetCollectionsInScheme(conceptScheme).Any(cl => cl.GetIRI().Equals(collection.GetIRI())) == true;
 
         /// <summary>
         /// Enlists the SKOS collections found in the working ontology under the given scheme
         /// </summary>
-        public static List<RDFResource> GetCollectionsInScheme(this OWLOntology ontology, OWLNamedIndividual skosConceptScheme)
+        public static List<OWLNamedIndividual> GetCollectionsInScheme(this OWLOntology ontology, OWLNamedIndividual skosConceptScheme)
         {
             List<RDFResource> collectionsInScheme = new List<RDFResource>();
 
@@ -488,19 +488,19 @@ namespace OWLSharp.Extensions.SKOS
                                     .Select(skosInSchemeAsn => skosInSchemeAsn.SourceIndividualExpression.GetIRI()));
             }
 
-            return RDFQueryUtilities.RemoveDuplicates(collectionsInScheme);
+            return RDFQueryUtilities.RemoveDuplicates(collectionsInScheme).Select(r => new OWLNamedIndividual(r)).ToList();
         }
 
         /// <summary>
         /// Checks if the given SKOS concepts are linked with a "skos:broader" or a "skos:broaderTransitive" hierarchy relation (child->parent)
         /// </summary>
         public static bool CheckHasBroaderConcept(this OWLOntology ontology, OWLNamedIndividual childConcept, OWLNamedIndividual parentConcept)
-            => childConcept != null && parentConcept != null && ontology?.GetBroaderConcepts(childConcept).Any(concept => concept.Equals(parentConcept.GetIRI())) == true;
+            => childConcept != null && parentConcept != null && ontology?.GetBroaderConcepts(childConcept).Any(concept => concept.GetIRI().Equals(parentConcept.GetIRI())) == true;
 
         /// <summary>
         /// Enlists the SKOS concepts found to be hierarchically broader than the given one in the working ontology
         /// </summary>
-        public static List<RDFResource> GetBroaderConcepts(this OWLOntology ontology, OWLNamedIndividual skosConcept)
+        public static List<OWLNamedIndividual> GetBroaderConcepts(this OWLOntology ontology, OWLNamedIndividual skosConcept)
         {
             List<RDFResource> broaderConcepts = new List<RDFResource>();
 
@@ -521,7 +521,7 @@ namespace OWLSharp.Extensions.SKOS
             }
 
             broaderConcepts.RemoveAll(c => c.Equals(skosConcept.GetIRI()));
-            return broaderConcepts;
+            return broaderConcepts.Select(r => new OWLNamedIndividual(r)).ToList();
         }
         internal static List<RDFResource> SubsumeBroaderTransitivity(this OWLOntology ontology, RDFResource skosConcept, List<OWLObjectPropertyAssertion> skosBroaderTransitiveAsns, Dictionary<long, RDFResource> visitContext)
         {
@@ -549,12 +549,12 @@ namespace OWLSharp.Extensions.SKOS
         /// Checks if the given SKOS concepts are linked with a "skos:narrower" or a "skos:narrowerTransitive" hierarchy relation (parent->child)
         /// </summary>
         public static bool CheckHasNarrowerConcept(this OWLOntology ontology, OWLNamedIndividual parentConcept, OWLNamedIndividual childConcept)
-            => parentConcept != null && childConcept != null && ontology?.GetNarrowerConcepts(parentConcept).Any(concept => concept.Equals(childConcept.GetIRI())) == true;
+            => parentConcept != null && childConcept != null && ontology?.GetNarrowerConcepts(parentConcept).Any(concept => concept.GetIRI().Equals(childConcept.GetIRI())) == true;
 
         /// <summary>
         /// Enlists the SKOS concepts found to be hierarchically narrower than the given one in the working ontology
         /// </summary>
-        public static List<RDFResource> GetNarrowerConcepts(this OWLOntology ontology, OWLNamedIndividual skosConcept)
+        public static List<OWLNamedIndividual> GetNarrowerConcepts(this OWLOntology ontology, OWLNamedIndividual skosConcept)
         {
             List<RDFResource> narrowerConcepts = new List<RDFResource>();
 
@@ -575,7 +575,7 @@ namespace OWLSharp.Extensions.SKOS
             }
 
             narrowerConcepts.RemoveAll(c => c.Equals(skosConcept.GetIRI()));
-            return narrowerConcepts;
+            return narrowerConcepts.Select(r => new OWLNamedIndividual(r)).ToList();
         }
         internal static List<RDFResource> SubsumeNarrowerTransitivity(this OWLOntology ontology, RDFResource skosConcept, List<OWLObjectPropertyAssertion> skosNarrowerTransitiveAsns, Dictionary<long, RDFResource> visitContext)
         {
@@ -603,12 +603,12 @@ namespace OWLSharp.Extensions.SKOS
         /// Checks if the given SKOS concepts are linked with a "skos:related" mapping relation
         /// </summary>
         public static bool CheckHasRelatedConcept(this OWLOntology ontology, OWLNamedIndividual leftConcept, OWLNamedIndividual rightConcept)
-            => leftConcept != null && rightConcept != null && ontology?.GetRelatedConcepts(leftConcept).Any(concept => concept.Equals(rightConcept.GetIRI())) == true;
+            => leftConcept != null && rightConcept != null && ontology?.GetRelatedConcepts(leftConcept).Any(concept => concept.GetIRI().Equals(rightConcept.GetIRI())) == true;
 
         /// <summary>
         /// Enlists the SKOS concepts found to be mapped to the given one with a "skos:related" relation in the working ontology
         /// </summary>
-        public static List<RDFResource> GetRelatedConcepts(this OWLOntology ontology, OWLNamedIndividual skosConcept)
+        public static List<OWLNamedIndividual> GetRelatedConcepts(this OWLOntology ontology, OWLNamedIndividual skosConcept)
         {
             List<RDFResource> relatedConcepts = new List<RDFResource>();
 
@@ -628,19 +628,19 @@ namespace OWLSharp.Extensions.SKOS
             }
 
             relatedConcepts.RemoveAll(c => c.Equals(skosConcept.GetIRI()));
-            return RDFQueryUtilities.RemoveDuplicates(relatedConcepts);
+            return RDFQueryUtilities.RemoveDuplicates(relatedConcepts).Select(r => new OWLNamedIndividual(r)).ToList();
         }
 
         /// <summary>
         /// Checks if the given SKOS concepts are linked with a "skos:broadMatch" mapping relation (left->right)
         /// </summary>
         public static bool CheckHasBroadMatchConcept(this OWLOntology ontology, OWLNamedIndividual leftConcept, OWLNamedIndividual rightConcept)
-            => leftConcept != null && rightConcept != null && ontology?.GetBroadMatchConcepts(leftConcept).Any(concept => concept.Equals(rightConcept.GetIRI())) == true;
+            => leftConcept != null && rightConcept != null && ontology?.GetBroadMatchConcepts(leftConcept).Any(concept => concept.GetIRI().Equals(rightConcept.GetIRI())) == true;
 
         /// <summary>
         /// Enlists the SKOS concepts found to be mapped to the given one with a "skos:broadMatch" relation in the working ontology
         /// </summary>
-        public static List<RDFResource> GetBroadMatchConcepts(this OWLOntology ontology, OWLNamedIndividual skosConcept)
+        public static List<OWLNamedIndividual> GetBroadMatchConcepts(this OWLOntology ontology, OWLNamedIndividual skosConcept)
         {
             List<RDFResource> broadMatchConcepts = new List<RDFResource>();
 
@@ -663,19 +663,19 @@ namespace OWLSharp.Extensions.SKOS
             }
 
             broadMatchConcepts.RemoveAll(c => c.Equals(skosConcept.GetIRI()));
-            return RDFQueryUtilities.RemoveDuplicates(broadMatchConcepts);
+            return RDFQueryUtilities.RemoveDuplicates(broadMatchConcepts).Select(r => new OWLNamedIndividual(r)).ToList();
         }
 
         /// <summary>
         /// Checks if the given SKOS concepts are linked with a "skos:narrowMatch" mapping relation (left->right)
         /// </summary>
         public static bool CheckHasNarrowMatchConcept(this OWLOntology ontology, OWLNamedIndividual leftConcept, OWLNamedIndividual rightConcept)
-            => leftConcept != null && rightConcept != null && ontology?.GetNarrowMatchConcepts(leftConcept).Any(concept => concept.Equals(rightConcept.GetIRI())) == true;
+            => leftConcept != null && rightConcept != null && ontology?.GetNarrowMatchConcepts(leftConcept).Any(concept => concept.GetIRI().Equals(rightConcept.GetIRI())) == true;
 
         /// <summary>
         /// Enlists the SKOS concepts found to be mapped to the given one with a "skos:narrowMatch" relation in the working ontology
         /// </summary>
-        public static List<RDFResource> GetNarrowMatchConcepts(this OWLOntology ontology, OWLNamedIndividual skosConcept)
+        public static List<OWLNamedIndividual> GetNarrowMatchConcepts(this OWLOntology ontology, OWLNamedIndividual skosConcept)
         {
             List<RDFResource> narrowMatchConcepts = new List<RDFResource>();
 
@@ -698,19 +698,19 @@ namespace OWLSharp.Extensions.SKOS
             }
 
             narrowMatchConcepts.RemoveAll(c => c.Equals(skosConcept.GetIRI()));
-            return RDFQueryUtilities.RemoveDuplicates(narrowMatchConcepts);
+            return RDFQueryUtilities.RemoveDuplicates(narrowMatchConcepts).Select(r => new OWLNamedIndividual(r)).ToList();
         }
 
         /// <summary>
         /// Checks if the given SKOS concepts are linked with a "skos:closeMatch" mapping relation (left->right)
         /// </summary>
         public static bool CheckHasCloseMatchConcept(this OWLOntology ontology, OWLNamedIndividual leftConcept, OWLNamedIndividual rightConcept)
-            => leftConcept != null && rightConcept != null && ontology?.GetCloseMatchConcepts(leftConcept).Any(concept => concept.Equals(rightConcept.GetIRI())) == true;
+            => leftConcept != null && rightConcept != null && ontology?.GetCloseMatchConcepts(leftConcept).Any(concept => concept.GetIRI().Equals(rightConcept.GetIRI())) == true;
 
         /// <summary>
         /// Enlists the SKOS concepts found to be mapped to the given one with a "skos:closeMatch" relation in the working ontology
         /// </summary>
-        public static List<RDFResource> GetCloseMatchConcepts(this OWLOntology ontology, OWLNamedIndividual skosConcept)
+        public static List<OWLNamedIndividual> GetCloseMatchConcepts(this OWLOntology ontology, OWLNamedIndividual skosConcept)
         {
             List<RDFResource> closeMatchConcepts = new List<RDFResource>();
 
@@ -730,19 +730,19 @@ namespace OWLSharp.Extensions.SKOS
             }
 
             closeMatchConcepts.RemoveAll(c => c.Equals(skosConcept.GetIRI()));
-            return RDFQueryUtilities.RemoveDuplicates(closeMatchConcepts);
+            return RDFQueryUtilities.RemoveDuplicates(closeMatchConcepts).Select(r => new OWLNamedIndividual(r)).ToList();
         }
 
         /// <summary>
         /// Checks if the given SKOS concepts are linked with a "skos:exactMatch" mapping relation (left->right)
         /// </summary>
         public static bool CheckHasExactMatchConcept(this OWLOntology ontology, OWLNamedIndividual leftConcept, OWLNamedIndividual rightConcept)
-            => leftConcept != null && rightConcept != null && ontology?.GetExactMatchConcepts(leftConcept).Any(concept => concept.Equals(rightConcept.GetIRI())) == true;
+            => leftConcept != null && rightConcept != null && ontology?.GetExactMatchConcepts(leftConcept).Any(concept => concept.GetIRI().Equals(rightConcept.GetIRI())) == true;
 
         /// <summary>
         /// Enlists the SKOS concepts found to be mapped to the given one with a "skos:exactMatch" relation in the working ontology
         /// </summary>
-        public static List<RDFResource> GetExactMatchConcepts(this OWLOntology ontology, OWLNamedIndividual skosConcept)
+        public static List<OWLNamedIndividual> GetExactMatchConcepts(this OWLOntology ontology, OWLNamedIndividual skosConcept)
         {
             List<RDFResource> exactMatchConcepts = new List<RDFResource>();
 
@@ -757,7 +757,7 @@ namespace OWLSharp.Extensions.SKOS
             }
 
             exactMatchConcepts.RemoveAll(c => c.Equals(skosConcept.GetIRI()));
-            return RDFQueryUtilities.RemoveDuplicates(exactMatchConcepts);
+            return RDFQueryUtilities.RemoveDuplicates(exactMatchConcepts).Select(r => new OWLNamedIndividual(r)).ToList();
         }
         internal static List<RDFResource> SubsumeExactMatchTransitivity(this OWLOntology ontology, RDFResource skosConcept, List<OWLObjectPropertyAssertion> skosExactMatchAsns, Dictionary<long, RDFResource> visitContext)
         {
@@ -788,12 +788,12 @@ namespace OWLSharp.Extensions.SKOS
         /// Checks if the given SKOS concepts are linked with a "skos:relatedMatch" mapping relation (left->right)
         /// </summary>
         public static bool CheckHasRelatedMatchConcept(this OWLOntology ontology, OWLNamedIndividual leftConcept, OWLNamedIndividual rightConcept)
-            => leftConcept != null && rightConcept != null && ontology?.GetRelatedMatchConcepts(leftConcept).Any(concept => concept.Equals(rightConcept.GetIRI())) == true;
+            => leftConcept != null && rightConcept != null && ontology?.GetRelatedMatchConcepts(leftConcept).Any(concept => concept.GetIRI().Equals(rightConcept.GetIRI())) == true;
 
         /// <summary>
         /// Enlists the SKOS concepts found to be mapped to the given one with a "skos:relatedMatch" relation in the working ontology
         /// </summary>
-        public static List<RDFResource> GetRelatedMatchConcepts(this OWLOntology ontology, OWLNamedIndividual skosConcept)
+        public static List<OWLNamedIndividual> GetRelatedMatchConcepts(this OWLOntology ontology, OWLNamedIndividual skosConcept)
         {
             List<RDFResource> relatedMatchConcepts = new List<RDFResource>();
 
@@ -813,7 +813,7 @@ namespace OWLSharp.Extensions.SKOS
             }
 
             relatedMatchConcepts.RemoveAll(c => c.Equals(skosConcept.GetIRI()));
-            return RDFQueryUtilities.RemoveDuplicates(relatedMatchConcepts);
+            return RDFQueryUtilities.RemoveDuplicates(relatedMatchConcepts).Select(r => new OWLNamedIndividual(r)).ToList();
         }
         #endregion
 

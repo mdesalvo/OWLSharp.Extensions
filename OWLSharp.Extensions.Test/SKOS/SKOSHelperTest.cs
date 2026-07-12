@@ -201,7 +201,7 @@ public class SKOSHelperTest
             new OWLNamedIndividual(new RDFResource("ex:concept3")),
             new OWLNamedIndividual(new RDFResource("ex:conceptScheme2"))));
 
-        List<RDFResource> cs1Concepts = ontology.GetConceptsInScheme(new OWLNamedIndividual(new RDFResource("ex:conceptScheme1")));
+        List<OWLNamedIndividual> cs1Concepts = ontology.GetConceptsInScheme(new OWLNamedIndividual(new RDFResource("ex:conceptScheme1")));
 
         Assert.HasCount(4, cs1Concepts);
         Assert.IsTrue(ontology.CheckHasConcept(new OWLNamedIndividual(new RDFResource("ex:conceptScheme1")), new OWLNamedIndividual(new RDFResource("ex:concept1"))));
@@ -286,7 +286,7 @@ public class SKOSHelperTest
             new OWLNamedIndividual(new RDFResource("ex:collection2")),
             new OWLNamedIndividual(new RDFResource("ex:conceptScheme1"))));
 
-        List<RDFResource> cs1Collections = ontology.GetCollectionsInScheme(new OWLNamedIndividual(new RDFResource("ex:conceptScheme1")));
+        List<OWLNamedIndividual> cs1Collections = ontology.GetCollectionsInScheme(new OWLNamedIndividual(new RDFResource("ex:conceptScheme1")));
 
         Assert.HasCount(2, cs1Collections);
         Assert.IsTrue(ontology.CheckHasCollection(new OWLNamedIndividual(new RDFResource("ex:conceptScheme1")), new OWLNamedIndividual(new RDFResource("ex:collection1"))));
@@ -340,7 +340,7 @@ public class SKOSHelperTest
             new OWLNamedIndividual(new RDFResource("ex:concept3")),
             new OWLNamedIndividual(new RDFResource("ex:concept4"))));
 
-        List<RDFResource> c1BroaderConcepts = ontology.GetBroaderConcepts(new OWLNamedIndividual(new RDFResource("ex:concept1")));
+        List<OWLNamedIndividual> c1BroaderConcepts = ontology.GetBroaderConcepts(new OWLNamedIndividual(new RDFResource("ex:concept1")));
 
         Assert.HasCount(3, c1BroaderConcepts);
         Assert.IsTrue(ontology.CheckHasBroaderConcept(new OWLNamedIndividual(new RDFResource("ex:concept1")), new OWLNamedIndividual(new RDFResource("ex:concept2"))));
@@ -396,7 +396,7 @@ public class SKOSHelperTest
             new OWLNamedIndividual(new RDFResource("ex:concept3")),
             new OWLNamedIndividual(new RDFResource("ex:concept4"))));
 
-        List<RDFResource> c1NarrowerConcepts = ontology.GetNarrowerConcepts(new OWLNamedIndividual(new RDFResource("ex:concept1")));
+        List<OWLNamedIndividual> c1NarrowerConcepts = ontology.GetNarrowerConcepts(new OWLNamedIndividual(new RDFResource("ex:concept1")));
 
         Assert.HasCount(3, c1NarrowerConcepts);
         Assert.IsTrue(ontology.CheckHasNarrowerConcept(new OWLNamedIndividual(new RDFResource("ex:concept1")), new OWLNamedIndividual(new RDFResource("ex:concept2"))));
@@ -454,7 +454,7 @@ public class SKOSHelperTest
             new OWLNamedIndividual(new RDFResource("ex:concept3")),
             new OWLNamedIndividual(new RDFResource("ex:concept5"))));
 
-        List<RDFResource> c1RelatedConcepts = ontology.GetRelatedConcepts(new OWLNamedIndividual(new RDFResource("ex:concept1")));
+        List<OWLNamedIndividual> c1RelatedConcepts = ontology.GetRelatedConcepts(new OWLNamedIndividual(new RDFResource("ex:concept1")));
 
         Assert.HasCount(2, c1RelatedConcepts);
         Assert.IsTrue(ontology.CheckHasRelatedConcept(new OWLNamedIndividual(new RDFResource("ex:concept1")), new OWLNamedIndividual(new RDFResource("ex:concept2"))));
@@ -507,7 +507,7 @@ public class SKOSHelperTest
             new OWLNamedIndividual(new RDFResource("ex:concept3")),
             new OWLNamedIndividual(new RDFResource("ex:concept5"))));
 
-        List<RDFResource> c1BroadMatchConcepts = ontology.GetBroadMatchConcepts(new OWLNamedIndividual(new RDFResource("ex:concept1")));
+        List<OWLNamedIndividual> c1BroadMatchConcepts = ontology.GetBroadMatchConcepts(new OWLNamedIndividual(new RDFResource("ex:concept1")));
 
         Assert.HasCount(2, c1BroadMatchConcepts);
         Assert.IsTrue(ontology.CheckHasBroadMatchConcept(new OWLNamedIndividual(new RDFResource("ex:concept1")), new OWLNamedIndividual(new RDFResource("ex:concept2"))));
@@ -560,7 +560,7 @@ public class SKOSHelperTest
             new OWLNamedIndividual(new RDFResource("ex:concept3")),
             new OWLNamedIndividual(new RDFResource("ex:concept5"))));
 
-        List<RDFResource> c1NarrowMatchConcepts = ontology.GetNarrowMatchConcepts(new OWLNamedIndividual(new RDFResource("ex:concept1")));
+        List<OWLNamedIndividual> c1NarrowMatchConcepts = ontology.GetNarrowMatchConcepts(new OWLNamedIndividual(new RDFResource("ex:concept1")));
 
         Assert.HasCount(2, c1NarrowMatchConcepts);
         Assert.IsTrue(ontology.CheckHasNarrowMatchConcept(new OWLNamedIndividual(new RDFResource("ex:concept1")), new OWLNamedIndividual(new RDFResource("ex:concept2"))));
@@ -616,7 +616,7 @@ public class SKOSHelperTest
             new OWLNamedIndividual(new RDFResource("ex:concept3")),
             new OWLNamedIndividual(new RDFResource("ex:concept5"))));
 
-        List<RDFResource> c1CloseMatchConcepts = ontology.GetCloseMatchConcepts(new OWLNamedIndividual(new RDFResource("ex:concept1")));
+        List<OWLNamedIndividual> c1CloseMatchConcepts = ontology.GetCloseMatchConcepts(new OWLNamedIndividual(new RDFResource("ex:concept1")));
 
         Assert.HasCount(2, c1CloseMatchConcepts);
         Assert.IsTrue(ontology.CheckHasCloseMatchConcept(new OWLNamedIndividual(new RDFResource("ex:concept1")), new OWLNamedIndividual(new RDFResource("ex:concept2"))));
@@ -672,7 +672,7 @@ public class SKOSHelperTest
             new OWLNamedIndividual(new RDFResource("ex:concept5")),
             new OWLNamedIndividual(new RDFResource("ex:concept4"))));
 
-        List<RDFResource> c1ExactMatchConcepts = ontology.GetExactMatchConcepts(new OWLNamedIndividual(new RDFResource("ex:concept1")));
+        List<OWLNamedIndividual> c1ExactMatchConcepts = ontology.GetExactMatchConcepts(new OWLNamedIndividual(new RDFResource("ex:concept1")));
 
         Assert.HasCount(4, c1ExactMatchConcepts);
         Assert.IsTrue(ontology.CheckHasExactMatchConcept(new OWLNamedIndividual(new RDFResource("ex:concept1")), new OWLNamedIndividual(new RDFResource("ex:concept2"))));
@@ -730,7 +730,7 @@ public class SKOSHelperTest
             new OWLNamedIndividual(new RDFResource("ex:concept3")),
             new OWLNamedIndividual(new RDFResource("ex:concept5"))));
 
-        List<RDFResource> c1RelatedMatchConcepts = ontology.GetRelatedMatchConcepts(new OWLNamedIndividual(new RDFResource("ex:concept1")));
+        List<OWLNamedIndividual> c1RelatedMatchConcepts = ontology.GetRelatedMatchConcepts(new OWLNamedIndividual(new RDFResource("ex:concept1")));
 
         Assert.HasCount(2, c1RelatedMatchConcepts);
         Assert.IsTrue(ontology.CheckHasRelatedMatchConcept(new OWLNamedIndividual(new RDFResource("ex:concept1")), new OWLNamedIndividual(new RDFResource("ex:concept2"))));
@@ -783,7 +783,7 @@ public class SKOSHelperTest
         ontology.DeclareBroaderConcept(c1, c2, transitive: true);
         ontology.DeclareBroaderConcept(c2, c3, transitive: true);
 
-        List<RDFResource> c1Broader = ontology.GetBroaderConcepts(c1);
+        List<OWLNamedIndividual> c1Broader = ontology.GetBroaderConcepts(c1);
         Assert.HasCount(2, c1Broader);
         Assert.IsTrue(ontology.CheckHasBroaderConcept(c1, c3)); //closure over 3+ nodes
     }
