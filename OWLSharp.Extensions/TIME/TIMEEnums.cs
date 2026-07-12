@@ -152,7 +152,307 @@ namespace OWLSharp.Extensions.TIME
             /// <summary>
             /// STARTEDBY(?I1,?I2) ^ EQUALS(?I2,?I3) -> STARTEDBY(?I1,?I3)
             /// </summary>
-            StartedByEqualsEntailment = 24
+            StartedByEqualsEntailment = 24,
+            /// <summary>
+            /// AFTER(?I1,?I2) ^ CONTAINS(?I2,?I3) -> AFTER(?I1,?I3)
+            /// </summary>
+            AfterContainsEntailment = 25,
+            /// <summary>
+            /// AFTER(?I1,?I2) ^ FINISHEDBY(?I2,?I3) -> AFTER(?I1,?I3)
+            /// </summary>
+            AfterFinishedByEntailment = 26,
+            /// <summary>
+            /// AFTER(?I1,?I2) ^ OVERLAPPEDBY(?I2,?I3) -> AFTER(?I1,?I3)
+            /// </summary>
+            AfterOverlappedByEntailment = 27,
+            /// <summary>
+            /// AFTER(?I1,?I2) ^ STARTEDBY(?I2,?I3) -> AFTER(?I1,?I3)
+            /// </summary>
+            AfterStartedByEntailment = 28,
+            /// <summary>
+            /// BEFORE(?I1,?I2) ^ CONTAINS(?I2,?I3) -> BEFORE(?I1,?I3)
+            /// </summary>
+            BeforeContainsEntailment = 29,
+            /// <summary>
+            /// BEFORE(?I1,?I2) ^ FINISHEDBY(?I2,?I3) -> BEFORE(?I1,?I3)
+            /// </summary>
+            BeforeFinishedByEntailment = 30,
+            /// <summary>
+            /// BEFORE(?I1,?I2) ^ OVERLAPS(?I2,?I3) -> BEFORE(?I1,?I3)
+            /// </summary>
+            BeforeOverlapsEntailment = 31,
+            /// <summary>
+            /// BEFORE(?I1,?I2) ^ STARTEDBY(?I2,?I3) -> BEFORE(?I1,?I3)
+            /// </summary>
+            BeforeStartedByEntailment = 32,
+            /// <summary>
+            /// CONTAINS(?I1,?I2) ^ FINISHEDBY(?I2,?I3) -> CONTAINS(?I1,?I3)
+            /// </summary>
+            ContainsFinishedByEntailment = 33,
+            /// <summary>
+            /// CONTAINS(?I1,?I2) ^ STARTEDBY(?I2,?I3) -> CONTAINS(?I1,?I3)
+            /// </summary>
+            ContainsStartedByEntailment = 34,
+            /// <summary>
+            /// DURING(?I1,?I2) ^ AFTER(?I2,?I3) -> AFTER(?I1,?I3)
+            /// </summary>
+            DuringAfterEntailment = 35,
+            /// <summary>
+            /// DURING(?I1,?I2) ^ BEFORE(?I2,?I3) -> BEFORE(?I1,?I3)
+            /// </summary>
+            DuringBeforeEntailment = 36,
+            /// <summary>
+            /// DURING(?I1,?I2) ^ FINISHES(?I2,?I3) -> DURING(?I1,?I3)
+            /// </summary>
+            DuringFinishesEntailment = 37,
+            /// <summary>
+            /// DURING(?I1,?I2) ^ MEETS(?I2,?I3) -> BEFORE(?I1,?I3)
+            /// </summary>
+            DuringMeetsEntailment = 38,
+            /// <summary>
+            /// DURING(?I1,?I2) ^ METBY(?I2,?I3) -> AFTER(?I1,?I3)
+            /// </summary>
+            DuringMetByEntailment = 39,
+            /// <summary>
+            /// DURING(?I1,?I2) ^ STARTS(?I2,?I3) -> DURING(?I1,?I3)
+            /// </summary>
+            DuringStartsEntailment = 40,
+            /// <summary>
+            /// EQUALS(?I1,?I2) ^ AFTER(?I2,?I3) -> AFTER(?I1,?I3)
+            /// </summary>
+            EqualsAfterEntailment = 41,
+            /// <summary>
+            /// EQUALS(?I1,?I2) ^ BEFORE(?I2,?I3) -> BEFORE(?I1,?I3)
+            /// </summary>
+            EqualsBeforeEntailment = 42,
+            /// <summary>
+            /// EQUALS(?I1,?I2) ^ CONTAINS(?I2,?I3) -> CONTAINS(?I1,?I3)
+            /// </summary>
+            EqualsContainsEntailment = 43,
+            /// <summary>
+            /// EQUALS(?I1,?I2) ^ DURING(?I2,?I3) -> DURING(?I1,?I3)
+            /// </summary>
+            EqualsDuringEntailment = 44,
+            /// <summary>
+            /// EQUALS(?I1,?I2) ^ FINISHEDBY(?I2,?I3) -> FINISHEDBY(?I1,?I3)
+            /// </summary>
+            EqualsFinishedByEntailment = 45,
+            /// <summary>
+            /// EQUALS(?I1,?I2) ^ FINISHES(?I2,?I3) -> FINISHES(?I1,?I3)
+            /// </summary>
+            EqualsFinishesEntailment = 46,
+            /// <summary>
+            /// EQUALS(?I1,?I2) ^ MEETS(?I2,?I3) -> MEETS(?I1,?I3)
+            /// </summary>
+            EqualsMeetsEntailment = 47,
+            /// <summary>
+            /// EQUALS(?I1,?I2) ^ METBY(?I2,?I3) -> METBY(?I1,?I3)
+            /// </summary>
+            EqualsMetByEntailment = 48,
+            /// <summary>
+            /// EQUALS(?I1,?I2) ^ OVERLAPPEDBY(?I2,?I3) -> OVERLAPPEDBY(?I1,?I3)
+            /// </summary>
+            EqualsOverlappedByEntailment = 49,
+            /// <summary>
+            /// EQUALS(?I1,?I2) ^ OVERLAPS(?I2,?I3) -> OVERLAPS(?I1,?I3)
+            /// </summary>
+            EqualsOverlapsEntailment = 50,
+            /// <summary>
+            /// EQUALS(?I1,?I2) ^ STARTEDBY(?I2,?I3) -> STARTEDBY(?I1,?I3)
+            /// </summary>
+            EqualsStartedByEntailment = 51,
+            /// <summary>
+            /// EQUALS(?I1,?I2) ^ STARTS(?I2,?I3) -> STARTS(?I1,?I3)
+            /// </summary>
+            EqualsStartsEntailment = 52,
+            /// <summary>
+            /// FINISHEDBY(?I1,?I2) ^ BEFORE(?I2,?I3) -> BEFORE(?I1,?I3)
+            /// </summary>
+            FinishedByBeforeEntailment = 53,
+            /// <summary>
+            /// FINISHEDBY(?I1,?I2) ^ CONTAINS(?I2,?I3) -> CONTAINS(?I1,?I3)
+            /// </summary>
+            FinishedByContainsEntailment = 54,
+            /// <summary>
+            /// FINISHEDBY(?I1,?I2) ^ FINISHEDBY(?I2,?I3) -> FINISHEDBY(?I1,?I3)
+            /// </summary>
+            FinishedByFinishedByEntailment = 55,
+            /// <summary>
+            /// FINISHEDBY(?I1,?I2) ^ MEETS(?I2,?I3) -> MEETS(?I1,?I3)
+            /// </summary>
+            FinishedByMeetsEntailment = 56,
+            /// <summary>
+            /// FINISHEDBY(?I1,?I2) ^ OVERLAPS(?I2,?I3) -> OVERLAPS(?I1,?I3)
+            /// </summary>
+            FinishedByOverlapsEntailment = 57,
+            /// <summary>
+            /// FINISHEDBY(?I1,?I2) ^ STARTEDBY(?I2,?I3) -> CONTAINS(?I1,?I3)
+            /// </summary>
+            FinishedByStartedByEntailment = 58,
+            /// <summary>
+            /// FINISHEDBY(?I1,?I2) ^ STARTS(?I2,?I3) -> OVERLAPS(?I1,?I3)
+            /// </summary>
+            FinishedByStartsEntailment = 59,
+            /// <summary>
+            /// FINISHES(?I1,?I2) ^ AFTER(?I2,?I3) -> AFTER(?I1,?I3)
+            /// </summary>
+            FinishesAfterEntailment = 60,
+            /// <summary>
+            /// FINISHES(?I1,?I2) ^ BEFORE(?I2,?I3) -> BEFORE(?I1,?I3)
+            /// </summary>
+            FinishesBeforeEntailment = 61,
+            /// <summary>
+            /// FINISHES(?I1,?I2) ^ DURING(?I2,?I3) -> DURING(?I1,?I3)
+            /// </summary>
+            FinishesDuringEntailment = 62,
+            /// <summary>
+            /// FINISHES(?I1,?I2) ^ FINISHES(?I2,?I3) -> FINISHES(?I1,?I3)
+            /// </summary>
+            FinishesFinishesEntailment = 63,
+            /// <summary>
+            /// FINISHES(?I1,?I2) ^ MEETS(?I2,?I3) -> MEETS(?I1,?I3)
+            /// </summary>
+            FinishesMeetsEntailment = 64,
+            /// <summary>
+            /// FINISHES(?I1,?I2) ^ METBY(?I2,?I3) -> AFTER(?I1,?I3)
+            /// </summary>
+            FinishesMetByEntailment = 65,
+            /// <summary>
+            /// FINISHES(?I1,?I2) ^ STARTS(?I2,?I3) -> DURING(?I1,?I3)
+            /// </summary>
+            FinishesStartsEntailment = 66,
+            /// <summary>
+            /// MEETS(?I1,?I2) ^ BEFORE(?I2,?I3) -> BEFORE(?I1,?I3)
+            /// </summary>
+            MeetsBeforeEntailment = 67,
+            /// <summary>
+            /// MEETS(?I1,?I2) ^ CONTAINS(?I2,?I3) -> BEFORE(?I1,?I3)
+            /// </summary>
+            MeetsContainsEntailment = 68,
+            /// <summary>
+            /// MEETS(?I1,?I2) ^ FINISHEDBY(?I2,?I3) -> BEFORE(?I1,?I3)
+            /// </summary>
+            MeetsFinishedByEntailment = 69,
+            /// <summary>
+            /// MEETS(?I1,?I2) ^ MEETS(?I2,?I3) -> BEFORE(?I1,?I3)
+            /// </summary>
+            MeetsMeetsEntailment = 70,
+            /// <summary>
+            /// MEETS(?I1,?I2) ^ OVERLAPS(?I2,?I3) -> BEFORE(?I1,?I3)
+            /// </summary>
+            MeetsOverlapsEntailment = 71,
+            /// <summary>
+            /// MEETS(?I1,?I2) ^ STARTEDBY(?I2,?I3) -> MEETS(?I1,?I3)
+            /// </summary>
+            MeetsStartedByEntailment = 72,
+            /// <summary>
+            /// METBY(?I1,?I2) ^ AFTER(?I2,?I3) -> AFTER(?I1,?I3)
+            /// </summary>
+            MetByAfterEntailment = 73,
+            /// <summary>
+            /// METBY(?I1,?I2) ^ CONTAINS(?I2,?I3) -> AFTER(?I1,?I3)
+            /// </summary>
+            MetByContainsEntailment = 74,
+            /// <summary>
+            /// METBY(?I1,?I2) ^ FINISHEDBY(?I2,?I3) -> METBY(?I1,?I3)
+            /// </summary>
+            MetByFinishedByEntailment = 75,
+            /// <summary>
+            /// METBY(?I1,?I2) ^ FINISHES(?I2,?I3) -> METBY(?I1,?I3)
+            /// </summary>
+            MetByFinishesEntailment = 76,
+            /// <summary>
+            /// METBY(?I1,?I2) ^ METBY(?I2,?I3) -> AFTER(?I1,?I3)
+            /// </summary>
+            MetByMetByEntailment = 77,
+            /// <summary>
+            /// METBY(?I1,?I2) ^ OVERLAPPEDBY(?I2,?I3) -> AFTER(?I1,?I3)
+            /// </summary>
+            MetByOverlappedByEntailment = 78,
+            /// <summary>
+            /// METBY(?I1,?I2) ^ STARTEDBY(?I2,?I3) -> AFTER(?I1,?I3)
+            /// </summary>
+            MetByStartedByEntailment = 79,
+            /// <summary>
+            /// OVERLAPPEDBY(?I1,?I2) ^ AFTER(?I2,?I3) -> AFTER(?I1,?I3)
+            /// </summary>
+            OverlappedByAfterEntailment = 80,
+            /// <summary>
+            /// OVERLAPPEDBY(?I1,?I2) ^ FINISHES(?I2,?I3) -> OVERLAPPEDBY(?I1,?I3)
+            /// </summary>
+            OverlappedByFinishesEntailment = 81,
+            /// <summary>
+            /// OVERLAPPEDBY(?I1,?I2) ^ METBY(?I2,?I3) -> AFTER(?I1,?I3)
+            /// </summary>
+            OverlappedByMetByEntailment = 82,
+            /// <summary>
+            /// OVERLAPS(?I1,?I2) ^ BEFORE(?I2,?I3) -> BEFORE(?I1,?I3)
+            /// </summary>
+            OverlapsBeforeEntailment = 83,
+            /// <summary>
+            /// OVERLAPS(?I1,?I2) ^ MEETS(?I2,?I3) -> BEFORE(?I1,?I3)
+            /// </summary>
+            OverlapsMeetsEntailment = 84,
+            /// <summary>
+            /// OVERLAPS(?I1,?I2) ^ STARTS(?I2,?I3) -> OVERLAPS(?I1,?I3)
+            /// </summary>
+            OverlapsStartsEntailment = 85,
+            /// <summary>
+            /// STARTEDBY(?I1,?I2) ^ AFTER(?I2,?I3) -> AFTER(?I1,?I3)
+            /// </summary>
+            StartedByAfterEntailment = 86,
+            /// <summary>
+            /// STARTEDBY(?I1,?I2) ^ CONTAINS(?I2,?I3) -> CONTAINS(?I1,?I3)
+            /// </summary>
+            StartedByContainsEntailment = 87,
+            /// <summary>
+            /// STARTEDBY(?I1,?I2) ^ FINISHEDBY(?I2,?I3) -> CONTAINS(?I1,?I3)
+            /// </summary>
+            StartedByFinishedByEntailment = 88,
+            /// <summary>
+            /// STARTEDBY(?I1,?I2) ^ FINISHES(?I2,?I3) -> OVERLAPPEDBY(?I1,?I3)
+            /// </summary>
+            StartedByFinishesEntailment = 89,
+            /// <summary>
+            /// STARTEDBY(?I1,?I2) ^ METBY(?I2,?I3) -> METBY(?I1,?I3)
+            /// </summary>
+            StartedByMetByEntailment = 90,
+            /// <summary>
+            /// STARTEDBY(?I1,?I2) ^ OVERLAPPEDBY(?I2,?I3) -> OVERLAPPEDBY(?I1,?I3)
+            /// </summary>
+            StartedByOverlappedByEntailment = 91,
+            /// <summary>
+            /// STARTEDBY(?I1,?I2) ^ STARTEDBY(?I2,?I3) -> STARTEDBY(?I1,?I3)
+            /// </summary>
+            StartedByStartedByEntailment = 92,
+            /// <summary>
+            /// STARTS(?I1,?I2) ^ AFTER(?I2,?I3) -> AFTER(?I1,?I3)
+            /// </summary>
+            StartsAfterEntailment = 93,
+            /// <summary>
+            /// STARTS(?I1,?I2) ^ BEFORE(?I2,?I3) -> BEFORE(?I1,?I3)
+            /// </summary>
+            StartsBeforeEntailment = 94,
+            /// <summary>
+            /// STARTS(?I1,?I2) ^ DURING(?I2,?I3) -> DURING(?I1,?I3)
+            /// </summary>
+            StartsDuringEntailment = 95,
+            /// <summary>
+            /// STARTS(?I1,?I2) ^ FINISHES(?I2,?I3) -> DURING(?I1,?I3)
+            /// </summary>
+            StartsFinishesEntailment = 96,
+            /// <summary>
+            /// STARTS(?I1,?I2) ^ MEETS(?I2,?I3) -> BEFORE(?I1,?I3)
+            /// </summary>
+            StartsMeetsEntailment = 97,
+            /// <summary>
+            /// STARTS(?I1,?I2) ^ METBY(?I2,?I3) -> METBY(?I1,?I3)
+            /// </summary>
+            StartsMetByEntailment = 98,
+            /// <summary>
+            /// STARTS(?I1,?I2) ^ STARTS(?I2,?I3) -> STARTS(?I1,?I3)
+            /// </summary>
+            StartsStartsEntailment = 99,
         }
 
         /// <summary>
