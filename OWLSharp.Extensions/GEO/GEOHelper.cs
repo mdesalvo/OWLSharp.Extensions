@@ -1416,6 +1416,20 @@ namespace OWLSharp.Extensions.GEO
         }
 
         /// <summary>
+        /// Ensures the given geometry is neither empty nor topologically invalid before it is fed into a spatial
+        /// analysis (Boundary/Buffer/Centroid/ConvexHull/Envelope), which would otherwise silently propagate a
+        /// degenerate result (e.g. "POINT EMPTY") without diagnostics.
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        internal static void EnsureValidNonEmptyGeometry(Geometry geometry, string context)
+        {
+            if (geometry.IsEmpty)
+                throw new OWLException($"Cannot analyze geometry '{context}' because it is empty");
+            if (!geometry.IsValid)
+                throw new OWLException($"Cannot analyze geometry '{context}' because it is not topologically valid");
+        }
+
+        /// <summary>
         /// Evaluates the given pairwise topological relation between two Azimuthal-projected geometries.
         /// </summary>
         internal static bool EvaluateSpatialRelation(Geometry lazFrom, Geometry lazTo, GEOEnums.GeoSpatialRelation relation)
@@ -1676,6 +1690,7 @@ namespace OWLSharp.Extensions.GEO
             (Geometry, Geometry) defaultGeometry = await ontology.GetDefaultGeometryOfFeatureAsync(featureUri);
             if (defaultGeometry.Item1 != null && defaultGeometry.Item2 != null)
             {
+                EnsureValidNonEmptyGeometry(defaultGeometry.Item1, featureUri.ToString());
                 Point centroid = defaultGeometry.Item1.Centroid;
                 (MathTransform forward, MathTransform inverse) = CreateDynamicLAEATransforms(centroid.X, centroid.Y);
                 Geometry lazGeometry = ApplyTransform(defaultGeometry.Item1, forward);
@@ -1688,6 +1703,7 @@ namespace OWLSharp.Extensions.GEO
             List<(Geometry, Geometry)> secondaryGeometries = await ontology.GetSecondaryGeometriesOfFeatureAsync(featureUri);
             if (secondaryGeometries.Count > 0)
             {
+                EnsureValidNonEmptyGeometry(secondaryGeometries[0].Item1, featureUri.ToString());
                 Point centroid = secondaryGeometries[0].Item1.Centroid;
                 (MathTransform forward, MathTransform inverse) = CreateDynamicLAEATransforms(centroid.X, centroid.Y);
                 Geometry lazGeometry = ApplyTransform(secondaryGeometries[0].Item1, forward);
@@ -1734,7 +1750,8 @@ namespace OWLSharp.Extensions.GEO
             #endregion
 
             //Transform feature into WGS84 geometry
-                        Geometry wgs84Geometry = ParseAndValidateWGS84Geometry(featureLiteral);
+            Geometry wgs84Geometry = ParseAndValidateWGS84Geometry(featureLiteral);
+            EnsureValidNonEmptyGeometry(wgs84Geometry, featureLiteral.Value);
 
             //Using dynamic LAEA centered on the geometry itself for accurate, uniform precision
             Point centroid = wgs84Geometry.Centroid;

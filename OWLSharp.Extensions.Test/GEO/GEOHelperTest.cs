@@ -3487,5 +3487,20 @@ public class GEOHelperTest
         Assert.IsNotNull(await GEOHelper.GetCentroidOfFeatureAsync(
             new OWLLiteral(new RDFTypedLiteral("""<gml:Point xmlns:gml="http://www.opengis.net/gml/3.2" srsName="EPSG:4326"><gml:pos>9.18 45.46</gml:pos></gml:Point>""", RDFModelEnums.RDFDatatypes.GEOSPARQL_GML))));
     }
+
+    [TestMethod]
+    public async Task ShouldRejectEmptyGeometryLiteralAsync()
+    {
+        await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetCentroidOfFeatureAsync(
+            new OWLLiteral(new RDFTypedLiteral("POLYGON EMPTY", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT))));
+        await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetBoundaryOfFeatureAsync(
+            new OWLLiteral(new RDFTypedLiteral("POLYGON EMPTY", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT))));
+        await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetConvexHullOfFeatureAsync(
+            new OWLLiteral(new RDFTypedLiteral("POLYGON EMPTY", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT))));
+        await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetEnvelopeOfFeatureAsync(
+            new OWLLiteral(new RDFTypedLiteral("POLYGON EMPTY", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT))));
+        await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetBufferAroundFeatureAsync(
+            new OWLLiteral(new RDFTypedLiteral("POLYGON EMPTY", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)), 500));
+    }
     #endregion
 }
