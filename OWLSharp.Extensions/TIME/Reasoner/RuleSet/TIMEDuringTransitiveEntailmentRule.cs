@@ -1,5 +1,5 @@
 /*
-   Copyright 2014-2024 Marco De Salvo
+   Copyright 2014-2026 Marco De Salvo
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
@@ -16,43 +16,13 @@ using System.Threading.Tasks;
 using OWLSharp.Ontology;
 using OWLSharp.Reasoner;
 using RDFSharp.Model;
-using RDFSharp.Query;
 
 namespace OWLSharp.Extensions.TIME
 {
     internal static class TIMEDuringTransitiveEntailmentRule
     {
         internal static Task<List<OWLInference>> ExecuteRuleAsync(OWLOntology ontology)
-        {
-            SWRLRule swrlRule = new SWRLRule(
-                new RDFPlainLiteral(nameof(TIMEDuringTransitiveEntailmentRule)),
-                new RDFPlainLiteral("DURING(?I1,?I2) ^ DURING(?I2,?I3) -> DURING(?I1,?I3)"),
-                new SWRLAntecedent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLClassAtom(RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(), new SWRLVariableArgument(new RDFVariable("?I1"))),
-                        new SWRLClassAtom(RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(), new SWRLVariableArgument(new RDFVariable("?I2"))),
-                        new SWRLClassAtom(RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(), new SWRLVariableArgument(new RDFVariable("?I3"))),
-                        new SWRLObjectPropertyAtom(new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_DURING), new SWRLVariableArgument(new RDFVariable("?I1")), new SWRLVariableArgument(new RDFVariable("?I2"))),
-                        new SWRLObjectPropertyAtom(new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_DURING), new SWRLVariableArgument(new RDFVariable("?I2")), new SWRLVariableArgument(new RDFVariable("?I3")))
-                    },
-                    BuiltIns = new List<SWRLBuiltIn>
-                    {
-                        SWRLBuiltIn.NotEqual(new SWRLVariableArgument(new RDFVariable("?I1")), new SWRLVariableArgument(new RDFVariable("?I2"))),
-                        SWRLBuiltIn.NotEqual(new SWRLVariableArgument(new RDFVariable("?I1")), new SWRLVariableArgument(new RDFVariable("?I3"))),
-                        SWRLBuiltIn.NotEqual(new SWRLVariableArgument(new RDFVariable("?I2")), new SWRLVariableArgument(new RDFVariable("?I3")))
-                    }
-                },
-                new SWRLConsequent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLObjectPropertyAtom(new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_DURING), new SWRLVariableArgument(new RDFVariable("?I1")), new SWRLVariableArgument(new RDFVariable("?I3")))
-                    }
-                });
-
-            return swrlRule.ApplyToOntologyAsync(ontology);
-        }
+            => TIMEReasonerHelper.ComposeRelationsAsync(ontology, nameof(TIMEDuringTransitiveEntailmentRule),
+                RDFVocabulary.TIME.INTERVAL_DURING, RDFVocabulary.TIME.INTERVAL_DURING, RDFVocabulary.TIME.INTERVAL_DURING);
     }
 }
