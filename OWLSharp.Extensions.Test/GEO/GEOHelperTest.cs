@@ -537,9 +537,9 @@ public class GEOHelperTest
         OWLLiteral brebemiCentroid = await GEOHelper.GetCentroidOfFeatureAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:brebemiFT")));
 
         Assert.IsNotNull(milanCentroid);
-        Assert.IsTrue(milanCentroid.GetLiteral().Equals(new RDFTypedLiteral("POINT (9.18635964 45.46411499)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+        Assert.IsTrue(milanCentroid.GetLiteral().Equals(new RDFTypedLiteral("POINT (9.1863596 45.46411504)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
         Assert.IsNotNull(brebemiCentroid);
-        Assert.IsTrue(brebemiCentroid.GetLiteral().Equals(new RDFTypedLiteral("POINT (9.66872097 45.59479136)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+        Assert.IsTrue(brebemiCentroid.GetLiteral().Equals(new RDFTypedLiteral("POINT (9.67171402 45.59539507)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
 
         //Unexisting features
         Assert.IsNull(await GEOHelper.GetCentroidOfFeatureAsync(geoOntology,
@@ -559,9 +559,9 @@ public class GEOHelperTest
         OWLLiteral brebemiCentroid = await GEOHelper.GetCentroidOfFeatureAsync(new OWLLiteral(new RDFTypedLiteral("LINESTRING(9.16778508 45.46481222, 9.6118352 45.68014585, 10.21423284 45.54758259)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
 
         Assert.IsNotNull(milanCentroid);
-        Assert.IsTrue(milanCentroid.GetLiteral().Equals(new RDFTypedLiteral("POINT (9.18635964 45.46411499)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+        Assert.IsTrue(milanCentroid.GetLiteral().Equals(new RDFTypedLiteral("POINT (9.1863596 45.46411504)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
         Assert.IsNotNull(brebemiCentroid);
-        Assert.IsTrue(brebemiCentroid.GetLiteral().Equals(new RDFTypedLiteral("POINT (9.66872097 45.59479136)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+        Assert.IsTrue(brebemiCentroid.GetLiteral().Equals(new RDFTypedLiteral("POINT (9.67171402 45.59539507)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
 
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetCentroidOfFeatureAsync(
@@ -798,7 +798,7 @@ public class GEOHelperTest
         OWLLiteral brebemiConvexHull = await GEOHelper.GetConvexHullOfFeatureAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:brebemiFT")));
 
         Assert.IsNotNull(milanConvexHull);
-        Assert.IsTrue(milanConvexHull.GetLiteral().Equals(new RDFTypedLiteral("POLYGON ((9.19054385 45.46003666, 9.18217536 45.46003666, 9.18217536 45.46819347, 9.19054385 45.46819347, 9.19054385 45.46003666))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+        Assert.IsTrue(milanConvexHull.GetLiteral().Equals(new RDFTypedLiteral("POLYGON ((9.18217536 45.46003666, 9.18217536 45.46819347, 9.19054385 45.46819347, 9.19054385 45.46003666, 9.18217536 45.46003666))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
         Assert.IsNotNull(brebemiConvexHull);
         Assert.IsTrue(brebemiConvexHull.GetLiteral().Equals(new RDFTypedLiteral("POLYGON ((9.16778508 45.46481222, 9.6118352 45.68014585, 10.21423284 45.54758259, 9.16778508 45.46481222))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
 
@@ -819,7 +819,7 @@ public class GEOHelperTest
         OWLLiteral brebemiConvexHull = await GEOHelper.GetConvexHullOfFeatureAsync(new OWLLiteral(new RDFTypedLiteral("LINESTRING(9.16778508 45.46481222, 9.6118352 45.68014585, 10.21423284 45.54758259)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
 
         Assert.IsNotNull(milanConvexHull);
-        Assert.IsTrue(milanConvexHull.GetLiteral().Equals(new RDFTypedLiteral("POLYGON ((9.19054385 45.46003666, 9.18217536 45.46003666, 9.18217536 45.46819347, 9.19054385 45.46819347, 9.19054385 45.46003666))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+        Assert.IsTrue(milanConvexHull.GetLiteral().Equals(new RDFTypedLiteral("POLYGON ((9.18217536 45.46003666, 9.18217536 45.46819347, 9.19054385 45.46819347, 9.19054385 45.46003666, 9.18217536 45.46003666))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
         Assert.IsNotNull(brebemiConvexHull);
         Assert.IsTrue(brebemiConvexHull.GetLiteral().Equals(new RDFTypedLiteral("POLYGON ((9.16778508 45.46481222, 9.6118352 45.68014585, 10.21423284 45.54758259, 9.16778508 45.46481222))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
 
@@ -884,9 +884,9 @@ public class GEOHelperTest
         OWLLiteral brebemiEnvelope = await GEOHelper.GetEnvelopeOfFeatureAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:brebemiFT")));
 
         Assert.IsNotNull(milanEnvelope);
-        Assert.IsTrue(milanEnvelope.GetLiteral().Equals(new RDFTypedLiteral("POLYGON ((9.18222872 45.45969789, 9.18089846 45.46814142, 9.19049051 45.46853225, 9.19181962 45.46008861, 9.18222872 45.45969789))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+        Assert.IsTrue(milanEnvelope.GetLiteral().Equals(new RDFTypedLiteral("POLYGON ((9.18217536 45.46003666, 9.18217476 45.46819347, 9.19054445 45.46819347, 9.19054385 45.46003666, 9.18217536 45.46003666))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
         Assert.IsNotNull(brebemiEnvelope);
-        Assert.IsTrue(brebemiEnvelope.GetLiteral().Equals(new RDFTypedLiteral("POLYGON ((9.16778508 45.46481222, 9.13666191 45.66109756, 10.19206555 45.70224787, 10.22020906 45.50567292, 9.16778508 45.46481222))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+        Assert.IsTrue(brebemiEnvelope.GetLiteral().Equals(new RDFTypedLiteral("POLYGON ((9.16778508 45.46481222, 9.16583437 45.6790123, 10.21547874 45.67891916, 10.21345085 45.46471951, 9.16778508 45.46481222))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
 
         //Unexisting features
         Assert.IsNull(await GEOHelper.GetEnvelopeOfFeatureAsync(geoOntology,
@@ -905,9 +905,9 @@ public class GEOHelperTest
         OWLLiteral brebemiEnvelope = await GEOHelper.GetEnvelopeOfFeatureAsync(new OWLLiteral(new RDFTypedLiteral("LINESTRING(9.16778508 45.46481222, 9.6118352 45.68014585, 10.21423284 45.54758259)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
 
         Assert.IsNotNull(milanEnvelope);
-        Assert.IsTrue(milanEnvelope.GetLiteral().Equals(new RDFTypedLiteral("POLYGON ((9.18222872 45.45969789, 9.18089846 45.46814142, 9.19049051 45.46853225, 9.19181962 45.46008861, 9.18222872 45.45969789))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+        Assert.IsTrue(milanEnvelope.GetLiteral().Equals(new RDFTypedLiteral("POLYGON ((9.18217536 45.46003666, 9.18217476 45.46819347, 9.19054445 45.46819347, 9.19054385 45.46003666, 9.18217536 45.46003666))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
         Assert.IsNotNull(brebemiEnvelope);
-        Assert.IsTrue(brebemiEnvelope.GetLiteral().Equals(new RDFTypedLiteral("POLYGON ((9.16778508 45.46481222, 9.13666191 45.66109756, 10.19206555 45.70224787, 10.22020906 45.50567292, 9.16778508 45.46481222))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+        Assert.IsTrue(brebemiEnvelope.GetLiteral().Equals(new RDFTypedLiteral("POLYGON ((9.16778508 45.46481222, 9.16583437 45.6790123, 10.21547874 45.67891916, 10.21345085 45.46471951, 9.16778508 45.46481222))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
 
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetEnvelopeOfFeatureAsync(

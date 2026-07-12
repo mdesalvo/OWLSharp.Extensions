@@ -1664,47 +1664,27 @@ namespace OWLSharp.Extensions.GEO
             }
             #endregion
 
-            //Analyze default geometry of feature
+            //Analyze default geometry of feature, using dynamic LAEA centered on it for accurate, uniform precision
             (Geometry, Geometry) defaultGeometry = await ontology.GetDefaultGeometryOfFeatureAsync(featureUri);
             if (defaultGeometry.Item1 != null && defaultGeometry.Item2 != null)
             {
-                Geometry computedGeometryWGS84;
-                if (geoAnalysis == GEOEnums.GeoAnalysis.Buffer)
-                {
-                    //Buffer uses meters: dynamic LAEA for accurate metric distance
-                    Point centroid = defaultGeometry.Item1.Centroid;
-                    (MathTransform forward, MathTransform inverse) = CreateDynamicLAEATransforms(centroid.X, centroid.Y);
-                    Geometry lazGeometry = ApplyTransform(defaultGeometry.Item1, forward);
-                    Geometry computedGeometryAZ = AnalyzeFeature(lazGeometry);
-                    computedGeometryWGS84 = ApplyTransform(computedGeometryAZ, inverse);
-                }
-                else
-                {
-                    //Topological operations: fixed LAEA is adequate
-                    Geometry computedGeometryAZ = AnalyzeFeature(defaultGeometry.Item2);
-                    computedGeometryWGS84 = RDFGeoConverter.GetWGS84GeometryFromLambertAzimuthal(computedGeometryAZ);
-                }
+                Point centroid = defaultGeometry.Item1.Centroid;
+                (MathTransform forward, MathTransform inverse) = CreateDynamicLAEATransforms(centroid.X, centroid.Y);
+                Geometry lazGeometry = ApplyTransform(defaultGeometry.Item1, forward);
+                Geometry computedGeometryAZ = AnalyzeFeature(lazGeometry);
+                Geometry computedGeometryWGS84 = ApplyTransform(computedGeometryAZ, inverse);
                 return new RDFTypedLiteral(WKTWriter.Write(computedGeometryWGS84).Replace("LINEARRING", "LINESTRING"), RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT);
             }
 
-            //Analyze secondary geometries of feature
+            //Analyze secondary geometries of feature, using dynamic LAEA centered on the first one
             List<(Geometry, Geometry)> secondaryGeometries = await ontology.GetSecondaryGeometriesOfFeatureAsync(featureUri);
             if (secondaryGeometries.Count > 0)
             {
-                Geometry computedGeometryWGS84;
-                if (geoAnalysis == GEOEnums.GeoAnalysis.Buffer)
-                {
-                    Point centroid = secondaryGeometries[0].Item1.Centroid;
-                    (MathTransform forward, MathTransform inverse) = CreateDynamicLAEATransforms(centroid.X, centroid.Y);
-                    Geometry lazGeometry = ApplyTransform(secondaryGeometries[0].Item1, forward);
-                    Geometry computedGeometryAZ = AnalyzeFeature(lazGeometry);
-                    computedGeometryWGS84 = ApplyTransform(computedGeometryAZ, inverse);
-                }
-                else
-                {
-                    Geometry computedGeometryAZ = AnalyzeFeature(secondaryGeometries[0].Item2);
-                    computedGeometryWGS84 = RDFGeoConverter.GetWGS84GeometryFromLambertAzimuthal(computedGeometryAZ);
-                }
+                Point centroid = secondaryGeometries[0].Item1.Centroid;
+                (MathTransform forward, MathTransform inverse) = CreateDynamicLAEATransforms(centroid.X, centroid.Y);
+                Geometry lazGeometry = ApplyTransform(secondaryGeometries[0].Item1, forward);
+                Geometry computedGeometryAZ = AnalyzeFeature(lazGeometry);
+                Geometry computedGeometryWGS84 = ApplyTransform(computedGeometryAZ, inverse);
                 return new RDFTypedLiteral(WKTWriter.Write(computedGeometryWGS84).Replace("LINEARRING", "LINESTRING"), RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT);
             }
 
@@ -1750,23 +1730,12 @@ namespace OWLSharp.Extensions.GEO
             Geometry wgs84Geometry = isWKT ? WKTReader.Read(featureLiteral.Value) : GMLReader.Read(featureLiteral.Value);
             wgs84Geometry.SRID=4326;
 
-            Geometry computedGeometryWGS84;
-            if (geoAnalysis == GEOEnums.GeoAnalysis.Buffer)
-            {
-                //Buffer uses meters: dynamic LAEA for accurate metric distance
-                Point centroid = wgs84Geometry.Centroid;
-                (MathTransform forward, MathTransform inverse) = CreateDynamicLAEATransforms(centroid.X, centroid.Y);
-                Geometry lazGeometry = ApplyTransform(wgs84Geometry, forward);
-                Geometry computedGeometryAZ = AnalyzeFeature(lazGeometry);
-                computedGeometryWGS84 = ApplyTransform(computedGeometryAZ, inverse);
-            }
-            else
-            {
-                //Topological operations: fixed LAEA is adequate
-                Geometry lazGeometry = RDFGeoConverter.GetLambertAzimuthalGeometryFromWGS84(wgs84Geometry);
-                Geometry computedGeometryAZ = AnalyzeFeature(lazGeometry);
-                computedGeometryWGS84 = RDFGeoConverter.GetWGS84GeometryFromLambertAzimuthal(computedGeometryAZ);
-            }
+            //Using dynamic LAEA centered on the geometry itself for accurate, uniform precision
+            Point centroid = wgs84Geometry.Centroid;
+            (MathTransform forward, MathTransform inverse) = CreateDynamicLAEATransforms(centroid.X, centroid.Y);
+            Geometry lazGeometry = ApplyTransform(wgs84Geometry, forward);
+            Geometry computedGeometryAZ = AnalyzeFeature(lazGeometry);
+            Geometry computedGeometryWGS84 = ApplyTransform(computedGeometryAZ, inverse);
             return Task.FromResult(new RDFTypedLiteral(WKTWriter.Write(computedGeometryWGS84).Replace("LINEARRING", "LINESTRING"), RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
         }
 
