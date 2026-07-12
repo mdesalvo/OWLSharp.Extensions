@@ -452,7 +452,7 @@ namespace OWLSharp.Extensions.TIME
             /// <summary>
             /// STARTS(?I1,?I2) ^ STARTS(?I2,?I3) -> STARTS(?I1,?I3)
             /// </summary>
-            StartsStartsEntailment = 99,
+            StartsStartsEntailment = 99
         }
 
         /// <summary>
