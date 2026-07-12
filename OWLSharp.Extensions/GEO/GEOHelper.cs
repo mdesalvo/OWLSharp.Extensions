@@ -73,7 +73,7 @@ namespace OWLSharp.Extensions.GEO
         /// Injects the A-BOX axioms for declaring the existence of a geospatial feature having the given name and the given point encoding
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static OWLOntology DeclarePointFeature(this OWLOntology ontology, RDFResource featureUri, GEOPoint geoPoint, bool isDefaultGeometry=true)
+        public static OWLOntology DeclarePointFeature(this OWLOntology ontology, OWLNamedIndividual featureUri, GEOPoint geoPoint, bool isDefaultGeometry=true)
         {
             #region Guards
             if (featureUri == null)
@@ -82,11 +82,11 @@ namespace OWLSharp.Extensions.GEO
                 throw new OWLException($"Cannot declare point feature because given '{nameof(geoPoint)}' parameter is null");
             #endregion
 
-            ontology.DeclareEntity(new OWLNamedIndividual(featureUri));
+            ontology.DeclareEntity(featureUri);
             ontology.DeclareEntity(new OWLNamedIndividual(geoPoint));
             ontology.DeclareAssertionAxiom(new OWLClassAssertion(
                 RDFVocabulary.GEOSPARQL.FEATURE.ToEntity<OWLClass>(),
-                new OWLNamedIndividual(featureUri)));
+                featureUri));
             ontology.DeclareAssertionAxiom(new OWLClassAssertion(
                 RDFVocabulary.GEOSPARQL.GEOMETRY.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(geoPoint)));
@@ -96,7 +96,7 @@ namespace OWLSharp.Extensions.GEO
             ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
                 isDefaultGeometry ? RDFVocabulary.GEOSPARQL.DEFAULT_GEOMETRY.ToEntity<OWLObjectProperty>()
                                   : new OWLObjectProperty(RDFVocabulary.GEOSPARQL.HAS_GEOMETRY),
-                new OWLNamedIndividual(featureUri),
+                featureUri,
                 new OWLNamedIndividual(geoPoint)));
             ontology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
                 RDFVocabulary.GEOSPARQL.AS_WKT.ToEntity<OWLDataProperty>(),
@@ -114,7 +114,7 @@ namespace OWLSharp.Extensions.GEO
         /// Injects the A-BOX axioms for declaring the existence of a geospatial feature having the given name and the given linestring encoding
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static OWLOntology DeclareLineFeature(this OWLOntology ontology, RDFResource featureUri, GEOLine geoLine, bool isDefaultGeometry=true)
+        public static OWLOntology DeclareLineFeature(this OWLOntology ontology, OWLNamedIndividual featureUri, GEOLine geoLine, bool isDefaultGeometry=true)
         {
             #region Guards
             if (featureUri == null)
@@ -123,11 +123,11 @@ namespace OWLSharp.Extensions.GEO
                 throw new OWLException($"Cannot declare line feature because given '{nameof(geoLine)}' parameter is null");
             #endregion
 
-            ontology.DeclareEntity(new OWLNamedIndividual(featureUri));
+            ontology.DeclareEntity(featureUri);
             ontology.DeclareEntity(new OWLNamedIndividual(geoLine));
             ontology.DeclareAssertionAxiom(new OWLClassAssertion(
                 RDFVocabulary.GEOSPARQL.FEATURE.ToEntity<OWLClass>(),
-                new OWLNamedIndividual(featureUri)));
+                featureUri));
             ontology.DeclareAssertionAxiom(new OWLClassAssertion(
                 RDFVocabulary.GEOSPARQL.GEOMETRY.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(geoLine)));
@@ -137,7 +137,7 @@ namespace OWLSharp.Extensions.GEO
             ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
                 isDefaultGeometry ? RDFVocabulary.GEOSPARQL.DEFAULT_GEOMETRY.ToEntity<OWLObjectProperty>()
                                   : new OWLObjectProperty(RDFVocabulary.GEOSPARQL.HAS_GEOMETRY),
-                new OWLNamedIndividual(featureUri),
+                featureUri,
                 new OWLNamedIndividual(geoLine)));
             ontology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
                 RDFVocabulary.GEOSPARQL.AS_WKT.ToEntity<OWLDataProperty>(),
@@ -155,7 +155,7 @@ namespace OWLSharp.Extensions.GEO
         /// Injects the A-BOX axioms for declaring the existence of a geospatial feature having the given name and the given polygon encoding
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static OWLOntology DeclareAreaFeature(this OWLOntology ontology, RDFResource featureUri, GEOArea geoArea, bool isDefaultGeometry=true)
+        public static OWLOntology DeclareAreaFeature(this OWLOntology ontology, OWLNamedIndividual featureUri, GEOArea geoArea, bool isDefaultGeometry=true)
         {
             #region Guards
             if (featureUri == null)
@@ -164,11 +164,11 @@ namespace OWLSharp.Extensions.GEO
                 throw new OWLException($"Cannot declare area feature because given '{nameof(geoArea)}' parameter is null");
             #endregion
 
-            ontology.DeclareEntity(new OWLNamedIndividual(featureUri));
+            ontology.DeclareEntity(featureUri);
             ontology.DeclareEntity(new OWLNamedIndividual(geoArea));
             ontology.DeclareAssertionAxiom(new OWLClassAssertion(
                 RDFVocabulary.GEOSPARQL.FEATURE.ToEntity<OWLClass>(),
-                new OWLNamedIndividual(featureUri)));
+                featureUri));
             ontology.DeclareAssertionAxiom(new OWLClassAssertion(
                 RDFVocabulary.GEOSPARQL.GEOMETRY.ToEntity<OWLClass>(),
                 new OWLNamedIndividual(geoArea)));
@@ -178,7 +178,7 @@ namespace OWLSharp.Extensions.GEO
             ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
                 isDefaultGeometry ? RDFVocabulary.GEOSPARQL.DEFAULT_GEOMETRY.ToEntity<OWLObjectProperty>()
                                   : new OWLObjectProperty(RDFVocabulary.GEOSPARQL.HAS_GEOMETRY),
-                new OWLNamedIndividual(featureUri),
+                featureUri,
                 new OWLNamedIndividual(geoArea)));
             ontology.DeclareAssertionAxiom(new OWLDataPropertyAssertion(
                 RDFVocabulary.GEOSPARQL.AS_WKT.ToEntity<OWLDataProperty>(),
@@ -197,7 +197,7 @@ namespace OWLSharp.Extensions.GEO
         /// It is usually a single entity encoding the default geometry, but it may also contain the secondary geometries.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static async Task<List<GEOEntity>> GetSpatialFeatureAsync(this OWLOntology ontology, RDFResource featureURI)
+        public static async Task<List<GEOEntity>> GetSpatialFeatureAsync(this OWLOntology ontology, OWLNamedIndividual featureURI)
         {
             #region Guards
             if (featureURI == null)
@@ -205,8 +205,8 @@ namespace OWLSharp.Extensions.GEO
             #endregion
 
             List<GEOEntity> spatialExtentOfFeature = new List<GEOEntity>();
-            Dictionary<string,List<(Geometry,Geometry)>> featuresWithGeometry = await GetFeaturesWithGeometriesAsync(ontology, featureURI);
-            if (featuresWithGeometry.TryGetValue(featureURI.ToString(), out List<(Geometry wgs84,Geometry laz)> featureGeometries))
+            Dictionary<string,List<(Geometry,Geometry)>> featuresWithGeometry = await GetFeaturesWithGeometriesAsync(ontology, featureURI.GetIRI());
+            if (featuresWithGeometry.TryGetValue(featureURI.GetIRI().ToString(), out List<(Geometry wgs84,Geometry laz)> featureGeometries))
             {
                 foreach (Geometry wgs84Geom in featureGeometries.Select(fg => fg.wgs84))
                 {
@@ -234,7 +234,7 @@ namespace OWLSharp.Extensions.GEO
         /// Gets the spatial distance, expressed in meters, between the given GeoSPARQL features from the working ontology.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static async Task<double?> GetDistanceBetweenFeaturesAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFResource toFeatureUri)
+        public static async Task<double?> GetDistanceBetweenFeaturesAsync(OWLOntology ontology, OWLNamedIndividual fromFeatureUri, OWLNamedIndividual toFeatureUri)
         {
             #region Guards
             if (ontology == null)
@@ -246,14 +246,14 @@ namespace OWLSharp.Extensions.GEO
             #endregion
 
             //Collect WGS84 geometries of "From" feature
-            (Geometry, Geometry) defaultGeometryFrom = await ontology.GetDefaultGeometryOfFeatureAsync(fromFeatureUri);
-            List<(Geometry, Geometry)> geometriesFrom = await ontology.GetSecondaryGeometriesOfFeatureAsync(fromFeatureUri);
+            (Geometry, Geometry) defaultGeometryFrom = await ontology.GetDefaultGeometryOfFeatureAsync(fromFeatureUri.GetIRI());
+            List<(Geometry, Geometry)> geometriesFrom = await ontology.GetSecondaryGeometriesOfFeatureAsync(fromFeatureUri.GetIRI());
             if (defaultGeometryFrom.Item1 != null && defaultGeometryFrom.Item2 != null)
                 geometriesFrom.Insert(0, defaultGeometryFrom);
 
             //Collect WGS84 geometries of "To" feature
-            (Geometry, Geometry) defaultGeometryTo = await ontology.GetDefaultGeometryOfFeatureAsync(toFeatureUri);
-            List<(Geometry, Geometry)> geometriesTo = await ontology.GetSecondaryGeometriesOfFeatureAsync(toFeatureUri);
+            (Geometry, Geometry) defaultGeometryTo = await ontology.GetDefaultGeometryOfFeatureAsync(toFeatureUri.GetIRI());
+            List<(Geometry, Geometry)> geometriesTo = await ontology.GetSecondaryGeometriesOfFeatureAsync(toFeatureUri.GetIRI());
             if (defaultGeometryTo.Item1 != null && defaultGeometryTo.Item2 != null)
                 geometriesTo.Insert(0, defaultGeometryTo);
 
@@ -279,7 +279,7 @@ namespace OWLSharp.Extensions.GEO
         /// Gets the spatial distance, expressed in meters, between the given GeoSPARQL feature and the given GeoSPARQL literal from the working ontology.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static async Task<double?> GetDistanceBetweenFeaturesAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFTypedLiteral toFeatureLiteral)
+        public static async Task<double?> GetDistanceBetweenFeaturesAsync(OWLOntology ontology, OWLNamedIndividual fromFeatureUri, OWLLiteral toFeatureLiteral)
         {
             #region Guards
             if (ontology == null)
@@ -288,19 +288,19 @@ namespace OWLSharp.Extensions.GEO
                 throw new OWLException($"Cannot get distance between features because given '{nameof(fromFeatureUri)}' parameter is null");
             if (toFeatureLiteral == null)
                 throw new OWLException($"Cannot get distance between features because given '{nameof(toFeatureLiteral)}' parameter is null");
-            if (!toFeatureLiteral.HasGeographicDatatype())
+            if (!(toFeatureLiteral.GetLiteral() is RDFTypedLiteral toFeatureTypedLiteral) || !toFeatureTypedLiteral.HasGeographicDatatype())
                 throw new OWLException($"Cannot get distance between features because given '{nameof(toFeatureLiteral)}' parameter is not a geographic typed literal");
             #endregion
 
             //Collect WGS84 geometries of "From" feature
-            (Geometry, Geometry) defaultGeometryFrom = await ontology.GetDefaultGeometryOfFeatureAsync(fromFeatureUri);
-            List<(Geometry, Geometry)> geometriesFrom = await ontology.GetSecondaryGeometriesOfFeatureAsync(fromFeatureUri);
+            (Geometry, Geometry) defaultGeometryFrom = await ontology.GetDefaultGeometryOfFeatureAsync(fromFeatureUri.GetIRI());
+            List<(Geometry, Geometry)> geometriesFrom = await ontology.GetSecondaryGeometriesOfFeatureAsync(fromFeatureUri.GetIRI());
             if (defaultGeometryFrom.Item1 != null && defaultGeometryFrom.Item2 != null)
                 geometriesFrom.Insert(0, defaultGeometryFrom);
 
             //Transform "To" feature into WGS84 geometry
-            bool isWKT = toFeatureLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
-            Geometry wgs84GeometryTo = isWKT ? WKTReader.Read(toFeatureLiteral.Value) : GMLReader.Read(toFeatureLiteral.Value);
+            bool isWKT = toFeatureTypedLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
+            Geometry wgs84GeometryTo = isWKT ? WKTReader.Read(toFeatureTypedLiteral.Value) : GMLReader.Read(toFeatureTypedLiteral.Value);
             wgs84GeometryTo.SRID=4326;
 
             //Perform spatial analysis using dynamic LAEA centered on "From" geometry
@@ -321,27 +321,27 @@ namespace OWLSharp.Extensions.GEO
         /// Gets the spatial distance, expressed in meters, between the given GeoSPARQL literals.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static async Task<double?> GetDistanceBetweenFeaturesAsync(RDFTypedLiteral fromFeatureLiteral, RDFTypedLiteral toFeatureLiteral)
+        public static async Task<double?> GetDistanceBetweenFeaturesAsync(OWLLiteral fromFeatureLiteral, OWLLiteral toFeatureLiteral)
         {
             #region Guards
             if (fromFeatureLiteral == null)
                 throw new OWLException($"Cannot get distance between features because given '{nameof(fromFeatureLiteral)}' parameter is null");
-            if (!fromFeatureLiteral.HasGeographicDatatype())
+            if (!(fromFeatureLiteral.GetLiteral() is RDFTypedLiteral fromFeatureTypedLiteral) || !fromFeatureTypedLiteral.HasGeographicDatatype())
                 throw new OWLException($"Cannot get distance between features because given '{nameof(fromFeatureLiteral)}' parameter is not a geographic typed literal");
             if (toFeatureLiteral == null)
                 throw new OWLException($"Cannot get distance between features because given '{nameof(toFeatureLiteral)}' parameter is null");
-            if (!toFeatureLiteral.HasGeographicDatatype())
+            if (!(toFeatureLiteral.GetLiteral() is RDFTypedLiteral toFeatureTypedLiteral) || !toFeatureTypedLiteral.HasGeographicDatatype())
                 throw new OWLException($"Cannot get distance between features because given '{nameof(toFeatureLiteral)}' parameter is not a geographic typed literal");
             #endregion
 
             //Transform "From" feature into WGS84 geometry
-            bool fromIsWKT = fromFeatureLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
-            Geometry wgs84GeometryFrom = fromIsWKT ? WKTReader.Read(fromFeatureLiteral.Value) : GMLReader.Read(fromFeatureLiteral.Value);
+            bool fromIsWKT = fromFeatureTypedLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
+            Geometry wgs84GeometryFrom = fromIsWKT ? WKTReader.Read(fromFeatureTypedLiteral.Value) : GMLReader.Read(fromFeatureTypedLiteral.Value);
             wgs84GeometryFrom.SRID=4326;
 
             //Transform "To" feature into WGS84 geometry
-            bool toIsWKT = toFeatureLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
-            Geometry wgs84GeometryTo = toIsWKT ? WKTReader.Read(toFeatureLiteral.Value) : GMLReader.Read(toFeatureLiteral.Value);
+            bool toIsWKT = toFeatureTypedLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
+            Geometry wgs84GeometryTo = toIsWKT ? WKTReader.Read(toFeatureTypedLiteral.Value) : GMLReader.Read(toFeatureTypedLiteral.Value);
             wgs84GeometryTo.SRID=4326;
 
             //Perform spatial analysis using dynamic LAEA centered on "From" geometry
@@ -353,7 +353,7 @@ namespace OWLSharp.Extensions.GEO
         /// Gets the spatial length, expressed in meters, of the given GeoSPARQL feature from the working ontology.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static async Task<double?> GetLengthOfFeatureAsync(OWLOntology ontology, RDFResource featureUri)
+        public static async Task<double?> GetLengthOfFeatureAsync(OWLOntology ontology, OWLNamedIndividual featureUri)
         {
             #region Guards
             if (ontology == null)
@@ -363,8 +363,8 @@ namespace OWLSharp.Extensions.GEO
             #endregion
 
             //Collect WGS84 geometries of feature
-            (Geometry, Geometry) defaultGeometry = await ontology.GetDefaultGeometryOfFeatureAsync(featureUri);
-            List<(Geometry, Geometry)> geometries = await ontology.GetSecondaryGeometriesOfFeatureAsync(featureUri);
+            (Geometry, Geometry) defaultGeometry = await ontology.GetDefaultGeometryOfFeatureAsync(featureUri.GetIRI());
+            List<(Geometry, Geometry)> geometries = await ontology.GetSecondaryGeometriesOfFeatureAsync(featureUri.GetIRI());
             if (defaultGeometry.Item1 != null && defaultGeometry.Item2 != null)
                 geometries.Insert(0, defaultGeometry);
 
@@ -386,18 +386,18 @@ namespace OWLSharp.Extensions.GEO
         /// Gets the spatial length, expressed in meters, of the given GeoSPARQL literal.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static async Task<double?> GetLengthOfFeatureAsync(RDFTypedLiteral featureLiteral)
+        public static async Task<double?> GetLengthOfFeatureAsync(OWLLiteral featureLiteral)
         {
             #region Guards
             if (featureLiteral == null)
                 throw new OWLException($"Cannot get length of feature because given '{nameof(featureLiteral)}' parameter is null");
-            if (!featureLiteral.HasGeographicDatatype())
+            if (!(featureLiteral.GetLiteral() is RDFTypedLiteral featureTypedLiteral) || !featureTypedLiteral.HasGeographicDatatype())
                 throw new OWLException($"Cannot get length of feature because given '{nameof(featureLiteral)}' parameter is not a geographic typed literal");
             #endregion
 
             //Transform feature into WGS84 geometry and project to dynamic LAEA
-            bool isWKT = featureLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
-            Geometry wgs84Geometry = isWKT ? WKTReader.Read(featureLiteral.Value) : GMLReader.Read(featureLiteral.Value);
+            bool isWKT = featureTypedLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
+            Geometry wgs84Geometry = isWKT ? WKTReader.Read(featureTypedLiteral.Value) : GMLReader.Read(featureTypedLiteral.Value);
             wgs84Geometry.SRID=4326;
             Geometry lazGeometry = ProjectToDynamicLAEA(wgs84Geometry);
 
@@ -408,7 +408,7 @@ namespace OWLSharp.Extensions.GEO
         /// Gets the spatial length, expressed in square meters, of the given GeoSPARQL feature from the working ontology.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static async Task<double?> GetAreaOfFeatureAsync(OWLOntology ontology, RDFResource featureUri)
+        public static async Task<double?> GetAreaOfFeatureAsync(OWLOntology ontology, OWLNamedIndividual featureUri)
         {
             #region Guards
             if (ontology == null)
@@ -418,8 +418,8 @@ namespace OWLSharp.Extensions.GEO
             #endregion
 
             //Collect WGS84 geometries of feature
-            (Geometry, Geometry) defaultGeometry = await ontology.GetDefaultGeometryOfFeatureAsync(featureUri);
-            List<(Geometry, Geometry)> geometries = await ontology.GetSecondaryGeometriesOfFeatureAsync(featureUri);
+            (Geometry, Geometry) defaultGeometry = await ontology.GetDefaultGeometryOfFeatureAsync(featureUri.GetIRI());
+            List<(Geometry, Geometry)> geometries = await ontology.GetSecondaryGeometriesOfFeatureAsync(featureUri.GetIRI());
             if (defaultGeometry.Item1 != null && defaultGeometry.Item2 != null)
                 geometries.Insert(0, defaultGeometry);
 
@@ -441,18 +441,18 @@ namespace OWLSharp.Extensions.GEO
         /// Gets the spatial area, expressed in square meters, of the given GeoSPARQL literal.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static async Task<double?> GetAreaOfFeatureAsync(RDFTypedLiteral featureLiteral)
+        public static async Task<double?> GetAreaOfFeatureAsync(OWLLiteral featureLiteral)
         {
             #region Guards
             if (featureLiteral == null)
                 throw new OWLException($"Cannot get area of feature because given '{nameof(featureLiteral)}' parameter is null");
-            if (!featureLiteral.HasGeographicDatatype())
+            if (!(featureLiteral.GetLiteral() is RDFTypedLiteral featureTypedLiteral) || !featureTypedLiteral.HasGeographicDatatype())
                 throw new OWLException($"Cannot get area of feature because given '{nameof(featureLiteral)}' parameter is not a geographic typed literal");
             #endregion
 
             //Transform feature into WGS84 geometry and project to dynamic LAEA
-            bool isWKT = featureLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
-            Geometry wgs84Geometry = isWKT ? WKTReader.Read(featureLiteral.Value) : GMLReader.Read(featureLiteral.Value);
+            bool isWKT = featureTypedLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
+            Geometry wgs84Geometry = isWKT ? WKTReader.Read(featureTypedLiteral.Value) : GMLReader.Read(featureTypedLiteral.Value);
             wgs84Geometry.SRID=4326;
             Geometry lazGeometry = ProjectToDynamicLAEA(wgs84Geometry);
 
@@ -465,71 +465,71 @@ namespace OWLSharp.Extensions.GEO
         /// Gets the spatial boundary polygon, expressed as a WGS84-georeferenced WKT literal, of the given GeoSPARQL feature from the working ontology.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static Task<RDFTypedLiteral> GetBoundaryOfFeatureAsync(OWLOntology ontology, RDFResource featureUri)
-            => AnalyzeFeatureAsync(ontology, featureUri, GEOEnums.GeoAnalysis.Boundary);
+        public static async Task<OWLLiteral> GetBoundaryOfFeatureAsync(OWLOntology ontology, OWLNamedIndividual featureUri)
+            => WrapNullableLiteral(await AnalyzeFeatureAsync(ontology, featureUri?.GetIRI(), GEOEnums.GeoAnalysis.Boundary));
 
         /// <summary>
         /// Gets the spatial boundary polygon, expressed as a WGS84-georeferenced WKT literal, of the given GeoSPARQL literal.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static Task<RDFTypedLiteral> GetBoundaryOfFeatureAsync(RDFTypedLiteral featureLiteral)
-            => AnalyzeLiteralAsync(featureLiteral, GEOEnums.GeoAnalysis.Boundary);
+        public static async Task<OWLLiteral> GetBoundaryOfFeatureAsync(OWLLiteral featureLiteral)
+            => WrapNullableLiteral(await AnalyzeLiteralAsync(featureLiteral?.GetLiteral() as RDFTypedLiteral, GEOEnums.GeoAnalysis.Boundary));
 
         /// <summary>
         /// Gets the spatial buffer polygon, expressed as a WGS84-georeferenced WKT literal, of the given GeoSPARQL feature from the working ontology.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static Task<RDFTypedLiteral> GetBufferAroundFeatureAsync(OWLOntology ontology, RDFResource featureUri, double bufferMeters)
-            => AnalyzeFeatureAsync(ontology, featureUri, GEOEnums.GeoAnalysis.Buffer, bufferMeters);
+        public static async Task<OWLLiteral> GetBufferAroundFeatureAsync(OWLOntology ontology, OWLNamedIndividual featureUri, double bufferMeters)
+            => WrapNullableLiteral(await AnalyzeFeatureAsync(ontology, featureUri?.GetIRI(), GEOEnums.GeoAnalysis.Buffer, bufferMeters));
 
         /// <summary>
         /// Gets the spatial buffer polygon, expressed as a WGS84-georeferenced WKT literal, of the given GeoSPARQL literal.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static Task<RDFTypedLiteral> GetBufferAroundFeatureAsync(RDFTypedLiteral featureLiteral, double bufferMeters)
-            => AnalyzeLiteralAsync(featureLiteral, GEOEnums.GeoAnalysis.Buffer, bufferMeters);
+        public static async Task<OWLLiteral> GetBufferAroundFeatureAsync(OWLLiteral featureLiteral, double bufferMeters)
+            => WrapNullableLiteral(await AnalyzeLiteralAsync(featureLiteral?.GetLiteral() as RDFTypedLiteral, GEOEnums.GeoAnalysis.Buffer, bufferMeters));
 
         /// <summary>
         /// Gets the spatial centroid point, expressed as a WGS84-georeferenced WKT literal, of the given GeoSPARQL feature from the working ontology.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static Task<RDFTypedLiteral> GetCentroidOfFeatureAsync(OWLOntology ontology, RDFResource featureUri)
-            => AnalyzeFeatureAsync(ontology, featureUri, GEOEnums.GeoAnalysis.Centroid);
+        public static async Task<OWLLiteral> GetCentroidOfFeatureAsync(OWLOntology ontology, OWLNamedIndividual featureUri)
+            => WrapNullableLiteral(await AnalyzeFeatureAsync(ontology, featureUri?.GetIRI(), GEOEnums.GeoAnalysis.Centroid));
 
         /// <summary>
         /// Gets the spatial centroid point, expressed as a WGS84-georeferenced WKT literal, of the given GeoSPARQL literal.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static Task<RDFTypedLiteral> GetCentroidOfFeatureAsync(RDFTypedLiteral featureLiteral)
-            => AnalyzeLiteralAsync(featureLiteral, GEOEnums.GeoAnalysis.Centroid);
+        public static async Task<OWLLiteral> GetCentroidOfFeatureAsync(OWLLiteral featureLiteral)
+            => WrapNullableLiteral(await AnalyzeLiteralAsync(featureLiteral?.GetLiteral() as RDFTypedLiteral, GEOEnums.GeoAnalysis.Centroid));
 
         /// <summary>
         /// Gets the spatial convex hull polygon, expressed as a WGS84-georeferenced WKT literal, of the given GeoSPARQL feature from the working ontology.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static Task<RDFTypedLiteral> GetConvexHullOfFeatureAsync(OWLOntology ontology, RDFResource featureUri)
-            => AnalyzeFeatureAsync(ontology, featureUri, GEOEnums.GeoAnalysis.ConvexHull);
+        public static async Task<OWLLiteral> GetConvexHullOfFeatureAsync(OWLOntology ontology, OWLNamedIndividual featureUri)
+            => WrapNullableLiteral(await AnalyzeFeatureAsync(ontology, featureUri?.GetIRI(), GEOEnums.GeoAnalysis.ConvexHull));
 
         /// <summary>
         /// Gets the spatial convex hull polygon, expressed as a WGS84-georeferenced WKT literal, of the given GeoSPARQL literal.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static Task<RDFTypedLiteral> GetConvexHullOfFeatureAsync(RDFTypedLiteral featureLiteral)
-            => AnalyzeLiteralAsync(featureLiteral, GEOEnums.GeoAnalysis.ConvexHull);
+        public static async Task<OWLLiteral> GetConvexHullOfFeatureAsync(OWLLiteral featureLiteral)
+            => WrapNullableLiteral(await AnalyzeLiteralAsync(featureLiteral?.GetLiteral() as RDFTypedLiteral, GEOEnums.GeoAnalysis.ConvexHull));
 
         /// <summary>
         /// Gets the spatial envelope (bounding box) polygon, expressed as a WGS84-georeferenced WKT literal, of the given GeoSPARQL feature from the working ontology.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static Task<RDFTypedLiteral> GetEnvelopeOfFeatureAsync(OWLOntology ontology, RDFResource featureUri)
-            => AnalyzeFeatureAsync(ontology, featureUri, GEOEnums.GeoAnalysis.Envelope);
+        public static async Task<OWLLiteral> GetEnvelopeOfFeatureAsync(OWLOntology ontology, OWLNamedIndividual featureUri)
+            => WrapNullableLiteral(await AnalyzeFeatureAsync(ontology, featureUri?.GetIRI(), GEOEnums.GeoAnalysis.Envelope));
 
         /// <summary>
         /// Gets the spatial envelope (bounding box) polygon, expressed as a WGS84-georeferenced WKT literal, of the given GeoSPARQL literal.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static Task<RDFTypedLiteral> GetEnvelopeOfFeatureAsync(RDFTypedLiteral featureLiteral)
-            => AnalyzeLiteralAsync(featureLiteral, GEOEnums.GeoAnalysis.Envelope);
+        public static async Task<OWLLiteral> GetEnvelopeOfFeatureAsync(OWLLiteral featureLiteral)
+            => WrapNullableLiteral(await AnalyzeLiteralAsync(featureLiteral?.GetLiteral() as RDFTypedLiteral, GEOEnums.GeoAnalysis.Envelope));
         #endregion
 
         #region Analyzer (Proximity, Direction, Interaction)
@@ -537,7 +537,7 @@ namespace OWLSharp.Extensions.GEO
         /// Gets the features in proximity of the given GeoSPARQL feature from the working ontology.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static async Task<List<RDFResource>> GetFeaturesNearBy(OWLOntology ontology, RDFResource featureUri, double distanceMeters)
+        public static async Task<List<OWLNamedIndividual>> GetFeaturesNearBy(OWLOntology ontology, OWLNamedIndividual featureUri, double distanceMeters)
         {
             #region Guards
             if (ontology == null)
@@ -547,9 +547,10 @@ namespace OWLSharp.Extensions.GEO
             #endregion
 
             //Get centroid of feature
-            RDFTypedLiteral centroidOfFeature = await GetCentroidOfFeatureAsync(ontology, featureUri);
-            if (centroidOfFeature == null)
+            OWLLiteral centroidOfFeatureLit = await GetCentroidOfFeatureAsync(ontology, featureUri);
+            if (centroidOfFeatureLit == null)
                 return null;
+            RDFTypedLiteral centroidOfFeature = (RDFTypedLiteral)centroidOfFeatureLit.GetLiteral();
 
             //Create WGS84 geometry from centroid of feature
             bool isWKT = centroidOfFeature.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
@@ -569,7 +570,7 @@ namespace OWLSharp.Extensions.GEO
             foreach (KeyValuePair<string,List<(Geometry,Geometry)>> featureWithGeometry in featuresWithGeometry)
             {
                 //Obviously exclude the given feature itself
-                if (string.Equals(featureWithGeometry.Key, featureUri.ToString()))
+                if (string.Equals(featureWithGeometry.Key, featureUri.GetIRI().ToString()))
                     continue;
 
                 foreach ((Geometry, Geometry) geometryOfFeature in featureWithGeometry.Value)
@@ -582,27 +583,27 @@ namespace OWLSharp.Extensions.GEO
                 }
             }
 
-            return RDFQueryUtilities.RemoveDuplicates(featuresWithinDistance);
+            return RDFQueryUtilities.RemoveDuplicates(featuresWithinDistance).Select(r => new OWLNamedIndividual(r)).ToList();
         }
 
         /// <summary>
         /// Gets the features in proximity of the given GeoSPARQL literal.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static async Task<List<RDFResource>> GetFeaturesNearBy(OWLOntology ontology, RDFTypedLiteral featureLiteral, double distanceMeters)
+        public static async Task<List<OWLNamedIndividual>> GetFeaturesNearBy(OWLOntology ontology, OWLLiteral featureLiteral, double distanceMeters)
         {
             #region Guards
             if (ontology == null)
                 throw new OWLException($"Cannot get features within distance because given '{nameof(ontology)}' parameter is null");
             if (featureLiteral == null)
                 throw new OWLException($"Cannot get features within distance because given '{nameof(featureLiteral)}' parameter is null");
-            if (!featureLiteral.HasGeographicDatatype())
+            if (!(featureLiteral.GetLiteral() is RDFTypedLiteral featureTypedLiteral) || !featureTypedLiteral.HasGeographicDatatype())
                 throw new OWLException($"Cannot get features within distance because given '{nameof(featureLiteral)}' parameter is not a geographic typed literal");
             #endregion
 
             //Transform feature into WGS84 geometry
-            bool isWKT = featureLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
-            Geometry wgs84Geometry = isWKT ? WKTReader.Read(featureLiteral.Value) : GMLReader.Read(featureLiteral.Value);
+            bool isWKT = featureTypedLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
+            Geometry wgs84Geometry = isWKT ? WKTReader.Read(featureTypedLiteral.Value) : GMLReader.Read(featureTypedLiteral.Value);
             wgs84Geometry.SRID=4326;
 
             //Create dynamic LAEA centered on centroid of feature for accurate distance calculation
@@ -626,14 +627,14 @@ namespace OWLSharp.Extensions.GEO
                 }
             }
 
-            return RDFQueryUtilities.RemoveDuplicates(featuresWithinDistance);
+            return RDFQueryUtilities.RemoveDuplicates(featuresWithinDistance).Select(r => new OWLNamedIndividual(r)).ToList();
         }
 
         /// <summary>
         /// Gets the features in direction of the given GeoSPARQL feature from the working ontology.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static async Task<List<RDFResource>> GetFeaturesDirectionAsync(OWLOntology ontology, RDFResource featureUri, GEOEnums.GeoDirections geoDirection)
+        public static async Task<List<OWLNamedIndividual>> GetFeaturesDirectionAsync(OWLOntology ontology, OWLNamedIndividual featureUri, GEOEnums.GeoDirections geoDirection)
         {
             #region Guards
             if (ontology == null)
@@ -643,7 +644,7 @@ namespace OWLSharp.Extensions.GEO
             #endregion
 
             //Analyze default geometry of feature
-            (Geometry, Geometry) defaultGeometry = await ontology.GetDefaultGeometryOfFeatureAsync(featureUri);
+            (Geometry, Geometry) defaultGeometry = await ontology.GetDefaultGeometryOfFeatureAsync(featureUri.GetIRI());
             if (defaultGeometry.Item1 != null && defaultGeometry.Item2 != null)
             {
                 //Retrieve WKT/GML serialization of features
@@ -654,7 +655,7 @@ namespace OWLSharp.Extensions.GEO
                 foreach (KeyValuePair<string, List<(Geometry, Geometry)>> featureWithGeometry in featuresWithGeometry)
                 {
                     //Obviously exclude the given feature itself
-                    if (string.Equals(featureWithGeometry.Key, featureUri.ToString()))
+                    if (string.Equals(featureWithGeometry.Key, featureUri.GetIRI().ToString()))
                         continue;
 
                     foreach ((Geometry, Geometry) geometryOfFeature in featureWithGeometry.Value)
@@ -664,11 +665,11 @@ namespace OWLSharp.Extensions.GEO
                     }
                 }
 
-                return RDFQueryUtilities.RemoveDuplicates(featuresDirection);
+                return RDFQueryUtilities.RemoveDuplicates(featuresDirection).Select(r => new OWLNamedIndividual(r)).ToList();
             }
 
             //Analyze secondary geometries of feature
-            List<(Geometry, Geometry)> secondaryGeometries = await ontology.GetSecondaryGeometriesOfFeatureAsync(featureUri);
+            List<(Geometry, Geometry)> secondaryGeometries = await ontology.GetSecondaryGeometriesOfFeatureAsync(featureUri.GetIRI());
             if (secondaryGeometries.Count > 0)
             {
                 //Retrieve WKT/GML serialization of features
@@ -679,7 +680,7 @@ namespace OWLSharp.Extensions.GEO
                 foreach (KeyValuePair<string, List<(Geometry, Geometry)>> featureWithGeometry in featuresWithGeometry)
                 {
                     //Obviously exclude the given feature itself
-                    if (string.Equals(featureWithGeometry.Key, featureUri.ToString()))
+                    if (string.Equals(featureWithGeometry.Key, featureUri.GetIRI().ToString()))
                         continue;
 
                     foreach ((Geometry, Geometry) geometryOfFeature in featureWithGeometry.Value)
@@ -689,7 +690,7 @@ namespace OWLSharp.Extensions.GEO
                     }
                 }
 
-                return RDFQueryUtilities.RemoveDuplicates(featuresDirection);
+                return RDFQueryUtilities.RemoveDuplicates(featuresDirection).Select(r => new OWLNamedIndividual(r)).ToList();
             }
 
             return null;
@@ -699,20 +700,20 @@ namespace OWLSharp.Extensions.GEO
         /// Gets the features in direction of the given GeoSPARQL literal.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static async Task<List<RDFResource>> GetFeaturesDirectionAsync(OWLOntology ontology, RDFTypedLiteral featureLiteral, GEOEnums.GeoDirections geoDirection)
+        public static async Task<List<OWLNamedIndividual>> GetFeaturesDirectionAsync(OWLOntology ontology, OWLLiteral featureLiteral, GEOEnums.GeoDirections geoDirection)
         {
             #region Guards
             if (ontology == null)
                 throw new OWLException($"Cannot get features direction because given '{nameof(ontology)}' parameter is null");
             if (featureLiteral == null)
                 throw new OWLException($"Cannot get features direction because given '{nameof(featureLiteral)}' parameter is null");
-            if (!featureLiteral.HasGeographicDatatype())
+            if (!(featureLiteral.GetLiteral() is RDFTypedLiteral featureTypedLiteral) || !featureTypedLiteral.HasGeographicDatatype())
                 throw new OWLException($"Cannot get features direction because given '{nameof(featureLiteral)}' parameter is not a geographic typed literal");
             #endregion
 
             //Transform feature into geometry
-            bool isWKT = featureLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
-            Geometry wgs84Geometry = isWKT ? WKTReader.Read(featureLiteral.Value) : GMLReader.Read(featureLiteral.Value);
+            bool isWKT = featureTypedLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
+            Geometry wgs84Geometry = isWKT ? WKTReader.Read(featureTypedLiteral.Value) : GMLReader.Read(featureTypedLiteral.Value);
             wgs84Geometry.SRID=4326;
             Geometry lazGeometry = RDFGeoConverter.GetLambertAzimuthalGeometryFromWGS84(wgs84Geometry);
 
@@ -730,14 +731,14 @@ namespace OWLSharp.Extensions.GEO
                 }
             }
 
-            return RDFQueryUtilities.RemoveDuplicates(featuresDirection);
+            return RDFQueryUtilities.RemoveDuplicates(featuresDirection).Select(r => new OWLNamedIndividual(r)).ToList();
         }
 
         /// <summary>
         /// Gets the features interacting with the given GeoSPARQL feature (crossedBy) from the working ontology.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static async Task<List<RDFResource>> GetFeaturesCrossedByAsync(OWLOntology ontology, RDFResource featureUri)
+        public static async Task<List<OWLNamedIndividual>> GetFeaturesCrossedByAsync(OWLOntology ontology, OWLNamedIndividual featureUri)
         {
             #region Guards
             if (ontology == null)
@@ -747,7 +748,7 @@ namespace OWLSharp.Extensions.GEO
             #endregion
 
             //Analyze default geometry of feature
-            (Geometry, Geometry) defaultGeometry = await ontology.GetDefaultGeometryOfFeatureAsync(featureUri);
+            (Geometry, Geometry) defaultGeometry = await ontology.GetDefaultGeometryOfFeatureAsync(featureUri.GetIRI());
             if (defaultGeometry.Item1 != null && defaultGeometry.Item2 != null)
             {
                 //Retrieve WKT/GML serialization of features
@@ -758,7 +759,7 @@ namespace OWLSharp.Extensions.GEO
                 foreach (KeyValuePair<string, List<(Geometry, Geometry)>> featureWithGeometry in featuresWithGeometry)
                 {
                     //Obviously exclude the given feature itself
-                    if (string.Equals(featureWithGeometry.Key, featureUri.ToString()))
+                    if (string.Equals(featureWithGeometry.Key, featureUri.GetIRI().ToString()))
                         continue;
 
                     foreach ((Geometry, Geometry) geometryOfFeature in featureWithGeometry.Value)
@@ -768,11 +769,11 @@ namespace OWLSharp.Extensions.GEO
                     }
                 }
 
-                return RDFQueryUtilities.RemoveDuplicates(featuresInteraction);
+                return RDFQueryUtilities.RemoveDuplicates(featuresInteraction).Select(r => new OWLNamedIndividual(r)).ToList();
             }
 
             //Analyze secondary geometries of feature
-            List<(Geometry, Geometry)> secondaryGeometries = await ontology.GetSecondaryGeometriesOfFeatureAsync(featureUri);
+            List<(Geometry, Geometry)> secondaryGeometries = await ontology.GetSecondaryGeometriesOfFeatureAsync(featureUri.GetIRI());
             if (secondaryGeometries.Count > 0)
             {
                 //Retrieve WKT/GML serialization of features
@@ -783,7 +784,7 @@ namespace OWLSharp.Extensions.GEO
                 foreach (KeyValuePair<string, List<(Geometry, Geometry)>> featureWithGeometry in featuresWithGeometry)
                 {
                     //Obviously exclude the given feature itself
-                    if (string.Equals(featureWithGeometry.Key, featureUri.ToString()))
+                    if (string.Equals(featureWithGeometry.Key, featureUri.GetIRI().ToString()))
                         continue;
 
                     foreach ((Geometry, Geometry) geometryOfFeature in featureWithGeometry.Value)
@@ -793,7 +794,7 @@ namespace OWLSharp.Extensions.GEO
                     }
                 }
 
-                return RDFQueryUtilities.RemoveDuplicates(featuresInteraction);
+                return RDFQueryUtilities.RemoveDuplicates(featuresInteraction).Select(r => new OWLNamedIndividual(r)).ToList();
             }
 
             return null;
@@ -803,20 +804,20 @@ namespace OWLSharp.Extensions.GEO
         /// Gets the features interacting with the given GeoSPARQL literal (crossedBy).
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static async Task<List<RDFResource>> GetFeaturesCrossedByAsync(OWLOntology ontology, RDFTypedLiteral featureLiteral)
+        public static async Task<List<OWLNamedIndividual>> GetFeaturesCrossedByAsync(OWLOntology ontology, OWLLiteral featureLiteral)
         {
             #region Guards
             if (ontology == null)
                 throw new OWLException($"Cannot get features interaction because given '{nameof(ontology)}' parameter is null");
             if (featureLiteral == null)
                 throw new OWLException($"Cannot get features interaction because given '{nameof(featureLiteral)}' parameter is null");
-            if (!featureLiteral.HasGeographicDatatype())
+            if (!(featureLiteral.GetLiteral() is RDFTypedLiteral featureTypedLiteral) || !featureTypedLiteral.HasGeographicDatatype())
                 throw new OWLException($"Cannot get features interaction because given '{nameof(featureLiteral)}' parameter is not a geographic typed literal");
             #endregion
 
             //Transform feature into geometry
-            bool isWKT = featureLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
-            Geometry wgs84Geometry = isWKT ? WKTReader.Read(featureLiteral.Value) : GMLReader.Read(featureLiteral.Value);
+            bool isWKT = featureTypedLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
+            Geometry wgs84Geometry = isWKT ? WKTReader.Read(featureTypedLiteral.Value) : GMLReader.Read(featureTypedLiteral.Value);
             wgs84Geometry.SRID=4326;
             Geometry lazGeometry = RDFGeoConverter.GetLambertAzimuthalGeometryFromWGS84(wgs84Geometry);
 
@@ -834,14 +835,14 @@ namespace OWLSharp.Extensions.GEO
                 }
             }
 
-            return RDFQueryUtilities.RemoveDuplicates(featuresDirectionOf);
+            return RDFQueryUtilities.RemoveDuplicates(featuresDirectionOf).Select(r => new OWLNamedIndividual(r)).ToList();
         }
 
         /// <summary>
         /// Gets the features interacting with the given GeoSPARQL feature (touchedBy) from the working ontology.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static async Task<List<RDFResource>> GetFeaturesTouchedByAsync(OWLOntology ontology, RDFResource featureUri)
+        public static async Task<List<OWLNamedIndividual>> GetFeaturesTouchedByAsync(OWLOntology ontology, OWLNamedIndividual featureUri)
         {
             #region Guards
             if (ontology == null)
@@ -851,7 +852,7 @@ namespace OWLSharp.Extensions.GEO
             #endregion
 
             //Analyze default geometry of feature
-            (Geometry, Geometry) defaultGeometry = await ontology.GetDefaultGeometryOfFeatureAsync(featureUri);
+            (Geometry, Geometry) defaultGeometry = await ontology.GetDefaultGeometryOfFeatureAsync(featureUri.GetIRI());
             if (defaultGeometry.Item1 != null && defaultGeometry.Item2 != null)
             {
                 //Retrieve WKT/GML serialization of features
@@ -862,7 +863,7 @@ namespace OWLSharp.Extensions.GEO
                 foreach (KeyValuePair<string, List<(Geometry, Geometry)>> featureWithGeometry in featuresWithGeometry)
                 {
                     //Obviously exclude the given feature itself
-                    if (string.Equals(featureWithGeometry.Key, featureUri.ToString()))
+                    if (string.Equals(featureWithGeometry.Key, featureUri.GetIRI().ToString()))
                         continue;
 
                     foreach ((Geometry, Geometry) geometryOfFeature in featureWithGeometry.Value)
@@ -872,11 +873,11 @@ namespace OWLSharp.Extensions.GEO
                     }
                 }
 
-                return RDFQueryUtilities.RemoveDuplicates(featuresInteraction);
+                return RDFQueryUtilities.RemoveDuplicates(featuresInteraction).Select(r => new OWLNamedIndividual(r)).ToList();
             }
 
             //Analyze secondary geometries of feature
-            List<(Geometry, Geometry)> secondaryGeometries = await ontology.GetSecondaryGeometriesOfFeatureAsync(featureUri);
+            List<(Geometry, Geometry)> secondaryGeometries = await ontology.GetSecondaryGeometriesOfFeatureAsync(featureUri.GetIRI());
             if (secondaryGeometries.Count > 0)
             {
                 //Retrieve WKT/GML serialization of features
@@ -887,7 +888,7 @@ namespace OWLSharp.Extensions.GEO
                 foreach (KeyValuePair<string, List<(Geometry, Geometry)>> featureWithGeometry in featuresWithGeometry)
                 {
                     //Obviously exclude the given feature itself
-                    if (string.Equals(featureWithGeometry.Key, featureUri.ToString()))
+                    if (string.Equals(featureWithGeometry.Key, featureUri.GetIRI().ToString()))
                         continue;
 
                     foreach ((Geometry, Geometry) geometryOfFeature in featureWithGeometry.Value)
@@ -897,7 +898,7 @@ namespace OWLSharp.Extensions.GEO
                     }
                 }
 
-                return RDFQueryUtilities.RemoveDuplicates(featuresInteraction);
+                return RDFQueryUtilities.RemoveDuplicates(featuresInteraction).Select(r => new OWLNamedIndividual(r)).ToList();
             }
 
             return null;
@@ -907,20 +908,20 @@ namespace OWLSharp.Extensions.GEO
         /// Gets the features interacting with the given GeoSPARQL literal (touchedBy).
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static async Task<List<RDFResource>> GetFeaturesTouchedByAsync(OWLOntology ontology, RDFTypedLiteral featureLiteral)
+        public static async Task<List<OWLNamedIndividual>> GetFeaturesTouchedByAsync(OWLOntology ontology, OWLLiteral featureLiteral)
         {
             #region Guards
             if (ontology == null)
                 throw new OWLException($"Cannot get features interaction because given '{nameof(ontology)}' parameter is null");
             if (featureLiteral == null)
                 throw new OWLException($"Cannot get features interaction because given '{nameof(featureLiteral)}' parameter is null");
-            if (!featureLiteral.HasGeographicDatatype())
+            if (!(featureLiteral.GetLiteral() is RDFTypedLiteral featureTypedLiteral) || !featureTypedLiteral.HasGeographicDatatype())
                 throw new OWLException($"Cannot get features interaction because given '{nameof(featureLiteral)}' parameter is not a geographic typed literal");
             #endregion
 
             //Transform feature into geometry
-            bool isWKT = featureLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
-            Geometry wgs84Geometry = isWKT ? WKTReader.Read(featureLiteral.Value) : GMLReader.Read(featureLiteral.Value);
+            bool isWKT = featureTypedLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
+            Geometry wgs84Geometry = isWKT ? WKTReader.Read(featureTypedLiteral.Value) : GMLReader.Read(featureTypedLiteral.Value);
             wgs84Geometry.SRID=4326;
             Geometry lazGeometry = RDFGeoConverter.GetLambertAzimuthalGeometryFromWGS84(wgs84Geometry);
 
@@ -938,14 +939,14 @@ namespace OWLSharp.Extensions.GEO
                 }
             }
 
-            return RDFQueryUtilities.RemoveDuplicates(featuresDirectionOf);
+            return RDFQueryUtilities.RemoveDuplicates(featuresDirectionOf).Select(r => new OWLNamedIndividual(r)).ToList();
         }
 
         /// <summary>
         /// Gets the features interacting with the given GeoSPARQL feature (overlappedBy) from the working ontology.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static async Task<List<RDFResource>> GetFeaturesOverlappedByAsync(OWLOntology ontology, RDFResource featureUri)
+        public static async Task<List<OWLNamedIndividual>> GetFeaturesOverlappedByAsync(OWLOntology ontology, OWLNamedIndividual featureUri)
         {
             #region Guards
             if (ontology == null)
@@ -955,7 +956,7 @@ namespace OWLSharp.Extensions.GEO
             #endregion
 
             //Analyze default geometry of feature
-            (Geometry, Geometry) defaultGeometry = await ontology.GetDefaultGeometryOfFeatureAsync(featureUri);
+            (Geometry, Geometry) defaultGeometry = await ontology.GetDefaultGeometryOfFeatureAsync(featureUri.GetIRI());
             if (defaultGeometry.Item1 != null && defaultGeometry.Item2 != null)
             {
                 //Retrieve WKT/GML serialization of features
@@ -966,7 +967,7 @@ namespace OWLSharp.Extensions.GEO
                 foreach (KeyValuePair<string, List<(Geometry, Geometry)>> featureWithGeometry in featuresWithGeometry)
                 {
                     //Obviously exclude the given feature itself
-                    if (string.Equals(featureWithGeometry.Key, featureUri.ToString()))
+                    if (string.Equals(featureWithGeometry.Key, featureUri.GetIRI().ToString()))
                         continue;
 
                     foreach ((Geometry, Geometry) geometryOfFeature in featureWithGeometry.Value)
@@ -976,11 +977,11 @@ namespace OWLSharp.Extensions.GEO
                     }
                 }
 
-                return RDFQueryUtilities.RemoveDuplicates(featuresInteraction);
+                return RDFQueryUtilities.RemoveDuplicates(featuresInteraction).Select(r => new OWLNamedIndividual(r)).ToList();
             }
 
             //Analyze secondary geometries of feature
-            List<(Geometry, Geometry)> secondaryGeometries = await ontology.GetSecondaryGeometriesOfFeatureAsync(featureUri);
+            List<(Geometry, Geometry)> secondaryGeometries = await ontology.GetSecondaryGeometriesOfFeatureAsync(featureUri.GetIRI());
             if (secondaryGeometries.Count > 0)
             {
                 //Retrieve WKT/GML serialization of features
@@ -991,7 +992,7 @@ namespace OWLSharp.Extensions.GEO
                 foreach (KeyValuePair<string, List<(Geometry, Geometry)>> featureWithGeometry in featuresWithGeometry)
                 {
                     //Obviously exclude the given feature itself
-                    if (string.Equals(featureWithGeometry.Key, featureUri.ToString()))
+                    if (string.Equals(featureWithGeometry.Key, featureUri.GetIRI().ToString()))
                         continue;
 
                     foreach ((Geometry, Geometry) geometryOfFeature in featureWithGeometry.Value)
@@ -1001,7 +1002,7 @@ namespace OWLSharp.Extensions.GEO
                     }
                 }
 
-                return RDFQueryUtilities.RemoveDuplicates(featuresInteraction);
+                return RDFQueryUtilities.RemoveDuplicates(featuresInteraction).Select(r => new OWLNamedIndividual(r)).ToList();
             }
 
             return null;
@@ -1011,20 +1012,20 @@ namespace OWLSharp.Extensions.GEO
         /// Gets the features interacting with the given GeoSPARQL literal (overlappedBy).
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static async Task<List<RDFResource>> GetFeaturesOverlappedByAsync(OWLOntology ontology, RDFTypedLiteral featureLiteral)
+        public static async Task<List<OWLNamedIndividual>> GetFeaturesOverlappedByAsync(OWLOntology ontology, OWLLiteral featureLiteral)
         {
             #region Guards
             if (ontology == null)
                 throw new OWLException($"Cannot get features interaction because given '{nameof(ontology)}' parameter is null");
             if (featureLiteral == null)
                 throw new OWLException($"Cannot get features interaction because given '{nameof(featureLiteral)}' parameter is null");
-            if (!featureLiteral.HasGeographicDatatype())
+            if (!(featureLiteral.GetLiteral() is RDFTypedLiteral featureTypedLiteral) || !featureTypedLiteral.HasGeographicDatatype())
                 throw new OWLException($"Cannot get features interaction because given '{nameof(featureLiteral)}' parameter is not a geographic typed literal");
             #endregion
 
             //Transform feature into geometry
-            bool isWKT = featureLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
-            Geometry wgs84Geometry = isWKT ? WKTReader.Read(featureLiteral.Value) : GMLReader.Read(featureLiteral.Value);
+            bool isWKT = featureTypedLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
+            Geometry wgs84Geometry = isWKT ? WKTReader.Read(featureTypedLiteral.Value) : GMLReader.Read(featureTypedLiteral.Value);
             wgs84Geometry.SRID=4326;
             Geometry lazGeometry = RDFGeoConverter.GetLambertAzimuthalGeometryFromWGS84(wgs84Geometry);
 
@@ -1042,14 +1043,14 @@ namespace OWLSharp.Extensions.GEO
                 }
             }
 
-            return RDFQueryUtilities.RemoveDuplicates(featuresDirectionOf);
+            return RDFQueryUtilities.RemoveDuplicates(featuresDirectionOf).Select(r => new OWLNamedIndividual(r)).ToList();
         }
 
         /// <summary>
         /// Gets the features interacting with the given GeoSPARQL feature (within) from the working ontology.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static async Task<List<RDFResource>> GetFeaturesWithinAsync(OWLOntology ontology, RDFResource featureUri)
+        public static async Task<List<OWLNamedIndividual>> GetFeaturesWithinAsync(OWLOntology ontology, OWLNamedIndividual featureUri)
         {
             #region Guards
             if (ontology == null)
@@ -1059,7 +1060,7 @@ namespace OWLSharp.Extensions.GEO
             #endregion
 
             //Analyze default geometry of feature
-            (Geometry, Geometry) defaultGeometry = await ontology.GetDefaultGeometryOfFeatureAsync(featureUri);
+            (Geometry, Geometry) defaultGeometry = await ontology.GetDefaultGeometryOfFeatureAsync(featureUri.GetIRI());
             if (defaultGeometry.Item1 != null && defaultGeometry.Item2 != null)
             {
                 //Retrieve WKT/GML serialization of features
@@ -1070,7 +1071,7 @@ namespace OWLSharp.Extensions.GEO
                 foreach (KeyValuePair<string, List<(Geometry, Geometry)>> featureWithGeometry in featuresWithGeometry)
                 {
                     //Obviously exclude the given feature itself
-                    if (string.Equals(featureWithGeometry.Key, featureUri.ToString()))
+                    if (string.Equals(featureWithGeometry.Key, featureUri.GetIRI().ToString()))
                         continue;
 
                     foreach ((Geometry, Geometry) geometryOfFeature in featureWithGeometry.Value)
@@ -1080,11 +1081,11 @@ namespace OWLSharp.Extensions.GEO
                     }
                 }
 
-                return RDFQueryUtilities.RemoveDuplicates(featuresInteraction);
+                return RDFQueryUtilities.RemoveDuplicates(featuresInteraction).Select(r => new OWLNamedIndividual(r)).ToList();
             }
 
             //Analyze secondary geometries of feature
-            List<(Geometry, Geometry)> secondaryGeometries = await ontology.GetSecondaryGeometriesOfFeatureAsync(featureUri);
+            List<(Geometry, Geometry)> secondaryGeometries = await ontology.GetSecondaryGeometriesOfFeatureAsync(featureUri.GetIRI());
             if (secondaryGeometries.Count > 0)
             {
                 //Retrieve WKT/GML serialization of features
@@ -1095,7 +1096,7 @@ namespace OWLSharp.Extensions.GEO
                 foreach (KeyValuePair<string, List<(Geometry, Geometry)>> featureWithGeometry in featuresWithGeometry)
                 {
                     //Obviously exclude the given feature itself
-                    if (string.Equals(featureWithGeometry.Key, featureUri.ToString()))
+                    if (string.Equals(featureWithGeometry.Key, featureUri.GetIRI().ToString()))
                         continue;
 
                     foreach ((Geometry, Geometry) geometryOfFeature in featureWithGeometry.Value)
@@ -1105,7 +1106,7 @@ namespace OWLSharp.Extensions.GEO
                         }
                 }
 
-                return RDFQueryUtilities.RemoveDuplicates(featuresInteraction);
+                return RDFQueryUtilities.RemoveDuplicates(featuresInteraction).Select(r => new OWLNamedIndividual(r)).ToList();
             }
 
             return null;
@@ -1115,20 +1116,20 @@ namespace OWLSharp.Extensions.GEO
         /// Gets the features interacting with the given GeoSPARQL literal (within).
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static async Task<List<RDFResource>> GetFeaturesWithinAsync(OWLOntology ontology, RDFTypedLiteral featureLiteral)
+        public static async Task<List<OWLNamedIndividual>> GetFeaturesWithinAsync(OWLOntology ontology, OWLLiteral featureLiteral)
         {
             #region Guards
             if (ontology == null)
                 throw new OWLException($"Cannot get features interaction because given '{nameof(ontology)}' parameter is null");
             if (featureLiteral == null)
                 throw new OWLException($"Cannot get features interaction because given '{nameof(featureLiteral)}' parameter is null");
-            if (!featureLiteral.HasGeographicDatatype())
+            if (!(featureLiteral.GetLiteral() is RDFTypedLiteral featureTypedLiteral) || !featureTypedLiteral.HasGeographicDatatype())
                 throw new OWLException($"Cannot get features interaction because given '{nameof(featureLiteral)}' parameter is not a geographic typed literal");
             #endregion
 
             //Transform feature into geometry
-            bool isWKT = featureLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
-            Geometry wgs84Geometry = isWKT ? WKTReader.Read(featureLiteral.Value) : GMLReader.Read(featureLiteral.Value);
+            bool isWKT = featureTypedLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
+            Geometry wgs84Geometry = isWKT ? WKTReader.Read(featureTypedLiteral.Value) : GMLReader.Read(featureTypedLiteral.Value);
             wgs84Geometry.SRID=4326;
             Geometry lazGeometry = RDFGeoConverter.GetLambertAzimuthalGeometryFromWGS84(wgs84Geometry);
 
@@ -1146,14 +1147,14 @@ namespace OWLSharp.Extensions.GEO
                 }
             }
 
-            return RDFQueryUtilities.RemoveDuplicates(featuresDirectionOf);
+            return RDFQueryUtilities.RemoveDuplicates(featuresDirectionOf).Select(r => new OWLNamedIndividual(r)).ToList();
         }
 
         /// <summary>
         /// Gets the features interacting with the given GeoSPARQL feature (intersectedBy) from the working ontology.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static async Task<List<RDFResource>> GetFeaturesIntersectedByAsync(OWLOntology ontology, RDFResource featureUri)
+        public static async Task<List<OWLNamedIndividual>> GetFeaturesIntersectedByAsync(OWLOntology ontology, OWLNamedIndividual featureUri)
         {
             #region Guards
             if (ontology == null)
@@ -1163,7 +1164,7 @@ namespace OWLSharp.Extensions.GEO
             #endregion
 
             //Analyze default geometry of feature
-            (Geometry, Geometry) defaultGeometry = await ontology.GetDefaultGeometryOfFeatureAsync(featureUri);
+            (Geometry, Geometry) defaultGeometry = await ontology.GetDefaultGeometryOfFeatureAsync(featureUri.GetIRI());
             if (defaultGeometry.Item1 != null && defaultGeometry.Item2 != null)
             {
                 //Retrieve WKT/GML serialization of features
@@ -1174,7 +1175,7 @@ namespace OWLSharp.Extensions.GEO
                 foreach (KeyValuePair<string, List<(Geometry, Geometry)>> featureWithGeometry in featuresWithGeometry)
                 {
                     //Obviously exclude the given feature itself
-                    if (string.Equals(featureWithGeometry.Key, featureUri.ToString()))
+                    if (string.Equals(featureWithGeometry.Key, featureUri.GetIRI().ToString()))
                         continue;
 
                     foreach ((Geometry, Geometry) geometryOfFeature in featureWithGeometry.Value)
@@ -1184,11 +1185,11 @@ namespace OWLSharp.Extensions.GEO
                     }
                 }
 
-                return RDFQueryUtilities.RemoveDuplicates(featuresInteraction);
+                return RDFQueryUtilities.RemoveDuplicates(featuresInteraction).Select(r => new OWLNamedIndividual(r)).ToList();
             }
 
             //Analyze secondary geometries of feature
-            List<(Geometry, Geometry)> secondaryGeometries = await ontology.GetSecondaryGeometriesOfFeatureAsync(featureUri);
+            List<(Geometry, Geometry)> secondaryGeometries = await ontology.GetSecondaryGeometriesOfFeatureAsync(featureUri.GetIRI());
             if (secondaryGeometries.Count > 0)
             {
                 //Retrieve WKT/GML serialization of features
@@ -1199,7 +1200,7 @@ namespace OWLSharp.Extensions.GEO
                 foreach (KeyValuePair<string, List<(Geometry, Geometry)>> featureWithGeometry in featuresWithGeometry)
                 {
                     //Obviously exclude the given feature itself
-                    if (string.Equals(featureWithGeometry.Key, featureUri.ToString()))
+                    if (string.Equals(featureWithGeometry.Key, featureUri.GetIRI().ToString()))
                         continue;
 
                     foreach ((Geometry, Geometry) geometryOfFeature in featureWithGeometry.Value)
@@ -1209,7 +1210,7 @@ namespace OWLSharp.Extensions.GEO
                     }
                 }
 
-                return RDFQueryUtilities.RemoveDuplicates(featuresInteraction);
+                return RDFQueryUtilities.RemoveDuplicates(featuresInteraction).Select(r => new OWLNamedIndividual(r)).ToList();
             }
 
             return null;
@@ -1219,20 +1220,20 @@ namespace OWLSharp.Extensions.GEO
         /// Gets the features interacting with the given GeoSPARQL literal (intersectedBy).
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static async Task<List<RDFResource>> GetFeaturesIntersectedByAsync(OWLOntology ontology, RDFTypedLiteral featureLiteral)
+        public static async Task<List<OWLNamedIndividual>> GetFeaturesIntersectedByAsync(OWLOntology ontology, OWLLiteral featureLiteral)
         {
             #region Guards
             if (ontology == null)
                 throw new OWLException($"Cannot get features interaction because given '{nameof(ontology)}' parameter is null");
             if (featureLiteral == null)
                 throw new OWLException($"Cannot get features interaction because given '{nameof(featureLiteral)}' parameter is null");
-            if (!featureLiteral.HasGeographicDatatype())
+            if (!(featureLiteral.GetLiteral() is RDFTypedLiteral featureTypedLiteral) || !featureTypedLiteral.HasGeographicDatatype())
                 throw new OWLException($"Cannot get features interaction because given '{nameof(featureLiteral)}' parameter is not a geographic typed literal");
             #endregion
 
             //Transform feature into geometry
-            bool isWKT = featureLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
-            Geometry wgs84Geometry = isWKT ? WKTReader.Read(featureLiteral.Value) : GMLReader.Read(featureLiteral.Value);
+            bool isWKT = featureTypedLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
+            Geometry wgs84Geometry = isWKT ? WKTReader.Read(featureTypedLiteral.Value) : GMLReader.Read(featureTypedLiteral.Value);
             wgs84Geometry.SRID=4326;
             Geometry lazGeometry = RDFGeoConverter.GetLambertAzimuthalGeometryFromWGS84(wgs84Geometry);
 
@@ -1250,7 +1251,7 @@ namespace OWLSharp.Extensions.GEO
                 }
             }
 
-            return RDFQueryUtilities.RemoveDuplicates(featuresIntersectedBy);
+            return RDFQueryUtilities.RemoveDuplicates(featuresIntersectedBy).Select(r => new OWLNamedIndividual(r)).ToList();
         }
         #endregion
 
@@ -1259,146 +1260,152 @@ namespace OWLSharp.Extensions.GEO
         /// Checks if the given GeoSPARQL features are topologically equal.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static Task<bool> CheckIsEqualToAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFResource toFeatureUri)
+        public static Task<bool> CheckIsEqualToAsync(OWLOntology ontology, OWLNamedIndividual fromFeatureUri, OWLNamedIndividual toFeatureUri)
             => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureUri, GEOEnums.GeoSpatialRelation.Equals);
 
         /// <summary>
         /// Checks if the given GeoSPARQL feature and the given GeoSPARQL literal are topologically equal.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static Task<bool> CheckIsEqualToAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFTypedLiteral toFeatureLiteral)
+        public static Task<bool> CheckIsEqualToAsync(OWLOntology ontology, OWLNamedIndividual fromFeatureUri, OWLLiteral toFeatureLiteral)
             => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureLiteral, GEOEnums.GeoSpatialRelation.Equals);
 
         /// <summary>
         /// Checks if the given GeoSPARQL features are topologically disjoint.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static Task<bool> CheckIsDisjointFromAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFResource toFeatureUri)
+        public static Task<bool> CheckIsDisjointFromAsync(OWLOntology ontology, OWLNamedIndividual fromFeatureUri, OWLNamedIndividual toFeatureUri)
             => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureUri, GEOEnums.GeoSpatialRelation.Disjoint);
 
         /// <summary>
         /// Checks if the given GeoSPARQL feature and the given GeoSPARQL literal are topologically disjoint.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static Task<bool> CheckIsDisjointFromAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFTypedLiteral toFeatureLiteral)
+        public static Task<bool> CheckIsDisjointFromAsync(OWLOntology ontology, OWLNamedIndividual fromFeatureUri, OWLLiteral toFeatureLiteral)
             => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureLiteral, GEOEnums.GeoSpatialRelation.Disjoint);
 
         /// <summary>
         /// Checks if the first given GeoSPARQL feature is touched by the second given GeoSPARQL feature.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static Task<bool> CheckIsTouchedByAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFResource toFeatureUri)
+        public static Task<bool> CheckIsTouchedByAsync(OWLOntology ontology, OWLNamedIndividual fromFeatureUri, OWLNamedIndividual toFeatureUri)
             => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureUri, GEOEnums.GeoSpatialRelation.Touches);
 
         /// <summary>
         /// Checks if the given GeoSPARQL feature is touched by the given GeoSPARQL literal.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static Task<bool> CheckIsTouchedByAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFTypedLiteral toFeatureLiteral)
+        public static Task<bool> CheckIsTouchedByAsync(OWLOntology ontology, OWLNamedIndividual fromFeatureUri, OWLLiteral toFeatureLiteral)
             => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureLiteral, GEOEnums.GeoSpatialRelation.Touches);
 
         /// <summary>
         /// Checks if the first given GeoSPARQL feature is crossed by the second given GeoSPARQL feature.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static Task<bool> CheckIsCrossedByAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFResource toFeatureUri)
+        public static Task<bool> CheckIsCrossedByAsync(OWLOntology ontology, OWLNamedIndividual fromFeatureUri, OWLNamedIndividual toFeatureUri)
             => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureUri, GEOEnums.GeoSpatialRelation.Crosses);
 
         /// <summary>
         /// Checks if the given GeoSPARQL feature is crossed by the given GeoSPARQL literal.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static Task<bool> CheckIsCrossedByAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFTypedLiteral toFeatureLiteral)
+        public static Task<bool> CheckIsCrossedByAsync(OWLOntology ontology, OWLNamedIndividual fromFeatureUri, OWLLiteral toFeatureLiteral)
             => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureLiteral, GEOEnums.GeoSpatialRelation.Crosses);
 
         /// <summary>
         /// Checks if the first given GeoSPARQL feature is overlapped by the second given GeoSPARQL feature.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static Task<bool> CheckIsOverlappedByAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFResource toFeatureUri)
+        public static Task<bool> CheckIsOverlappedByAsync(OWLOntology ontology, OWLNamedIndividual fromFeatureUri, OWLNamedIndividual toFeatureUri)
             => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureUri, GEOEnums.GeoSpatialRelation.Overlaps);
 
         /// <summary>
         /// Checks if the given GeoSPARQL feature is overlapped by the given GeoSPARQL literal.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static Task<bool> CheckIsOverlappedByAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFTypedLiteral toFeatureLiteral)
+        public static Task<bool> CheckIsOverlappedByAsync(OWLOntology ontology, OWLNamedIndividual fromFeatureUri, OWLLiteral toFeatureLiteral)
             => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureLiteral, GEOEnums.GeoSpatialRelation.Overlaps);
 
         /// <summary>
         /// Checks if the first given GeoSPARQL feature is intersected by the second given GeoSPARQL feature.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static Task<bool> CheckIsIntersectedByAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFResource toFeatureUri)
+        public static Task<bool> CheckIsIntersectedByAsync(OWLOntology ontology, OWLNamedIndividual fromFeatureUri, OWLNamedIndividual toFeatureUri)
             => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureUri, GEOEnums.GeoSpatialRelation.Intersects);
 
         /// <summary>
         /// Checks if the given GeoSPARQL feature is intersected by the given GeoSPARQL literal.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static Task<bool> CheckIsIntersectedByAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFTypedLiteral toFeatureLiteral)
+        public static Task<bool> CheckIsIntersectedByAsync(OWLOntology ontology, OWLNamedIndividual fromFeatureUri, OWLLiteral toFeatureLiteral)
             => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureLiteral, GEOEnums.GeoSpatialRelation.Intersects);
 
         /// <summary>
         /// Checks if the first given GeoSPARQL feature is spatially within the second given GeoSPARQL feature.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static Task<bool> CheckIsWithinAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFResource toFeatureUri)
+        public static Task<bool> CheckIsWithinAsync(OWLOntology ontology, OWLNamedIndividual fromFeatureUri, OWLNamedIndividual toFeatureUri)
             => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureUri, GEOEnums.GeoSpatialRelation.Within);
 
         /// <summary>
         /// Checks if the given GeoSPARQL feature is spatially within the given GeoSPARQL literal.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static Task<bool> CheckIsWithinAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFTypedLiteral toFeatureLiteral)
+        public static Task<bool> CheckIsWithinAsync(OWLOntology ontology, OWLNamedIndividual fromFeatureUri, OWLLiteral toFeatureLiteral)
             => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureLiteral, GEOEnums.GeoSpatialRelation.Within);
 
         /// <summary>
         /// Checks if the first given GeoSPARQL feature spatially contains the second given GeoSPARQL feature.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static Task<bool> CheckContainsAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFResource toFeatureUri)
+        public static Task<bool> CheckContainsAsync(OWLOntology ontology, OWLNamedIndividual fromFeatureUri, OWLNamedIndividual toFeatureUri)
             => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureUri, GEOEnums.GeoSpatialRelation.Contains);
 
         /// <summary>
         /// Checks if the given GeoSPARQL feature spatially contains the given GeoSPARQL literal.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static Task<bool> CheckContainsAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFTypedLiteral toFeatureLiteral)
+        public static Task<bool> CheckContainsAsync(OWLOntology ontology, OWLNamedIndividual fromFeatureUri, OWLLiteral toFeatureLiteral)
             => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureLiteral, GEOEnums.GeoSpatialRelation.Contains);
 
         /// <summary>
         /// Checks if the first given GeoSPARQL feature is covered by the second given GeoSPARQL feature.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static Task<bool> CheckIsCoveredByAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFResource toFeatureUri)
+        public static Task<bool> CheckIsCoveredByAsync(OWLOntology ontology, OWLNamedIndividual fromFeatureUri, OWLNamedIndividual toFeatureUri)
             => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureUri, GEOEnums.GeoSpatialRelation.CoveredBy);
 
         /// <summary>
         /// Checks if the given GeoSPARQL feature is covered by the given GeoSPARQL literal.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static Task<bool> CheckIsCoveredByAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFTypedLiteral toFeatureLiteral)
+        public static Task<bool> CheckIsCoveredByAsync(OWLOntology ontology, OWLNamedIndividual fromFeatureUri, OWLLiteral toFeatureLiteral)
             => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureLiteral, GEOEnums.GeoSpatialRelation.CoveredBy);
 
         /// <summary>
         /// Checks if the first given GeoSPARQL feature covers the second given GeoSPARQL feature.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static Task<bool> CheckCoversAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFResource toFeatureUri)
+        public static Task<bool> CheckCoversAsync(OWLOntology ontology, OWLNamedIndividual fromFeatureUri, OWLNamedIndividual toFeatureUri)
             => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureUri, GEOEnums.GeoSpatialRelation.Covers);
 
         /// <summary>
         /// Checks if the given GeoSPARQL feature covers the given GeoSPARQL literal.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        public static Task<bool> CheckCoversAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFTypedLiteral toFeatureLiteral)
+        public static Task<bool> CheckCoversAsync(OWLOntology ontology, OWLNamedIndividual fromFeatureUri, OWLLiteral toFeatureLiteral)
             => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureLiteral, GEOEnums.GeoSpatialRelation.Covers);
         #endregion
 
         #endregion
 
         #region Utilities
+        /// <summary>
+        /// Wraps the given WKT/GML typed literal into an OWLLiteral, propagating null (no result) as-is.
+        /// </summary>
+        internal static OWLLiteral WrapNullableLiteral(RDFTypedLiteral literal)
+            => literal == null ? null : new OWLLiteral(literal);
+
         /// <summary>
         /// Evaluates the given pairwise topological relation between two Azimuthal-projected geometries.
         /// </summary>
@@ -1424,7 +1431,7 @@ namespace OWLSharp.Extensions.GEO
         /// Checks the given pairwise topological relation between the given GeoSPARQL features from the working ontology.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        internal static async Task<bool> CheckSpatialRelationAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFResource toFeatureUri, GEOEnums.GeoSpatialRelation relation)
+        internal static async Task<bool> CheckSpatialRelationAsync(OWLOntology ontology, OWLNamedIndividual fromFeatureUri, OWLNamedIndividual toFeatureUri, GEOEnums.GeoSpatialRelation relation)
         {
             #region Guards
             if (ontology == null)
@@ -1436,14 +1443,14 @@ namespace OWLSharp.Extensions.GEO
             #endregion
 
             //Collect Azimuthal geometries of "From" feature
-            (Geometry, Geometry) defaultGeometryFrom = await ontology.GetDefaultGeometryOfFeatureAsync(fromFeatureUri);
-            List<(Geometry, Geometry)> geometriesFrom = await ontology.GetSecondaryGeometriesOfFeatureAsync(fromFeatureUri);
+            (Geometry, Geometry) defaultGeometryFrom = await ontology.GetDefaultGeometryOfFeatureAsync(fromFeatureUri.GetIRI());
+            List<(Geometry, Geometry)> geometriesFrom = await ontology.GetSecondaryGeometriesOfFeatureAsync(fromFeatureUri.GetIRI());
             if (defaultGeometryFrom.Item1 != null && defaultGeometryFrom.Item2 != null)
                 geometriesFrom.Insert(0, defaultGeometryFrom);
 
             //Collect Azimuthal geometries of "To" feature
-            (Geometry, Geometry) defaultGeometryTo = await ontology.GetDefaultGeometryOfFeatureAsync(toFeatureUri);
-            List<(Geometry, Geometry)> geometriesTo = await ontology.GetSecondaryGeometriesOfFeatureAsync(toFeatureUri);
+            (Geometry, Geometry) defaultGeometryTo = await ontology.GetDefaultGeometryOfFeatureAsync(toFeatureUri.GetIRI());
+            List<(Geometry, Geometry)> geometriesTo = await ontology.GetSecondaryGeometriesOfFeatureAsync(toFeatureUri.GetIRI());
             if (defaultGeometryTo.Item1 != null && defaultGeometryTo.Item2 != null)
                 geometriesTo.Insert(0, defaultGeometryTo);
 
@@ -1455,7 +1462,7 @@ namespace OWLSharp.Extensions.GEO
         /// Checks the given pairwise topological relation between the given GeoSPARQL feature and the given GeoSPARQL literal.
         /// </summary>
         /// <exception cref="OWLException"></exception>
-        internal static async Task<bool> CheckSpatialRelationAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFTypedLiteral toFeatureLiteral, GEOEnums.GeoSpatialRelation relation)
+        internal static async Task<bool> CheckSpatialRelationAsync(OWLOntology ontology, OWLNamedIndividual fromFeatureUri, OWLLiteral toFeatureLiteral, GEOEnums.GeoSpatialRelation relation)
         {
             #region Guards
             if (ontology == null)
@@ -1464,19 +1471,19 @@ namespace OWLSharp.Extensions.GEO
                 throw new OWLException($"Cannot check spatial relation between features because given '{nameof(fromFeatureUri)}' parameter is null");
             if (toFeatureLiteral == null)
                 throw new OWLException($"Cannot check spatial relation between features because given '{nameof(toFeatureLiteral)}' parameter is null");
-            if (!toFeatureLiteral.HasGeographicDatatype())
+            if (!(toFeatureLiteral.GetLiteral() is RDFTypedLiteral toFeatureTypedLiteral) || !toFeatureTypedLiteral.HasGeographicDatatype())
                 throw new OWLException($"Cannot check spatial relation between features because given '{nameof(toFeatureLiteral)}' parameter is not a geographic typed literal");
             #endregion
 
             //Collect Azimuthal geometries of "From" feature
-            (Geometry, Geometry) defaultGeometryFrom = await ontology.GetDefaultGeometryOfFeatureAsync(fromFeatureUri);
-            List<(Geometry, Geometry)> geometriesFrom = await ontology.GetSecondaryGeometriesOfFeatureAsync(fromFeatureUri);
+            (Geometry, Geometry) defaultGeometryFrom = await ontology.GetDefaultGeometryOfFeatureAsync(fromFeatureUri.GetIRI());
+            List<(Geometry, Geometry)> geometriesFrom = await ontology.GetSecondaryGeometriesOfFeatureAsync(fromFeatureUri.GetIRI());
             if (defaultGeometryFrom.Item1 != null && defaultGeometryFrom.Item2 != null)
                 geometriesFrom.Insert(0, defaultGeometryFrom);
 
             //Transform "To" feature into Azimuthal geometry
-            bool isWKT = toFeatureLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
-            Geometry wgs84GeometryTo = isWKT ? WKTReader.Read(toFeatureLiteral.Value) : GMLReader.Read(toFeatureLiteral.Value);
+            bool isWKT = toFeatureTypedLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
+            Geometry wgs84GeometryTo = isWKT ? WKTReader.Read(toFeatureTypedLiteral.Value) : GMLReader.Read(toFeatureTypedLiteral.Value);
             wgs84GeometryTo.SRID=4326;
             Geometry lazGeometryTo = RDFGeoConverter.GetLambertAzimuthalGeometryFromWGS84(wgs84GeometryTo);
 

@@ -34,7 +34,7 @@ public class GEOHelperTest
     {
         OWLOntology ontology = new OWLOntology();
         GEOPoint geom = new GEOPoint(new RDFResource("ex:MilanGM"), (9.188540, 45.464664));
-        ontology.DeclarePointFeature(new RDFResource("ex:MilanFT"), geom);
+        ontology.DeclarePointFeature(new OWLNamedIndividual(new RDFResource("ex:MilanFT")), geom);
 
         Assert.HasCount(2, ontology.DeclarationAxioms);
         Assert.HasCount(3, ontology.GetAssertionAxiomsOfType<OWLClassAssertion>());
@@ -42,7 +42,7 @@ public class GEOHelperTest
         Assert.HasCount(2, ontology.GetAssertionAxiomsOfType<OWLDataPropertyAssertion>());
 
         Assert.ThrowsExactly<OWLException>(() => _ = ontology.DeclarePointFeature(null, geom));
-        Assert.ThrowsExactly<OWLException>(() => _ = ontology.DeclarePointFeature(new RDFResource("ex:MilanFT"), null));
+        Assert.ThrowsExactly<OWLException>(() => _ = ontology.DeclarePointFeature(new OWLNamedIndividual(new RDFResource("ex:MilanFT")), null));
     }
 
     [TestMethod]
@@ -50,7 +50,7 @@ public class GEOHelperTest
     {
         OWLOntology ontology = new OWLOntology();
         GEOPoint geom = new GEOPoint(new RDFResource("ex:MilanGM"), (9.188540, 45.464664));
-        ontology.DeclarePointFeature(new RDFResource("ex:MilanFT"), geom, false);
+        ontology.DeclarePointFeature(new OWLNamedIndividual(new RDFResource("ex:MilanFT")), geom, false);
 
         Assert.HasCount(2, ontology.DeclarationAxioms);
         Assert.HasCount(3, ontology.GetAssertionAxiomsOfType<OWLClassAssertion>());
@@ -63,7 +63,7 @@ public class GEOHelperTest
     {
         OWLOntology ontology = new OWLOntology();
         GEOLine geom = new GEOLine(new RDFResource("ex:MilanGM"), [(9.188540, 45.464664), (9.198540, 45.474664)]);
-        ontology.DeclareLineFeature(new RDFResource("ex:MilanFT"), geom);
+        ontology.DeclareLineFeature(new OWLNamedIndividual(new RDFResource("ex:MilanFT")), geom);
 
         Assert.HasCount(2, ontology.DeclarationAxioms);
         Assert.HasCount(3, ontology.GetAssertionAxiomsOfType<OWLClassAssertion>());
@@ -71,7 +71,7 @@ public class GEOHelperTest
         Assert.HasCount(2, ontology.GetAssertionAxiomsOfType<OWLDataPropertyAssertion>());
 
         Assert.ThrowsExactly<OWLException>(() => _ = ontology.DeclareLineFeature(null, geom));
-        Assert.ThrowsExactly<OWLException>(() => _ = ontology.DeclareLineFeature(new RDFResource("ex:MilanFT"), null));
+        Assert.ThrowsExactly<OWLException>(() => _ = ontology.DeclareLineFeature(new OWLNamedIndividual(new RDFResource("ex:MilanFT")), null));
     }
 
     [TestMethod]
@@ -79,7 +79,7 @@ public class GEOHelperTest
     {
         OWLOntology ontology = new OWLOntology();
         GEOLine geom = new GEOLine(new RDFResource("ex:MilanGM"), [(9.188540, 45.464664), (9.198540, 45.474664)]);
-        ontology.DeclareLineFeature(new RDFResource("ex:MilanFT"), geom, false);
+        ontology.DeclareLineFeature(new OWLNamedIndividual(new RDFResource("ex:MilanFT")), geom, false);
 
         Assert.HasCount(2, ontology.DeclarationAxioms);
         Assert.HasCount(3, ontology.GetAssertionAxiomsOfType<OWLClassAssertion>());
@@ -92,7 +92,7 @@ public class GEOHelperTest
     {
         OWLOntology ontology = new OWLOntology();
         GEOArea geom = new GEOArea(new RDFResource("ex:MilanGM"), [(9.188540, 45.464664), (9.198540, 45.474664), (9.208540, 45.484664)]); //will be automatically closed
-        ontology.DeclareAreaFeature(new RDFResource("ex:MilanFT"), geom);
+        ontology.DeclareAreaFeature(new OWLNamedIndividual(new RDFResource("ex:MilanFT")), geom);
 
         Assert.HasCount(2, ontology.DeclarationAxioms);
         Assert.HasCount(3, ontology.GetAssertionAxiomsOfType<OWLClassAssertion>());
@@ -100,7 +100,7 @@ public class GEOHelperTest
         Assert.HasCount(2, ontology.GetAssertionAxiomsOfType<OWLDataPropertyAssertion>());
 
         Assert.ThrowsExactly<OWLException>(() => _ = ontology.DeclareAreaFeature(null, geom));
-        Assert.ThrowsExactly<OWLException>(() => _ = ontology.DeclareAreaFeature(new RDFResource("ex:MilanFT"), null));
+        Assert.ThrowsExactly<OWLException>(() => _ = ontology.DeclareAreaFeature(new OWLNamedIndividual(new RDFResource("ex:MilanFT")), null));
     }
 
     [TestMethod]
@@ -108,7 +108,7 @@ public class GEOHelperTest
     {
         OWLOntology ontology = new OWLOntology();
         GEOArea geom = new GEOArea(new RDFResource("ex:MilanGM"), [(9.188540, 45.464664), (9.198540, 45.474664), (9.208540, 45.484664)]); //will be automatically closed
-        ontology.DeclareAreaFeature(new RDFResource("ex:MilanFT"), geom, false);
+        ontology.DeclareAreaFeature(new OWLNamedIndividual(new RDFResource("ex:MilanFT")), geom, false);
 
         Assert.HasCount(2, ontology.DeclarationAxioms);
         Assert.HasCount(3, ontology.GetAssertionAxiomsOfType<OWLClassAssertion>());
@@ -126,22 +126,22 @@ public class GEOHelperTest
     public async Task ShouldGetSpatialPointFeatureAsync()
     {
         OWLOntology ontology = new OWLOntology();
-        ontology.DeclarePointFeature(new RDFResource("ex:MilanFT"), new GEOPoint(new RDFResource("ex:MilanGM"), (9.188540, 45.464664)));
-        List<GEOEntity> geoEntities = await ontology.GetSpatialFeatureAsync(new RDFResource("ex:MilanFT"));
+        ontology.DeclarePointFeature(new OWLNamedIndividual(new RDFResource("ex:MilanFT")), new GEOPoint(new RDFResource("ex:MilanGM"), (9.188540, 45.464664)));
+        List<GEOEntity> geoEntities = await ontology.GetSpatialFeatureAsync(new OWLNamedIndividual(new RDFResource("ex:MilanFT")));
 
         Assert.IsNotNull(geoEntities);
         Assert.IsTrue(geoEntities.Single() is GEOPoint geoPoint
                       && geoPoint.URI.Equals(new Uri("ex:MilanGM"))
                       && string.Equals(geoPoint.ToWKT(), "POINT (9.18854 45.464664)"));
-        Assert.IsEmpty(await ontology.GetSpatialFeatureAsync(new RDFResource("ex:MilanGGGGFT")));
+        Assert.IsEmpty(await ontology.GetSpatialFeatureAsync(new OWLNamedIndividual(new RDFResource("ex:MilanGGGGFT"))));
     }
 
     [TestMethod]
     public async Task ShouldGetSpatialLineFeatureAsync()
     {
         OWLOntology ontology = new OWLOntology();
-        ontology.DeclareLineFeature(new RDFResource("ex:MilanFT"), new GEOLine(new RDFResource("ex:MilanGM"), [(9.188540, 45.464664), (9.198540, 45.474664)]));
-        List<GEOEntity> geoEntities = await ontology.GetSpatialFeatureAsync(new RDFResource("ex:MilanFT"));
+        ontology.DeclareLineFeature(new OWLNamedIndividual(new RDFResource("ex:MilanFT")), new GEOLine(new RDFResource("ex:MilanGM"), [(9.188540, 45.464664), (9.198540, 45.474664)]));
+        List<GEOEntity> geoEntities = await ontology.GetSpatialFeatureAsync(new OWLNamedIndividual(new RDFResource("ex:MilanFT")));
 
         Assert.IsNotNull(geoEntities);
         Assert.IsTrue(geoEntities.Single() is GEOLine geoLine
@@ -153,8 +153,8 @@ public class GEOHelperTest
     public async Task ShouldGetSpatialAreaFeatureAsync()
     {
         OWLOntology ontology = new OWLOntology();
-        ontology.DeclareAreaFeature(new RDFResource("ex:MilanFT"), new GEOArea(new RDFResource("ex:MilanGM"), [(9.188540, 45.464664), (9.198540, 45.474664), (9.208540, 45.484664)]));
-        List<GEOEntity> geoEntities = await ontology.GetSpatialFeatureAsync(new RDFResource("ex:MilanFT"));
+        ontology.DeclareAreaFeature(new OWLNamedIndividual(new RDFResource("ex:MilanFT")), new GEOArea(new RDFResource("ex:MilanGM"), [(9.188540, 45.464664), (9.198540, 45.474664), (9.208540, 45.484664)]));
+        List<GEOEntity> geoEntities = await ontology.GetSpatialFeatureAsync(new OWLNamedIndividual(new RDFResource("ex:MilanFT")));
 
         Assert.IsNotNull(geoEntities);
         Assert.IsTrue(geoEntities.Single() is GEOArea geoArea
@@ -221,23 +221,23 @@ public class GEOHelperTest
             ]
         };
         double? milanRomeDistance = await GEOHelper.GetDistanceBetweenFeaturesAsync(geoOntology,
-            new RDFResource("ex:milanFT"), new RDFResource("ex:romeFT"));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT")), new OWLNamedIndividual(new RDFResource("ex:romeFT")));
 
         Assert.IsTrue(milanRomeDistance is >= 450000 and <= 4800000); //milan-rome should be between 450km and 480km
 
         //Unexisting features
         Assert.IsNull(await GEOHelper.GetDistanceBetweenFeaturesAsync(geoOntology,
-            new RDFResource("ex:milanFT2"), new RDFResource("ex:romeFT")));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT2")), new OWLNamedIndividual(new RDFResource("ex:romeFT"))));
         Assert.IsNull(await GEOHelper.GetDistanceBetweenFeaturesAsync(geoOntology,
-            new RDFResource("ex:milanFT"), new RDFResource("ex:romeFT2")));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT")), new OWLNamedIndividual(new RDFResource("ex:romeFT2"))));
 
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async() => await GEOHelper.GetDistanceBetweenFeaturesAsync(null,
-            new RDFResource("ex:milanFT"), new RDFResource("ex:romeFT")));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT")), new OWLNamedIndividual(new RDFResource("ex:romeFT"))));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetDistanceBetweenFeaturesAsync(geoOntology,
-            null, new RDFResource("ex:romeFT")));
+            null, new OWLNamedIndividual(new RDFResource("ex:romeFT"))));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetDistanceBetweenFeaturesAsync(geoOntology,
-            new RDFResource("ex:milanFT"), null as RDFResource));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT")), null as OWLNamedIndividual));
     }
 
     [TestMethod]
@@ -277,46 +277,46 @@ public class GEOHelperTest
             ]
         };
         double? milanRomeDistance = await GEOHelper.GetDistanceBetweenFeaturesAsync(geoOntology,
-            new RDFResource("ex:milanFT"), new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT")), new OWLLiteral(new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
 
         Assert.IsTrue(milanRomeDistance is >= 450000 and <= 4800000); //milan-rome should be between 450km and 480km
 
         //Unexisting features
         Assert.IsNull(await GEOHelper.GetDistanceBetweenFeaturesAsync(geoOntology,
-            new RDFResource("ex:milanFT2"), new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT2")), new OWLLiteral(new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT))));
 
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetDistanceBetweenFeaturesAsync(null,
-            new RDFResource("ex:milanFT"), new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT")), new OWLLiteral(new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT))));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetDistanceBetweenFeaturesAsync(geoOntology,
-            null, new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+            null, new OWLLiteral(new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT))));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetDistanceBetweenFeaturesAsync(geoOntology,
-            new RDFResource("ex:milanFT"), null as RDFTypedLiteral));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT")), null as OWLLiteral));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetDistanceBetweenFeaturesAsync(geoOntology,
-            new RDFResource("ex:milanFT"), new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING)));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT")), new OWLLiteral(new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING))));
     }
 
     [TestMethod]
     public async Task ShouldGetDistanceBetweenLiteralsAsync()
     {
         double? milanRomeDistance = await GEOHelper.GetDistanceBetweenFeaturesAsync(
-            new RDFTypedLiteral("""<gml:Point xmlns:gml="http://www.opengis.net/gml/3.2"><gml:pos>9.19193456 45.46420722</gml:pos></gml:Point>""", RDFModelEnums.RDFDatatypes.GEOSPARQL_GML),
-            new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
+            new OWLLiteral(new RDFTypedLiteral("""<gml:Point xmlns:gml="http://www.opengis.net/gml/3.2"><gml:pos>9.19193456 45.46420722</gml:pos></gml:Point>""", RDFModelEnums.RDFDatatypes.GEOSPARQL_GML)),
+            new OWLLiteral(new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
 
         Assert.IsTrue(milanRomeDistance is >= 450000 and <= 4800000); //milan-rome should be between 450km and 480km
 
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetDistanceBetweenFeaturesAsync(
-            null, new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+            null, new OWLLiteral(new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT))));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetDistanceBetweenFeaturesAsync(
-            new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING),
-            new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+            new OWLLiteral(new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING)),
+            new OWLLiteral(new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT))));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetDistanceBetweenFeaturesAsync(
-            new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT),
+            new OWLLiteral(new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)),
             null));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetDistanceBetweenFeaturesAsync(
-            new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT),
-            new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING)));
+            new OWLLiteral(new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)),
+            new OWLLiteral(new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING))));
     }
     #endregion
 
@@ -369,19 +369,19 @@ public class GEOHelperTest
                     new OWLLiteral(new RDFTypedLiteral("LINESTRING(9.16778508 45.46481222, 9.6118352 45.68014585, 10.21423284 45.54758259)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)))
             ]
         };
-        double? milanLength = await GEOHelper.GetLengthOfFeatureAsync(geoOntology, new RDFResource("ex:milanFT"));
-        double? brebemiLength = await GEOHelper.GetLengthOfFeatureAsync(geoOntology, new RDFResource("ex:brebemiFT"));
+        double? milanLength = await GEOHelper.GetLengthOfFeatureAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:milanFT")));
+        double? brebemiLength = await GEOHelper.GetLengthOfFeatureAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:brebemiFT")));
 
         Assert.IsTrue(milanLength is >= 3000 and <= 3300); //Perimeter of milan is about 3KM
         Assert.IsTrue(brebemiLength is >= 90000 and <= 95000); //BreBeMi simplified path is about 90-95KM
 
         //Unexisting features
         Assert.IsNull(await GEOHelper.GetLengthOfFeatureAsync(geoOntology,
-            new RDFResource("ex:milanFT2")));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT2"))));
 
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetLengthOfFeatureAsync(null,
-            new RDFResource("ex:milanFT")));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT"))));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetLengthOfFeatureAsync(geoOntology,
             null));
     }
@@ -389,8 +389,8 @@ public class GEOHelperTest
     [TestMethod]
     public async Task ShouldGetLengthOfLiteralAsync()
     {
-        double? milanLength = await GEOHelper.GetLengthOfFeatureAsync(new RDFTypedLiteral("POLYGON((9.18217536 45.46819347, 9.19054385 45.46819347, 9.19054385 45.46003666, 9.18217536 45.46003666, 9.18217536 45.46819347))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
-        double ? brebemiLength = await GEOHelper.GetLengthOfFeatureAsync(new RDFTypedLiteral("LINESTRING(9.16778508 45.46481222, 9.6118352 45.68014585, 10.21423284 45.54758259)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
+        double? milanLength = await GEOHelper.GetLengthOfFeatureAsync(new OWLLiteral(new RDFTypedLiteral("POLYGON((9.18217536 45.46819347, 9.19054385 45.46819347, 9.19054385 45.46003666, 9.18217536 45.46003666, 9.18217536 45.46819347))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+        double ? brebemiLength = await GEOHelper.GetLengthOfFeatureAsync(new OWLLiteral(new RDFTypedLiteral("LINESTRING(9.16778508 45.46481222, 9.6118352 45.68014585, 10.21423284 45.54758259)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
 
         Assert.IsTrue(milanLength is >= 3000 and <= 3300); //Perimeter of milan is about 3KM
         Assert.IsTrue(brebemiLength is >= 90000 and <= 95000); //BreBeMi simplified path is about 90-95KM
@@ -399,7 +399,7 @@ public class GEOHelperTest
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetLengthOfFeatureAsync(
             null));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetLengthOfFeatureAsync(
-            new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING)));
+            new OWLLiteral(new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING))));
     }
 
     [TestMethod]
@@ -450,19 +450,19 @@ public class GEOHelperTest
                     new OWLLiteral(new RDFTypedLiteral("LINESTRING(9.16778508 45.46481222, 9.6118352 45.68014585, 10.21423284 45.54758259)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)))
             ]
         };
-        double? milanArea = await GEOHelper.GetAreaOfFeatureAsync(geoOntology, new RDFResource("ex:milanFT"));
-        double? brebemiArea = await GEOHelper.GetAreaOfFeatureAsync(geoOntology, new RDFResource("ex:brebemiFT"));
+        double? milanArea = await GEOHelper.GetAreaOfFeatureAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:milanFT")));
+        double? brebemiArea = await GEOHelper.GetAreaOfFeatureAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:brebemiFT")));
 
         Assert.IsTrue(milanArea is >= 590000 and <= 600000);
         Assert.AreEqual(0, brebemiArea);  //lines have no area
 
         //Unexisting features
         Assert.IsNull(await GEOHelper.GetAreaOfFeatureAsync(geoOntology,
-            new RDFResource("ex:milanFT2")));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT2"))));
 
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetAreaOfFeatureAsync(null,
-            new RDFResource("ex:milanFT")));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT"))));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetAreaOfFeatureAsync(geoOntology,
             null));
     }
@@ -470,8 +470,8 @@ public class GEOHelperTest
     [TestMethod]
     public async Task ShouldGetAreaOfLiteralAsync()
     {
-        double? milanArea = await GEOHelper.GetAreaOfFeatureAsync(new RDFTypedLiteral("POLYGON((9.18217536 45.46819347, 9.19054385 45.46819347, 9.19054385 45.46003666, 9.18217536 45.46003666, 9.18217536 45.46819347))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
-        double? brebemiArea = await GEOHelper.GetAreaOfFeatureAsync(new RDFTypedLiteral("LINESTRING(9.16778508 45.46481222, 9.6118352 45.68014585, 10.21423284 45.54758259)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
+        double? milanArea = await GEOHelper.GetAreaOfFeatureAsync(new OWLLiteral(new RDFTypedLiteral("POLYGON((9.18217536 45.46819347, 9.19054385 45.46819347, 9.19054385 45.46003666, 9.18217536 45.46003666, 9.18217536 45.46819347))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+        double? brebemiArea = await GEOHelper.GetAreaOfFeatureAsync(new OWLLiteral(new RDFTypedLiteral("LINESTRING(9.16778508 45.46481222, 9.6118352 45.68014585, 10.21423284 45.54758259)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
 
         Assert.IsTrue(milanArea is >= 590000 and <= 600000);
         Assert.AreEqual(0, brebemiArea);  //lines have no area
@@ -480,7 +480,7 @@ public class GEOHelperTest
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetAreaOfFeatureAsync(
             null));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetAreaOfFeatureAsync(
-            new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING)));
+            new OWLLiteral(new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING))));
     }
     #endregion
 
@@ -533,21 +533,21 @@ public class GEOHelperTest
                     new OWLLiteral(new RDFTypedLiteral("LINESTRING(9.16778508 45.46481222, 9.6118352 45.68014585, 10.21423284 45.54758259)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)))
             ]
         };
-        RDFTypedLiteral milanCentroid = await GEOHelper.GetCentroidOfFeatureAsync(geoOntology, new RDFResource("ex:milanFT"));
-        RDFTypedLiteral brebemiCentroid = await GEOHelper.GetCentroidOfFeatureAsync(geoOntology, new RDFResource("ex:brebemiFT"));
+        OWLLiteral milanCentroid = await GEOHelper.GetCentroidOfFeatureAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:milanFT")));
+        OWLLiteral brebemiCentroid = await GEOHelper.GetCentroidOfFeatureAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:brebemiFT")));
 
         Assert.IsNotNull(milanCentroid);
-        Assert.IsTrue(milanCentroid.Equals(new RDFTypedLiteral("POINT (9.18635964 45.46411499)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+        Assert.IsTrue(milanCentroid.GetLiteral().Equals(new RDFTypedLiteral("POINT (9.18635964 45.46411499)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
         Assert.IsNotNull(brebemiCentroid);
-        Assert.IsTrue(brebemiCentroid.Equals(new RDFTypedLiteral("POINT (9.66872097 45.59479136)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+        Assert.IsTrue(brebemiCentroid.GetLiteral().Equals(new RDFTypedLiteral("POINT (9.66872097 45.59479136)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
 
         //Unexisting features
         Assert.IsNull(await GEOHelper.GetCentroidOfFeatureAsync(geoOntology,
-            new RDFResource("ex:milanFT2")));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT2"))));
 
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetCentroidOfFeatureAsync(null,
-            new RDFResource("ex:milanFT")));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT"))));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetCentroidOfFeatureAsync(geoOntology,
             null));
     }
@@ -555,19 +555,19 @@ public class GEOHelperTest
     [TestMethod]
     public async Task ShouldGetCentroidOfLiteralAsync()
     {
-        RDFTypedLiteral milanCentroid = await GEOHelper.GetCentroidOfFeatureAsync(new RDFTypedLiteral("POLYGON((9.18217536 45.46819347, 9.19054385 45.46819347, 9.19054385 45.46003666, 9.18217536 45.46003666, 9.18217536 45.46819347))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
-        RDFTypedLiteral brebemiCentroid = await GEOHelper.GetCentroidOfFeatureAsync(new RDFTypedLiteral("LINESTRING(9.16778508 45.46481222, 9.6118352 45.68014585, 10.21423284 45.54758259)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
+        OWLLiteral milanCentroid = await GEOHelper.GetCentroidOfFeatureAsync(new OWLLiteral(new RDFTypedLiteral("POLYGON((9.18217536 45.46819347, 9.19054385 45.46819347, 9.19054385 45.46003666, 9.18217536 45.46003666, 9.18217536 45.46819347))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+        OWLLiteral brebemiCentroid = await GEOHelper.GetCentroidOfFeatureAsync(new OWLLiteral(new RDFTypedLiteral("LINESTRING(9.16778508 45.46481222, 9.6118352 45.68014585, 10.21423284 45.54758259)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
 
         Assert.IsNotNull(milanCentroid);
-        Assert.IsTrue(milanCentroid.Equals(new RDFTypedLiteral("POINT (9.18635964 45.46411499)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+        Assert.IsTrue(milanCentroid.GetLiteral().Equals(new RDFTypedLiteral("POINT (9.18635964 45.46411499)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
         Assert.IsNotNull(brebemiCentroid);
-        Assert.IsTrue(brebemiCentroid.Equals(new RDFTypedLiteral("POINT (9.66872097 45.59479136)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+        Assert.IsTrue(brebemiCentroid.GetLiteral().Equals(new RDFTypedLiteral("POINT (9.66872097 45.59479136)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
 
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetCentroidOfFeatureAsync(
             null));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetCentroidOfFeatureAsync(
-            new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING)));
+            new OWLLiteral(new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING))));
     }
     #endregion
 
@@ -620,21 +620,21 @@ public class GEOHelperTest
                     new OWLLiteral(new RDFTypedLiteral("LINESTRING(9.16778508 45.46481222, 9.6118352 45.68014585, 10.21423284 45.54758259)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)))
             ]
         };
-        RDFTypedLiteral milanBoundary = await GEOHelper.GetBoundaryOfFeatureAsync(geoOntology, new RDFResource("ex:milanFT"));
-        RDFTypedLiteral brebemiBoundary = await GEOHelper.GetBoundaryOfFeatureAsync(geoOntology, new RDFResource("ex:brebemiFT"));
+        OWLLiteral milanBoundary = await GEOHelper.GetBoundaryOfFeatureAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:milanFT")));
+        OWLLiteral brebemiBoundary = await GEOHelper.GetBoundaryOfFeatureAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:brebemiFT")));
 
         Assert.IsNotNull(milanBoundary);
-        Assert.IsTrue(milanBoundary.Equals(new RDFTypedLiteral("LINESTRING (9.18217536 45.46819347, 9.19054385 45.46819347, 9.19054385 45.46003666, 9.18217536 45.46003666, 9.18217536 45.46819347)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+        Assert.IsTrue(milanBoundary.GetLiteral().Equals(new RDFTypedLiteral("LINESTRING (9.18217536 45.46819347, 9.19054385 45.46819347, 9.19054385 45.46003666, 9.18217536 45.46003666, 9.18217536 45.46819347)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
         Assert.IsNotNull(brebemiBoundary);
-        Assert.IsTrue(brebemiBoundary.Equals(new RDFTypedLiteral("MULTIPOINT ((9.16778508 45.46481222), (10.21423284 45.54758259))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+        Assert.IsTrue(brebemiBoundary.GetLiteral().Equals(new RDFTypedLiteral("MULTIPOINT ((9.16778508 45.46481222), (10.21423284 45.54758259))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
 
         //Unexisting features
         Assert.IsNull(await GEOHelper.GetBoundaryOfFeatureAsync(geoOntology,
-            new RDFResource("ex:milanFT2")));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT2"))));
 
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetBoundaryOfFeatureAsync(null,
-            new RDFResource("ex:milanFT")));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT"))));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetBoundaryOfFeatureAsync(geoOntology,
             null));
     }
@@ -642,19 +642,19 @@ public class GEOHelperTest
     [TestMethod]
     public async Task ShouldGetBoundaryOfLiteralAsync()
     {
-        RDFTypedLiteral milanBoundary = await GEOHelper.GetBoundaryOfFeatureAsync(new RDFTypedLiteral("POLYGON((9.18217536 45.46819347, 9.19054385 45.46819347, 9.19054385 45.46003666, 9.18217536 45.46003666, 9.18217536 45.46819347))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
-        RDFTypedLiteral brebemiBoundary = await GEOHelper.GetBoundaryOfFeatureAsync(new RDFTypedLiteral("LINESTRING(9.16778508 45.46481222, 9.6118352 45.68014585, 10.21423284 45.54758259)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
+        OWLLiteral milanBoundary = await GEOHelper.GetBoundaryOfFeatureAsync(new OWLLiteral(new RDFTypedLiteral("POLYGON((9.18217536 45.46819347, 9.19054385 45.46819347, 9.19054385 45.46003666, 9.18217536 45.46003666, 9.18217536 45.46819347))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+        OWLLiteral brebemiBoundary = await GEOHelper.GetBoundaryOfFeatureAsync(new OWLLiteral(new RDFTypedLiteral("LINESTRING(9.16778508 45.46481222, 9.6118352 45.68014585, 10.21423284 45.54758259)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
 
         Assert.IsNotNull(milanBoundary);
-        Assert.IsTrue(milanBoundary.Equals(new RDFTypedLiteral("LINESTRING (9.18217536 45.46819347, 9.19054385 45.46819347, 9.19054385 45.46003666, 9.18217536 45.46003666, 9.18217536 45.46819347)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+        Assert.IsTrue(milanBoundary.GetLiteral().Equals(new RDFTypedLiteral("LINESTRING (9.18217536 45.46819347, 9.19054385 45.46819347, 9.19054385 45.46003666, 9.18217536 45.46003666, 9.18217536 45.46819347)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
         Assert.IsNotNull(brebemiBoundary);
-        Assert.IsTrue(brebemiBoundary.Equals(new RDFTypedLiteral("MULTIPOINT ((9.16778508 45.46481222), (10.21423284 45.54758259))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+        Assert.IsTrue(brebemiBoundary.GetLiteral().Equals(new RDFTypedLiteral("MULTIPOINT ((9.16778508 45.46481222), (10.21423284 45.54758259))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
 
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetBoundaryOfFeatureAsync(
             null));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetBoundaryOfFeatureAsync(
-            new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING)));
+            new OWLLiteral(new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING))));
     }
     #endregion
 
@@ -707,8 +707,8 @@ public class GEOHelperTest
                     new OWLLiteral(new RDFTypedLiteral("LINESTRING(9.16778508 45.46481222, 9.6118352 45.68014585, 10.21423284 45.54758259)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)))
             ]
         };
-        RDFTypedLiteral milanBuffer = await GEOHelper.GetBufferAroundFeatureAsync(geoOntology, new RDFResource("ex:milanFT"), 5000);
-        RDFTypedLiteral brebemiBuffer = await GEOHelper.GetBufferAroundFeatureAsync(geoOntology, new RDFResource("ex:brebemiFT"), 5000);
+        OWLLiteral milanBuffer = await GEOHelper.GetBufferAroundFeatureAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:milanFT")), 5000);
+        OWLLiteral brebemiBuffer = await GEOHelper.GetBufferAroundFeatureAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:brebemiFT")), 5000);
 
         Assert.IsNotNull(milanBuffer);
         Assert.IsTrue(milanBuffer.Value.StartsWith("POLYGON"));
@@ -717,11 +717,11 @@ public class GEOHelperTest
 
         //Unexisting features
         Assert.IsNull(await GEOHelper.GetBufferAroundFeatureAsync(geoOntology,
-            new RDFResource("ex:milanFT2"), 5000));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT2")), 5000));
 
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetBufferAroundFeatureAsync(null,
-            new RDFResource("ex:milanFT"), 5000));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT")), 5000));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetBufferAroundFeatureAsync(geoOntology,
             null, 5000));
     }
@@ -729,8 +729,8 @@ public class GEOHelperTest
     [TestMethod]
     public async Task ShouldGetBufferAroundLiteralAsync()
     {
-        RDFTypedLiteral milanBuffer = await GEOHelper.GetBufferAroundFeatureAsync(new RDFTypedLiteral("POLYGON((9.18217536 45.46819347, 9.19054385 45.46819347, 9.19054385 45.46003666, 9.18217536 45.46003666, 9.18217536 45.46819347))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT), 5000);
-        RDFTypedLiteral brebemiBuffer = await GEOHelper.GetBufferAroundFeatureAsync(new RDFTypedLiteral("LINESTRING(9.16778508 45.46481222, 9.6118352 45.68014585, 10.21423284 45.54758259)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT), 5000);
+        OWLLiteral milanBuffer = await GEOHelper.GetBufferAroundFeatureAsync(new OWLLiteral(new RDFTypedLiteral("POLYGON((9.18217536 45.46819347, 9.19054385 45.46819347, 9.19054385 45.46003666, 9.18217536 45.46003666, 9.18217536 45.46819347))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)), 5000);
+        OWLLiteral brebemiBuffer = await GEOHelper.GetBufferAroundFeatureAsync(new OWLLiteral(new RDFTypedLiteral("LINESTRING(9.16778508 45.46481222, 9.6118352 45.68014585, 10.21423284 45.54758259)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)), 5000);
 
         Assert.IsNotNull(milanBuffer);
         Assert.IsTrue(milanBuffer.Value.StartsWith("POLYGON"));
@@ -741,7 +741,7 @@ public class GEOHelperTest
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetBufferAroundFeatureAsync(
             null, 5000));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetBufferAroundFeatureAsync(
-            new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING), 5000));
+            new OWLLiteral(new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING)), 5000));
     }
     #endregion
 
@@ -794,20 +794,20 @@ public class GEOHelperTest
                     new OWLLiteral(new RDFTypedLiteral("LINESTRING(9.16778508 45.46481222, 9.6118352 45.68014585, 10.21423284 45.54758259)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)))
             ]
         };
-        RDFTypedLiteral milanConvexHull = await GEOHelper.GetConvexHullOfFeatureAsync(geoOntology, new RDFResource("ex:milanFT"));
-        RDFTypedLiteral brebemiConvexHull = await GEOHelper.GetConvexHullOfFeatureAsync(geoOntology, new RDFResource("ex:brebemiFT"));
+        OWLLiteral milanConvexHull = await GEOHelper.GetConvexHullOfFeatureAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:milanFT")));
+        OWLLiteral brebemiConvexHull = await GEOHelper.GetConvexHullOfFeatureAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:brebemiFT")));
 
         Assert.IsNotNull(milanConvexHull);
-        Assert.IsTrue(milanConvexHull.Equals(new RDFTypedLiteral("POLYGON ((9.19054385 45.46003666, 9.18217536 45.46003666, 9.18217536 45.46819347, 9.19054385 45.46819347, 9.19054385 45.46003666))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+        Assert.IsTrue(milanConvexHull.GetLiteral().Equals(new RDFTypedLiteral("POLYGON ((9.19054385 45.46003666, 9.18217536 45.46003666, 9.18217536 45.46819347, 9.19054385 45.46819347, 9.19054385 45.46003666))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
         Assert.IsNotNull(brebemiConvexHull);
-        Assert.IsTrue(brebemiConvexHull.Equals(new RDFTypedLiteral("POLYGON ((9.16778508 45.46481222, 9.6118352 45.68014585, 10.21423284 45.54758259, 9.16778508 45.46481222))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+        Assert.IsTrue(brebemiConvexHull.GetLiteral().Equals(new RDFTypedLiteral("POLYGON ((9.16778508 45.46481222, 9.6118352 45.68014585, 10.21423284 45.54758259, 9.16778508 45.46481222))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
 
         //Unexisting features
         Assert.IsNull(await GEOHelper.GetConvexHullOfFeatureAsync(geoOntology,
-            new RDFResource("ex:milanFT2")));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT2"))));
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetConvexHullOfFeatureAsync(null,
-            new RDFResource("ex:milanFT")));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT"))));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetConvexHullOfFeatureAsync(geoOntology,
             null));
     }
@@ -815,19 +815,19 @@ public class GEOHelperTest
     [TestMethod]
     public async Task ShouldGetConvexHullOfLiteralAsync()
     {
-        RDFTypedLiteral milanConvexHull = await GEOHelper.GetConvexHullOfFeatureAsync(new RDFTypedLiteral("POLYGON((9.18217536 45.46819347, 9.19054385 45.46819347, 9.19054385 45.46003666, 9.18217536 45.46003666, 9.18217536 45.46819347))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
-        RDFTypedLiteral brebemiConvexHull = await GEOHelper.GetConvexHullOfFeatureAsync(new RDFTypedLiteral("LINESTRING(9.16778508 45.46481222, 9.6118352 45.68014585, 10.21423284 45.54758259)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
+        OWLLiteral milanConvexHull = await GEOHelper.GetConvexHullOfFeatureAsync(new OWLLiteral(new RDFTypedLiteral("POLYGON((9.18217536 45.46819347, 9.19054385 45.46819347, 9.19054385 45.46003666, 9.18217536 45.46003666, 9.18217536 45.46819347))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+        OWLLiteral brebemiConvexHull = await GEOHelper.GetConvexHullOfFeatureAsync(new OWLLiteral(new RDFTypedLiteral("LINESTRING(9.16778508 45.46481222, 9.6118352 45.68014585, 10.21423284 45.54758259)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
 
         Assert.IsNotNull(milanConvexHull);
-        Assert.IsTrue(milanConvexHull.Equals(new RDFTypedLiteral("POLYGON ((9.19054385 45.46003666, 9.18217536 45.46003666, 9.18217536 45.46819347, 9.19054385 45.46819347, 9.19054385 45.46003666))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+        Assert.IsTrue(milanConvexHull.GetLiteral().Equals(new RDFTypedLiteral("POLYGON ((9.19054385 45.46003666, 9.18217536 45.46003666, 9.18217536 45.46819347, 9.19054385 45.46819347, 9.19054385 45.46003666))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
         Assert.IsNotNull(brebemiConvexHull);
-        Assert.IsTrue(brebemiConvexHull.Equals(new RDFTypedLiteral("POLYGON ((9.16778508 45.46481222, 9.6118352 45.68014585, 10.21423284 45.54758259, 9.16778508 45.46481222))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+        Assert.IsTrue(brebemiConvexHull.GetLiteral().Equals(new RDFTypedLiteral("POLYGON ((9.16778508 45.46481222, 9.6118352 45.68014585, 10.21423284 45.54758259, 9.16778508 45.46481222))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
 
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetConvexHullOfFeatureAsync(
             null));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetConvexHullOfFeatureAsync(
-            new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING)));
+            new OWLLiteral(new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING))));
     }
     #endregion
 
@@ -880,20 +880,20 @@ public class GEOHelperTest
                     new OWLLiteral(new RDFTypedLiteral("LINESTRING(9.16778508 45.46481222, 9.6118352 45.68014585, 10.21423284 45.54758259)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)))
             ]
         };
-        RDFTypedLiteral milanEnvelope = await GEOHelper.GetEnvelopeOfFeatureAsync(geoOntology, new RDFResource("ex:milanFT"));
-        RDFTypedLiteral brebemiEnvelope = await GEOHelper.GetEnvelopeOfFeatureAsync(geoOntology, new RDFResource("ex:brebemiFT"));
+        OWLLiteral milanEnvelope = await GEOHelper.GetEnvelopeOfFeatureAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:milanFT")));
+        OWLLiteral brebemiEnvelope = await GEOHelper.GetEnvelopeOfFeatureAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:brebemiFT")));
 
         Assert.IsNotNull(milanEnvelope);
-        Assert.IsTrue(milanEnvelope.Equals(new RDFTypedLiteral("POLYGON ((9.18222872 45.45969789, 9.18089846 45.46814142, 9.19049051 45.46853225, 9.19181962 45.46008861, 9.18222872 45.45969789))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+        Assert.IsTrue(milanEnvelope.GetLiteral().Equals(new RDFTypedLiteral("POLYGON ((9.18222872 45.45969789, 9.18089846 45.46814142, 9.19049051 45.46853225, 9.19181962 45.46008861, 9.18222872 45.45969789))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
         Assert.IsNotNull(brebemiEnvelope);
-        Assert.IsTrue(brebemiEnvelope.Equals(new RDFTypedLiteral("POLYGON ((9.16778508 45.46481222, 9.13666191 45.66109756, 10.19206555 45.70224787, 10.22020906 45.50567292, 9.16778508 45.46481222))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+        Assert.IsTrue(brebemiEnvelope.GetLiteral().Equals(new RDFTypedLiteral("POLYGON ((9.16778508 45.46481222, 9.13666191 45.66109756, 10.19206555 45.70224787, 10.22020906 45.50567292, 9.16778508 45.46481222))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
 
         //Unexisting features
         Assert.IsNull(await GEOHelper.GetEnvelopeOfFeatureAsync(geoOntology,
-            new RDFResource("ex:milanFT2")));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT2"))));
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetEnvelopeOfFeatureAsync(null,
-            new RDFResource("ex:milanFT")));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT"))));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetEnvelopeOfFeatureAsync(geoOntology,
             null));
     }
@@ -901,19 +901,19 @@ public class GEOHelperTest
     [TestMethod]
     public async Task ShouldGetEnvelopeOfLiteralAsync()
     {
-        RDFTypedLiteral milanEnvelope = await GEOHelper.GetEnvelopeOfFeatureAsync(new RDFTypedLiteral("POLYGON((9.18217536 45.46819347, 9.19054385 45.46819347, 9.19054385 45.46003666, 9.18217536 45.46003666, 9.18217536 45.46819347))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
-        RDFTypedLiteral brebemiEnvelope = await GEOHelper.GetEnvelopeOfFeatureAsync(new RDFTypedLiteral("LINESTRING(9.16778508 45.46481222, 9.6118352 45.68014585, 10.21423284 45.54758259)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
+        OWLLiteral milanEnvelope = await GEOHelper.GetEnvelopeOfFeatureAsync(new OWLLiteral(new RDFTypedLiteral("POLYGON((9.18217536 45.46819347, 9.19054385 45.46819347, 9.19054385 45.46003666, 9.18217536 45.46003666, 9.18217536 45.46819347))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+        OWLLiteral brebemiEnvelope = await GEOHelper.GetEnvelopeOfFeatureAsync(new OWLLiteral(new RDFTypedLiteral("LINESTRING(9.16778508 45.46481222, 9.6118352 45.68014585, 10.21423284 45.54758259)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
 
         Assert.IsNotNull(milanEnvelope);
-        Assert.IsTrue(milanEnvelope.Equals(new RDFTypedLiteral("POLYGON ((9.18222872 45.45969789, 9.18089846 45.46814142, 9.19049051 45.46853225, 9.19181962 45.46008861, 9.18222872 45.45969789))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+        Assert.IsTrue(milanEnvelope.GetLiteral().Equals(new RDFTypedLiteral("POLYGON ((9.18222872 45.45969789, 9.18089846 45.46814142, 9.19049051 45.46853225, 9.19181962 45.46008861, 9.18222872 45.45969789))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
         Assert.IsNotNull(brebemiEnvelope);
-        Assert.IsTrue(brebemiEnvelope.Equals(new RDFTypedLiteral("POLYGON ((9.16778508 45.46481222, 9.13666191 45.66109756, 10.19206555 45.70224787, 10.22020906 45.50567292, 9.16778508 45.46481222))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+        Assert.IsTrue(brebemiEnvelope.GetLiteral().Equals(new RDFTypedLiteral("POLYGON ((9.16778508 45.46481222, 9.13666191 45.66109756, 10.19206555 45.70224787, 10.22020906 45.50567292, 9.16778508 45.46481222))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
 
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetEnvelopeOfFeatureAsync(
             null));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetEnvelopeOfFeatureAsync(
-            new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING)));
+            new OWLLiteral(new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING))));
     }
     #endregion
 
@@ -982,22 +982,22 @@ public class GEOHelperTest
                     new OWLLiteral(new RDFTypedLiteral("POINT(12.79938661 41.96217718)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)))
             ]
         };
-        List<RDFResource> milanProximityFeatures = await GEOHelper.GetFeaturesNearBy(geoOntology, new RDFResource("ex:milanFT"), 480000);
-        List<RDFResource> romeProximityFeatures = await GEOHelper.GetFeaturesNearBy(geoOntology, new RDFResource("ex:romeFT"), 100000);
+        List<OWLNamedIndividual> milanProximityFeatures = await GEOHelper.GetFeaturesNearBy(geoOntology, new OWLNamedIndividual(new RDFResource("ex:milanFT")), 480000);
+        List<OWLNamedIndividual> romeProximityFeatures = await GEOHelper.GetFeaturesNearBy(geoOntology, new OWLNamedIndividual(new RDFResource("ex:romeFT")), 100000);
 
         Assert.IsNotNull(milanProximityFeatures);
-        Assert.IsTrue(milanProximityFeatures.Single().URI.Equals(new Uri("ex:romeFT")));
+        Assert.IsTrue(milanProximityFeatures.Single().GetIRI().URI.Equals(new Uri("ex:romeFT")));
         Assert.IsNotNull(romeProximityFeatures);
-        Assert.IsTrue(romeProximityFeatures.Single().URI.Equals(new Uri("ex:tivoliFT")));
+        Assert.IsTrue(romeProximityFeatures.Single().GetIRI().URI.Equals(new Uri("ex:tivoliFT")));
 
         //Unexisting features
         Assert.IsNull(await GEOHelper.GetFeaturesNearBy(geoOntology,
-            new RDFResource("ex:milanFT2"), 20000));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT2")), 20000));
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesNearBy(null,
-            new RDFResource("ex:milanFT"), 20000));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT")), 20000));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesNearBy(geoOntology,
-            null as RDFResource, 20000));
+            null as OWLNamedIndividual, 20000));
     }
 
     [TestMethod]
@@ -1048,21 +1048,21 @@ public class GEOHelperTest
                     new OWLLiteral(new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)))
             ]
         };
-        List<RDFResource> proximityFeatures = await GEOHelper.GetFeaturesNearBy(geoOntology, new RDFTypedLiteral("POINT(12.79938661 41.96217718)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT), 100000);
+        List<OWLNamedIndividual> proximityFeatures = await GEOHelper.GetFeaturesNearBy(geoOntology, new OWLLiteral(new RDFTypedLiteral("POINT(12.79938661 41.96217718)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)), 100000);
 
         Assert.IsNotNull(proximityFeatures);
-        Assert.IsTrue(proximityFeatures.Single().URI.Equals(new Uri("ex:romeFT")));
+        Assert.IsTrue(proximityFeatures.Single().GetIRI().URI.Equals(new Uri("ex:romeFT")));
 
         //Unexisting features
         Assert.IsNull(await GEOHelper.GetFeaturesNearBy(geoOntology,
-            new RDFResource("ex:milanFT2"), 20000));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT2")), 20000));
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesNearBy(null,
-            new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT), 20000));
+            new OWLLiteral(new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)), 20000));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesNearBy(geoOntology,
-            null as RDFTypedLiteral, 20000));
+            null as OWLLiteral, 20000));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesNearBy(geoOntology,
-            new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING), 20000));
+            new OWLLiteral(new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING)), 20000));
     }
     #endregion
 
@@ -1131,9 +1131,9 @@ public class GEOHelperTest
                     new OWLLiteral(new RDFTypedLiteral("POINT(12.79938661 41.96217718)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)))
             ]
         };
-        List<RDFResource> milanDirectionNorthFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new RDFResource("ex:milanFT"), GEOEnums.GeoDirections.North);
-        List<RDFResource> romeDirectionNorthFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new RDFResource("ex:romeFT"), GEOEnums.GeoDirections.North);
-        List<RDFResource> tivoliDirectionNorthFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new RDFResource("ex:tivoliFT"), GEOEnums.GeoDirections.North);
+        List<OWLNamedIndividual> milanDirectionNorthFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:milanFT")), GEOEnums.GeoDirections.North);
+        List<OWLNamedIndividual> romeDirectionNorthFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:romeFT")), GEOEnums.GeoDirections.North);
+        List<OWLNamedIndividual> tivoliDirectionNorthFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:tivoliFT")), GEOEnums.GeoDirections.North);
 
         Assert.IsNotNull(milanDirectionNorthFeatures);
         Assert.IsEmpty(milanDirectionNorthFeatures);
@@ -1144,12 +1144,12 @@ public class GEOHelperTest
 
         //Unexisting features
         Assert.IsNull(await GEOHelper.GetFeaturesDirectionAsync(geoOntology,
-            new RDFResource("ex:milanFT2"), GEOEnums.GeoDirections.North));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT2")), GEOEnums.GeoDirections.North));
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(null,
-            new RDFResource("ex:milanFT"), GEOEnums.GeoDirections.North));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT")), GEOEnums.GeoDirections.North));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(geoOntology,
-            null as RDFResource, GEOEnums.GeoDirections.North));
+            null as OWLNamedIndividual, GEOEnums.GeoDirections.North));
     }
 
     [TestMethod]
@@ -1216,9 +1216,9 @@ public class GEOHelperTest
                     new OWLLiteral(new RDFTypedLiteral("POINT(12.79938661 41.96217718)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)))
             ]
         };
-        List<RDFResource> milanDirectionNorthEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new RDFResource("ex:milanFT"), GEOEnums.GeoDirections.NorthEast);
-        List<RDFResource> romeDirectionNorthEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new RDFResource("ex:romeFT"), GEOEnums.GeoDirections.NorthEast);
-        List<RDFResource> tivoliDirectionNorthEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new RDFResource("ex:tivoliFT"), GEOEnums.GeoDirections.NorthEast);
+        List<OWLNamedIndividual> milanDirectionNorthEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:milanFT")), GEOEnums.GeoDirections.NorthEast);
+        List<OWLNamedIndividual> romeDirectionNorthEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:romeFT")), GEOEnums.GeoDirections.NorthEast);
+        List<OWLNamedIndividual> tivoliDirectionNorthEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:tivoliFT")), GEOEnums.GeoDirections.NorthEast);
 
         Assert.IsNotNull(milanDirectionNorthEastFeatures);
         Assert.IsEmpty(milanDirectionNorthEastFeatures);
@@ -1229,12 +1229,12 @@ public class GEOHelperTest
 
         //Unexisting features
         Assert.IsNull(await GEOHelper.GetFeaturesDirectionAsync(geoOntology,
-            new RDFResource("ex:milanFT2"), GEOEnums.GeoDirections.NorthEast));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT2")), GEOEnums.GeoDirections.NorthEast));
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(null,
-            new RDFResource("ex:milanFT"), GEOEnums.GeoDirections.NorthEast));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT")), GEOEnums.GeoDirections.NorthEast));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(geoOntology,
-            null as RDFResource, GEOEnums.GeoDirections.NorthEast));
+            null as OWLNamedIndividual, GEOEnums.GeoDirections.NorthEast));
     }
 
     [TestMethod]
@@ -1301,9 +1301,9 @@ public class GEOHelperTest
                     new OWLLiteral(new RDFTypedLiteral("POINT(12.79938661 41.96217718)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)))
             ]
         };
-        List<RDFResource> milanDirectionNorthWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new RDFResource("ex:milanFT"), GEOEnums.GeoDirections.NorthWest);
-        List<RDFResource> romeDirectionNorthWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new RDFResource("ex:romeFT"), GEOEnums.GeoDirections.NorthWest);
-        List<RDFResource> tivoliDirectionNorthWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new RDFResource("ex:tivoliFT"), GEOEnums.GeoDirections.NorthWest);
+        List<OWLNamedIndividual> milanDirectionNorthWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:milanFT")), GEOEnums.GeoDirections.NorthWest);
+        List<OWLNamedIndividual> romeDirectionNorthWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:romeFT")), GEOEnums.GeoDirections.NorthWest);
+        List<OWLNamedIndividual> tivoliDirectionNorthWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:tivoliFT")), GEOEnums.GeoDirections.NorthWest);
 
         Assert.IsNotNull(milanDirectionNorthWestFeatures);
         Assert.IsEmpty(milanDirectionNorthWestFeatures);
@@ -1314,12 +1314,12 @@ public class GEOHelperTest
 
         //Unexisting features
         Assert.IsNull(await GEOHelper.GetFeaturesDirectionAsync(geoOntology,
-            new RDFResource("ex:milanFT2"), GEOEnums.GeoDirections.NorthWest));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT2")), GEOEnums.GeoDirections.NorthWest));
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(null,
-            new RDFResource("ex:milanFT"), GEOEnums.GeoDirections.NorthWest));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT")), GEOEnums.GeoDirections.NorthWest));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(geoOntology,
-            null as RDFResource, GEOEnums.GeoDirections.NorthWest));
+            null as OWLNamedIndividual, GEOEnums.GeoDirections.NorthWest));
     }
 
     [TestMethod]
@@ -1386,9 +1386,9 @@ public class GEOHelperTest
                     new OWLLiteral(new RDFTypedLiteral("POINT(12.79938661 41.96217718)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)))
             ]
         };
-        List<RDFResource> milanDirectionEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new RDFResource("ex:milanFT"), GEOEnums.GeoDirections.East);
-        List<RDFResource> romeDirectionEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new RDFResource("ex:romeFT"), GEOEnums.GeoDirections.East);
-        List<RDFResource> tivoliDirectionEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new RDFResource("ex:tivoliFT"), GEOEnums.GeoDirections.East);
+        List<OWLNamedIndividual> milanDirectionEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:milanFT")), GEOEnums.GeoDirections.East);
+        List<OWLNamedIndividual> romeDirectionEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:romeFT")), GEOEnums.GeoDirections.East);
+        List<OWLNamedIndividual> tivoliDirectionEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:tivoliFT")), GEOEnums.GeoDirections.East);
 
         Assert.IsNotNull(milanDirectionEastFeatures);
         Assert.HasCount(2, milanDirectionEastFeatures);
@@ -1399,12 +1399,12 @@ public class GEOHelperTest
 
         //Unexisting features
         Assert.IsNull(await GEOHelper.GetFeaturesDirectionAsync(geoOntology,
-            new RDFResource("ex:milanFT2"), GEOEnums.GeoDirections.East));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT2")), GEOEnums.GeoDirections.East));
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(null,
-            new RDFResource("ex:milanFT"), GEOEnums.GeoDirections.East));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT")), GEOEnums.GeoDirections.East));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(geoOntology,
-            null as RDFResource, GEOEnums.GeoDirections.East));
+            null as OWLNamedIndividual, GEOEnums.GeoDirections.East));
     }
 
     [TestMethod]
@@ -1471,9 +1471,9 @@ public class GEOHelperTest
                     new OWLLiteral(new RDFTypedLiteral("POINT(12.79938661 41.96217718)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)))
             ]
         };
-        List<RDFResource> milanDirectionSouthEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new RDFResource("ex:milanFT"), GEOEnums.GeoDirections.SouthEast);
-        List<RDFResource> romeDirectionSouthEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new RDFResource("ex:romeFT"), GEOEnums.GeoDirections.SouthEast);
-        List<RDFResource> tivoliDirectionSouthEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new RDFResource("ex:tivoliFT"), GEOEnums.GeoDirections.SouthEast);
+        List<OWLNamedIndividual> milanDirectionSouthEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:milanFT")), GEOEnums.GeoDirections.SouthEast);
+        List<OWLNamedIndividual> romeDirectionSouthEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:romeFT")), GEOEnums.GeoDirections.SouthEast);
+        List<OWLNamedIndividual> tivoliDirectionSouthEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:tivoliFT")), GEOEnums.GeoDirections.SouthEast);
 
         Assert.IsNotNull(milanDirectionSouthEastFeatures);
         Assert.HasCount(2, milanDirectionSouthEastFeatures);
@@ -1484,12 +1484,12 @@ public class GEOHelperTest
 
         //Unexisting features
         Assert.IsNull(await GEOHelper.GetFeaturesDirectionAsync(geoOntology,
-            new RDFResource("ex:milanFT2"), GEOEnums.GeoDirections.SouthEast));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT2")), GEOEnums.GeoDirections.SouthEast));
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(null,
-            new RDFResource("ex:milanFT"), GEOEnums.GeoDirections.SouthEast));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT")), GEOEnums.GeoDirections.SouthEast));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(geoOntology,
-            null as RDFResource, GEOEnums.GeoDirections.East));
+            null as OWLNamedIndividual, GEOEnums.GeoDirections.East));
     }
 
     [TestMethod]
@@ -1556,9 +1556,9 @@ public class GEOHelperTest
                     new OWLLiteral(new RDFTypedLiteral("POINT(12.79938661 41.96217718)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)))
             ]
         };
-        List<RDFResource> milanDirectionWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new RDFResource("ex:milanFT"), GEOEnums.GeoDirections.West);
-        List<RDFResource> romeDirectionWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new RDFResource("ex:romeFT"), GEOEnums.GeoDirections.West);
-        List<RDFResource> tivoliDirectionWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new RDFResource("ex:tivoliFT"), GEOEnums.GeoDirections.West);
+        List<OWLNamedIndividual> milanDirectionWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:milanFT")), GEOEnums.GeoDirections.West);
+        List<OWLNamedIndividual> romeDirectionWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:romeFT")), GEOEnums.GeoDirections.West);
+        List<OWLNamedIndividual> tivoliDirectionWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:tivoliFT")), GEOEnums.GeoDirections.West);
 
         Assert.IsNotNull(milanDirectionWestFeatures);
         Assert.IsEmpty(milanDirectionWestFeatures);
@@ -1569,12 +1569,12 @@ public class GEOHelperTest
 
         //Unexisting features
         Assert.IsNull(await GEOHelper.GetFeaturesDirectionAsync(geoOntology,
-            new RDFResource("ex:milanFT2"), GEOEnums.GeoDirections.West));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT2")), GEOEnums.GeoDirections.West));
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(null,
-            new RDFResource("ex:milanFT"), GEOEnums.GeoDirections.West));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT")), GEOEnums.GeoDirections.West));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(geoOntology,
-            null as RDFResource, GEOEnums.GeoDirections.West));
+            null as OWLNamedIndividual, GEOEnums.GeoDirections.West));
     }
 
     [TestMethod]
@@ -1641,9 +1641,9 @@ public class GEOHelperTest
                     new OWLLiteral(new RDFTypedLiteral("POINT(12.79938661 41.96217718)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)))
             ]
         };
-        List<RDFResource> milanDirectionSouthWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new RDFResource("ex:milanFT"), GEOEnums.GeoDirections.SouthWest);
-        List<RDFResource> romeDirectionSouthWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new RDFResource("ex:romeFT"), GEOEnums.GeoDirections.SouthWest);
-        List<RDFResource> tivoliDirectionSouthWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new RDFResource("ex:tivoliFT"), GEOEnums.GeoDirections.SouthWest);
+        List<OWLNamedIndividual> milanDirectionSouthWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:milanFT")), GEOEnums.GeoDirections.SouthWest);
+        List<OWLNamedIndividual> romeDirectionSouthWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:romeFT")), GEOEnums.GeoDirections.SouthWest);
+        List<OWLNamedIndividual> tivoliDirectionSouthWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:tivoliFT")), GEOEnums.GeoDirections.SouthWest);
 
         Assert.IsNotNull(milanDirectionSouthWestFeatures);
         Assert.IsEmpty(milanDirectionSouthWestFeatures);
@@ -1654,12 +1654,12 @@ public class GEOHelperTest
 
         //Unexisting features
         Assert.IsNull(await GEOHelper.GetFeaturesDirectionAsync(geoOntology,
-            new RDFResource("ex:milanFT2"), GEOEnums.GeoDirections.SouthWest));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT2")), GEOEnums.GeoDirections.SouthWest));
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(null,
-            new RDFResource("ex:milanFT"), GEOEnums.GeoDirections.SouthWest));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT")), GEOEnums.GeoDirections.SouthWest));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(geoOntology,
-            null as RDFResource, GEOEnums.GeoDirections.SouthWest));
+            null as OWLNamedIndividual, GEOEnums.GeoDirections.SouthWest));
     }
 
     [TestMethod]
@@ -1726,9 +1726,9 @@ public class GEOHelperTest
                     new OWLLiteral(new RDFTypedLiteral("POINT(12.79938661 41.96217718)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)))
             ]
         };
-        List<RDFResource> milanDirectionSouthFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new RDFResource("ex:milanFT"), GEOEnums.GeoDirections.South);
-        List<RDFResource> romeDirectionSouthFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new RDFResource("ex:romeFT"), GEOEnums.GeoDirections.South);
-        List<RDFResource> tivoliDirectionSouthFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new RDFResource("ex:tivoliFT"), GEOEnums.GeoDirections.South);
+        List<OWLNamedIndividual> milanDirectionSouthFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:milanFT")), GEOEnums.GeoDirections.South);
+        List<OWLNamedIndividual> romeDirectionSouthFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:romeFT")), GEOEnums.GeoDirections.South);
+        List<OWLNamedIndividual> tivoliDirectionSouthFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:tivoliFT")), GEOEnums.GeoDirections.South);
 
         Assert.IsNotNull(milanDirectionSouthFeatures);
         Assert.HasCount(2, milanDirectionSouthFeatures);
@@ -1739,20 +1739,20 @@ public class GEOHelperTest
 
         //Unexisting features
         Assert.IsNull(await GEOHelper.GetFeaturesDirectionAsync(geoOntology,
-            new RDFResource("ex:milanFT2"), GEOEnums.GeoDirections.South));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT2")), GEOEnums.GeoDirections.South));
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(null,
-            new RDFResource("ex:milanFT"), GEOEnums.GeoDirections.South));
+            new OWLNamedIndividual(new RDFResource("ex:milanFT")), GEOEnums.GeoDirections.South));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(geoOntology,
-            null as RDFResource, GEOEnums.GeoDirections.South));
+            null as OWLNamedIndividual, GEOEnums.GeoDirections.South));
     }
 
     [TestMethod]
     public async Task ShouldGetFeaturesNorthDirectionOfLiteralAsync()
     {
-        RDFTypedLiteral milanTL = new RDFTypedLiteral("POINT(9.188540 45.464664)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT);
-        RDFTypedLiteral romeTL = new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT);
-        RDFTypedLiteral tivoliTL = new RDFTypedLiteral("POINT(12.79938661 41.96217718)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT);
+        OWLLiteral milanTL = new OWLLiteral(new RDFTypedLiteral("POINT(9.188540 45.464664)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
+        OWLLiteral romeTL = new OWLLiteral(new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
+        OWLLiteral tivoliTL = new OWLLiteral(new RDFTypedLiteral("POINT(12.79938661 41.96217718)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
         OWLOntology geoOntology = new OWLOntology(new Uri("ex:geoOnt"))
         {
             DeclarationAxioms = [
@@ -1803,20 +1803,20 @@ public class GEOHelperTest
                 new OWLDataPropertyAssertion(
                     new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
                     new OWLNamedIndividual(new RDFResource("ex:milanGM")),
-                    new OWLLiteral(milanTL)),
+                    milanTL),
                 new OWLDataPropertyAssertion(
                     new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
                     new OWLNamedIndividual(new RDFResource("ex:romeGM")),
-                    new OWLLiteral(romeTL)),
+                    romeTL),
                 new OWLDataPropertyAssertion(
                     new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
                     new OWLNamedIndividual(new RDFResource("ex:tivoliGM")),
-                    new OWLLiteral(tivoliTL))
+                    tivoliTL)
             ]
         };
-        List<RDFResource> milanDirectionNorthFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, milanTL, GEOEnums.GeoDirections.North);
-        List<RDFResource> romeDirectionNorthFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, romeTL, GEOEnums.GeoDirections.North);
-        List<RDFResource> tivoliDirectionNorthFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, tivoliTL, GEOEnums.GeoDirections.North);
+        List<OWLNamedIndividual> milanDirectionNorthFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, milanTL, GEOEnums.GeoDirections.North);
+        List<OWLNamedIndividual> romeDirectionNorthFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, romeTL, GEOEnums.GeoDirections.North);
+        List<OWLNamedIndividual> tivoliDirectionNorthFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, tivoliTL, GEOEnums.GeoDirections.North);
 
         Assert.IsNotNull(milanDirectionNorthFeatures);
         Assert.IsEmpty(milanDirectionNorthFeatures);
@@ -1829,15 +1829,15 @@ public class GEOHelperTest
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(null,
             milanTL, GEOEnums.GeoDirections.North));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(geoOntology,
-            null as RDFTypedLiteral, GEOEnums.GeoDirections.North));
+            null as OWLLiteral, GEOEnums.GeoDirections.North));
     }
 
     [TestMethod]
     public async Task ShouldGetFeaturesNorthEastDirectionOfLiteralAsync()
     {
-        RDFTypedLiteral milanTL = new RDFTypedLiteral("POINT(9.188540 45.464664)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT);
-        RDFTypedLiteral romeTL = new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT);
-        RDFTypedLiteral tivoliTL = new RDFTypedLiteral("POINT(12.79938661 41.96217718)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT);
+        OWLLiteral milanTL = new OWLLiteral(new RDFTypedLiteral("POINT(9.188540 45.464664)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
+        OWLLiteral romeTL = new OWLLiteral(new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
+        OWLLiteral tivoliTL = new OWLLiteral(new RDFTypedLiteral("POINT(12.79938661 41.96217718)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
         OWLOntology geoOntology = new OWLOntology(new Uri("ex:geoOnt"))
         {
             DeclarationAxioms = [
@@ -1888,20 +1888,20 @@ public class GEOHelperTest
                 new OWLDataPropertyAssertion(
                     new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
                     new OWLNamedIndividual(new RDFResource("ex:milanGM")),
-                    new OWLLiteral(milanTL)),
+                    milanTL),
                 new OWLDataPropertyAssertion(
                     new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
                     new OWLNamedIndividual(new RDFResource("ex:romeGM")),
-                    new OWLLiteral(romeTL)),
+                    romeTL),
                 new OWLDataPropertyAssertion(
                     new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
                     new OWLNamedIndividual(new RDFResource("ex:tivoliGM")),
-                    new OWLLiteral(tivoliTL))
+                    tivoliTL)
             ]
         };
-        List<RDFResource> milanDirectionNorthEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, milanTL, GEOEnums.GeoDirections.NorthEast);
-        List<RDFResource> romeDirectionNorthEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, romeTL, GEOEnums.GeoDirections.NorthEast);
-        List<RDFResource> tivoliDirectionNorthEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, tivoliTL, GEOEnums.GeoDirections.NorthEast);
+        List<OWLNamedIndividual> milanDirectionNorthEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, milanTL, GEOEnums.GeoDirections.NorthEast);
+        List<OWLNamedIndividual> romeDirectionNorthEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, romeTL, GEOEnums.GeoDirections.NorthEast);
+        List<OWLNamedIndividual> tivoliDirectionNorthEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, tivoliTL, GEOEnums.GeoDirections.NorthEast);
 
         Assert.IsNotNull(milanDirectionNorthEastFeatures);
         Assert.IsEmpty(milanDirectionNorthEastFeatures);
@@ -1914,15 +1914,15 @@ public class GEOHelperTest
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(null,
             milanTL, GEOEnums.GeoDirections.NorthEast));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(geoOntology,
-            null as RDFTypedLiteral, GEOEnums.GeoDirections.NorthEast));
+            null as OWLLiteral, GEOEnums.GeoDirections.NorthEast));
     }
 
     [TestMethod]
     public async Task ShouldGetFeaturesNorthWestDirectionOfLiteralAsync()
     {
-        RDFTypedLiteral milanTL = new RDFTypedLiteral("POINT(9.188540 45.464664)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT);
-        RDFTypedLiteral romeTL = new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT);
-        RDFTypedLiteral tivoliTL = new RDFTypedLiteral("POINT(12.79938661 41.96217718)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT);
+        OWLLiteral milanTL = new OWLLiteral(new RDFTypedLiteral("POINT(9.188540 45.464664)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
+        OWLLiteral romeTL = new OWLLiteral(new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
+        OWLLiteral tivoliTL = new OWLLiteral(new RDFTypedLiteral("POINT(12.79938661 41.96217718)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
         OWLOntology geoOntology = new OWLOntology(new Uri("ex:geoOnt"))
         {
             DeclarationAxioms = [
@@ -1973,20 +1973,20 @@ public class GEOHelperTest
                 new OWLDataPropertyAssertion(
                     new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
                     new OWLNamedIndividual(new RDFResource("ex:milanGM")),
-                    new OWLLiteral(milanTL)),
+                    milanTL),
                 new OWLDataPropertyAssertion(
                     new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
                     new OWLNamedIndividual(new RDFResource("ex:romeGM")),
-                    new OWLLiteral(romeTL)),
+                    romeTL),
                 new OWLDataPropertyAssertion(
                     new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
                     new OWLNamedIndividual(new RDFResource("ex:tivoliGM")),
-                    new OWLLiteral(tivoliTL))
+                    tivoliTL)
             ]
         };
-        List<RDFResource> milanDirectionNorthWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, milanTL, GEOEnums.GeoDirections.NorthWest);
-        List<RDFResource> romeDirectionNorthWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, romeTL, GEOEnums.GeoDirections.NorthWest);
-        List<RDFResource> tivoliDirectionNorthWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, tivoliTL, GEOEnums.GeoDirections.NorthWest);
+        List<OWLNamedIndividual> milanDirectionNorthWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, milanTL, GEOEnums.GeoDirections.NorthWest);
+        List<OWLNamedIndividual> romeDirectionNorthWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, romeTL, GEOEnums.GeoDirections.NorthWest);
+        List<OWLNamedIndividual> tivoliDirectionNorthWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, tivoliTL, GEOEnums.GeoDirections.NorthWest);
 
         Assert.IsNotNull(milanDirectionNorthWestFeatures);
         Assert.IsEmpty(milanDirectionNorthWestFeatures);
@@ -1999,15 +1999,15 @@ public class GEOHelperTest
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(null,
             milanTL, GEOEnums.GeoDirections.NorthWest));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(geoOntology,
-            null as RDFTypedLiteral, GEOEnums.GeoDirections.NorthWest));
+            null as OWLLiteral, GEOEnums.GeoDirections.NorthWest));
     }
 
     [TestMethod]
     public async Task ShouldGetFeaturesEastDirectionOfLiteralAsync()
     {
-        RDFTypedLiteral milanTL = new RDFTypedLiteral("POINT(9.188540 45.464664)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT);
-        RDFTypedLiteral romeTL = new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT);
-        RDFTypedLiteral tivoliTL = new RDFTypedLiteral("POINT(12.79938661 41.96217718)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT);
+        OWLLiteral milanTL = new OWLLiteral(new RDFTypedLiteral("POINT(9.188540 45.464664)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
+        OWLLiteral romeTL = new OWLLiteral(new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
+        OWLLiteral tivoliTL = new OWLLiteral(new RDFTypedLiteral("POINT(12.79938661 41.96217718)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
         OWLOntology geoOntology = new OWLOntology(new Uri("ex:geoOnt"))
         {
             DeclarationAxioms = [
@@ -2058,20 +2058,20 @@ public class GEOHelperTest
                 new OWLDataPropertyAssertion(
                     new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
                     new OWLNamedIndividual(new RDFResource("ex:milanGM")),
-                    new OWLLiteral(milanTL)),
+                    milanTL),
                 new OWLDataPropertyAssertion(
                     new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
                     new OWLNamedIndividual(new RDFResource("ex:romeGM")),
-                    new OWLLiteral(romeTL)),
+                    romeTL),
                 new OWLDataPropertyAssertion(
                     new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
                     new OWLNamedIndividual(new RDFResource("ex:tivoliGM")),
-                    new OWLLiteral(tivoliTL))
+                    tivoliTL)
             ]
         };
-        List<RDFResource> milanDirectionEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, milanTL, GEOEnums.GeoDirections.East);
-        List<RDFResource> romeDirectionEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, romeTL, GEOEnums.GeoDirections.East);
-        List<RDFResource> tivoliDirectionEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, tivoliTL, GEOEnums.GeoDirections.East);
+        List<OWLNamedIndividual> milanDirectionEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, milanTL, GEOEnums.GeoDirections.East);
+        List<OWLNamedIndividual> romeDirectionEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, romeTL, GEOEnums.GeoDirections.East);
+        List<OWLNamedIndividual> tivoliDirectionEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, tivoliTL, GEOEnums.GeoDirections.East);
 
         Assert.IsNotNull(milanDirectionEastFeatures);
         Assert.HasCount(2, milanDirectionEastFeatures);
@@ -2084,15 +2084,15 @@ public class GEOHelperTest
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(null,
             milanTL, GEOEnums.GeoDirections.East));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(geoOntology,
-            null as RDFTypedLiteral, GEOEnums.GeoDirections.East));
+            null as OWLLiteral, GEOEnums.GeoDirections.East));
     }
 
     [TestMethod]
     public async Task ShouldGetFeaturesSouthEastDirectionOfLiteralAsync()
     {
-        RDFTypedLiteral milanTL = new RDFTypedLiteral("POINT(9.188540 45.464664)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT);
-        RDFTypedLiteral romeTL = new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT);
-        RDFTypedLiteral tivoliTL = new RDFTypedLiteral("POINT(12.79938661 41.96217718)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT);
+        OWLLiteral milanTL = new OWLLiteral(new RDFTypedLiteral("POINT(9.188540 45.464664)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
+        OWLLiteral romeTL = new OWLLiteral(new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
+        OWLLiteral tivoliTL = new OWLLiteral(new RDFTypedLiteral("POINT(12.79938661 41.96217718)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
         OWLOntology geoOntology = new OWLOntology(new Uri("ex:geoOnt"))
         {
             DeclarationAxioms = [
@@ -2143,20 +2143,20 @@ public class GEOHelperTest
                 new OWLDataPropertyAssertion(
                     new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
                     new OWLNamedIndividual(new RDFResource("ex:milanGM")),
-                    new OWLLiteral(milanTL)),
+                    milanTL),
                 new OWLDataPropertyAssertion(
                     new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
                     new OWLNamedIndividual(new RDFResource("ex:romeGM")),
-                    new OWLLiteral(romeTL)),
+                    romeTL),
                 new OWLDataPropertyAssertion(
                     new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
                     new OWLNamedIndividual(new RDFResource("ex:tivoliGM")),
-                    new OWLLiteral(tivoliTL))
+                    tivoliTL)
             ]
         };
-        List<RDFResource> milanDirectionSouthEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, milanTL, GEOEnums.GeoDirections.SouthEast);
-        List<RDFResource> romeDirectionSouthEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, romeTL, GEOEnums.GeoDirections.SouthEast);
-        List<RDFResource> tivoliDirectionSouthEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, tivoliTL, GEOEnums.GeoDirections.SouthEast);
+        List<OWLNamedIndividual> milanDirectionSouthEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, milanTL, GEOEnums.GeoDirections.SouthEast);
+        List<OWLNamedIndividual> romeDirectionSouthEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, romeTL, GEOEnums.GeoDirections.SouthEast);
+        List<OWLNamedIndividual> tivoliDirectionSouthEastFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, tivoliTL, GEOEnums.GeoDirections.SouthEast);
 
         Assert.IsNotNull(milanDirectionSouthEastFeatures);
         Assert.HasCount(2, milanDirectionSouthEastFeatures);
@@ -2169,15 +2169,15 @@ public class GEOHelperTest
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(null,
             milanTL, GEOEnums.GeoDirections.SouthEast));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(geoOntology,
-            null as RDFTypedLiteral, GEOEnums.GeoDirections.SouthEast));
+            null as OWLLiteral, GEOEnums.GeoDirections.SouthEast));
     }
 
     [TestMethod]
     public async Task ShouldGetFeaturesWestDirectionOfLiteralAsync()
     {
-        RDFTypedLiteral milanTL = new RDFTypedLiteral("POINT(9.188540 45.464664)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT);
-        RDFTypedLiteral romeTL = new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT);
-        RDFTypedLiteral tivoliTL = new RDFTypedLiteral("POINT(12.79938661 41.96217718)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT);
+        OWLLiteral milanTL = new OWLLiteral(new RDFTypedLiteral("POINT(9.188540 45.464664)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
+        OWLLiteral romeTL = new OWLLiteral(new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
+        OWLLiteral tivoliTL = new OWLLiteral(new RDFTypedLiteral("POINT(12.79938661 41.96217718)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
         OWLOntology geoOntology = new OWLOntology(new Uri("ex:geoOnt"))
         {
             DeclarationAxioms = [
@@ -2228,20 +2228,20 @@ public class GEOHelperTest
                 new OWLDataPropertyAssertion(
                     new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
                     new OWLNamedIndividual(new RDFResource("ex:milanGM")),
-                    new OWLLiteral(milanTL)),
+                    milanTL),
                 new OWLDataPropertyAssertion(
                     new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
                     new OWLNamedIndividual(new RDFResource("ex:romeGM")),
-                    new OWLLiteral(romeTL)),
+                    romeTL),
                 new OWLDataPropertyAssertion(
                     new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
                     new OWLNamedIndividual(new RDFResource("ex:tivoliGM")),
-                    new OWLLiteral(tivoliTL))
+                    tivoliTL)
             ]
         };
-        List<RDFResource> milanDirectionWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, milanTL, GEOEnums.GeoDirections.West);
-        List<RDFResource> romeDirectionWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, romeTL, GEOEnums.GeoDirections.West);
-        List<RDFResource> tivoliDirectionWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, tivoliTL, GEOEnums.GeoDirections.West);
+        List<OWLNamedIndividual> milanDirectionWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, milanTL, GEOEnums.GeoDirections.West);
+        List<OWLNamedIndividual> romeDirectionWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, romeTL, GEOEnums.GeoDirections.West);
+        List<OWLNamedIndividual> tivoliDirectionWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, tivoliTL, GEOEnums.GeoDirections.West);
 
         Assert.IsNotNull(milanDirectionWestFeatures);
         Assert.IsEmpty(milanDirectionWestFeatures);
@@ -2254,15 +2254,15 @@ public class GEOHelperTest
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(null,
             milanTL, GEOEnums.GeoDirections.West));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(geoOntology,
-            null as RDFTypedLiteral, GEOEnums.GeoDirections.West));
+            null as OWLLiteral, GEOEnums.GeoDirections.West));
     }
 
     [TestMethod]
     public async Task ShouldGetFeaturesSouthWestDirectionOfLiteralAsync()
     {
-        RDFTypedLiteral milanTL = new RDFTypedLiteral("POINT(9.188540 45.464664)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT);
-        RDFTypedLiteral romeTL = new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT);
-        RDFTypedLiteral tivoliTL = new RDFTypedLiteral("POINT(12.79938661 41.96217718)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT);
+        OWLLiteral milanTL = new OWLLiteral(new RDFTypedLiteral("POINT(9.188540 45.464664)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
+        OWLLiteral romeTL = new OWLLiteral(new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
+        OWLLiteral tivoliTL = new OWLLiteral(new RDFTypedLiteral("POINT(12.79938661 41.96217718)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
         OWLOntology geoOntology = new OWLOntology(new Uri("ex:geoOnt"))
         {
             DeclarationAxioms = [
@@ -2313,20 +2313,20 @@ public class GEOHelperTest
                 new OWLDataPropertyAssertion(
                     new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
                     new OWLNamedIndividual(new RDFResource("ex:milanGM")),
-                    new OWLLiteral(milanTL)),
+                    milanTL),
                 new OWLDataPropertyAssertion(
                     new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
                     new OWLNamedIndividual(new RDFResource("ex:romeGM")),
-                    new OWLLiteral(romeTL)),
+                    romeTL),
                 new OWLDataPropertyAssertion(
                     new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
                     new OWLNamedIndividual(new RDFResource("ex:tivoliGM")),
-                    new OWLLiteral(tivoliTL))
+                    tivoliTL)
             ]
         };
-        List<RDFResource> milanDirectionSouthWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, milanTL, GEOEnums.GeoDirections.SouthWest);
-        List<RDFResource> romeDirectionSouthWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, romeTL, GEOEnums.GeoDirections.SouthWest);
-        List<RDFResource> tivoliDirectionSouthWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, tivoliTL, GEOEnums.GeoDirections.SouthWest);
+        List<OWLNamedIndividual> milanDirectionSouthWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, milanTL, GEOEnums.GeoDirections.SouthWest);
+        List<OWLNamedIndividual> romeDirectionSouthWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, romeTL, GEOEnums.GeoDirections.SouthWest);
+        List<OWLNamedIndividual> tivoliDirectionSouthWestFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, tivoliTL, GEOEnums.GeoDirections.SouthWest);
 
         Assert.IsNotNull(milanDirectionSouthWestFeatures);
         Assert.IsEmpty(milanDirectionSouthWestFeatures);
@@ -2339,15 +2339,15 @@ public class GEOHelperTest
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(null,
             milanTL, GEOEnums.GeoDirections.SouthWest));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(geoOntology,
-            null as RDFTypedLiteral, GEOEnums.GeoDirections.SouthWest));
+            null as OWLLiteral, GEOEnums.GeoDirections.SouthWest));
     }
 
     [TestMethod]
     public async Task ShouldGetFeaturesSouthDirectionOfLiteralAsync()
     {
-        RDFTypedLiteral milanTL = new RDFTypedLiteral("POINT(9.188540 45.464664)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT);
-        RDFTypedLiteral romeTL = new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT);
-        RDFTypedLiteral tivoliTL = new RDFTypedLiteral("POINT(12.79938661 41.96217718)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT);
+        OWLLiteral milanTL = new OWLLiteral(new RDFTypedLiteral("POINT(9.188540 45.464664)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
+        OWLLiteral romeTL = new OWLLiteral(new RDFTypedLiteral("POINT(12.496365 41.902782)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
+        OWLLiteral tivoliTL = new OWLLiteral(new RDFTypedLiteral("POINT(12.79938661 41.96217718)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
         OWLOntology geoOntology = new OWLOntology(new Uri("ex:geoOnt"))
         {
             DeclarationAxioms = [
@@ -2398,20 +2398,20 @@ public class GEOHelperTest
                 new OWLDataPropertyAssertion(
                     new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
                     new OWLNamedIndividual(new RDFResource("ex:milanGM")),
-                    new OWLLiteral(milanTL)),
+                    milanTL),
                 new OWLDataPropertyAssertion(
                     new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
                     new OWLNamedIndividual(new RDFResource("ex:romeGM")),
-                    new OWLLiteral(romeTL)),
+                    romeTL),
                 new OWLDataPropertyAssertion(
                     new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
                     new OWLNamedIndividual(new RDFResource("ex:tivoliGM")),
-                    new OWLLiteral(tivoliTL))
+                    tivoliTL)
             ]
         };
-        List<RDFResource> milanDirectionSouthFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, milanTL, GEOEnums.GeoDirections.South);
-        List<RDFResource> romeDirectionSouthFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, romeTL, GEOEnums.GeoDirections.South);
-        List<RDFResource> tivoliDirectionSouthFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, tivoliTL, GEOEnums.GeoDirections.South);
+        List<OWLNamedIndividual> milanDirectionSouthFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, milanTL, GEOEnums.GeoDirections.South);
+        List<OWLNamedIndividual> romeDirectionSouthFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, romeTL, GEOEnums.GeoDirections.South);
+        List<OWLNamedIndividual> tivoliDirectionSouthFeatures = await GEOHelper.GetFeaturesDirectionAsync(geoOntology, tivoliTL, GEOEnums.GeoDirections.South);
 
         Assert.IsNotNull(milanDirectionSouthFeatures);
         Assert.HasCount(2, milanDirectionSouthFeatures);
@@ -2424,7 +2424,7 @@ public class GEOHelperTest
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(null,
             milanTL, GEOEnums.GeoDirections.South));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesDirectionAsync(geoOntology,
-            null as RDFTypedLiteral, GEOEnums.GeoDirections.South));
+            null as OWLLiteral, GEOEnums.GeoDirections.South));
     }
     #endregion
 
@@ -2509,21 +2509,21 @@ public class GEOHelperTest
                     new OWLLiteral(new RDFTypedLiteral("POLYGON((11.270306098327575 45.4078781070719, 10.992901313171325 45.432939821462234, 10.866558539733825 45.338418378714074, 11.270306098327575 45.4078781070719))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)))
             ]
         };
-        List<RDFResource> crossedByPoRiver = await GEOHelper.GetFeaturesCrossedByAsync(geoOntology, new RDFResource("ex:PoFT"));
+        List<OWLNamedIndividual> crossedByPoRiver = await GEOHelper.GetFeaturesCrossedByAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:PoFT")));
 
         Assert.IsNotNull(crossedByPoRiver);
         Assert.HasCount(2, crossedByPoRiver);
-        Assert.IsTrue(crossedByPoRiver.Any(ft => ft.Equals(new RDFResource("ex:MontagnanaCentoFT"))));
-        Assert.IsTrue(crossedByPoRiver.Any(ft => ft.Equals(new RDFResource("ex:NogaraPortoMaggioreFT"))));
+        Assert.IsTrue(crossedByPoRiver.Any(ft => ft.GetIRI().Equals(new RDFResource("ex:MontagnanaCentoFT"))));
+        Assert.IsTrue(crossedByPoRiver.Any(ft => ft.GetIRI().Equals(new RDFResource("ex:NogaraPortoMaggioreFT"))));
 
         //Unexisting features
         Assert.IsNull(await GEOHelper.GetFeaturesCrossedByAsync(geoOntology,
-            new RDFResource("ex:PoFT2")));
+            new OWLNamedIndividual(new RDFResource("ex:PoFT2"))));
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesCrossedByAsync(null,
-            new RDFResource("ex:PoFT")));
+            new OWLNamedIndividual(new RDFResource("ex:PoFT"))));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesCrossedByAsync(geoOntology,
-            null as RDFResource));
+            null as OWLNamedIndividual));
     }
 
     [TestMethod]
@@ -2590,20 +2590,20 @@ public class GEOHelperTest
                     new OWLLiteral(new RDFTypedLiteral("POLYGON((11.270306098327575 45.4078781070719, 10.992901313171325 45.432939821462234, 10.866558539733825 45.338418378714074, 11.270306098327575 45.4078781070719))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)))
             ]
         };
-        List<RDFResource> crossedByPoRiver = await GEOHelper.GetFeaturesCrossedByAsync(geoOntology, new RDFTypedLiteral("LINESTRING(11.001141059265075 45.06554633935097, 11.058819281921325 45.036440377586516, 11.127483832702575 45.05972633195962, 11.262066352233825 45.05002500301712, 11.421368110046325 44.960695556664774, 11.605389106140075 44.89068838827955, 11.814129340515075 44.97624111890936, 12.069561469421325 44.98012685115769)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
+        List<OWLNamedIndividual> crossedByPoRiver = await GEOHelper.GetFeaturesCrossedByAsync(geoOntology, new OWLLiteral(new RDFTypedLiteral("LINESTRING(11.001141059265075 45.06554633935097, 11.058819281921325 45.036440377586516, 11.127483832702575 45.05972633195962, 11.262066352233825 45.05002500301712, 11.421368110046325 44.960695556664774, 11.605389106140075 44.89068838827955, 11.814129340515075 44.97624111890936, 12.069561469421325 44.98012685115769)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
 
         Assert.IsNotNull(crossedByPoRiver);
         Assert.HasCount(2, crossedByPoRiver);
-        Assert.IsTrue(crossedByPoRiver.Any(ft => ft.Equals(new RDFResource("ex:MontagnanaCentoFT"))));
-        Assert.IsTrue(crossedByPoRiver.Any(ft => ft.Equals(new RDFResource("ex:NogaraPortoMaggioreFT"))));
+        Assert.IsTrue(crossedByPoRiver.Any(ft => ft.GetIRI().Equals(new RDFResource("ex:MontagnanaCentoFT"))));
+        Assert.IsTrue(crossedByPoRiver.Any(ft => ft.GetIRI().Equals(new RDFResource("ex:NogaraPortoMaggioreFT"))));
 
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesCrossedByAsync(null,
-            new RDFTypedLiteral("LINESTRING(11.001141059265075 45.06554633935097, 11.058819281921325 45.036440377586516, 11.127483832702575 45.05972633195962, 11.262066352233825 45.05002500301712, 11.421368110046325 44.960695556664774, 11.605389106140075 44.89068838827955, 11.814129340515075 44.97624111890936, 12.069561469421325 44.98012685115769)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+            new OWLLiteral(new RDFTypedLiteral("LINESTRING(11.001141059265075 45.06554633935097, 11.058819281921325 45.036440377586516, 11.127483832702575 45.05972633195962, 11.262066352233825 45.05002500301712, 11.421368110046325 44.960695556664774, 11.605389106140075 44.89068838827955, 11.814129340515075 44.97624111890936, 12.069561469421325 44.98012685115769)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT))));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesCrossedByAsync(geoOntology,
-            null as RDFTypedLiteral));
+            null as OWLLiteral));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesCrossedByAsync(geoOntology,
-            new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING)));
+            new OWLLiteral(new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING))));
     }
 
     [TestMethod]
@@ -2686,21 +2686,21 @@ public class GEOHelperTest
                     new OWLLiteral(new RDFTypedLiteral("POLYGON((11.270306098327575 45.4078781070719, 10.992901313171325 45.432939821462234, 10.866558539733825 45.338418378714074, 11.270306098327575 45.4078781070719))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)))
             ]
         };
-        List<RDFResource> touchedByIseoFT = await GEOHelper.GetFeaturesTouchedByAsync(geoOntology, new RDFResource("ex:IseoFT"));
+        List<OWLNamedIndividual> touchedByIseoFT = await GEOHelper.GetFeaturesTouchedByAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:IseoFT")));
 
         Assert.IsNotNull(touchedByIseoFT);
         Assert.HasCount(2, touchedByIseoFT);
-        Assert.IsTrue(touchedByIseoFT.Any(ft => ft.Equals(new RDFResource("ex:IseoBiennoFT"))));
-        Assert.IsTrue(touchedByIseoFT.Any(ft => ft.Equals(new RDFResource("ex:IseoLevrangeFT"))));
+        Assert.IsTrue(touchedByIseoFT.Any(ft => ft.GetIRI().Equals(new RDFResource("ex:IseoBiennoFT"))));
+        Assert.IsTrue(touchedByIseoFT.Any(ft => ft.GetIRI().Equals(new RDFResource("ex:IseoLevrangeFT"))));
 
         //Unexisting features
         Assert.IsNull(await GEOHelper.GetFeaturesTouchedByAsync(geoOntology,
-            new RDFResource("ex:IseoFT2")));
+            new OWLNamedIndividual(new RDFResource("ex:IseoFT2"))));
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesTouchedByAsync(null,
-            new RDFResource("ex:IseoFT2")));
+            new OWLNamedIndividual(new RDFResource("ex:IseoFT2"))));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesTouchedByAsync(geoOntology,
-            null as RDFResource));
+            null as OWLNamedIndividual));
     }
 
     [TestMethod]
@@ -2767,20 +2767,20 @@ public class GEOHelperTest
                     new OWLLiteral(new RDFTypedLiteral("POLYGON((11.270306098327575 45.4078781070719, 10.992901313171325 45.432939821462234, 10.866558539733825 45.338418378714074, 11.270306098327575 45.4078781070719))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)))
             ]
         };
-        List<RDFResource> touchedByIseoFT = await GEOHelper.GetFeaturesTouchedByAsync(geoOntology, new RDFTypedLiteral("POINT(10.090599060058592 45.701863522304734)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
+        List<OWLNamedIndividual> touchedByIseoFT = await GEOHelper.GetFeaturesTouchedByAsync(geoOntology, new OWLLiteral(new RDFTypedLiteral("POINT(10.090599060058592 45.701863522304734)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
 
         Assert.IsNotNull(touchedByIseoFT);
         Assert.HasCount(2, touchedByIseoFT);
-        Assert.IsTrue(touchedByIseoFT.Any(ft => ft.Equals(new RDFResource("ex:IseoBiennoFT"))));
-        Assert.IsTrue(touchedByIseoFT.Any(ft => ft.Equals(new RDFResource("ex:IseoLevrangeFT"))));
+        Assert.IsTrue(touchedByIseoFT.Any(ft => ft.GetIRI().Equals(new RDFResource("ex:IseoBiennoFT"))));
+        Assert.IsTrue(touchedByIseoFT.Any(ft => ft.GetIRI().Equals(new RDFResource("ex:IseoLevrangeFT"))));
 
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesTouchedByAsync(null,
-            new RDFTypedLiteral("POINT(10.090599060058592 45.701863522304734)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+            new OWLLiteral(new RDFTypedLiteral("POINT(10.090599060058592 45.701863522304734)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT))));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesTouchedByAsync(geoOntology,
-            null as RDFTypedLiteral));
+            null as OWLLiteral));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesTouchedByAsync(geoOntology,
-            new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING)));
+            new OWLLiteral(new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING))));
     }
 
     [TestMethod]
@@ -2863,20 +2863,20 @@ public class GEOHelperTest
                     new OWLLiteral(new RDFTypedLiteral("POINT(10.090599060058592 45.701863522304734)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)))
             ]
         };
-        List<RDFResource> overlappedByBallabioCivateFT = await GEOHelper.GetFeaturesOverlappedByAsync(geoOntology, new RDFResource("ex:BallabioCivateFT"));
+        List<OWLNamedIndividual> overlappedByBallabioCivateFT = await GEOHelper.GetFeaturesOverlappedByAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:BallabioCivateFT")));
 
         Assert.IsNotNull(overlappedByBallabioCivateFT);
         Assert.HasCount(1, overlappedByBallabioCivateFT);
-        Assert.IsTrue(overlappedByBallabioCivateFT.Any(ft => ft.Equals(new RDFResource("ex:LaorcaVercuragoFT"))));
+        Assert.IsTrue(overlappedByBallabioCivateFT.Any(ft => ft.GetIRI().Equals(new RDFResource("ex:LaorcaVercuragoFT"))));
 
         //Unexisting features
         Assert.IsNull(await GEOHelper.GetFeaturesOverlappedByAsync(geoOntology,
-            new RDFResource("ex:BallabioCivateFT2")));
+            new OWLNamedIndividual(new RDFResource("ex:BallabioCivateFT2"))));
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesOverlappedByAsync(null,
-            new RDFResource("ex:BallabioCivateFT2")));
+            new OWLNamedIndividual(new RDFResource("ex:BallabioCivateFT2"))));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesOverlappedByAsync(geoOntology,
-            null as RDFResource));
+            null as OWLNamedIndividual));
     }
 
     [TestMethod]
@@ -2943,19 +2943,19 @@ public class GEOHelperTest
                     new OWLLiteral(new RDFTypedLiteral("POINT(10.090599060058592 45.701863522304734)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)))
             ]
         };
-        List<RDFResource> overlappedByBallabioCivateFT = await GEOHelper.GetFeaturesOverlappedByAsync(geoOntology, new RDFTypedLiteral("POLYGON((9.425042848892229 45.89413442236222, 9.346078615493791 45.828624093492635, 9.455255251235979 45.77932096932273, 9.425042848892229 45.89413442236222))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
+        List<OWLNamedIndividual> overlappedByBallabioCivateFT = await GEOHelper.GetFeaturesOverlappedByAsync(geoOntology, new OWLLiteral(new RDFTypedLiteral("POLYGON((9.425042848892229 45.89413442236222, 9.346078615493791 45.828624093492635, 9.455255251235979 45.77932096932273, 9.425042848892229 45.89413442236222))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
 
         Assert.IsNotNull(overlappedByBallabioCivateFT);
         Assert.HasCount(1, overlappedByBallabioCivateFT);
-        Assert.IsTrue(overlappedByBallabioCivateFT.Any(ft => ft.Equals(new RDFResource("ex:LaorcaVercuragoFT"))));
+        Assert.IsTrue(overlappedByBallabioCivateFT.Any(ft => ft.GetIRI().Equals(new RDFResource("ex:LaorcaVercuragoFT"))));
 
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesOverlappedByAsync(null,
-            new RDFTypedLiteral("POLYGON((9.425042848892229 45.89413442236222, 9.346078615493791 45.828624093492635, 9.455255251235979 45.77932096932273, 9.425042848892229 45.89413442236222))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+            new OWLLiteral(new RDFTypedLiteral("POLYGON((9.425042848892229 45.89413442236222, 9.346078615493791 45.828624093492635, 9.455255251235979 45.77932096932273, 9.425042848892229 45.89413442236222))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT))));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesOverlappedByAsync(geoOntology,
-            null as RDFTypedLiteral));
+            null as OWLLiteral));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesOverlappedByAsync(geoOntology,
-            new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING)));
+            new OWLLiteral(new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING))));
     }
 
     [TestMethod]
@@ -3038,21 +3038,21 @@ public class GEOHelperTest
                     new OWLLiteral(new RDFTypedLiteral("POINT(10.090599060058592 45.701863522304734)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)))
             ]
         };
-        List<RDFResource> overlappedByBallabioCivateFT = await GEOHelper.GetFeaturesWithinAsync(geoOntology, new RDFResource("ex:BallabioCivateFT"));
+        List<OWLNamedIndividual> overlappedByBallabioCivateFT = await GEOHelper.GetFeaturesWithinAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:BallabioCivateFT")));
 
         Assert.IsNotNull(overlappedByBallabioCivateFT);
         Assert.HasCount(2, overlappedByBallabioCivateFT);
-        Assert.IsTrue(overlappedByBallabioCivateFT.Any(ft => ft.Equals(new RDFResource("ex:BallabioPescateFT"))));
-        Assert.IsTrue(overlappedByBallabioCivateFT.Any(ft => ft.Equals(new RDFResource("ex:FornaciVillaFT"))));
+        Assert.IsTrue(overlappedByBallabioCivateFT.Any(ft => ft.GetIRI().Equals(new RDFResource("ex:BallabioPescateFT"))));
+        Assert.IsTrue(overlappedByBallabioCivateFT.Any(ft => ft.GetIRI().Equals(new RDFResource("ex:FornaciVillaFT"))));
 
         //Unexisting features
         Assert.IsNull(await GEOHelper.GetFeaturesWithinAsync(geoOntology,
-            new RDFResource("ex:BallabioCivateFT2")));
+            new OWLNamedIndividual(new RDFResource("ex:BallabioCivateFT2"))));
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesWithinAsync(null,
-            new RDFResource("ex:BallabioCivateFT2")));
+            new OWLNamedIndividual(new RDFResource("ex:BallabioCivateFT2"))));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesWithinAsync(geoOntology,
-            null as RDFResource));
+            null as OWLNamedIndividual));
     }
 
     [TestMethod]
@@ -3119,20 +3119,20 @@ public class GEOHelperTest
                     new OWLLiteral(new RDFTypedLiteral("POINT(10.090599060058592 45.701863522304734)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)))
             ]
         };
-        List<RDFResource> overlappedByBallabioCivateFT = await GEOHelper.GetFeaturesWithinAsync(geoOntology, new RDFTypedLiteral("POLYGON((9.425042848892229 45.89413442236222, 9.346078615493791 45.828624093492635, 9.455255251235979 45.77932096932273, 9.425042848892229 45.89413442236222))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
+        List<OWLNamedIndividual> overlappedByBallabioCivateFT = await GEOHelper.GetFeaturesWithinAsync(geoOntology, new OWLLiteral(new RDFTypedLiteral("POLYGON((9.425042848892229 45.89413442236222, 9.346078615493791 45.828624093492635, 9.455255251235979 45.77932096932273, 9.425042848892229 45.89413442236222))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
 
         Assert.IsNotNull(overlappedByBallabioCivateFT);
         Assert.HasCount(2, overlappedByBallabioCivateFT);
-        Assert.IsTrue(overlappedByBallabioCivateFT.Any(ft => ft.Equals(new RDFResource("ex:BallabioPescateFT"))));
-        Assert.IsTrue(overlappedByBallabioCivateFT.Any(ft => ft.Equals(new RDFResource("ex:FornaciVillaFT"))));
+        Assert.IsTrue(overlappedByBallabioCivateFT.Any(ft => ft.GetIRI().Equals(new RDFResource("ex:BallabioPescateFT"))));
+        Assert.IsTrue(overlappedByBallabioCivateFT.Any(ft => ft.GetIRI().Equals(new RDFResource("ex:FornaciVillaFT"))));
 
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesWithinAsync(null,
-            new RDFTypedLiteral("POLYGON((9.425042848892229 45.89413442236222, 9.346078615493791 45.828624093492635, 9.455255251235979 45.77932096932273, 9.425042848892229 45.89413442236222))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+            new OWLLiteral(new RDFTypedLiteral("POLYGON((9.425042848892229 45.89413442236222, 9.346078615493791 45.828624093492635, 9.455255251235979 45.77932096932273, 9.425042848892229 45.89413442236222))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT))));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesWithinAsync(geoOntology,
-            null as RDFTypedLiteral));
+            null as OWLLiteral));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesWithinAsync(geoOntology,
-            new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING)));
+            new OWLLiteral(new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING))));
     }
 
     [TestMethod]
@@ -3215,21 +3215,21 @@ public class GEOHelperTest
                     new OWLLiteral(new RDFTypedLiteral("POLYGON((11.270306098327575 45.4078781070719, 10.992901313171325 45.432939821462234, 10.866558539733825 45.338418378714074, 11.270306098327575 45.4078781070719))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)))
             ]
         };
-        List<RDFResource> intersectedByPoRiver = await GEOHelper.GetFeaturesIntersectedByAsync(geoOntology, new RDFResource("ex:PoFT"));
+        List<OWLNamedIndividual> intersectedByPoRiver = await GEOHelper.GetFeaturesIntersectedByAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:PoFT")));
 
         Assert.IsNotNull(intersectedByPoRiver);
         Assert.HasCount(2, intersectedByPoRiver);
-        Assert.IsTrue(intersectedByPoRiver.Any(ft => ft.Equals(new RDFResource("ex:MontagnanaCentoFT"))));
-        Assert.IsTrue(intersectedByPoRiver.Any(ft => ft.Equals(new RDFResource("ex:NogaraPortoMaggioreFT"))));
+        Assert.IsTrue(intersectedByPoRiver.Any(ft => ft.GetIRI().Equals(new RDFResource("ex:MontagnanaCentoFT"))));
+        Assert.IsTrue(intersectedByPoRiver.Any(ft => ft.GetIRI().Equals(new RDFResource("ex:NogaraPortoMaggioreFT"))));
 
         //Unexisting features
         Assert.IsNull(await GEOHelper.GetFeaturesIntersectedByAsync(geoOntology,
-            new RDFResource("ex:PoFT2")));
+            new OWLNamedIndividual(new RDFResource("ex:PoFT2"))));
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesIntersectedByAsync(null,
-            new RDFResource("ex:PoFT")));
+            new OWLNamedIndividual(new RDFResource("ex:PoFT"))));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesIntersectedByAsync(geoOntology,
-            null as RDFResource));
+            null as OWLNamedIndividual));
     }
 
     [TestMethod]
@@ -3296,20 +3296,20 @@ public class GEOHelperTest
                     new OWLLiteral(new RDFTypedLiteral("POLYGON((11.270306098327575 45.4078781070719, 10.992901313171325 45.432939821462234, 10.866558539733825 45.338418378714074, 11.270306098327575 45.4078781070719))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)))
             ]
         };
-        List<RDFResource> intersectedByPoRiver = await GEOHelper.GetFeaturesIntersectedByAsync(geoOntology, new RDFTypedLiteral("LINESTRING(11.001141059265075 45.06554633935097, 11.058819281921325 45.036440377586516, 11.127483832702575 45.05972633195962, 11.262066352233825 45.05002500301712, 11.421368110046325 44.960695556664774, 11.605389106140075 44.89068838827955, 11.814129340515075 44.97624111890936, 12.069561469421325 44.98012685115769)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT));
+        List<OWLNamedIndividual> intersectedByPoRiver = await GEOHelper.GetFeaturesIntersectedByAsync(geoOntology, new OWLLiteral(new RDFTypedLiteral("LINESTRING(11.001141059265075 45.06554633935097, 11.058819281921325 45.036440377586516, 11.127483832702575 45.05972633195962, 11.262066352233825 45.05002500301712, 11.421368110046325 44.960695556664774, 11.605389106140075 44.89068838827955, 11.814129340515075 44.97624111890936, 12.069561469421325 44.98012685115769)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
 
         Assert.IsNotNull(intersectedByPoRiver);
         Assert.HasCount(2, intersectedByPoRiver);
-        Assert.IsTrue(intersectedByPoRiver.Any(ft => ft.Equals(new RDFResource("ex:MontagnanaCentoFT"))));
-        Assert.IsTrue(intersectedByPoRiver.Any(ft => ft.Equals(new RDFResource("ex:NogaraPortoMaggioreFT"))));
+        Assert.IsTrue(intersectedByPoRiver.Any(ft => ft.GetIRI().Equals(new RDFResource("ex:MontagnanaCentoFT"))));
+        Assert.IsTrue(intersectedByPoRiver.Any(ft => ft.GetIRI().Equals(new RDFResource("ex:NogaraPortoMaggioreFT"))));
 
         //Input guards
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesIntersectedByAsync(null,
-            new RDFTypedLiteral("LINESTRING(11.001141059265075 45.06554633935097, 11.058819281921325 45.036440377586516, 11.127483832702575 45.05972633195962, 11.262066352233825 45.05002500301712, 11.421368110046325 44.960695556664774, 11.605389106140075 44.89068838827955, 11.814129340515075 44.97624111890936, 12.069561469421325 44.98012685115769)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+            new OWLLiteral(new RDFTypedLiteral("LINESTRING(11.001141059265075 45.06554633935097, 11.058819281921325 45.036440377586516, 11.127483832702575 45.05972633195962, 11.262066352233825 45.05002500301712, 11.421368110046325 44.960695556664774, 11.605389106140075 44.89068838827955, 11.814129340515075 44.97624111890936, 12.069561469421325 44.98012685115769)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT))));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesIntersectedByAsync(geoOntology,
-            null as RDFTypedLiteral));
+            null as OWLLiteral));
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesIntersectedByAsync(geoOntology,
-            new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING)));
+            new OWLLiteral(new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING))));
     }
 
     private static OWLOntology BuildSpatialRelationsOntology()
@@ -3373,13 +3373,13 @@ public class GEOHelperTest
     {
         OWLOntology geoOntology = BuildSpatialRelationsOntology();
 
-        Assert.IsTrue(await GEOHelper.CheckIsEqualToAsync(geoOntology, new RDFResource("ex:SquareAFT"), new RDFResource("ex:SquareA2FT")));
-        Assert.IsTrue(await GEOHelper.CheckIsEqualToAsync(geoOntology, new RDFResource("ex:SquareA2FT"), new RDFResource("ex:SquareAFT"))); //symmetric
-        Assert.IsFalse(await GEOHelper.CheckIsEqualToAsync(geoOntology, new RDFResource("ex:SquareAFT"), new RDFResource("ex:SquareBFT")));
+        Assert.IsTrue(await GEOHelper.CheckIsEqualToAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:SquareAFT")), new OWLNamedIndividual(new RDFResource("ex:SquareA2FT"))));
+        Assert.IsTrue(await GEOHelper.CheckIsEqualToAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:SquareA2FT")), new OWLNamedIndividual(new RDFResource("ex:SquareAFT")))); //symmetric
+        Assert.IsFalse(await GEOHelper.CheckIsEqualToAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:SquareAFT")), new OWLNamedIndividual(new RDFResource("ex:SquareBFT"))));
 
-        await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.CheckIsEqualToAsync(null, new RDFResource("ex:SquareAFT"), new RDFResource("ex:SquareA2FT")));
-        await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.CheckIsEqualToAsync(geoOntology, null, new RDFResource("ex:SquareA2FT")));
-        await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.CheckIsEqualToAsync(geoOntology, new RDFResource("ex:SquareAFT"), null as RDFResource));
+        await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.CheckIsEqualToAsync(null, new OWLNamedIndividual(new RDFResource("ex:SquareAFT")), new OWLNamedIndividual(new RDFResource("ex:SquareA2FT"))));
+        await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.CheckIsEqualToAsync(geoOntology, null, new OWLNamedIndividual(new RDFResource("ex:SquareA2FT"))));
+        await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.CheckIsEqualToAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:SquareAFT")), null as OWLNamedIndividual));
     }
 
     [TestMethod]
@@ -3387,9 +3387,9 @@ public class GEOHelperTest
     {
         OWLOntology geoOntology = BuildSpatialRelationsOntology();
 
-        Assert.IsTrue(await GEOHelper.CheckIsDisjointFromAsync(geoOntology, new RDFResource("ex:SquareAFT"), new RDFResource("ex:SquareEFT")));
-        Assert.IsTrue(await GEOHelper.CheckIsDisjointFromAsync(geoOntology, new RDFResource("ex:SquareEFT"), new RDFResource("ex:SquareAFT")));
-        Assert.IsFalse(await GEOHelper.CheckIsDisjointFromAsync(geoOntology, new RDFResource("ex:SquareAFT"), new RDFResource("ex:SquareBFT")));
+        Assert.IsTrue(await GEOHelper.CheckIsDisjointFromAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:SquareAFT")), new OWLNamedIndividual(new RDFResource("ex:SquareEFT"))));
+        Assert.IsTrue(await GEOHelper.CheckIsDisjointFromAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:SquareEFT")), new OWLNamedIndividual(new RDFResource("ex:SquareAFT"))));
+        Assert.IsFalse(await GEOHelper.CheckIsDisjointFromAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:SquareAFT")), new OWLNamedIndividual(new RDFResource("ex:SquareBFT"))));
     }
 
     [TestMethod]
@@ -3397,16 +3397,16 @@ public class GEOHelperTest
     {
         OWLOntology geoOntology = BuildSpatialRelationsOntology();
 
-        Assert.IsTrue(await GEOHelper.CheckIsTouchedByAsync(geoOntology, new RDFResource("ex:SquareAFT"), new RDFResource("ex:SquareBFT")));
-        Assert.IsTrue(await GEOHelper.CheckIsTouchedByAsync(geoOntology, new RDFResource("ex:SquareBFT"), new RDFResource("ex:SquareAFT"))); //symmetric
-        Assert.IsFalse(await GEOHelper.CheckIsTouchedByAsync(geoOntology, new RDFResource("ex:SquareAFT"), new RDFResource("ex:SquareEFT")));
+        Assert.IsTrue(await GEOHelper.CheckIsTouchedByAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:SquareAFT")), new OWLNamedIndividual(new RDFResource("ex:SquareBFT"))));
+        Assert.IsTrue(await GEOHelper.CheckIsTouchedByAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:SquareBFT")), new OWLNamedIndividual(new RDFResource("ex:SquareAFT")))); //symmetric
+        Assert.IsFalse(await GEOHelper.CheckIsTouchedByAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:SquareAFT")), new OWLNamedIndividual(new RDFResource("ex:SquareEFT"))));
 
         //Literal overload
-        Assert.IsTrue(await GEOHelper.CheckIsTouchedByAsync(geoOntology, new RDFResource("ex:SquareAFT"),
-            new RDFTypedLiteral("POLYGON((10 0, 10 10, 20 10, 20 0, 10 0))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+        Assert.IsTrue(await GEOHelper.CheckIsTouchedByAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:SquareAFT")),
+            new OWLLiteral(new RDFTypedLiteral("POLYGON((10 0, 10 10, 20 10, 20 0, 10 0))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT))));
 
-        await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.CheckIsTouchedByAsync(geoOntology, new RDFResource("ex:SquareAFT"), null as RDFTypedLiteral));
-        await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.CheckIsTouchedByAsync(geoOntology, new RDFResource("ex:SquareAFT"), new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING)));
+        await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.CheckIsTouchedByAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:SquareAFT")), null as OWLLiteral));
+        await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.CheckIsTouchedByAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:SquareAFT")), new OWLLiteral(new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING))));
     }
 
     [TestMethod]
@@ -3414,9 +3414,9 @@ public class GEOHelperTest
     {
         OWLOntology geoOntology = BuildSpatialRelationsOntology();
 
-        Assert.IsTrue(await GEOHelper.CheckIsCrossedByAsync(geoOntology, new RDFResource("ex:SquareAFT"), new RDFResource("ex:LineFFT")));
-        Assert.IsTrue(await GEOHelper.CheckIsCrossedByAsync(geoOntology, new RDFResource("ex:LineFFT"), new RDFResource("ex:SquareAFT"))); //symmetric
-        Assert.IsFalse(await GEOHelper.CheckIsCrossedByAsync(geoOntology, new RDFResource("ex:SquareAFT"), new RDFResource("ex:SquareEFT")));
+        Assert.IsTrue(await GEOHelper.CheckIsCrossedByAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:SquareAFT")), new OWLNamedIndividual(new RDFResource("ex:LineFFT"))));
+        Assert.IsTrue(await GEOHelper.CheckIsCrossedByAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:LineFFT")), new OWLNamedIndividual(new RDFResource("ex:SquareAFT")))); //symmetric
+        Assert.IsFalse(await GEOHelper.CheckIsCrossedByAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:SquareAFT")), new OWLNamedIndividual(new RDFResource("ex:SquareEFT"))));
     }
 
     [TestMethod]
@@ -3424,9 +3424,9 @@ public class GEOHelperTest
     {
         OWLOntology geoOntology = BuildSpatialRelationsOntology();
 
-        Assert.IsTrue(await GEOHelper.CheckIsOverlappedByAsync(geoOntology, new RDFResource("ex:SquareAFT"), new RDFResource("ex:SquareCFT")));
-        Assert.IsTrue(await GEOHelper.CheckIsOverlappedByAsync(geoOntology, new RDFResource("ex:SquareCFT"), new RDFResource("ex:SquareAFT"))); //symmetric
-        Assert.IsFalse(await GEOHelper.CheckIsOverlappedByAsync(geoOntology, new RDFResource("ex:SquareAFT"), new RDFResource("ex:SquareDFT"))); //D is within A, not overlapping
+        Assert.IsTrue(await GEOHelper.CheckIsOverlappedByAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:SquareAFT")), new OWLNamedIndividual(new RDFResource("ex:SquareCFT"))));
+        Assert.IsTrue(await GEOHelper.CheckIsOverlappedByAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:SquareCFT")), new OWLNamedIndividual(new RDFResource("ex:SquareAFT")))); //symmetric
+        Assert.IsFalse(await GEOHelper.CheckIsOverlappedByAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:SquareAFT")), new OWLNamedIndividual(new RDFResource("ex:SquareDFT")))); //D is within A, not overlapping
     }
 
     [TestMethod]
@@ -3434,9 +3434,9 @@ public class GEOHelperTest
     {
         OWLOntology geoOntology = BuildSpatialRelationsOntology();
 
-        Assert.IsTrue(await GEOHelper.CheckIsIntersectedByAsync(geoOntology, new RDFResource("ex:SquareAFT"), new RDFResource("ex:SquareBFT")));
-        Assert.IsTrue(await GEOHelper.CheckIsIntersectedByAsync(geoOntology, new RDFResource("ex:SquareAFT"), new RDFResource("ex:SquareDFT")));
-        Assert.IsFalse(await GEOHelper.CheckIsIntersectedByAsync(geoOntology, new RDFResource("ex:SquareAFT"), new RDFResource("ex:SquareEFT")));
+        Assert.IsTrue(await GEOHelper.CheckIsIntersectedByAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:SquareAFT")), new OWLNamedIndividual(new RDFResource("ex:SquareBFT"))));
+        Assert.IsTrue(await GEOHelper.CheckIsIntersectedByAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:SquareAFT")), new OWLNamedIndividual(new RDFResource("ex:SquareDFT"))));
+        Assert.IsFalse(await GEOHelper.CheckIsIntersectedByAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:SquareAFT")), new OWLNamedIndividual(new RDFResource("ex:SquareEFT"))));
     }
 
     [TestMethod]
@@ -3444,15 +3444,15 @@ public class GEOHelperTest
     {
         OWLOntology geoOntology = BuildSpatialRelationsOntology();
 
-        Assert.IsTrue(await GEOHelper.CheckIsWithinAsync(geoOntology, new RDFResource("ex:SquareDFT"), new RDFResource("ex:SquareAFT")));
-        Assert.IsFalse(await GEOHelper.CheckIsWithinAsync(geoOntology, new RDFResource("ex:SquareAFT"), new RDFResource("ex:SquareDFT"))); //not symmetric
+        Assert.IsTrue(await GEOHelper.CheckIsWithinAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:SquareDFT")), new OWLNamedIndividual(new RDFResource("ex:SquareAFT"))));
+        Assert.IsFalse(await GEOHelper.CheckIsWithinAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:SquareAFT")), new OWLNamedIndividual(new RDFResource("ex:SquareDFT")))); //not symmetric
 
-        Assert.IsTrue(await GEOHelper.CheckContainsAsync(geoOntology, new RDFResource("ex:SquareAFT"), new RDFResource("ex:SquareDFT")));
-        Assert.IsFalse(await GEOHelper.CheckContainsAsync(geoOntology, new RDFResource("ex:SquareDFT"), new RDFResource("ex:SquareAFT")));
+        Assert.IsTrue(await GEOHelper.CheckContainsAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:SquareAFT")), new OWLNamedIndividual(new RDFResource("ex:SquareDFT"))));
+        Assert.IsFalse(await GEOHelper.CheckContainsAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:SquareDFT")), new OWLNamedIndividual(new RDFResource("ex:SquareAFT"))));
 
         //Literal overload
-        Assert.IsTrue(await GEOHelper.CheckIsWithinAsync(geoOntology, new RDFResource("ex:SquareDFT"),
-            new RDFTypedLiteral("POLYGON((0 0, 0 10, 10 10, 10 0, 0 0))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+        Assert.IsTrue(await GEOHelper.CheckIsWithinAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:SquareDFT")),
+            new OWLLiteral(new RDFTypedLiteral("POLYGON((0 0, 0 10, 10 10, 10 0, 0 0))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT))));
     }
 
     [TestMethod]
@@ -3461,9 +3461,9 @@ public class GEOHelperTest
         OWLOntology geoOntology = BuildSpatialRelationsOntology();
 
         //CoveredBy/Covers are a superset of Within/Contains: whatever is strictly within also counts as coveredBy
-        Assert.IsTrue(await GEOHelper.CheckIsCoveredByAsync(geoOntology, new RDFResource("ex:SquareDFT"), new RDFResource("ex:SquareAFT")));
-        Assert.IsTrue(await GEOHelper.CheckCoversAsync(geoOntology, new RDFResource("ex:SquareAFT"), new RDFResource("ex:SquareDFT")));
-        Assert.IsFalse(await GEOHelper.CheckIsCoveredByAsync(geoOntology, new RDFResource("ex:SquareAFT"), new RDFResource("ex:SquareEFT")));
+        Assert.IsTrue(await GEOHelper.CheckIsCoveredByAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:SquareDFT")), new OWLNamedIndividual(new RDFResource("ex:SquareAFT"))));
+        Assert.IsTrue(await GEOHelper.CheckCoversAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:SquareAFT")), new OWLNamedIndividual(new RDFResource("ex:SquareDFT"))));
+        Assert.IsFalse(await GEOHelper.CheckIsCoveredByAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:SquareAFT")), new OWLNamedIndividual(new RDFResource("ex:SquareEFT"))));
     }
     #endregion
 }
