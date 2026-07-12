@@ -71,5 +71,22 @@ namespace OWLSharp.Extensions.GEO
             ConvexHull = 4,
             Envelope = 5
         }
+
+        /// <summary>
+        /// Indicates the type of pairwise topological relation requested between two spatial features
+        /// </summary>
+        internal enum GeoSpatialRelation
+        {
+            Equals = 1,
+            Disjoint = 2,
+            Touches = 3,
+            Crosses = 4,
+            Overlaps = 5,
+            Intersects = 6,
+            Within = 7,
+            Contains = 8,
+            CoveredBy = 9,
+            Covers = 10
+        }
     }
 }

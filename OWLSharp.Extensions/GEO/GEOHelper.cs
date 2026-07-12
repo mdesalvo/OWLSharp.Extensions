@@ -1254,9 +1254,235 @@ namespace OWLSharp.Extensions.GEO
         }
         #endregion
 
+        #region Analyzer (Spatial Relations)
+        /// <summary>
+        /// Checks if the given GeoSPARQL features are topologically equal.
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        public static Task<bool> CheckIsEqualToAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFResource toFeatureUri)
+            => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureUri, GEOEnums.GeoSpatialRelation.Equals);
+
+        /// <summary>
+        /// Checks if the given GeoSPARQL feature and the given GeoSPARQL literal are topologically equal.
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        public static Task<bool> CheckIsEqualToAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFTypedLiteral toFeatureLiteral)
+            => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureLiteral, GEOEnums.GeoSpatialRelation.Equals);
+
+        /// <summary>
+        /// Checks if the given GeoSPARQL features are topologically disjoint.
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        public static Task<bool> CheckIsDisjointFromAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFResource toFeatureUri)
+            => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureUri, GEOEnums.GeoSpatialRelation.Disjoint);
+
+        /// <summary>
+        /// Checks if the given GeoSPARQL feature and the given GeoSPARQL literal are topologically disjoint.
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        public static Task<bool> CheckIsDisjointFromAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFTypedLiteral toFeatureLiteral)
+            => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureLiteral, GEOEnums.GeoSpatialRelation.Disjoint);
+
+        /// <summary>
+        /// Checks if the first given GeoSPARQL feature is touched by the second given GeoSPARQL feature.
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        public static Task<bool> CheckIsTouchedByAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFResource toFeatureUri)
+            => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureUri, GEOEnums.GeoSpatialRelation.Touches);
+
+        /// <summary>
+        /// Checks if the given GeoSPARQL feature is touched by the given GeoSPARQL literal.
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        public static Task<bool> CheckIsTouchedByAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFTypedLiteral toFeatureLiteral)
+            => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureLiteral, GEOEnums.GeoSpatialRelation.Touches);
+
+        /// <summary>
+        /// Checks if the first given GeoSPARQL feature is crossed by the second given GeoSPARQL feature.
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        public static Task<bool> CheckIsCrossedByAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFResource toFeatureUri)
+            => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureUri, GEOEnums.GeoSpatialRelation.Crosses);
+
+        /// <summary>
+        /// Checks if the given GeoSPARQL feature is crossed by the given GeoSPARQL literal.
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        public static Task<bool> CheckIsCrossedByAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFTypedLiteral toFeatureLiteral)
+            => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureLiteral, GEOEnums.GeoSpatialRelation.Crosses);
+
+        /// <summary>
+        /// Checks if the first given GeoSPARQL feature is overlapped by the second given GeoSPARQL feature.
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        public static Task<bool> CheckIsOverlappedByAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFResource toFeatureUri)
+            => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureUri, GEOEnums.GeoSpatialRelation.Overlaps);
+
+        /// <summary>
+        /// Checks if the given GeoSPARQL feature is overlapped by the given GeoSPARQL literal.
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        public static Task<bool> CheckIsOverlappedByAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFTypedLiteral toFeatureLiteral)
+            => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureLiteral, GEOEnums.GeoSpatialRelation.Overlaps);
+
+        /// <summary>
+        /// Checks if the first given GeoSPARQL feature is intersected by the second given GeoSPARQL feature.
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        public static Task<bool> CheckIsIntersectedByAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFResource toFeatureUri)
+            => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureUri, GEOEnums.GeoSpatialRelation.Intersects);
+
+        /// <summary>
+        /// Checks if the given GeoSPARQL feature is intersected by the given GeoSPARQL literal.
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        public static Task<bool> CheckIsIntersectedByAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFTypedLiteral toFeatureLiteral)
+            => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureLiteral, GEOEnums.GeoSpatialRelation.Intersects);
+
+        /// <summary>
+        /// Checks if the first given GeoSPARQL feature is spatially within the second given GeoSPARQL feature.
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        public static Task<bool> CheckIsWithinAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFResource toFeatureUri)
+            => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureUri, GEOEnums.GeoSpatialRelation.Within);
+
+        /// <summary>
+        /// Checks if the given GeoSPARQL feature is spatially within the given GeoSPARQL literal.
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        public static Task<bool> CheckIsWithinAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFTypedLiteral toFeatureLiteral)
+            => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureLiteral, GEOEnums.GeoSpatialRelation.Within);
+
+        /// <summary>
+        /// Checks if the first given GeoSPARQL feature spatially contains the second given GeoSPARQL feature.
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        public static Task<bool> CheckContainsAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFResource toFeatureUri)
+            => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureUri, GEOEnums.GeoSpatialRelation.Contains);
+
+        /// <summary>
+        /// Checks if the given GeoSPARQL feature spatially contains the given GeoSPARQL literal.
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        public static Task<bool> CheckContainsAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFTypedLiteral toFeatureLiteral)
+            => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureLiteral, GEOEnums.GeoSpatialRelation.Contains);
+
+        /// <summary>
+        /// Checks if the first given GeoSPARQL feature is covered by the second given GeoSPARQL feature.
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        public static Task<bool> CheckIsCoveredByAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFResource toFeatureUri)
+            => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureUri, GEOEnums.GeoSpatialRelation.CoveredBy);
+
+        /// <summary>
+        /// Checks if the given GeoSPARQL feature is covered by the given GeoSPARQL literal.
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        public static Task<bool> CheckIsCoveredByAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFTypedLiteral toFeatureLiteral)
+            => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureLiteral, GEOEnums.GeoSpatialRelation.CoveredBy);
+
+        /// <summary>
+        /// Checks if the first given GeoSPARQL feature covers the second given GeoSPARQL feature.
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        public static Task<bool> CheckCoversAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFResource toFeatureUri)
+            => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureUri, GEOEnums.GeoSpatialRelation.Covers);
+
+        /// <summary>
+        /// Checks if the given GeoSPARQL feature covers the given GeoSPARQL literal.
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        public static Task<bool> CheckCoversAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFTypedLiteral toFeatureLiteral)
+            => CheckSpatialRelationAsync(ontology, fromFeatureUri, toFeatureLiteral, GEOEnums.GeoSpatialRelation.Covers);
+        #endregion
+
         #endregion
 
         #region Utilities
+        /// <summary>
+        /// Evaluates the given pairwise topological relation between two Azimuthal-projected geometries.
+        /// </summary>
+        internal static bool EvaluateSpatialRelation(Geometry lazFrom, Geometry lazTo, GEOEnums.GeoSpatialRelation relation)
+        {
+            switch (relation)
+            {
+                case GEOEnums.GeoSpatialRelation.Equals: return lazFrom.Equals(lazTo);
+                case GEOEnums.GeoSpatialRelation.Disjoint: return lazFrom.Disjoint(lazTo);
+                case GEOEnums.GeoSpatialRelation.Touches: return lazFrom.Touches(lazTo);
+                case GEOEnums.GeoSpatialRelation.Crosses: return lazFrom.Crosses(lazTo);
+                case GEOEnums.GeoSpatialRelation.Overlaps: return lazFrom.Overlaps(lazTo);
+                case GEOEnums.GeoSpatialRelation.Intersects: return lazFrom.Intersects(lazTo);
+                case GEOEnums.GeoSpatialRelation.Within: return lazFrom.Within(lazTo);
+                case GEOEnums.GeoSpatialRelation.Contains: return lazFrom.Contains(lazTo);
+                case GEOEnums.GeoSpatialRelation.CoveredBy: return lazFrom.CoveredBy(lazTo);
+                case GEOEnums.GeoSpatialRelation.Covers: return lazFrom.Covers(lazTo);
+                default: return false;
+            }
+        }
+
+        /// <summary>
+        /// Checks the given pairwise topological relation between the given GeoSPARQL features from the working ontology.
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        internal static async Task<bool> CheckSpatialRelationAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFResource toFeatureUri, GEOEnums.GeoSpatialRelation relation)
+        {
+            #region Guards
+            if (ontology == null)
+                throw new OWLException($"Cannot check spatial relation between features because given '{nameof(ontology)}' parameter is null");
+            if (fromFeatureUri == null)
+                throw new OWLException($"Cannot check spatial relation between features because given '{nameof(fromFeatureUri)}' parameter is null");
+            if (toFeatureUri == null)
+                throw new OWLException($"Cannot check spatial relation between features because given '{nameof(toFeatureUri)}' parameter is null");
+            #endregion
+
+            //Collect Azimuthal geometries of "From" feature
+            (Geometry, Geometry) defaultGeometryFrom = await ontology.GetDefaultGeometryOfFeatureAsync(fromFeatureUri);
+            List<(Geometry, Geometry)> geometriesFrom = await ontology.GetSecondaryGeometriesOfFeatureAsync(fromFeatureUri);
+            if (defaultGeometryFrom.Item1 != null && defaultGeometryFrom.Item2 != null)
+                geometriesFrom.Insert(0, defaultGeometryFrom);
+
+            //Collect Azimuthal geometries of "To" feature
+            (Geometry, Geometry) defaultGeometryTo = await ontology.GetDefaultGeometryOfFeatureAsync(toFeatureUri);
+            List<(Geometry, Geometry)> geometriesTo = await ontology.GetSecondaryGeometriesOfFeatureAsync(toFeatureUri);
+            if (defaultGeometryTo.Item1 != null && defaultGeometryTo.Item2 != null)
+                geometriesTo.Insert(0, defaultGeometryTo);
+
+            //A relation holds between the features if it holds between any of their (possibly multiple) geometries
+            return geometriesFrom.Any(fromGeom => geometriesTo.Any(toGeom => EvaluateSpatialRelation(fromGeom.Item2, toGeom.Item2, relation)));
+        }
+
+        /// <summary>
+        /// Checks the given pairwise topological relation between the given GeoSPARQL feature and the given GeoSPARQL literal.
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        internal static async Task<bool> CheckSpatialRelationAsync(OWLOntology ontology, RDFResource fromFeatureUri, RDFTypedLiteral toFeatureLiteral, GEOEnums.GeoSpatialRelation relation)
+        {
+            #region Guards
+            if (ontology == null)
+                throw new OWLException($"Cannot check spatial relation between features because given '{nameof(ontology)}' parameter is null");
+            if (fromFeatureUri == null)
+                throw new OWLException($"Cannot check spatial relation between features because given '{nameof(fromFeatureUri)}' parameter is null");
+            if (toFeatureLiteral == null)
+                throw new OWLException($"Cannot check spatial relation between features because given '{nameof(toFeatureLiteral)}' parameter is null");
+            if (!toFeatureLiteral.HasGeographicDatatype())
+                throw new OWLException($"Cannot check spatial relation between features because given '{nameof(toFeatureLiteral)}' parameter is not a geographic typed literal");
+            #endregion
+
+            //Collect Azimuthal geometries of "From" feature
+            (Geometry, Geometry) defaultGeometryFrom = await ontology.GetDefaultGeometryOfFeatureAsync(fromFeatureUri);
+            List<(Geometry, Geometry)> geometriesFrom = await ontology.GetSecondaryGeometriesOfFeatureAsync(fromFeatureUri);
+            if (defaultGeometryFrom.Item1 != null && defaultGeometryFrom.Item2 != null)
+                geometriesFrom.Insert(0, defaultGeometryFrom);
+
+            //Transform "To" feature into Azimuthal geometry
+            bool isWKT = toFeatureLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
+            Geometry wgs84GeometryTo = isWKT ? WKTReader.Read(toFeatureLiteral.Value) : GMLReader.Read(toFeatureLiteral.Value);
+            wgs84GeometryTo.SRID=4326;
+            Geometry lazGeometryTo = RDFGeoConverter.GetLambertAzimuthalGeometryFromWGS84(wgs84GeometryTo);
+
+            return geometriesFrom.Any(fromGeom => EvaluateSpatialRelation(fromGeom.Item2, lazGeometryTo, relation));
+        }
+
         /// <summary>
         /// Extracts all the GeoSPARQL features living in the A-BOX of the working ontology, eventually filtering the specified one.<br/>
         /// It gives a dictionary having the detected features as keys and their spatial geometries as corresponding values (both WGS84 and Azimuthal).

@@ -3311,5 +3311,159 @@ public class GEOHelperTest
         await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetFeaturesIntersectedByAsync(geoOntology,
             new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING)));
     }
+
+    private static OWLOntology BuildSpatialRelationsOntology()
+    {
+        //SquareA:  (0,0)-(0,10)-(10,10)-(10,0)          10x10 square at origin
+        //SquareA2: same geometry as SquareA              (equals SquareA)
+        //SquareB:  (10,0)-(10,10)-(20,10)-(20,0)         adjacent to SquareA, shares edge x=10 (touches SquareA)
+        //SquareC:  (5,5)-(5,15)-(15,15)-(15,5)           overlaps SquareA on [5,10]x[5,10]
+        //SquareD:  (2,2)-(2,8)-(8,8)-(8,2)               strictly inside SquareA (within/contains)
+        //SquareE:  (100,100)-(100,110)-(110,110)-(110,100) disjoint from everything
+        //LineF:    (-5,5)-(15,5)                         crosses SquareA
+        (string uri, string wkt)[] features =
+        [
+            ("ex:SquareA", "POLYGON((0 0, 0 10, 10 10, 10 0, 0 0))"),
+            ("ex:SquareA2", "POLYGON((0 0, 0 10, 10 10, 10 0, 0 0))"),
+            ("ex:SquareB", "POLYGON((10 0, 10 10, 20 10, 20 0, 10 0))"),
+            ("ex:SquareC", "POLYGON((5 5, 5 15, 15 15, 15 5, 5 5))"),
+            ("ex:SquareD", "POLYGON((2 2, 2 8, 8 8, 8 2, 2 2))"),
+            ("ex:SquareE", "POLYGON((100 100, 100 110, 110 110, 110 100, 100 100))"),
+            ("ex:LineF", "LINESTRING(-5 5, 15 5)")
+        ];
+
+        OWLOntology geoOntology = new OWLOntology(new Uri("ex:geoOnt"))
+        {
+            DeclarationAxioms =
+            [
+                new OWLDeclaration(new OWLClass(RDFVocabulary.GEOSPARQL.FEATURE)),
+                new OWLDeclaration(new OWLClass(RDFVocabulary.GEOSPARQL.GEOMETRY)),
+                new OWLDeclaration(new OWLObjectProperty(RDFVocabulary.GEOSPARQL.DEFAULT_GEOMETRY)),
+                new OWLDeclaration(new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT))
+            ],
+            AssertionAxioms = []
+        };
+
+        foreach ((string uri, string wkt) in features)
+        {
+            string ftUri = $"{uri}FT", gmUri = $"{uri}GM";
+            geoOntology.DeclarationAxioms.Add(new OWLDeclaration(new OWLNamedIndividual(new RDFResource(ftUri))));
+            geoOntology.DeclarationAxioms.Add(new OWLDeclaration(new OWLNamedIndividual(new RDFResource(gmUri))));
+            geoOntology.AssertionAxioms.Add(new OWLClassAssertion(
+                new OWLClass(RDFVocabulary.GEOSPARQL.FEATURE),
+                new OWLNamedIndividual(new RDFResource(ftUri))));
+            geoOntology.AssertionAxioms.Add(new OWLClassAssertion(
+                new OWLClass(RDFVocabulary.GEOSPARQL.GEOMETRY),
+                new OWLNamedIndividual(new RDFResource(gmUri))));
+            geoOntology.AssertionAxioms.Add(new OWLObjectPropertyAssertion(
+                new OWLObjectProperty(RDFVocabulary.GEOSPARQL.DEFAULT_GEOMETRY),
+                new OWLNamedIndividual(new RDFResource(ftUri)),
+                new OWLNamedIndividual(new RDFResource(gmUri))));
+            geoOntology.AssertionAxioms.Add(new OWLDataPropertyAssertion(
+                new OWLDataProperty(RDFVocabulary.GEOSPARQL.AS_WKT),
+                new OWLNamedIndividual(new RDFResource(gmUri)),
+                new OWLLiteral(new RDFTypedLiteral(wkt, RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT))));
+        }
+
+        return geoOntology;
+    }
+
+    [TestMethod]
+    public async Task ShouldCheckIsEqualToAsync()
+    {
+        OWLOntology geoOntology = BuildSpatialRelationsOntology();
+
+        Assert.IsTrue(await GEOHelper.CheckIsEqualToAsync(geoOntology, new RDFResource("ex:SquareAFT"), new RDFResource("ex:SquareA2FT")));
+        Assert.IsTrue(await GEOHelper.CheckIsEqualToAsync(geoOntology, new RDFResource("ex:SquareA2FT"), new RDFResource("ex:SquareAFT"))); //symmetric
+        Assert.IsFalse(await GEOHelper.CheckIsEqualToAsync(geoOntology, new RDFResource("ex:SquareAFT"), new RDFResource("ex:SquareBFT")));
+
+        await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.CheckIsEqualToAsync(null, new RDFResource("ex:SquareAFT"), new RDFResource("ex:SquareA2FT")));
+        await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.CheckIsEqualToAsync(geoOntology, null, new RDFResource("ex:SquareA2FT")));
+        await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.CheckIsEqualToAsync(geoOntology, new RDFResource("ex:SquareAFT"), null as RDFResource));
+    }
+
+    [TestMethod]
+    public async Task ShouldCheckIsDisjointFromAsync()
+    {
+        OWLOntology geoOntology = BuildSpatialRelationsOntology();
+
+        Assert.IsTrue(await GEOHelper.CheckIsDisjointFromAsync(geoOntology, new RDFResource("ex:SquareAFT"), new RDFResource("ex:SquareEFT")));
+        Assert.IsTrue(await GEOHelper.CheckIsDisjointFromAsync(geoOntology, new RDFResource("ex:SquareEFT"), new RDFResource("ex:SquareAFT")));
+        Assert.IsFalse(await GEOHelper.CheckIsDisjointFromAsync(geoOntology, new RDFResource("ex:SquareAFT"), new RDFResource("ex:SquareBFT")));
+    }
+
+    [TestMethod]
+    public async Task ShouldCheckIsTouchedByAsync()
+    {
+        OWLOntology geoOntology = BuildSpatialRelationsOntology();
+
+        Assert.IsTrue(await GEOHelper.CheckIsTouchedByAsync(geoOntology, new RDFResource("ex:SquareAFT"), new RDFResource("ex:SquareBFT")));
+        Assert.IsTrue(await GEOHelper.CheckIsTouchedByAsync(geoOntology, new RDFResource("ex:SquareBFT"), new RDFResource("ex:SquareAFT"))); //symmetric
+        Assert.IsFalse(await GEOHelper.CheckIsTouchedByAsync(geoOntology, new RDFResource("ex:SquareAFT"), new RDFResource("ex:SquareEFT")));
+
+        //Literal overload
+        Assert.IsTrue(await GEOHelper.CheckIsTouchedByAsync(geoOntology, new RDFResource("ex:SquareAFT"),
+            new RDFTypedLiteral("POLYGON((10 0, 10 10, 20 10, 20 0, 10 0))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+
+        await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.CheckIsTouchedByAsync(geoOntology, new RDFResource("ex:SquareAFT"), null as RDFTypedLiteral));
+        await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.CheckIsTouchedByAsync(geoOntology, new RDFResource("ex:SquareAFT"), new RDFTypedLiteral("hello", RDFModelEnums.RDFDatatypes.XSD_STRING)));
+    }
+
+    [TestMethod]
+    public async Task ShouldCheckIsCrossedByAsync()
+    {
+        OWLOntology geoOntology = BuildSpatialRelationsOntology();
+
+        Assert.IsTrue(await GEOHelper.CheckIsCrossedByAsync(geoOntology, new RDFResource("ex:SquareAFT"), new RDFResource("ex:LineFFT")));
+        Assert.IsTrue(await GEOHelper.CheckIsCrossedByAsync(geoOntology, new RDFResource("ex:LineFFT"), new RDFResource("ex:SquareAFT"))); //symmetric
+        Assert.IsFalse(await GEOHelper.CheckIsCrossedByAsync(geoOntology, new RDFResource("ex:SquareAFT"), new RDFResource("ex:SquareEFT")));
+    }
+
+    [TestMethod]
+    public async Task ShouldCheckIsOverlappedByAsync()
+    {
+        OWLOntology geoOntology = BuildSpatialRelationsOntology();
+
+        Assert.IsTrue(await GEOHelper.CheckIsOverlappedByAsync(geoOntology, new RDFResource("ex:SquareAFT"), new RDFResource("ex:SquareCFT")));
+        Assert.IsTrue(await GEOHelper.CheckIsOverlappedByAsync(geoOntology, new RDFResource("ex:SquareCFT"), new RDFResource("ex:SquareAFT"))); //symmetric
+        Assert.IsFalse(await GEOHelper.CheckIsOverlappedByAsync(geoOntology, new RDFResource("ex:SquareAFT"), new RDFResource("ex:SquareDFT"))); //D is within A, not overlapping
+    }
+
+    [TestMethod]
+    public async Task ShouldCheckIsIntersectedByAsync()
+    {
+        OWLOntology geoOntology = BuildSpatialRelationsOntology();
+
+        Assert.IsTrue(await GEOHelper.CheckIsIntersectedByAsync(geoOntology, new RDFResource("ex:SquareAFT"), new RDFResource("ex:SquareBFT")));
+        Assert.IsTrue(await GEOHelper.CheckIsIntersectedByAsync(geoOntology, new RDFResource("ex:SquareAFT"), new RDFResource("ex:SquareDFT")));
+        Assert.IsFalse(await GEOHelper.CheckIsIntersectedByAsync(geoOntology, new RDFResource("ex:SquareAFT"), new RDFResource("ex:SquareEFT")));
+    }
+
+    [TestMethod]
+    public async Task ShouldCheckIsWithinAndContainsAsync()
+    {
+        OWLOntology geoOntology = BuildSpatialRelationsOntology();
+
+        Assert.IsTrue(await GEOHelper.CheckIsWithinAsync(geoOntology, new RDFResource("ex:SquareDFT"), new RDFResource("ex:SquareAFT")));
+        Assert.IsFalse(await GEOHelper.CheckIsWithinAsync(geoOntology, new RDFResource("ex:SquareAFT"), new RDFResource("ex:SquareDFT"))); //not symmetric
+
+        Assert.IsTrue(await GEOHelper.CheckContainsAsync(geoOntology, new RDFResource("ex:SquareAFT"), new RDFResource("ex:SquareDFT")));
+        Assert.IsFalse(await GEOHelper.CheckContainsAsync(geoOntology, new RDFResource("ex:SquareDFT"), new RDFResource("ex:SquareAFT")));
+
+        //Literal overload
+        Assert.IsTrue(await GEOHelper.CheckIsWithinAsync(geoOntology, new RDFResource("ex:SquareDFT"),
+            new RDFTypedLiteral("POLYGON((0 0, 0 10, 10 10, 10 0, 0 0))", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT)));
+    }
+
+    [TestMethod]
+    public async Task ShouldCheckIsCoveredByAndCoversAsync()
+    {
+        OWLOntology geoOntology = BuildSpatialRelationsOntology();
+
+        //CoveredBy/Covers are a superset of Within/Contains: whatever is strictly within also counts as coveredBy
+        Assert.IsTrue(await GEOHelper.CheckIsCoveredByAsync(geoOntology, new RDFResource("ex:SquareDFT"), new RDFResource("ex:SquareAFT")));
+        Assert.IsTrue(await GEOHelper.CheckCoversAsync(geoOntology, new RDFResource("ex:SquareAFT"), new RDFResource("ex:SquareDFT")));
+        Assert.IsFalse(await GEOHelper.CheckIsCoveredByAsync(geoOntology, new RDFResource("ex:SquareAFT"), new RDFResource("ex:SquareEFT")));
+    }
     #endregion
 }
