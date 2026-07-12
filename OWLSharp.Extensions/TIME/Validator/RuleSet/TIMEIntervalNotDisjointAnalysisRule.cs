@@ -12,10 +12,8 @@
 */
 
 using OWLSharp.Ontology;
-using OWLSharp.Reasoner;
 using OWLSharp.Validator;
 using RDFSharp.Model;
-using RDFSharp.Query;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -26,90 +24,25 @@ namespace OWLSharp.Extensions.TIME
         internal static readonly string rulename = nameof(TIMEEnums.TIMEValidatorRules.IntervalNotDisjointAnalysis);
         internal const string rulesugg = "There should not be OWL-TIME intervals having a clash in temporal relations (time:notDisjoint VS {0})";
 
-        internal static async Task<List<OWLIssue>> ExecuteRuleAsync(OWLOntology ontology)
+        internal static Task<List<OWLIssue>> ExecuteRuleAsync(OWLOntology ontology)
         {
             List<OWLIssue> issues = new List<OWLIssue>();
-            List<OWLInference> violations = new List<OWLInference>();
-
-            #region Utilities
-            async Task ExecuteRuleBodyAsync(string ruleDescription, string ruleSugg, SWRLObjectPropertyAtom clashingAtom, string shortClashingProperty)
-            {
-                SWRLRule clashRule = new SWRLRule(
-                new RDFPlainLiteral(nameof(TIMEIntervalNotDisjointAnalysisRule)),
-                new RDFPlainLiteral(ruleDescription),
-                new SWRLAntecedent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLClassAtom(
-                            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
-                            new SWRLVariableArgument(new RDFVariable("?I1"))),
-                        new SWRLClassAtom(
-                            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
-                            new SWRLVariableArgument(new RDFVariable("?I2"))),
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(RDFVocabulary.TIME.NOT_DISJOINT),
-                            new SWRLVariableArgument(new RDFVariable("?I1")),
-                            new SWRLVariableArgument(new RDFVariable("?I2"))),
-                        clashingAtom
-                    },
-                    BuiltIns = new List<SWRLBuiltIn>
-                    {
-                        SWRLBuiltIn.NotEqual(
-                            new SWRLVariableArgument(new RDFVariable("?I1")),
-                            new SWRLVariableArgument(new RDFVariable("?I2")))
-                    }
-                },
-                new SWRLConsequent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(TIMEValidator.ViolationIRI),
-                            new SWRLVariableArgument(new RDFVariable("?I1")),
-                            new SWRLVariableArgument(new RDFVariable("?I2")))
-                    }
-                });
-                violations.AddRange(await clashRule.ApplyToOntologyAsync(ontology));
-                violations.ForEach(violation => issues.Add(
-                    new OWLIssue(
-                        OWLEnums.OWLIssueSeverity.Error,
-                        rulename,
-                        ruleSugg,
-                        $"TIME intervals '{((OWLObjectPropertyAssertion)violation.Axiom).SourceIndividualExpression.GetIRI()}' and '{((OWLObjectPropertyAssertion)violation.Axiom).TargetIndividualExpression.GetIRI()}' should be adjusted to not clash on temporal relations (time:notDisjoint VS {shortClashingProperty})"
-                    )));
-                violations.Clear();
-            }
-            #endregion
-
-            await ExecuteRuleBodyAsync(
-                "NOT_DISJOINT(?I1,?I2) ^ INTERVAL_BEFORE(?I1,?I2) -> ERROR",
+            issues.AddRange(TIMEValidatorHelper.CheckRelationClash(ontology, rulename,
                 string.Format(rulesugg, "time:intervalBefore"),
-                new SWRLObjectPropertyAtom(
-                    new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_BEFORE),
-                    new SWRLVariableArgument(new RDFVariable("?I1")),
-                    new SWRLVariableArgument(new RDFVariable("?I2"))),
-                "time:intervalBefore");
+                RDFVocabulary.TIME.NOT_DISJOINT, RDFVocabulary.TIME.INTERVAL_BEFORE, false,
+                "intervals", $"time:notDisjoint VS time:intervalBefore"));
 
-            await ExecuteRuleBodyAsync(
-                "NOT_DISJOINT(?I1,?I2) ^ INTERVAL_AFTER(?I1,?I2) -> ERROR",
+            issues.AddRange(TIMEValidatorHelper.CheckRelationClash(ontology, rulename,
                 string.Format(rulesugg, "time:intervalAfter"),
-                new SWRLObjectPropertyAtom(
-                    new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_AFTER),
-                    new SWRLVariableArgument(new RDFVariable("?I1")),
-                    new SWRLVariableArgument(new RDFVariable("?I2"))),
-                "time:intervalAfter");
+                RDFVocabulary.TIME.NOT_DISJOINT, RDFVocabulary.TIME.INTERVAL_AFTER, false,
+                "intervals", $"time:notDisjoint VS time:intervalAfter"));
 
-            await ExecuteRuleBodyAsync(
-                "NOT_DISJOINT(?I1,?I2) ^ INTERVAL_DISJOINT(?I1,?I2) -> ERROR",
+            issues.AddRange(TIMEValidatorHelper.CheckRelationClash(ontology, rulename,
                 string.Format(rulesugg, "time:intervalDisjoint"),
-                new SWRLObjectPropertyAtom(
-                    new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_DISJOINT),
-                    new SWRLVariableArgument(new RDFVariable("?I1")),
-                    new SWRLVariableArgument(new RDFVariable("?I2"))),
-                "time:intervalDisjoint");
+                RDFVocabulary.TIME.NOT_DISJOINT, RDFVocabulary.TIME.INTERVAL_DISJOINT, false,
+                "intervals", $"time:notDisjoint VS time:intervalDisjoint"));
 
-            return issues;
+            return Task.FromResult(issues);
         }
     }
 }

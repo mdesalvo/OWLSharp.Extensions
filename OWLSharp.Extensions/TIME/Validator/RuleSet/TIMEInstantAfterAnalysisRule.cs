@@ -12,10 +12,8 @@
 */
 
 using OWLSharp.Ontology;
-using OWLSharp.Reasoner;
 using OWLSharp.Validator;
 using RDFSharp.Model;
-using RDFSharp.Query;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -27,112 +25,19 @@ namespace OWLSharp.Extensions.TIME
         internal const string rulesugg1 = "There should not be OWL-TIME instants having a clash in temporal relations (time:after VS time:after)";
         internal const string rulesugg2 = "There should not be OWL-TIME instants having a clash in temporal relations (time:after VS time:before)";
 
-        internal static async Task<List<OWLIssue>> ExecuteRuleAsync(OWLOntology ontology)
+        internal static Task<List<OWLIssue>> ExecuteRuleAsync(OWLOntology ontology)
         {
             List<OWLIssue> issues = new List<OWLIssue>();
-            List<OWLInference> violations = new List<OWLInference>();
 
-            //time:after vs time:after
-            SWRLRule clashRule1 = new SWRLRule(
-                new RDFPlainLiteral(nameof(TIMEInstantAfterAnalysisRule)),
-                new RDFPlainLiteral("AFTER(?I1,?I2) ^ AFTER(?I2,?I1) -> ERROR"),
-                new SWRLAntecedent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLClassAtom(
-                            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
-                            new SWRLVariableArgument(new RDFVariable("?I1"))),
-                        new SWRLClassAtom(
-                            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
-                            new SWRLVariableArgument(new RDFVariable("?I2"))),
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(RDFVocabulary.TIME.AFTER),
-                            new SWRLVariableArgument(new RDFVariable("?I1")),
-                            new SWRLVariableArgument(new RDFVariable("?I2"))),
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(RDFVocabulary.TIME.AFTER),
-                            new SWRLVariableArgument(new RDFVariable("?I2")),
-                            new SWRLVariableArgument(new RDFVariable("?I1")))
-                    },
-                    BuiltIns = new List<SWRLBuiltIn>
-                    {
-                        SWRLBuiltIn.NotEqual(
-                            new SWRLVariableArgument(new RDFVariable("?I1")),
-                            new SWRLVariableArgument(new RDFVariable("?I2")))
-                    }
-                },
-                new SWRLConsequent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(TIMEValidator.ViolationIRI),
-                            new SWRLVariableArgument(new RDFVariable("?I1")),
-                            new SWRLVariableArgument(new RDFVariable("?I2")))
-                    }
-                });
-            violations.AddRange(await clashRule1.ApplyToOntologyAsync(ontology));
-            violations.ForEach(violation => issues.Add(
-                new OWLIssue(
-                    OWLEnums.OWLIssueSeverity.Error,
-                    rulename,
-                    rulesugg1,
-                    $"TIME instants '{((OWLObjectPropertyAssertion)violation.Axiom).SourceIndividualExpression.GetIRI()}' and '{((OWLObjectPropertyAssertion)violation.Axiom).TargetIndividualExpression.GetIRI()}' should be adjusted to not clash on temporal relations (time:after VS time:after)"
-                )));
-            violations.Clear();
+            issues.AddRange(TIMEValidatorHelper.CheckRelationClash(ontology, rulename, rulesugg1,
+                RDFVocabulary.TIME.AFTER, RDFVocabulary.TIME.AFTER, true,
+                "instants", "time:after VS time:after"));
 
-            //time:after vs time:before
-            SWRLRule clashRule2 = new SWRLRule(
-                new RDFPlainLiteral(nameof(TIMEInstantAfterAnalysisRule)),
-                new RDFPlainLiteral("AFTER(?I1,?I2) ^ BEFORE(?I1,?I2) -> ERROR"),
-                new SWRLAntecedent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLClassAtom(
-                            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
-                            new SWRLVariableArgument(new RDFVariable("?I1"))),
-                        new SWRLClassAtom(
-                            RDFVocabulary.TIME.INSTANT.ToEntity<OWLClass>(),
-                            new SWRLVariableArgument(new RDFVariable("?I2"))),
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(RDFVocabulary.TIME.AFTER),
-                            new SWRLVariableArgument(new RDFVariable("?I1")),
-                            new SWRLVariableArgument(new RDFVariable("?I2"))),
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(RDFVocabulary.TIME.BEFORE),
-                            new SWRLVariableArgument(new RDFVariable("?I1")),
-                            new SWRLVariableArgument(new RDFVariable("?I2")))
-                    },
-                    BuiltIns = new List<SWRLBuiltIn>
-                    {
-                        SWRLBuiltIn.NotEqual(
-                            new SWRLVariableArgument(new RDFVariable("?I1")),
-                            new SWRLVariableArgument(new RDFVariable("?I2")))
-                    }
-                },
-                new SWRLConsequent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(TIMEValidator.ViolationIRI),
-                            new SWRLVariableArgument(new RDFVariable("?I1")),
-                            new SWRLVariableArgument(new RDFVariable("?I2")))
-                    }
-                });
-            violations.AddRange(await clashRule2.ApplyToOntologyAsync(ontology));
-            violations.ForEach(violation => issues.Add(
-                new OWLIssue(
-                    OWLEnums.OWLIssueSeverity.Error,
-                    rulename,
-                    rulesugg2,
-                    $"TIME instants '{((OWLObjectPropertyAssertion)violation.Axiom).SourceIndividualExpression.GetIRI()}' and '{((OWLObjectPropertyAssertion)violation.Axiom).TargetIndividualExpression.GetIRI()}' should be adjusted to not clash on temporal relations (time:after VS time:before)"
-                )));
-            violations.Clear();
+            issues.AddRange(TIMEValidatorHelper.CheckRelationClash(ontology, rulename, rulesugg2,
+                RDFVocabulary.TIME.AFTER, RDFVocabulary.TIME.BEFORE, false,
+                "instants", "time:after VS time:before"));
 
-            return issues;
+            return Task.FromResult(issues);
         }
     }
 }

@@ -12,10 +12,8 @@
 */
 
 using OWLSharp.Ontology;
-using OWLSharp.Reasoner;
 using OWLSharp.Validator;
 using RDFSharp.Model;
-using RDFSharp.Query;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -26,171 +24,70 @@ namespace OWLSharp.Extensions.TIME
         internal static readonly string rulename = nameof(TIMEEnums.TIMEValidatorRules.IntervalInAnalysis);
         internal const string rulesugg = "There should not be OWL-TIME intervals having a clash in temporal relations (time:intervalIn VS {0})";
 
-        internal static async Task<List<OWLIssue>> ExecuteRuleAsync(OWLOntology ontology)
+        internal static Task<List<OWLIssue>> ExecuteRuleAsync(OWLOntology ontology)
         {
             List<OWLIssue> issues = new List<OWLIssue>();
-            List<OWLInference> violations = new List<OWLInference>();
-
-            #region Utilities
-            async Task ExecuteRuleBodyAsync(string ruleDescription, string ruleSugg, SWRLObjectPropertyAtom clashingAtom, string shortClashingProperty)
-            {
-                SWRLRule clashRule = new SWRLRule(
-                new RDFPlainLiteral(nameof(TIMEIntervalInAnalysisRule)),
-                new RDFPlainLiteral(ruleDescription),
-                new SWRLAntecedent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLClassAtom(
-                            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
-                            new SWRLVariableArgument(new RDFVariable("?I1"))),
-                        new SWRLClassAtom(
-                            RDFVocabulary.TIME.INTERVAL.ToEntity<OWLClass>(),
-                            new SWRLVariableArgument(new RDFVariable("?I2"))),
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_IN),
-                            new SWRLVariableArgument(new RDFVariable("?I1")),
-                            new SWRLVariableArgument(new RDFVariable("?I2"))),
-                        clashingAtom
-                    },
-                    BuiltIns = new List<SWRLBuiltIn>
-                    {
-                        SWRLBuiltIn.NotEqual(
-                            new SWRLVariableArgument(new RDFVariable("?I1")),
-                            new SWRLVariableArgument(new RDFVariable("?I2")))
-                    }
-                },
-                new SWRLConsequent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLObjectPropertyAtom(
-                            new OWLObjectProperty(TIMEValidator.ViolationIRI),
-                            new SWRLVariableArgument(new RDFVariable("?I1")),
-                            new SWRLVariableArgument(new RDFVariable("?I2")))
-                    }
-                });
-                violations.AddRange(await clashRule.ApplyToOntologyAsync(ontology));
-                violations.ForEach(violation => issues.Add(
-                    new OWLIssue(
-                        OWLEnums.OWLIssueSeverity.Error,
-                        rulename,
-                        ruleSugg,
-                        $"TIME intervals '{((OWLObjectPropertyAssertion)violation.Axiom).SourceIndividualExpression.GetIRI()}' and '{((OWLObjectPropertyAssertion)violation.Axiom).TargetIndividualExpression.GetIRI()}' should be adjusted to not clash on temporal relations (time:intervalIn VS {shortClashingProperty})"
-                    )));
-                violations.Clear();
-            }
-            #endregion
-
-            await ExecuteRuleBodyAsync(
-                "INTERVAL_IN(?I1,?I2) ^ INTERVAL_BEFORE(?I1,?I2) -> ERROR",
+            issues.AddRange(TIMEValidatorHelper.CheckRelationClash(ontology, rulename,
                 string.Format(rulesugg, "time:intervalBefore"),
-                new SWRLObjectPropertyAtom(
-                    new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_BEFORE),
-                    new SWRLVariableArgument(new RDFVariable("?I1")),
-                    new SWRLVariableArgument(new RDFVariable("?I2"))),
-                "time:intervalBefore");
+                RDFVocabulary.TIME.INTERVAL_IN, RDFVocabulary.TIME.INTERVAL_BEFORE, false,
+                "intervals", $"time:intervalIn VS time:intervalBefore"));
 
-            await ExecuteRuleBodyAsync(
-                "INTERVAL_IN(?I1,?I2) ^ INTERVAL_AFTER(?I1,?I2) -> ERROR",
+            issues.AddRange(TIMEValidatorHelper.CheckRelationClash(ontology, rulename,
                 string.Format(rulesugg, "time:intervalAfter"),
-                new SWRLObjectPropertyAtom(
-                    new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_AFTER),
-                    new SWRLVariableArgument(new RDFVariable("?I1")),
-                    new SWRLVariableArgument(new RDFVariable("?I2"))),
-                "time:intervalAfter");
+                RDFVocabulary.TIME.INTERVAL_IN, RDFVocabulary.TIME.INTERVAL_AFTER, false,
+                "intervals", $"time:intervalIn VS time:intervalAfter"));
 
-            await ExecuteRuleBodyAsync(
-                "INTERVAL_IN(?I1,?I2) ^ INTERVAL_DISJOINT(?I1,?I2) -> ERROR",
+            issues.AddRange(TIMEValidatorHelper.CheckRelationClash(ontology, rulename,
                 string.Format(rulesugg, "time:intervalDisjoint"),
-                new SWRLObjectPropertyAtom(
-                    new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_DISJOINT),
-                    new SWRLVariableArgument(new RDFVariable("?I1")),
-                    new SWRLVariableArgument(new RDFVariable("?I2"))),
-                "time:intervalDisjoint");
+                RDFVocabulary.TIME.INTERVAL_IN, RDFVocabulary.TIME.INTERVAL_DISJOINT, false,
+                "intervals", $"time:intervalIn VS time:intervalDisjoint"));
 
-            await ExecuteRuleBodyAsync(
-                "INTERVAL_IN(?I1,?I2) ^ INTERVAL_EQUALS(?I1,?I2) -> ERROR",
+            issues.AddRange(TIMEValidatorHelper.CheckRelationClash(ontology, rulename,
                 string.Format(rulesugg, "time:intervalEquals"),
-                new SWRLObjectPropertyAtom(
-                    new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_EQUALS),
-                    new SWRLVariableArgument(new RDFVariable("?I1")),
-                    new SWRLVariableArgument(new RDFVariable("?I2"))),
-                "time:intervalEquals");
+                RDFVocabulary.TIME.INTERVAL_IN, RDFVocabulary.TIME.INTERVAL_EQUALS, false,
+                "intervals", $"time:intervalIn VS time:intervalEquals"));
 
-            await ExecuteRuleBodyAsync(
-                "INTERVAL_IN(?I1,?I2) ^ INTERVAL_FINISHED_BY(?I1,?I2) -> ERROR",
+            issues.AddRange(TIMEValidatorHelper.CheckRelationClash(ontology, rulename,
                 string.Format(rulesugg, "time:intervalFinishedBy"),
-                new SWRLObjectPropertyAtom(
-                    new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_FINISHED_BY),
-                    new SWRLVariableArgument(new RDFVariable("?I1")),
-                    new SWRLVariableArgument(new RDFVariable("?I2"))),
-                "time:intervalFinishedBy");
+                RDFVocabulary.TIME.INTERVAL_IN, RDFVocabulary.TIME.INTERVAL_FINISHED_BY, false,
+                "intervals", $"time:intervalIn VS time:intervalFinishedBy"));
 
-            await ExecuteRuleBodyAsync(
-                "INTERVAL_IN(?I1,?I2) ^ HAS_INSIDE(?I1,?I2) -> ERROR",
+            issues.AddRange(TIMEValidatorHelper.CheckRelationClash(ontology, rulename,
                 string.Format(rulesugg, "time:hasInside"),
-                new SWRLObjectPropertyAtom(
-                    new OWLObjectProperty(RDFVocabulary.TIME.HAS_INSIDE),
-                    new SWRLVariableArgument(new RDFVariable("?I1")),
-                    new SWRLVariableArgument(new RDFVariable("?I2"))),
-                "time:hasInside");
+                RDFVocabulary.TIME.INTERVAL_IN, RDFVocabulary.TIME.HAS_INSIDE, false,
+                "intervals", $"time:intervalIn VS time:hasInside"));
 
-            await ExecuteRuleBodyAsync(
-                "INTERVAL_IN(?I1,?I2) ^ INTERVAL_IN(?I2,?I1) -> ERROR",
+            issues.AddRange(TIMEValidatorHelper.CheckRelationClash(ontology, rulename,
                 string.Format(rulesugg, "time:intervalIn"),
-                new SWRLObjectPropertyAtom(
-                    new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_IN),
-                    new SWRLVariableArgument(new RDFVariable("?I2")),
-                    new SWRLVariableArgument(new RDFVariable("?I1"))),
-                "time:intervalIn");
+                RDFVocabulary.TIME.INTERVAL_IN, RDFVocabulary.TIME.INTERVAL_IN, true,
+                "intervals", $"time:intervalIn VS time:intervalIn"));
 
-            await ExecuteRuleBodyAsync(
-                "INTERVAL_IN(?I1,?I2) ^ INTERVAL_MEETS(?I1,?I2) -> ERROR",
+            issues.AddRange(TIMEValidatorHelper.CheckRelationClash(ontology, rulename,
                 string.Format(rulesugg, "time:intervalMeets"),
-                new SWRLObjectPropertyAtom(
-                    new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_MEETS),
-                    new SWRLVariableArgument(new RDFVariable("?I1")),
-                    new SWRLVariableArgument(new RDFVariable("?I2"))),
-                "time:intervalMeets");
+                RDFVocabulary.TIME.INTERVAL_IN, RDFVocabulary.TIME.INTERVAL_MEETS, false,
+                "intervals", $"time:intervalIn VS time:intervalMeets"));
 
-            await ExecuteRuleBodyAsync(
-                "INTERVAL_IN(?I1,?I2) ^ INTERVAL_MET_BY(?I1,?I2) -> ERROR",
+            issues.AddRange(TIMEValidatorHelper.CheckRelationClash(ontology, rulename,
                 string.Format(rulesugg, "time:intervalMetBy"),
-                new SWRLObjectPropertyAtom(
-                    new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_MET_BY),
-                    new SWRLVariableArgument(new RDFVariable("?I1")),
-                    new SWRLVariableArgument(new RDFVariable("?I2"))),
-                "time:intervalMetBy");
+                RDFVocabulary.TIME.INTERVAL_IN, RDFVocabulary.TIME.INTERVAL_MET_BY, false,
+                "intervals", $"time:intervalIn VS time:intervalMetBy"));
 
-            await ExecuteRuleBodyAsync(
-                "INTERVAL_IN(?I1,?I2) ^ INTERVAL_OVERLAPPED_BY(?I1,?I2) -> ERROR",
+            issues.AddRange(TIMEValidatorHelper.CheckRelationClash(ontology, rulename,
                 string.Format(rulesugg, "time:intervalOverlappedBy"),
-                new SWRLObjectPropertyAtom(
-                    new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_OVERLAPPED_BY),
-                    new SWRLVariableArgument(new RDFVariable("?I1")),
-                    new SWRLVariableArgument(new RDFVariable("?I2"))),
-                "time:intervalOverlappedBy");
+                RDFVocabulary.TIME.INTERVAL_IN, RDFVocabulary.TIME.INTERVAL_OVERLAPPED_BY, false,
+                "intervals", $"time:intervalIn VS time:intervalOverlappedBy"));
 
-            await ExecuteRuleBodyAsync(
-                "INTERVAL_IN(?I1,?I2) ^ INTERVAL_OVERLAPS(?I1,?I2) -> ERROR",
+            issues.AddRange(TIMEValidatorHelper.CheckRelationClash(ontology, rulename,
                 string.Format(rulesugg, "time:intervalOverlaps"),
-                new SWRLObjectPropertyAtom(
-                    new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_OVERLAPS),
-                    new SWRLVariableArgument(new RDFVariable("?I1")),
-                    new SWRLVariableArgument(new RDFVariable("?I2"))),
-                "time:intervalOverlaps");
+                RDFVocabulary.TIME.INTERVAL_IN, RDFVocabulary.TIME.INTERVAL_OVERLAPS, false,
+                "intervals", $"time:intervalIn VS time:intervalOverlaps"));
 
-            await ExecuteRuleBodyAsync(
-                "INTERVAL_IN(?I1,?I2) ^ INTERVAL_STARTED_BY(?I1,?I2) -> ERROR",
+            issues.AddRange(TIMEValidatorHelper.CheckRelationClash(ontology, rulename,
                 string.Format(rulesugg, "time:intervalStartedBy"),
-                new SWRLObjectPropertyAtom(
-                    new OWLObjectProperty(RDFVocabulary.TIME.INTERVAL_STARTED_BY),
-                    new SWRLVariableArgument(new RDFVariable("?I1")),
-                    new SWRLVariableArgument(new RDFVariable("?I2"))),
-                "time:intervalStartedBy");
+                RDFVocabulary.TIME.INTERVAL_IN, RDFVocabulary.TIME.INTERVAL_STARTED_BY, false,
+                "intervals", $"time:intervalIn VS time:intervalStartedBy"));
 
-            return issues;
+            return Task.FromResult(issues);
         }
     }
 }
