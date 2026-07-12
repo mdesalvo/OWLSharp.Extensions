@@ -49,8 +49,6 @@ namespace OWLSharp.Extensions.GEO
         internal static WKTWriter WKTWriter => WKTWriterTLS.Value;
         internal static GMLReader GMLReader => GMLReaderTLS.Value;
         internal static GMLWriter GMLWriter => GMLWriterTLS.Value;
-        private static readonly RDFResource AsWKT = new RDFResource("urn:swrl:geosparql:asWKT");
-        private static readonly RDFResource AsGML = new RDFResource("urn:swrl:geosparql:asGML");
 
         #region Methods
 
@@ -1537,275 +1535,72 @@ namespace OWLSharp.Extensions.GEO
         /// <summary>
         /// Extracts the default geometry of the given feature, which is returned both in WGS84 and Azimuthal.
         /// </summary>
-        internal static async Task<(Geometry wgs84Geom,Geometry lazGeom)> GetDefaultGeometryOfFeatureAsync(this OWLOntology ontology, RDFResource featureUri)
+        internal static Task<(Geometry wgs84Geom,Geometry lazGeom)> GetDefaultGeometryOfFeatureAsync(this OWLOntology ontology, RDFResource featureUri)
         {
-            //Execute SWRL rule to retrieve WKT serialization of the given feature's default geometry
-            List<OWLInference> inferences = new List<OWLInference>();
-            SWRLRule defaultGeometryAsWKT = new SWRLRule
-            {
-                Antecedent = new SWRLAntecedent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLClassAtom(
-                            RDFVocabulary.GEOSPARQL.FEATURE.ToEntity<OWLClass>(),
-                            new SWRLVariableArgument(new RDFVariable("?FEATURE"))),
-                        new SWRLClassAtom(
-                            RDFVocabulary.GEOSPARQL.GEOMETRY.ToEntity<OWLClass>(),
-                            new SWRLVariableArgument(new RDFVariable("?GEOMETRY"))),
-                        new SWRLObjectPropertyAtom(
-                            RDFVocabulary.GEOSPARQL.DEFAULT_GEOMETRY.ToEntity<OWLObjectProperty>(),
-                            new SWRLVariableArgument(new RDFVariable("?FEATURE")),
-                            new SWRLVariableArgument(new RDFVariable("?GEOMETRY"))),
-                        new SWRLDataPropertyAtom(
-                            RDFVocabulary.GEOSPARQL.AS_WKT.ToEntity<OWLDataProperty>(),
-                            new SWRLVariableArgument(new RDFVariable("?GEOMETRY")),
-                            new SWRLVariableArgument(new RDFVariable("?WKT")))
-                    },
-                    BuiltIns = new List<SWRLBuiltIn>
-                    {
-                        SWRLBuiltIn.Equal(
-                            new SWRLVariableArgument(new RDFVariable("?FEATURE")),
-                            new SWRLIndividualArgument(featureUri))
-                    }
-                },
-                Consequent = new SWRLConsequent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLDataPropertyAtom(
-                            AsWKT.ToEntity<OWLDataProperty>(),
-                            new SWRLVariableArgument(new RDFVariable("?GEOMETRY")),
-                            new SWRLVariableArgument(new RDFVariable("?WKT")))
-                    }
-                }
-            };
-            inferences.AddRange(await defaultGeometryAsWKT.ApplyToOntologyAsync(ontology));
-
-            //Execute SWRL rule to retrieve GML serialization of the given feature's default geometry
-            if (inferences.Count == 0)
-            {
-                SWRLRule defaultGeometryAsGML = new SWRLRule
-                {
-                    Antecedent = new SWRLAntecedent
-                    {
-                        Atoms = new List<SWRLAtom>
-                        {
-                            new SWRLClassAtom(
-                                RDFVocabulary.GEOSPARQL.FEATURE.ToEntity<OWLClass>(),
-                                new SWRLVariableArgument(new RDFVariable("?FEATURE"))),
-                            new SWRLClassAtom(
-                                RDFVocabulary.GEOSPARQL.GEOMETRY.ToEntity<OWLClass>(),
-                                new SWRLVariableArgument(new RDFVariable("?GEOMETRY"))),
-                            new SWRLObjectPropertyAtom(
-                                RDFVocabulary.GEOSPARQL.DEFAULT_GEOMETRY.ToEntity<OWLObjectProperty>(),
-                                new SWRLVariableArgument(new RDFVariable("?FEATURE")),
-                                new SWRLVariableArgument(new RDFVariable("?GEOMETRY"))),
-                            new SWRLDataPropertyAtom(
-                                RDFVocabulary.GEOSPARQL.AS_GML.ToEntity<OWLDataProperty>(),
-                                new SWRLVariableArgument(new RDFVariable("?GEOMETRY")),
-                                new SWRLVariableArgument(new RDFVariable("?GML")))
-                        },
-                        BuiltIns = new List<SWRLBuiltIn>
-                        {
-                            SWRLBuiltIn.Equal(
-                                new SWRLVariableArgument(new RDFVariable("?FEATURE")),
-                                new SWRLIndividualArgument(featureUri))
-                        }
-                    },
-                    Consequent = new SWRLConsequent
-                    {
-                        Atoms = new List<SWRLAtom>
-                        {
-                            new SWRLDataPropertyAtom(
-                                AsGML.ToEntity<OWLDataProperty>(),
-                                new SWRLVariableArgument(new RDFVariable("?GEOMETRY")),
-                                new SWRLVariableArgument(new RDFVariable("?GML")))
-                        }
-                    }
-                };
-                inferences.AddRange(await defaultGeometryAsGML.ApplyToOntologyAsync(ontology));
-            }
-
-            //Parse retrieved WKT/GML serialization into (WGS84,UTM) result geometry
-            OWLDataPropertyAssertion inferenceAxiom = (OWLDataPropertyAssertion)inferences.FirstOrDefault()?.Axiom;
-            if (string.Equals(inferenceAxiom?.DataProperty.GetIRI().ToString(), AsWKT.ToString(), StringComparison.Ordinal))
-            {
-                try
-                {
-                    //Parse default geometry from WKT
-                    RDFTypedLiteral inferenceLiteral = (RDFTypedLiteral)inferenceAxiom.Literal.GetLiteral();
-                    Geometry wgs84Geometry = WKTReader.Read(inferenceLiteral.Value);
-                    wgs84Geometry.SRID=4326;
-                    wgs84Geometry.UserData = inferenceAxiom.IndividualExpression.GetIRI().ToString();
-
-                    //Project default geometry from WGS84 to Lambert Azimuthal
-                    Geometry lazGeometry = RDFGeoConverter.GetLambertAzimuthalGeometryFromWGS84(wgs84Geometry);
-
-                    return (wgs84Geometry, lazGeometry);
-                }
-                catch { /* Just a no-op, since type errors are normal when trying to face variable's bindings */ }
-            }
-            if (string.Equals(inferenceAxiom?.DataProperty.GetIRI().ToString(), AsGML.ToString(), StringComparison.Ordinal))
-            {
-                try
-                {
-                    //Parse default geometry from GML
-                    RDFTypedLiteral inferenceLiteral = (RDFTypedLiteral)inferenceAxiom.Literal.GetLiteral();
-                    Geometry wgs84Geometry = GMLReader.Read(inferenceLiteral.Value);
-                    wgs84Geometry.SRID=4326;
-                    wgs84Geometry.UserData = inferenceAxiom.IndividualExpression.GetIRI().ToString();
-
-                    //Project default geometry from WGS84 to Lambert Azimuthal
-                    Geometry lazGeometry = RDFGeoConverter.GetLambertAzimuthalGeometryFromWGS84(wgs84Geometry);
-                    lazGeometry.UserData = inferenceAxiom.IndividualExpression.GetIRI().ToString();
-
-                    return (wgs84Geometry, lazGeometry);
-                }
-                catch { /* Just a no-op, since type errors are normal when trying to face variable's bindings */ }
-            }
-
-            return (null,null);
+            List<(Geometry, Geometry)> geometries = GetGeometriesOfFeatureByProperty(ontology, featureUri, RDFVocabulary.GEOSPARQL.DEFAULT_GEOMETRY.ToEntity<OWLObjectProperty>());
+            return Task.FromResult(geometries.Count > 0 ? geometries[0] : (null, null));
         }
 
         /// <summary>
         /// Extracts the secondary geometries of the given feature, which are returned both in WGS84 and Azimuthal.
         /// </summary>
-        internal static async Task<List<(Geometry wgs84Geom,Geometry lazGeom)>> GetSecondaryGeometriesOfFeatureAsync(this OWLOntology ontology, RDFResource featureUri)
+        /// <exception cref="OWLException"></exception>
+        internal static Task<List<(Geometry wgs84Geom,Geometry lazGeom)>> GetSecondaryGeometriesOfFeatureAsync(this OWLOntology ontology, RDFResource featureUri)
+            => Task.FromResult(GetGeometriesOfFeatureByProperty(ontology, featureUri, RDFVocabulary.GEOSPARQL.HAS_GEOMETRY.ToEntity<OWLObjectProperty>()));
+
+        /// <summary>
+        /// Extracts, via direct axiom lookup (no SWRL), the WGS84/Azimuthal geometries reachable from the given feature
+        /// through the given object property (geosparql:defaultGeometry or geosparql:hasGeometry), preferring WKT over
+        /// GML serialization when at least one of the feature's geometries exposes a WKT literal.
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        private static List<(Geometry wgs84Geom, Geometry lazGeom)> GetGeometriesOfFeatureByProperty(OWLOntology ontology, RDFResource featureUri, OWLObjectProperty geometryProperty)
         {
-            List<(Geometry,Geometry)> geometries = new List<(Geometry,Geometry)>();
+            List<(Geometry, Geometry)> results = new List<(Geometry, Geometry)>();
 
-            //Execute SWRL rule to retrieve WKT serialization of the given feature's default geometry
-            List<OWLInference> inferences = new List<OWLInference>();
-            SWRLRule secondaryGeometriesAsWKT = new SWRLRule
+            //Directly select the geometry individuals reachable from the feature through the given object property
+            List<OWLObjectPropertyAssertion> objPropAsns = OWLAssertionAxiomHelper.CalibrateObjectAssertions(ontology);
+            List<RDFResource> geometryUris = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, geometryProperty)
+                .Where(asn => asn.SourceIndividualExpression.GetIRI().Equals(featureUri))
+                .Select(asn => asn.TargetIndividualExpression.GetIRI())
+                .ToList();
+            if (geometryUris.Count == 0)
+                return results;
+
+            //Directly select the asWKT/asGML data assertions of the whole ontology, once
+            List<OWLDataPropertyAssertion> dataPropAsns = ontology.GetAssertionAxiomsOfType<OWLDataPropertyAssertion>();
+            List<OWLDataPropertyAssertion> wktAsns = OWLAssertionAxiomHelper.SelectDataAssertionsByDPEX(dataPropAsns, RDFVocabulary.GEOSPARQL.AS_WKT.ToEntity<OWLDataProperty>());
+            List<OWLDataPropertyAssertion> gmlAsns = OWLAssertionAxiomHelper.SelectDataAssertionsByDPEX(dataPropAsns, RDFVocabulary.GEOSPARQL.AS_GML.ToEntity<OWLDataProperty>());
+
+            bool preferWKT = geometryUris.Any(gUri => wktAsns.Any(asn => asn.IndividualExpression.GetIRI().Equals(gUri)));
+            List<OWLDataPropertyAssertion> literalAsns = preferWKT ? wktAsns : gmlAsns;
+
+            foreach (RDFResource geometryUri in geometryUris)
             {
-                Antecedent = new SWRLAntecedent
+                OWLDataPropertyAssertion literalAsn = literalAsns.FirstOrDefault(asn => asn.IndividualExpression.GetIRI().Equals(geometryUri));
+                if (literalAsn == null)
+                    continue; //No serialization of the expected kind for this geometry: not an error, just nothing to analyze
+
+                try
                 {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLClassAtom(
-                            RDFVocabulary.GEOSPARQL.FEATURE.ToEntity<OWLClass>(),
-                            new SWRLVariableArgument(new RDFVariable("?FEATURE"))),
-                        new SWRLClassAtom(
-                            RDFVocabulary.GEOSPARQL.GEOMETRY.ToEntity<OWLClass>(),
-                            new SWRLVariableArgument(new RDFVariable("?GEOMETRY"))),
-                        new SWRLObjectPropertyAtom(
-                            RDFVocabulary.GEOSPARQL.HAS_GEOMETRY.ToEntity<OWLObjectProperty>(),
-                            new SWRLVariableArgument(new RDFVariable("?FEATURE")),
-                            new SWRLVariableArgument(new RDFVariable("?GEOMETRY"))),
-                        new SWRLDataPropertyAtom(
-                            RDFVocabulary.GEOSPARQL.AS_WKT.ToEntity<OWLDataProperty>(),
-                            new SWRLVariableArgument(new RDFVariable("?GEOMETRY")),
-                            new SWRLVariableArgument(new RDFVariable("?WKT")))
-                    },
-                    BuiltIns = new List<SWRLBuiltIn>
-                    {
-                        SWRLBuiltIn.Equal(
-                            new SWRLVariableArgument(new RDFVariable("?FEATURE")),
-                            new SWRLIndividualArgument(featureUri))
-                    }
-                },
-                Consequent = new SWRLConsequent
-                {
-                    Atoms = new List<SWRLAtom>
-                    {
-                        new SWRLDataPropertyAtom(
-                            AsWKT.ToEntity<OWLDataProperty>(),
-                            new SWRLVariableArgument(new RDFVariable("?GEOMETRY")),
-                            new SWRLVariableArgument(new RDFVariable("?WKT")))
-                    }
+                    RDFTypedLiteral literal = (RDFTypedLiteral)literalAsn.Literal.GetLiteral();
+                    Geometry wgs84Geometry = preferWKT ? WKTReader.Read(literal.Value) : GMLReader.Read(literal.Value);
+                    wgs84Geometry.SRID=4326;
+                    wgs84Geometry.UserData = geometryUri.ToString();
+
+                    //Project geometry from WGS84 to Lambert Azimuthal
+                    Geometry lazGeometry = RDFGeoConverter.GetLambertAzimuthalGeometryFromWGS84(wgs84Geometry);
+                    lazGeometry.UserData = geometryUri.ToString();
+
+                    results.Add((wgs84Geometry, lazGeometry));
                 }
-            };
-            inferences.AddRange(await secondaryGeometriesAsWKT.ApplyToOntologyAsync(ontology));
-
-            //Execute SWRL rule to retrieve GML serialization of the given feature's default geometry
-            if (inferences.Count == 0)
-            {
-                SWRLRule defaultGeomAsGML = new SWRLRule
+                catch (Exception ex)
                 {
-                    Antecedent = new SWRLAntecedent
-                    {
-                        Atoms = new List<SWRLAtom>
-                        {
-                            new SWRLClassAtom(
-                                RDFVocabulary.GEOSPARQL.FEATURE.ToEntity<OWLClass>(),
-                                new SWRLVariableArgument(new RDFVariable("?FEATURE"))),
-                            new SWRLClassAtom(
-                                RDFVocabulary.GEOSPARQL.GEOMETRY.ToEntity<OWLClass>(),
-                                new SWRLVariableArgument(new RDFVariable("?GEOMETRY"))),
-                            new SWRLObjectPropertyAtom(
-                                RDFVocabulary.GEOSPARQL.HAS_GEOMETRY.ToEntity<OWLObjectProperty>(),
-                                new SWRLVariableArgument(new RDFVariable("?FEATURE")),
-                                new SWRLVariableArgument(new RDFVariable("?GEOMETRY"))),
-                            new SWRLDataPropertyAtom(
-                                RDFVocabulary.GEOSPARQL.AS_GML.ToEntity<OWLDataProperty>(),
-                                new SWRLVariableArgument(new RDFVariable("?GEOMETRY")),
-                                new SWRLVariableArgument(new RDFVariable("?GML")))
-                        },
-                        BuiltIns = new List<SWRLBuiltIn>
-                        {
-                            SWRLBuiltIn.Equal(
-                                new SWRLVariableArgument(new RDFVariable("?FEATURE")),
-                                new SWRLIndividualArgument(featureUri))
-                        }
-                    },
-                    Consequent = new SWRLConsequent
-                    {
-                        Atoms = new List<SWRLAtom>
-                        {
-                            new SWRLDataPropertyAtom(
-                                AsGML.ToEntity<OWLDataProperty>(),
-                                new SWRLVariableArgument(new RDFVariable("?GEOMETRY")),
-                                new SWRLVariableArgument(new RDFVariable("?GML")))
-                        }
-                    }
-                };
-                inferences.AddRange(await defaultGeomAsGML.ApplyToOntologyAsync(ontology));
-            }
-
-            //Parse retrieved WKT/GML serializations into (WGS84,UTM) result secondaryGeometries
-            foreach (OWLInference inference in inferences)
-            {
-                OWLDataPropertyAssertion inferenceAxiom = (OWLDataPropertyAssertion)inference.Axiom;
-                if (string.Equals(inferenceAxiom.DataProperty.GetIRI().ToString(), AsWKT.ToString(), StringComparison.Ordinal))
-                {
-                    try
-                    {
-                        //Parse default geometry from WKT
-                        RDFTypedLiteral inferenceLiteral = (RDFTypedLiteral)inferenceAxiom.Literal.GetLiteral();
-                        Geometry wgs84Geometry = WKTReader.Read(inferenceLiteral.Value);
-                        wgs84Geometry.SRID=4326;
-                        wgs84Geometry.UserData = inferenceAxiom.IndividualExpression.GetIRI().ToString();
-
-                        //Project default geometry from WGS84 to Lambert Azimuthal
-                        Geometry lazGeometry = RDFGeoConverter.GetLambertAzimuthalGeometryFromWGS84(wgs84Geometry);
-                        lazGeometry.UserData = inferenceAxiom.IndividualExpression.GetIRI().ToString();
-
-                        geometries.Add((wgs84Geometry, lazGeometry));
-                    }
-                    catch { /* Just a no-op, since type errors are normal when trying to face variable's bindings */ }
-                }
-                if (string.Equals(inferenceAxiom.DataProperty.GetIRI().ToString(), AsGML.ToString(), StringComparison.Ordinal))
-                {
-                    try
-                    {
-                        //Parse default geometry from GML
-                        RDFTypedLiteral inferenceLiteral = (RDFTypedLiteral)inferenceAxiom.Literal.GetLiteral();
-                        Geometry wgs84Geometry = GMLReader.Read(inferenceLiteral.Value);
-                        wgs84Geometry.SRID=4326;
-                        wgs84Geometry.UserData = inferenceAxiom.IndividualExpression.GetIRI().ToString();
-
-                        //Project default geometry from WGS84 to Lambert Azimuthal
-                        Geometry lazGeometry = RDFGeoConverter.GetLambertAzimuthalGeometryFromWGS84(wgs84Geometry);
-                        lazGeometry.UserData = inferenceAxiom.IndividualExpression.GetIRI().ToString();
-
-                        geometries.Add((wgs84Geometry, lazGeometry));
-                    }
-                    catch { /* Just a no-op, since type errors are normal when trying to face variable's bindings */ }
+                    throw new OWLException($"Cannot analyze geometry '{geometryUri}' because its {(preferWKT ? "WKT" : "GML")} serialization is malformed", ex);
                 }
             }
 
-            return geometries;
+            return results;
         }
 
         /// <summary>
