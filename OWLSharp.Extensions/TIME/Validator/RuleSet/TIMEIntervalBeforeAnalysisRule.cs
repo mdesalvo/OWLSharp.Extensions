@@ -35,7 +35,7 @@ namespace OWLSharp.Extensions.TIME
             async Task ExecuteRuleBodyAsync(string ruleDescription, string ruleSugg, SWRLObjectPropertyAtom clashingAtom, string shortClashingProperty)
             {
                 SWRLRule clashRule = new SWRLRule(
-                new RDFPlainLiteral(nameof(TIMEIntervalAfterAnalysisRule)),
+                new RDFPlainLiteral(nameof(TIMEIntervalBeforeAnalysisRule)),
                 new RDFPlainLiteral(ruleDescription),
                 new SWRLAntecedent
                 {
