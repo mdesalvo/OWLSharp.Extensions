@@ -67,5 +67,32 @@ namespace OWLSharp.Extensions.SKOS
             /// </summary>
             HierarchyCycleAnalysis = 10
         }
+
+        /// <summary>
+        /// SKOSMappingRelation represents an enumeration for supported SKOS mapping relations between concepts of different schemes
+        /// </summary>
+        public enum SKOSMappingRelation
+        {
+            /// <summary>
+            /// States that the mapped concepts can be used interchangeably across schemes (skos:exactMatch)
+            /// </summary>
+            ExactMatch = 1,
+            /// <summary>
+            /// States that the mapped concepts are sufficiently similar to be used interchangeably in some applications (skos:closeMatch)
+            /// </summary>
+            CloseMatch = 2,
+            /// <summary>
+            /// States that the left concept has a broader meaning than the right concept in another scheme (skos:broadMatch)
+            /// </summary>
+            BroadMatch = 3,
+            /// <summary>
+            /// States that the left concept has a narrower meaning than the right concept in another scheme (skos:narrowMatch)
+            /// </summary>
+            NarrowMatch = 4,
+            /// <summary>
+            /// States that the mapped concepts are associatively related in another scheme (skos:relatedMatch)
+            /// </summary>
+            RelatedMatch = 5
+        }
     }
 }
