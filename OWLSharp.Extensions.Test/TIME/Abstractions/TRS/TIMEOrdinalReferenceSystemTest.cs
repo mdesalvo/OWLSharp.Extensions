@@ -403,6 +403,38 @@ public class TIMEOrdinalReferenceSystemTest
     }
 
     [TestMethod]
+    public void ShouldGetReferencePoints()
+    {
+        TIMEOrdinalReferenceSystem thors = new TIMEOrdinalReferenceSystem(new RDFResource("ex:Thors2"), TestTRS);
+        thors.DeclareReferencePoints([
+            new TIMEInstant(
+                new RDFResource("ex:massExtinctionEventA"),
+                new TIMEInstantPosition(new RDFResource("ex:massExtinctionEventPositionA"), TIMEPositionReferenceSystem.Geologic, 111.9)),
+            new TIMEInstant(
+                new RDFResource("ex:massExtinctionEventB"),
+                new TIMEInstantPosition(new RDFResource("ex:massExtinctionEventPositionB"), TIMEPositionReferenceSystem.Geologic, 65.5))
+        ]);
+
+        List<RDFResource> referencePoints = thors.GetReferencePoints();
+
+        Assert.IsNotNull(referencePoints);
+        Assert.HasCount(2, referencePoints);
+        Assert.Contains(new RDFResource("ex:massExtinctionEventA"), referencePoints);
+        Assert.Contains(new RDFResource("ex:massExtinctionEventB"), referencePoints);
+    }
+
+    [TestMethod]
+    public void ShouldGetReferencePointsWhenNoneDeclared()
+    {
+        TIMEOrdinalReferenceSystem thors = new TIMEOrdinalReferenceSystem(new RDFResource("ex:Thors3"), TestTRS);
+
+        List<RDFResource> referencePoints = thors.GetReferencePoints();
+
+        Assert.IsNotNull(referencePoints);
+        Assert.IsEmpty(referencePoints);
+    }
+
+    [TestMethod]
     public void ShouldCheckIsSubEraOf()
     {
         TIMEOrdinalReferenceSystem thors = new TIMEOrdinalReferenceSystem(new RDFResource("ex:Thors2"), TestTRS);
@@ -957,6 +989,44 @@ public class TIMEOrdinalReferenceSystemTest
         Assert.IsNotNull(cenozoicBegin);
         Assert.IsTrue(mesozoicEnd.Equals(cenozoicBegin));
     }
+
+    [TestMethod]
+    public void ShouldGetNextAndPreviousEras()
+    {
+        TIMEOrdinalReferenceSystem ics = GetICS();
+
+        // Adjacent top-level eras sharing the Permian-Triassic / K-Pg boundaries
+        Assert.Contains(Mesozoic, ics.GetNextEras(Paleozoic));
+        Assert.Contains(Paleozoic, ics.GetPreviousEras(Mesozoic));
+        Assert.Contains(Cenozoic, ics.GetNextEras(Mesozoic));
+        Assert.Contains(Mesozoic, ics.GetPreviousEras(Cenozoic));
+
+        // Adjacent periods within the Paleozoic sequence
+        Assert.Contains(Ordovician, ics.GetNextEras(Cambrian));
+        Assert.Contains(Cambrian, ics.GetPreviousEras(Ordovician));
+        Assert.Contains(Devonian, ics.GetNextEras(Silurian));
+        Assert.Contains(Silurian, ics.GetPreviousEras(Devonian));
+
+        // The first era of the whole timeline has no previous era; the last has no next era
+        Assert.IsEmpty(ics.GetPreviousEras(Cambrian));
+        Assert.IsEmpty(ics.GetNextEras(Holocene));
+    }
+
+    [TestMethod]
+    public void ShouldThrowExceptionOnGettingNextErasBecauseNullEra()
+        => Assert.ThrowsExactly<OWLException>(() => _ = GetICS().GetNextEras(null));
+
+    [TestMethod]
+    public void ShouldThrowExceptionOnGettingNextErasBecauseUnknownEra()
+        => Assert.ThrowsExactly<OWLException>(() => _ = GetICS().GetNextEras(new RDFResource("ex:unknownEra")));
+
+    [TestMethod]
+    public void ShouldThrowExceptionOnGettingPreviousErasBecauseNullEra()
+        => Assert.ThrowsExactly<OWLException>(() => _ = GetICS().GetPreviousEras(null));
+
+    [TestMethod]
+    public void ShouldThrowExceptionOnGettingPreviousErasBecauseUnknownEra()
+        => Assert.ThrowsExactly<OWLException>(() => _ = GetICS().GetPreviousEras(new RDFResource("ex:unknownEra")));
 
     [TestMethod]
     public void ShouldDeclareMassExtinctionReferencePoints()

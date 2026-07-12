@@ -340,6 +340,20 @@ namespace OWLSharp.Extensions.TIME
         }
 
         /// <summary>
+        /// Enlists the thors:EraBoundary individuals declared as reference points (thors:referencePoint) of this ordinal TRS
+        /// </summary>
+        public List<RDFResource> GetReferencePoints()
+        {
+            List<OWLObjectPropertyAssertion> objPropAsns = GetCachedObjectAssertions();
+            List<OWLObjectPropertyAssertion> referencePointAsns = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(
+                objPropAsns, RDFVocabulary.TIME.THORS.REFERENCE_POINT.ToEntity<OWLObjectProperty>());
+            return referencePointAsns
+                .Where(asn => asn.SourceIndividualExpression.GetIRI().Equals(this))
+                .Select(asn => asn.TargetIndividualExpression.GetIRI())
+                .ToList();
+        }
+
+        /// <summary>
         /// Enlists the thors:Era individuals having a formal thors:Member hierarchical relationship with the given one
         /// in this ordinal TRS (in this case they must be sub-eras of it).
         /// When chronologicalOrder is true, sub-eras are sorted by their begin coordinate (earliest first).
@@ -460,6 +474,60 @@ namespace OWLSharp.Extensions.TIME
             }
 
             return superEras;
+        }
+
+        /// <summary>
+        /// Enlists the thors:Era individuals immediately following the given one in ordinal sequence, i.e. those whose
+        /// thors:begin boundary coincides with the end boundary of the given era (thors:nextEra semantics).
+        /// Empty when the era has no declared end boundary or no other era begins from it.
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        public List<RDFResource> GetNextEras(RDFResource era)
+        {
+            #region Guards
+            if (era == null)
+                throw new OWLException($"Cannot get next eras because given '{nameof(era)}' parameter is null");
+            if (!CheckHasEra(era))
+                throw new OWLException($"Cannot get next eras because given '{nameof(era)}' parameter is not declared as era of this ordinal TRS");
+            #endregion
+
+            List<OWLObjectPropertyAssertion> objPropAsns = GetCachedObjectAssertions();
+            RDFResource endBoundary = GetBoundaryInstantIRI(era, objPropAsns, false);
+            if (endBoundary == null)
+                return new List<RDFResource>();
+
+            return RDFQueryUtilities.RemoveDuplicates(
+                OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, RDFVocabulary.TIME.THORS.NEXT_ERA.ToEntity<OWLObjectProperty>())
+                    .Where(asn => asn.SourceIndividualExpression.GetIRI().Equals(endBoundary))
+                    .Select(asn => asn.TargetIndividualExpression.GetIRI())
+                    .ToList());
+        }
+
+        /// <summary>
+        /// Enlists the thors:Era individuals immediately preceding the given one in ordinal sequence, i.e. those whose
+        /// thors:end boundary coincides with the begin boundary of the given era (thors:previousEra semantics).
+        /// Empty when the era has no declared begin boundary or no other era ends at it.
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        public List<RDFResource> GetPreviousEras(RDFResource era)
+        {
+            #region Guards
+            if (era == null)
+                throw new OWLException($"Cannot get previous eras because given '{nameof(era)}' parameter is null");
+            if (!CheckHasEra(era))
+                throw new OWLException($"Cannot get previous eras because given '{nameof(era)}' parameter is not declared as era of this ordinal TRS");
+            #endregion
+
+            List<OWLObjectPropertyAssertion> objPropAsns = GetCachedObjectAssertions();
+            RDFResource beginBoundary = GetBoundaryInstantIRI(era, objPropAsns, true);
+            if (beginBoundary == null)
+                return new List<RDFResource>();
+
+            return RDFQueryUtilities.RemoveDuplicates(
+                OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, RDFVocabulary.TIME.THORS.PREVIOUS_ERA.ToEntity<OWLObjectProperty>())
+                    .Where(asn => asn.SourceIndividualExpression.GetIRI().Equals(beginBoundary))
+                    .Select(asn => asn.TargetIndividualExpression.GetIRI())
+                    .ToList());
         }
 
         /// <summary>
