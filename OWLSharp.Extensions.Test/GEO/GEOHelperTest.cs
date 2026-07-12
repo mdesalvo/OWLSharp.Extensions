@@ -3465,5 +3465,27 @@ public class GEOHelperTest
         Assert.IsTrue(await GEOHelper.CheckCoversAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:SquareAFT")), new OWLNamedIndividual(new RDFResource("ex:SquareDFT"))));
         Assert.IsFalse(await GEOHelper.CheckIsCoveredByAsync(geoOntology, new OWLNamedIndividual(new RDFResource("ex:SquareAFT")), new OWLNamedIndividual(new RDFResource("ex:SquareEFT"))));
     }
+
+    [TestMethod]
+    public async Task ShouldRejectNonWGS84WKTLiteralAsync()
+    {
+        await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetCentroidOfFeatureAsync(
+            new OWLLiteral(new RDFTypedLiteral("SRID=3857;POINT(9.18 45.46)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT))));
+
+        //WGS84 (EPSG:4326) is explicitly allowed
+        Assert.IsNotNull(await GEOHelper.GetCentroidOfFeatureAsync(
+            new OWLLiteral(new RDFTypedLiteral("SRID=4326;POINT(9.18 45.46)", RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT))));
+    }
+
+    [TestMethod]
+    public async Task ShouldRejectNonWGS84GMLLiteralAsync()
+    {
+        await Assert.ThrowsExactlyAsync<OWLException>(async () => await GEOHelper.GetCentroidOfFeatureAsync(
+            new OWLLiteral(new RDFTypedLiteral("""<gml:Point xmlns:gml="http://www.opengis.net/gml/3.2" srsName="EPSG:3857"><gml:pos>9.18 45.46</gml:pos></gml:Point>""", RDFModelEnums.RDFDatatypes.GEOSPARQL_GML))));
+
+        //WGS84 (EPSG:4326 / CRS84) is explicitly allowed
+        Assert.IsNotNull(await GEOHelper.GetCentroidOfFeatureAsync(
+            new OWLLiteral(new RDFTypedLiteral("""<gml:Point xmlns:gml="http://www.opengis.net/gml/3.2" srsName="EPSG:4326"><gml:pos>9.18 45.46</gml:pos></gml:Point>""", RDFModelEnums.RDFDatatypes.GEOSPARQL_GML))));
+    }
     #endregion
 }

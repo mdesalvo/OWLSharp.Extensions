@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using NetTopologySuite.Geometries;
@@ -297,9 +298,7 @@ namespace OWLSharp.Extensions.GEO
                 geometriesFrom.Insert(0, defaultGeometryFrom);
 
             //Transform "To" feature into WGS84 geometry
-            bool isWKT = toFeatureTypedLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
-            Geometry wgs84GeometryTo = isWKT ? WKTReader.Read(toFeatureTypedLiteral.Value) : GMLReader.Read(toFeatureTypedLiteral.Value);
-            wgs84GeometryTo.SRID=4326;
+            Geometry wgs84GeometryTo = ParseAndValidateWGS84Geometry(toFeatureTypedLiteral);
 
             //Perform spatial analysis using dynamic LAEA centered on "From" geometry
             double? featuresDistance = double.MaxValue;
@@ -333,14 +332,10 @@ namespace OWLSharp.Extensions.GEO
             #endregion
 
             //Transform "From" feature into WGS84 geometry
-            bool fromIsWKT = fromFeatureTypedLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
-            Geometry wgs84GeometryFrom = fromIsWKT ? WKTReader.Read(fromFeatureTypedLiteral.Value) : GMLReader.Read(fromFeatureTypedLiteral.Value);
-            wgs84GeometryFrom.SRID=4326;
+            Geometry wgs84GeometryFrom = ParseAndValidateWGS84Geometry(fromFeatureTypedLiteral);
 
             //Transform "To" feature into WGS84 geometry
-            bool toIsWKT = toFeatureTypedLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
-            Geometry wgs84GeometryTo = toIsWKT ? WKTReader.Read(toFeatureTypedLiteral.Value) : GMLReader.Read(toFeatureTypedLiteral.Value);
-            wgs84GeometryTo.SRID=4326;
+            Geometry wgs84GeometryTo = ParseAndValidateWGS84Geometry(toFeatureTypedLiteral);
 
             //Perform spatial analysis using dynamic LAEA centered on "From" geometry
             (Geometry lazFrom, Geometry lazTo) = ProjectToDynamicLAEA(wgs84GeometryFrom, wgs84GeometryTo);
@@ -394,9 +389,7 @@ namespace OWLSharp.Extensions.GEO
             #endregion
 
             //Transform feature into WGS84 geometry and project to dynamic LAEA
-            bool isWKT = featureTypedLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
-            Geometry wgs84Geometry = isWKT ? WKTReader.Read(featureTypedLiteral.Value) : GMLReader.Read(featureTypedLiteral.Value);
-            wgs84Geometry.SRID=4326;
+            Geometry wgs84Geometry = ParseAndValidateWGS84Geometry(featureTypedLiteral);
             Geometry lazGeometry = ProjectToDynamicLAEA(wgs84Geometry);
 
             return await Task.FromResult(lazGeometry.Length);
@@ -449,9 +442,7 @@ namespace OWLSharp.Extensions.GEO
             #endregion
 
             //Transform feature into WGS84 geometry and project to dynamic LAEA
-            bool isWKT = featureTypedLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
-            Geometry wgs84Geometry = isWKT ? WKTReader.Read(featureTypedLiteral.Value) : GMLReader.Read(featureTypedLiteral.Value);
-            wgs84Geometry.SRID=4326;
+            Geometry wgs84Geometry = ParseAndValidateWGS84Geometry(featureTypedLiteral);
             Geometry lazGeometry = ProjectToDynamicLAEA(wgs84Geometry);
 
             return await Task.FromResult(lazGeometry.Area);
@@ -551,9 +542,7 @@ namespace OWLSharp.Extensions.GEO
             RDFTypedLiteral centroidOfFeature = (RDFTypedLiteral)centroidOfFeatureLit.GetLiteral();
 
             //Create WGS84 geometry from centroid of feature
-            bool isWKT = centroidOfFeature.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
-            Geometry wgs84CentroidOfFeature = isWKT ? WKTReader.Read(centroidOfFeature.Value) : GMLReader.Read(centroidOfFeature.Value);
-            wgs84CentroidOfFeature.SRID=4326;
+            Geometry wgs84CentroidOfFeature = ParseAndValidateWGS84Geometry(centroidOfFeature);
 
             //Create dynamic LAEA centered on centroid of feature for accurate distance calculation
             (MathTransform forward, _) = CreateDynamicLAEATransforms(wgs84CentroidOfFeature.Centroid.X, wgs84CentroidOfFeature.Centroid.Y);
@@ -600,9 +589,7 @@ namespace OWLSharp.Extensions.GEO
             #endregion
 
             //Transform feature into WGS84 geometry
-            bool isWKT = featureTypedLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
-            Geometry wgs84Geometry = isWKT ? WKTReader.Read(featureTypedLiteral.Value) : GMLReader.Read(featureTypedLiteral.Value);
-            wgs84Geometry.SRID=4326;
+            Geometry wgs84Geometry = ParseAndValidateWGS84Geometry(featureTypedLiteral);
 
             //Create dynamic LAEA centered on centroid of feature for accurate distance calculation
             Point wgs84Centroid = wgs84Geometry.Centroid;
@@ -710,9 +697,7 @@ namespace OWLSharp.Extensions.GEO
             #endregion
 
             //Transform feature into geometry
-            bool isWKT = featureTypedLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
-            Geometry wgs84Geometry = isWKT ? WKTReader.Read(featureTypedLiteral.Value) : GMLReader.Read(featureTypedLiteral.Value);
-            wgs84Geometry.SRID=4326;
+            Geometry wgs84Geometry = ParseAndValidateWGS84Geometry(featureTypedLiteral);
             Geometry lazGeometry = RDFGeoConverter.GetLambertAzimuthalGeometryFromWGS84(wgs84Geometry);
 
             //Retrieve WKT/GML serialization of features
@@ -814,9 +799,7 @@ namespace OWLSharp.Extensions.GEO
             #endregion
 
             //Transform feature into geometry
-            bool isWKT = featureTypedLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
-            Geometry wgs84Geometry = isWKT ? WKTReader.Read(featureTypedLiteral.Value) : GMLReader.Read(featureTypedLiteral.Value);
-            wgs84Geometry.SRID=4326;
+            Geometry wgs84Geometry = ParseAndValidateWGS84Geometry(featureTypedLiteral);
             Geometry lazGeometry = RDFGeoConverter.GetLambertAzimuthalGeometryFromWGS84(wgs84Geometry);
 
             //Retrieve WKT/GML serialization of features
@@ -918,9 +901,7 @@ namespace OWLSharp.Extensions.GEO
             #endregion
 
             //Transform feature into geometry
-            bool isWKT = featureTypedLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
-            Geometry wgs84Geometry = isWKT ? WKTReader.Read(featureTypedLiteral.Value) : GMLReader.Read(featureTypedLiteral.Value);
-            wgs84Geometry.SRID=4326;
+            Geometry wgs84Geometry = ParseAndValidateWGS84Geometry(featureTypedLiteral);
             Geometry lazGeometry = RDFGeoConverter.GetLambertAzimuthalGeometryFromWGS84(wgs84Geometry);
 
             //Retrieve WKT/GML serialization of features
@@ -1022,9 +1003,7 @@ namespace OWLSharp.Extensions.GEO
             #endregion
 
             //Transform feature into geometry
-            bool isWKT = featureTypedLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
-            Geometry wgs84Geometry = isWKT ? WKTReader.Read(featureTypedLiteral.Value) : GMLReader.Read(featureTypedLiteral.Value);
-            wgs84Geometry.SRID=4326;
+            Geometry wgs84Geometry = ParseAndValidateWGS84Geometry(featureTypedLiteral);
             Geometry lazGeometry = RDFGeoConverter.GetLambertAzimuthalGeometryFromWGS84(wgs84Geometry);
 
             //Retrieve WKT/GML serialization of features
@@ -1126,9 +1105,7 @@ namespace OWLSharp.Extensions.GEO
             #endregion
 
             //Transform feature into geometry
-            bool isWKT = featureTypedLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
-            Geometry wgs84Geometry = isWKT ? WKTReader.Read(featureTypedLiteral.Value) : GMLReader.Read(featureTypedLiteral.Value);
-            wgs84Geometry.SRID=4326;
+            Geometry wgs84Geometry = ParseAndValidateWGS84Geometry(featureTypedLiteral);
             Geometry lazGeometry = RDFGeoConverter.GetLambertAzimuthalGeometryFromWGS84(wgs84Geometry);
 
             //Retrieve WKT/GML serialization of features
@@ -1230,9 +1207,7 @@ namespace OWLSharp.Extensions.GEO
             #endregion
 
             //Transform feature into geometry
-            bool isWKT = featureTypedLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
-            Geometry wgs84Geometry = isWKT ? WKTReader.Read(featureTypedLiteral.Value) : GMLReader.Read(featureTypedLiteral.Value);
-            wgs84Geometry.SRID=4326;
+            Geometry wgs84Geometry = ParseAndValidateWGS84Geometry(featureTypedLiteral);
             Geometry lazGeometry = RDFGeoConverter.GetLambertAzimuthalGeometryFromWGS84(wgs84Geometry);
 
             //Retrieve WKT/GML serialization of features
@@ -1398,11 +1373,47 @@ namespace OWLSharp.Extensions.GEO
         #endregion
 
         #region Utilities
+        // Regex to get SRS declaration from GML headers
+        private static readonly Regex GMLSrsNameRegex = new Regex("srsName\\s*=\\s*\"([^\"]+)\"", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
         /// <summary>
         /// Wraps the given WKT/GML typed literal into an OWLLiteral, propagating null (no result) as-is.
         /// </summary>
         internal static OWLLiteral WrapNullableLiteral(RDFTypedLiteral literal)
             => literal == null ? null : new OWLLiteral(literal);
+
+        /// <summary>
+        /// Parses the given WKT/GML typed literal into its WGS84 geometry, after validating that it does not
+        /// declare a CRS other than WGS84 (EWKT "SRID=..." prefix, or GML "srsName" attribute).
+        /// </summary>
+        /// <exception cref="OWLException"></exception>
+        internal static Geometry ParseAndValidateWGS84Geometry(RDFTypedLiteral literal)
+        {
+            bool isWKT = literal.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
+            if (isWKT)
+            {
+                // Accept only SRID=4326 if SRS is explicitly provided
+                if (literal.Value.TrimStart().StartsWith("SRID=", StringComparison.OrdinalIgnoreCase)
+                     && !literal.Value.TrimStart().StartsWith("SRID=4326;", StringComparison.OrdinalIgnoreCase))
+                    throw new OWLException($"Cannot analyze geometry because given WKT literal declares a non-WGS84 SRID (only EPSG:4326 is supported): '{literal.Value}'");
+            }
+            else
+            {
+                Match srsNameMatch = GMLSrsNameRegex.Match(literal.Value);
+                if (srsNameMatch.Success)
+                {
+                    string srsName = srsNameMatch.Groups[1].Value;
+                    bool isWGS84 = srsName.EndsWith("4326", StringComparison.Ordinal)
+                                    || srsName.EndsWith("CRS84", StringComparison.OrdinalIgnoreCase);
+                    if (!isWGS84)
+                        throw new OWLException($"Cannot analyze geometry because given GML literal declares a non-WGS84 CRS (only EPSG:4326/CRS84 is supported): '{srsName}'");
+                }
+            }
+
+            Geometry wgs84Geometry = isWKT ? WKTReader.Read(literal.Value) : GMLReader.Read(literal.Value);
+            wgs84Geometry.SRID = 4326;
+            return wgs84Geometry;
+        }
 
         /// <summary>
         /// Evaluates the given pairwise topological relation between two Azimuthal-projected geometries.
@@ -1480,9 +1491,7 @@ namespace OWLSharp.Extensions.GEO
                 geometriesFrom.Insert(0, defaultGeometryFrom);
 
             //Transform "To" feature into Azimuthal geometry
-            bool isWKT = toFeatureTypedLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
-            Geometry wgs84GeometryTo = isWKT ? WKTReader.Read(toFeatureTypedLiteral.Value) : GMLReader.Read(toFeatureTypedLiteral.Value);
-            wgs84GeometryTo.SRID=4326;
+            Geometry wgs84GeometryTo = ParseAndValidateWGS84Geometry(toFeatureTypedLiteral);
             Geometry lazGeometryTo = RDFGeoConverter.GetLambertAzimuthalGeometryFromWGS84(wgs84GeometryTo);
 
             return geometriesFrom.Any(fromGeom => EvaluateSpatialRelation(fromGeom.Item2, lazGeometryTo, relation));
@@ -1571,7 +1580,6 @@ namespace OWLSharp.Extensions.GEO
             List<OWLDataPropertyAssertion> dataPropAsns = ontology.GetAssertionAxiomsOfType<OWLDataPropertyAssertion>();
             List<OWLDataPropertyAssertion> wktAsns = OWLAssertionAxiomHelper.SelectDataAssertionsByDPEX(dataPropAsns, RDFVocabulary.GEOSPARQL.AS_WKT.ToEntity<OWLDataProperty>());
             List<OWLDataPropertyAssertion> gmlAsns = OWLAssertionAxiomHelper.SelectDataAssertionsByDPEX(dataPropAsns, RDFVocabulary.GEOSPARQL.AS_GML.ToEntity<OWLDataProperty>());
-
             bool preferWKT = geometryUris.Any(gUri => wktAsns.Any(asn => asn.IndividualExpression.GetIRI().Equals(gUri)));
             List<OWLDataPropertyAssertion> literalAsns = preferWKT ? wktAsns : gmlAsns;
 
@@ -1726,9 +1734,7 @@ namespace OWLSharp.Extensions.GEO
             #endregion
 
             //Transform feature into WGS84 geometry
-            bool isWKT = featureLiteral.Datatype.TargetDatatype == RDFModelEnums.RDFDatatypes.GEOSPARQL_WKT;
-            Geometry wgs84Geometry = isWKT ? WKTReader.Read(featureLiteral.Value) : GMLReader.Read(featureLiteral.Value);
-            wgs84Geometry.SRID=4326;
+                        Geometry wgs84Geometry = ParseAndValidateWGS84Geometry(featureLiteral);
 
             //Using dynamic LAEA centered on the geometry itself for accurate, uniform precision
             Point centroid = wgs84Geometry.Centroid;
