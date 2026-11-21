@@ -38,7 +38,13 @@ Code targeting `netstandard2.0` cannot assume `Parallel.ForEachAsync` or other n
 
 Each helper is a `static class` of extension methods on `OWLOntology`, organized under `#region`s:
 
-- **Helper (Initializer, Declarer[, Getter])** — `InitializeXAsync` imports the domain's T-BOX ontologies (dereferenced from their canonical URIs, e.g. `RDFVocabulary.SKOS.DEREFERENCE_URI`) with configurable timeout/cache; `DeclareX` methods inject A-BOX axioms (class assertions, object/data property assertions) for domain entities. Declare methods validate arguments and throw `OWLException` on invalid input.
+- **Helper (Initializer, Declarer[, Getter])** — `InitializeXAsync` is the consumer's opt-in: it imports the domain's T-BOX from copies embedded in the assembly (`<Domain>/Ontologies/`, `EmbeddedResource` with a fixed `LogicalName` in the csproj), never from the network; its `timeoutMilliseconds`/`cacheMilliseconds` parameters are unused since 5.0.1 and stay only for binary compatibility. `DeclareX` methods inject A-BOX axioms (class assertions, object/data property assertions) for domain entities. Declare methods validate arguments and throw `OWLException` on invalid input.
+
+### Embedded ontologies
+
+Each helper has one `EmbeddedOntologiesLazy` field (at the end of its `Utilities` region) that parses the embedded files once per process into `(ImportIRIs, Ontology)` pairs; `InitializeXAsync` skips a pair whose import IRIs (from `RDFVocabulary.*.DEREFERENCE_URI`) are already in `ontology.Imports`, otherwise it adds the imports and the axioms flagged `IsImport`. Files that type their entities with classes of another file must be parsed as one union graph (the OWLSharp RDF loader only recognizes entities declared in the same graph): skos ∪ skos-xl, geosparql ∪ sf, time ∪ gregorian. THORS is parsed alone on purpose: joined with OWL-TIME it aborts the load, because RDFSharp's `isIRI` accepts blank nodes and OWLSharp then turns THORS' anonymous inverse properties into named ones.
+
+Embedded files stay byte-identical to their published source, except for modifications declared in `THIRD-PARTY-NOTICES.md` (repository root, packed into the nupkg), which lists source, retrieval date, SHA-256, copyright and license of each one. Adding or refreshing an ontology means updating that file too.
 - **Analyzer** — read-only query methods (`CheckHasX`, `GetX...`) that traverse the ontology's assertions/graph to answer domain questions (e.g. SKOS broader/narrower closure, GEO distance/direction/containment between features, TIME instant/interval coordinates and extents).
 - **Utilities** — internal helpers backing the above (WKT/GML conversion via NTS in GEO, SWRL-relation traversal in SKOS/TIME).
 
