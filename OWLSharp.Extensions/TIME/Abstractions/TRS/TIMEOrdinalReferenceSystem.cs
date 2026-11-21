@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace OWLSharp.Extensions.TIME
 {
@@ -43,7 +44,8 @@ namespace OWLSharp.Extensions.TIME
         private static readonly Lazy<OWLOntology> THORSOntologyLazy = new Lazy<OWLOntology>(() =>
         {
             OWLOntology ontology = new OWLOntology();
-            ontology.InitializeTIMEAsync(30000).GetAwaiter().GetResult();
+            //Run on the thread pool: a TRS constructed on a UI thread would otherwise block the very thread the initialization resumes on
+            Task.Run(() => ontology.InitializeTIMEAsync()).GetAwaiter().GetResult();
             return ontology;
         }, LazyThreadSafetyMode.ExecutionAndPublication);
 

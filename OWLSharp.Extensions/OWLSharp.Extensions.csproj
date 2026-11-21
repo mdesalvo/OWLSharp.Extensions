@@ -44,4 +44,10 @@
   <ItemGroup>
     <PackageReference Include="OWLSharp" Version="5.0.1" />
   </ItemGroup>
+  <ItemGroup>
+    <!-- TIME ontologies -->
+    <EmbeddedResource Include="TIME\Ontologies\time.ttl" LogicalName="OWLSharp.Extensions.TIME.Ontologies.time.ttl" />
+    <EmbeddedResource Include="TIME\Ontologies\thors.ttl" LogicalName="OWLSharp.Extensions.TIME.Ontologies.thors.ttl" />
+    <EmbeddedResource Include="TIME\Ontologies\gregorian.ttl" LogicalName="OWLSharp.Extensions.TIME.Ontologies.gregorian.ttl" />
+  </ItemGroup>
 </Project>
