@@ -26,8 +26,8 @@ namespace OWLSharp.Extensions.SKOS
         internal const string rulesugg1B = "There should not be SKOS concepts having a clash in hierarchical relations (skos:narrowerTransitive VS skos:broaderTransitive)";
         internal const string rulesugg2A = "There should not be SKOS concepts having a clash in hierarchical VS associative relations (skos:narrower VS skos:related)";
         internal const string rulesugg2B = "There should not be SKOS concepts having a clash in hierarchical VS associative relations (skos:narrowerTransitive VS skos:related)";
-        internal const string rulesugg3A = "There should not be SKOS concepts having a clash in hierarchical VS mapping relations (skos:narrower VS skos:narrowMatch)";
-        internal const string rulesugg3B = "There should not be SKOS concepts having a clash in hierarchical VS mapping relations (skos:narrowerTransitive VS skos:narrowMatch)";
+        internal const string rulesugg3A = "There should not be SKOS concepts having a clash in hierarchical VS mapping relations (skos:narrower VS skos:broadMatch)";
+        internal const string rulesugg3B = "There should not be SKOS concepts having a clash in hierarchical VS mapping relations (skos:narrowerTransitive VS skos:broadMatch)";
         internal const string rulesugg4A = "There should not be SKOS concepts having a clash in hierarchical VS mapping relations (skos:narrower VS skos:closeMatch)";
         internal const string rulesugg4B = "There should not be SKOS concepts having a clash in hierarchical VS mapping relations (skos:narrowerTransitive VS skos:closeMatch)";
         internal const string rulesugg5A = "There should not be SKOS concepts having a clash in hierarchical VS mapping relations (skos:narrower VS skos:exactMatch)";
@@ -59,15 +59,15 @@ namespace OWLSharp.Extensions.SKOS
                 RDFVocabulary.SKOS.NARROWER_TRANSITIVE, RDFVocabulary.SKOS.RELATED, rulesugg2B,
                 "hierarchical/associative relations (skos:narrowerTransitive VS skos:related)", issues);
 
-            //skos:narrower VS skos:narrowMatch
+            //skos:narrower VS skos:broadMatch
             await SKOSHelper.CheckConceptRelationClashAsync(ontology, rulename,
-                RDFVocabulary.SKOS.NARROWER, RDFVocabulary.SKOS.NARROW_MATCH, rulesugg3A,
-                "hierarchical/mapping relations (skos:narrower VS skos:narrowMatch)", issues);
+                RDFVocabulary.SKOS.NARROWER, RDFVocabulary.SKOS.BROAD_MATCH, rulesugg3A,
+                "hierarchical/mapping relations (skos:narrower VS skos:broadMatch)", issues);
 
-            //skos:narrowerTransitive VS skos:narrowMatch
+            //skos:narrowerTransitive VS skos:broadMatch
             await SKOSHelper.CheckConceptRelationClashAsync(ontology, rulename,
-                RDFVocabulary.SKOS.NARROWER_TRANSITIVE, RDFVocabulary.SKOS.NARROW_MATCH, rulesugg3B,
-                "hierarchical/mapping relations (skos:narrowerTransitive VS skos:narrowMatch)", issues);
+                RDFVocabulary.SKOS.NARROWER_TRANSITIVE, RDFVocabulary.SKOS.BROAD_MATCH, rulesugg3B,
+                "hierarchical/mapping relations (skos:narrowerTransitive VS skos:broadMatch)", issues);
 
             //skos:narrower VS skos:closeMatch
             await SKOSHelper.CheckConceptRelationClashAsync(ontology, rulename,
