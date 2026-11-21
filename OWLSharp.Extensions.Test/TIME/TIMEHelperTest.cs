@@ -21,6 +21,7 @@ using RDFSharp.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml;
 
 namespace OWLSharp.Extensions.Test.TIME;
@@ -29,6 +30,79 @@ namespace OWLSharp.Extensions.Test.TIME;
 public class TIMEHelperTest : TIMETestOntology
 {
     #region Tests (Declarer)
+    [TestMethod]
+    public async Task ShouldInitializeTIMEAsync()
+    {
+        OWLOntology ontology = new OWLOntology();
+        await ontology.InitializeTIMEAsync();
+
+        Assert.HasCount(3, ontology.Imports);
+        Assert.IsTrue(ontology.Imports.Any(import => string.Equals(import.IRI, RDFVocabulary.TIME.DEREFERENCE_URI, StringComparison.Ordinal)));
+        Assert.IsTrue(ontology.Imports.Any(import => string.Equals(import.IRI, RDFVocabulary.TIME.GREG.DEREFERENCE_URI, StringComparison.Ordinal)));
+        Assert.IsTrue(ontology.Imports.Any(import => string.Equals(import.IRI, RDFVocabulary.TIME.THORS.DEREFERENCE_URI, StringComparison.Ordinal)));
+        Assert.HasCount(123, ontology.DeclarationAxioms);
+        Assert.HasCount(62, ontology.ClassAxioms);
+        Assert.HasCount(119, ontology.ObjectPropertyAxioms);
+        Assert.HasCount(25, ontology.DataPropertyAxioms);
+        Assert.HasCount(89, ontology.AssertionAxioms);
+        Assert.HasCount(2, ontology.AnnotationAxioms);
+
+        Assert.IsTrue(ontology.DeclarationAxioms.TrueForAll(axiom => axiom.IsImport));
+        Assert.IsTrue(ontology.ClassAxioms.TrueForAll(axiom => axiom.IsImport));
+        Assert.IsTrue(ontology.ObjectPropertyAxioms.TrueForAll(axiom => axiom.IsImport));
+        Assert.IsTrue(ontology.DataPropertyAxioms.TrueForAll(axiom => axiom.IsImport));
+        Assert.IsTrue(ontology.AssertionAxioms.TrueForAll(axiom => axiom.IsImport));
+        Assert.IsTrue(ontology.AnnotationAxioms.TrueForAll(axiom => axiom.IsImport));
+
+        Assert.IsTrue(ontology.AssertionAxioms.OfType<OWLClassAssertion>().Any(assertion =>
+            assertion.IndividualExpression.GetIRI().Equals(new RDFResource("http://www.w3.org/ns/time/gregorian/January"))
+              && assertion.ClassExpression.GetIRI().Equals(new RDFResource("http://www.w3.org/2006/time#MonthOfYear"))));
+
+        await ((OWLOntology)null).InitializeTIMEAsync();
+    }
+
+    [TestMethod]
+    public async Task ShouldInitializeTIMEOnlyOnceAsync()
+    {
+        OWLOntology ontology = new OWLOntology();
+        await ontology.InitializeTIMEAsync();
+        await ontology.InitializeTIMEAsync();
+
+        Assert.HasCount(3, ontology.Imports);
+        Assert.HasCount(123, ontology.DeclarationAxioms);
+        Assert.HasCount(62, ontology.ClassAxioms);
+        Assert.HasCount(119, ontology.ObjectPropertyAxioms);
+        Assert.HasCount(25, ontology.DataPropertyAxioms);
+        Assert.HasCount(89, ontology.AssertionAxioms);
+        Assert.HasCount(2, ontology.AnnotationAxioms);
+    }
+
+    [TestMethod]
+    public async Task ShouldInitializeTIMESkippingAlreadyImportedOntologiesAsync()
+    {
+        OWLOntology ontology = new OWLOntology();
+        ontology.Imports.Add(new OWLImport(new RDFResource(RDFVocabulary.TIME.THORS.DEREFERENCE_URI)));
+        await ontology.InitializeTIMEAsync();
+
+        Assert.HasCount(3, ontology.Imports);
+        Assert.HasCount(109, ontology.DeclarationAxioms);
+        Assert.HasCount(56, ontology.ClassAxioms);
+        Assert.HasCount(94, ontology.ObjectPropertyAxioms);
+        Assert.HasCount(25, ontology.DataPropertyAxioms);
+        Assert.HasCount(89, ontology.AssertionAxioms);
+        Assert.HasCount(2, ontology.AnnotationAxioms);
+    }
+
+    [TestMethod]
+    public async Task ShouldExportTIMEWithoutTBoxAsync()
+    {
+        OWLOntology ontology = new OWLOntology();
+        await ontology.InitializeTIMEAsync();
+        RDFGraph graph = await ontology.ToRDFGraphAsync();
+
+        Assert.AreEqual(0, graph[s: RDFVocabulary.TIME.INSTANT].TriplesCount);
+    }
+
     [TestMethod]
     public void ShouldDeclareInstantByDateTime()
     {

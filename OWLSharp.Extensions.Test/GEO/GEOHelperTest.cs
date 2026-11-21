@@ -30,6 +30,84 @@ public class GEOHelperTest
 {
     #region Tests (Declarer)
     [TestMethod]
+    public async Task ShouldInitializeGEOAsync()
+    {
+        OWLOntology ontology = new OWLOntology();
+        await ontology.InitializeGEOAsync();
+
+        Assert.HasCount(2, ontology.Imports);
+        Assert.IsTrue(ontology.Imports.Any(import => string.Equals(import.IRI, RDFVocabulary.GEOSPARQL.DEREFERENCE_URI, StringComparison.Ordinal)));
+        Assert.IsTrue(ontology.Imports.Any(import => string.Equals(import.IRI, RDFVocabulary.GEOSPARQL.SF.DEREFERENCE_URI, StringComparison.Ordinal)));
+        Assert.HasCount(109, ontology.DeclarationAxioms);
+        Assert.HasCount(25, ontology.ClassAxioms);
+        Assert.HasCount(85, ontology.ObjectPropertyAxioms);
+        Assert.HasCount(32, ontology.DataPropertyAxioms);
+        Assert.HasCount(0, ontology.AssertionAxioms);
+        Assert.HasCount(0, ontology.AnnotationAxioms);
+
+        Assert.IsTrue(ontology.DeclarationAxioms.TrueForAll(axiom => axiom.IsImport));
+        Assert.IsTrue(ontology.ClassAxioms.TrueForAll(axiom => axiom.IsImport));
+        Assert.IsTrue(ontology.ObjectPropertyAxioms.TrueForAll(axiom => axiom.IsImport));
+        Assert.IsTrue(ontology.DataPropertyAxioms.TrueForAll(axiom => axiom.IsImport));
+        Assert.IsTrue(ontology.AssertionAxioms.TrueForAll(axiom => axiom.IsImport));
+        Assert.IsTrue(ontology.AnnotationAxioms.TrueForAll(axiom => axiom.IsImport));
+
+        Assert.IsTrue(ontology.DeclarationAxioms.Any(declaration => declaration.Entity.GetIRI().Equals(RDFVocabulary.GEOSPARQL.FEATURE)));
+        Assert.IsTrue(ontology.DeclarationAxioms.Any(declaration => declaration.Entity.GetIRI().Equals(RDFVocabulary.GEOSPARQL.GEOMETRY)));
+        Assert.IsTrue(ontology.DeclarationAxioms.Any(declaration => declaration.Entity.GetIRI().Equals(RDFVocabulary.GEOSPARQL.HAS_GEOMETRY)));
+        Assert.IsTrue(ontology.DeclarationAxioms.Any(declaration => declaration.Entity.GetIRI().Equals(RDFVocabulary.GEOSPARQL.DEFAULT_GEOMETRY)));
+        Assert.IsTrue(ontology.DeclarationAxioms.Any(declaration => declaration.Entity.GetIRI().Equals(RDFVocabulary.GEOSPARQL.AS_WKT)));
+        Assert.IsTrue(ontology.DeclarationAxioms.Any(declaration => declaration.Entity.GetIRI().Equals(RDFVocabulary.GEOSPARQL.AS_GML)));
+        Assert.IsTrue(ontology.DeclarationAxioms.Any(declaration => declaration.Entity.GetIRI().Equals(RDFVocabulary.GEOSPARQL.SF.POINT)));
+        Assert.IsTrue(ontology.DeclarationAxioms.Any(declaration => declaration.Entity.GetIRI().Equals(RDFVocabulary.GEOSPARQL.SF.LINESTRING)));
+        Assert.IsTrue(ontology.DeclarationAxioms.Any(declaration => declaration.Entity.GetIRI().Equals(RDFVocabulary.GEOSPARQL.SF.POLYGON)));
+
+        await ((OWLOntology)null).InitializeGEOAsync();
+    }
+
+    [TestMethod]
+    public async Task ShouldInitializeGEOOnlyOnceAsync()
+    {
+        OWLOntology ontology = new OWLOntology();
+        await ontology.InitializeGEOAsync();
+        await ontology.InitializeGEOAsync();
+
+        Assert.HasCount(2, ontology.Imports);
+        Assert.HasCount(109, ontology.DeclarationAxioms);
+        Assert.HasCount(25, ontology.ClassAxioms);
+        Assert.HasCount(85, ontology.ObjectPropertyAxioms);
+        Assert.HasCount(32, ontology.DataPropertyAxioms);
+        Assert.HasCount(0, ontology.AssertionAxioms);
+        Assert.HasCount(0, ontology.AnnotationAxioms);
+    }
+
+    [TestMethod]
+    public async Task ShouldInitializeGEOSkippingAlreadyImportedOntologiesAsync()
+    {
+        OWLOntology ontology = new OWLOntology();
+        ontology.Imports.Add(new OWLImport(new RDFResource(RDFVocabulary.GEOSPARQL.SF.DEREFERENCE_URI)));
+        await ontology.InitializeGEOAsync();
+
+        Assert.HasCount(1, ontology.Imports);
+        Assert.IsEmpty(ontology.DeclarationAxioms);
+        Assert.IsEmpty(ontology.ClassAxioms);
+        Assert.IsEmpty(ontology.ObjectPropertyAxioms);
+        Assert.IsEmpty(ontology.DataPropertyAxioms);
+        Assert.IsEmpty(ontology.AssertionAxioms);
+        Assert.IsEmpty(ontology.AnnotationAxioms);
+    }
+
+    [TestMethod]
+    public async Task ShouldExportGEOWithoutTBoxAsync()
+    {
+        OWLOntology ontology = new OWLOntology();
+        await ontology.InitializeGEOAsync();
+        RDFGraph graph = await ontology.ToRDFGraphAsync();
+
+        Assert.AreEqual(0, graph[s: RDFVocabulary.GEOSPARQL.FEATURE].TriplesCount);
+    }
+
+    [TestMethod]
     public void ShouldDeclareGEOPointFeatureWithDefaultGeometry()
     {
         OWLOntology ontology = new OWLOntology();
