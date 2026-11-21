@@ -189,6 +189,22 @@ public class SKOSHelperTest
     }
 
     [TestMethod]
+    public void ShouldDeclareNestedCollection()
+    {
+        OWLOntology ontology = new OWLOntology();
+        ontology.DeclareCollection(new OWLNamedIndividual(new RDFResource("ex:InnerCollection")),
+            [new OWLNamedIndividual(new RDFResource("ex:ConceptA"))]);
+        ontology.DeclareCollection(new OWLNamedIndividual(new RDFResource("ex:OuterCollection")),
+            [new OWLNamedIndividual(new RDFResource("ex:InnerCollection"))]);
+
+        Assert.IsFalse(ontology.CheckIsIndividualOf(RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(), new OWLNamedIndividual(new RDFResource("ex:InnerCollection"))));
+        Assert.IsTrue(ontology.GetAssertionAxiomsOfType<OWLObjectPropertyAssertion>()
+            .Any(asn => asn.ObjectPropertyExpression.GetIRI().Equals(RDFVocabulary.SKOS.MEMBER)
+                        && asn.SourceIndividualExpression.GetIRI().Equals(new RDFResource("ex:OuterCollection"))
+                        && asn.TargetIndividualExpression.GetIRI().Equals(new RDFResource("ex:InnerCollection"))));
+    }
+
+    [TestMethod]
     public void ShouldCheckConceptScheme()
     {
         OWLOntology ontology = new OWLOntology(new Uri("ex:ontology"));
@@ -425,6 +441,87 @@ public class SKOSHelperTest
     }
 
     [TestMethod]
+    public void ShouldGetBroaderConceptsFromInverseAssertions()
+    {
+        OWLOntology ontology = new OWLOntology(new Uri("ex:ontology"));
+        ontology.DeclareEntity(RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>());
+        ontology.DeclareEntity(new OWLObjectProperty(RDFVocabulary.SKOS.NARROWER));
+        ontology.DeclareEntity(new OWLObjectProperty(RDFVocabulary.SKOS.NARROWER_TRANSITIVE));
+        ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept1")));
+        ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept2")));
+        ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept3")));
+        ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept4")));
+        ontology.DeclareAssertionAxiom(new OWLClassAssertion(
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
+            new OWLNamedIndividual(new RDFResource("ex:concept1"))));
+        ontology.DeclareAssertionAxiom(new OWLClassAssertion(
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
+            new OWLNamedIndividual(new RDFResource("ex:concept2"))));
+        ontology.DeclareAssertionAxiom(new OWLClassAssertion(
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
+            new OWLNamedIndividual(new RDFResource("ex:concept3"))));
+        ontology.DeclareAssertionAxiom(new OWLClassAssertion(
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
+            new OWLNamedIndividual(new RDFResource("ex:concept4"))));
+        ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
+            new OWLObjectProperty(RDFVocabulary.SKOS.NARROWER),
+            new OWLNamedIndividual(new RDFResource("ex:concept2")),
+            new OWLNamedIndividual(new RDFResource("ex:concept1"))));
+        ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
+            new OWLObjectProperty(RDFVocabulary.SKOS.NARROWER_TRANSITIVE),
+            new OWLNamedIndividual(new RDFResource("ex:concept3")),
+            new OWLNamedIndividual(new RDFResource("ex:concept1"))));
+        ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
+            new OWLObjectProperty(RDFVocabulary.SKOS.NARROWER_TRANSITIVE),
+            new OWLNamedIndividual(new RDFResource("ex:concept4")),
+            new OWLNamedIndividual(new RDFResource("ex:concept3"))));
+
+        List<OWLNamedIndividual> c1Concepts = ontology.GetBroaderConcepts(new OWLNamedIndividual(new RDFResource("ex:concept1")));
+
+        Assert.HasCount(3, c1Concepts);
+        Assert.IsTrue(ontology.CheckHasBroaderConcept(new OWLNamedIndividual(new RDFResource("ex:concept1")), new OWLNamedIndividual(new RDFResource("ex:concept2"))));
+        Assert.IsTrue(ontology.CheckHasBroaderConcept(new OWLNamedIndividual(new RDFResource("ex:concept1")), new OWLNamedIndividual(new RDFResource("ex:concept3"))));
+        Assert.IsTrue(ontology.CheckHasBroaderConcept(new OWLNamedIndividual(new RDFResource("ex:concept1")), new OWLNamedIndividual(new RDFResource("ex:concept4"))));
+    }
+
+    [TestMethod]
+    public void ShouldGetBroaderConceptsWithoutDuplicates()
+    {
+        OWLOntology ontology = new OWLOntology(new Uri("ex:ontology"));
+        ontology.DeclareEntity(RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>());
+        ontology.DeclareEntity(new OWLObjectProperty(RDFVocabulary.SKOS.BROADER));
+        ontology.DeclareEntity(new OWLObjectProperty(RDFVocabulary.SKOS.NARROWER));
+        ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept1")));
+        ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept2")));
+        ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept3")));
+        ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept4")));
+        ontology.DeclareAssertionAxiom(new OWLClassAssertion(
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
+            new OWLNamedIndividual(new RDFResource("ex:concept1"))));
+        ontology.DeclareAssertionAxiom(new OWLClassAssertion(
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
+            new OWLNamedIndividual(new RDFResource("ex:concept2"))));
+        ontology.DeclareAssertionAxiom(new OWLClassAssertion(
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
+            new OWLNamedIndividual(new RDFResource("ex:concept3"))));
+        ontology.DeclareAssertionAxiom(new OWLClassAssertion(
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
+            new OWLNamedIndividual(new RDFResource("ex:concept4"))));
+        ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
+            new OWLObjectProperty(RDFVocabulary.SKOS.BROADER),
+            new OWLNamedIndividual(new RDFResource("ex:concept1")),
+            new OWLNamedIndividual(new RDFResource("ex:concept2"))));
+        ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
+            new OWLObjectProperty(RDFVocabulary.SKOS.NARROWER),
+            new OWLNamedIndividual(new RDFResource("ex:concept2")),
+            new OWLNamedIndividual(new RDFResource("ex:concept1"))));
+
+        List<OWLNamedIndividual> c1BroaderConcepts = ontology.GetBroaderConcepts(new OWLNamedIndividual(new RDFResource("ex:concept1")));
+
+        Assert.HasCount(1, c1BroaderConcepts);
+    }
+
+    [TestMethod]
     public void ShouldCheckAndGetNarrowerConcepts()
     {
         OWLOntology ontology = new OWLOntology(new Uri("ex:ontology"));
@@ -478,6 +575,50 @@ public class SKOSHelperTest
         Assert.IsFalse((null as OWLOntology).CheckHasNarrowerConcept(new OWLNamedIndividual(new RDFResource("ex:concept1")), new OWLNamedIndividual(new RDFResource("ex:concept2"))));
         Assert.IsFalse(ontology.CheckHasNarrowerConcept(null, new OWLNamedIndividual(new RDFResource("ex:concept5"))));
         Assert.IsFalse(ontology.CheckHasNarrowerConcept(new OWLNamedIndividual(new RDFResource("ex:concept1")), null));
+    }
+
+    [TestMethod]
+    public void ShouldGetNarrowerConceptsFromInverseAssertions()
+    {
+        OWLOntology ontology = new OWLOntology(new Uri("ex:ontology"));
+        ontology.DeclareEntity(RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>());
+        ontology.DeclareEntity(new OWLObjectProperty(RDFVocabulary.SKOS.BROADER));
+        ontology.DeclareEntity(new OWLObjectProperty(RDFVocabulary.SKOS.BROADER_TRANSITIVE));
+        ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept1")));
+        ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept2")));
+        ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept3")));
+        ontology.DeclareEntity(new OWLNamedIndividual(new RDFResource("ex:concept4")));
+        ontology.DeclareAssertionAxiom(new OWLClassAssertion(
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
+            new OWLNamedIndividual(new RDFResource("ex:concept1"))));
+        ontology.DeclareAssertionAxiom(new OWLClassAssertion(
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
+            new OWLNamedIndividual(new RDFResource("ex:concept2"))));
+        ontology.DeclareAssertionAxiom(new OWLClassAssertion(
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
+            new OWLNamedIndividual(new RDFResource("ex:concept3"))));
+        ontology.DeclareAssertionAxiom(new OWLClassAssertion(
+            RDFVocabulary.SKOS.CONCEPT.ToEntity<OWLClass>(),
+            new OWLNamedIndividual(new RDFResource("ex:concept4"))));
+        ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
+            new OWLObjectProperty(RDFVocabulary.SKOS.BROADER),
+            new OWLNamedIndividual(new RDFResource("ex:concept2")),
+            new OWLNamedIndividual(new RDFResource("ex:concept1"))));
+        ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
+            new OWLObjectProperty(RDFVocabulary.SKOS.BROADER_TRANSITIVE),
+            new OWLNamedIndividual(new RDFResource("ex:concept3")),
+            new OWLNamedIndividual(new RDFResource("ex:concept1"))));
+        ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
+            new OWLObjectProperty(RDFVocabulary.SKOS.BROADER_TRANSITIVE),
+            new OWLNamedIndividual(new RDFResource("ex:concept4")),
+            new OWLNamedIndividual(new RDFResource("ex:concept3"))));
+
+        List<OWLNamedIndividual> c1Concepts = ontology.GetNarrowerConcepts(new OWLNamedIndividual(new RDFResource("ex:concept1")));
+
+        Assert.HasCount(3, c1Concepts);
+        Assert.IsTrue(ontology.CheckHasNarrowerConcept(new OWLNamedIndividual(new RDFResource("ex:concept1")), new OWLNamedIndividual(new RDFResource("ex:concept2"))));
+        Assert.IsTrue(ontology.CheckHasNarrowerConcept(new OWLNamedIndividual(new RDFResource("ex:concept1")), new OWLNamedIndividual(new RDFResource("ex:concept3"))));
+        Assert.IsTrue(ontology.CheckHasNarrowerConcept(new OWLNamedIndividual(new RDFResource("ex:concept1")), new OWLNamedIndividual(new RDFResource("ex:concept4"))));
     }
 
     [TestMethod]

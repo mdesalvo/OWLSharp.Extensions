@@ -154,6 +154,7 @@ namespace OWLSharp.Extensions.SKOS
         /// <summary>
         /// Injects the A-BOX axioms for declaring the existence of a SKOS collection having the given name and the given set of concepts.<br/>
         /// It can also be given a set of preferred language labels, the concept scheme to which this collection belongs and whether it is ordered.<br/>
+        /// Members already declared as collections are not typed as concepts: declare nested collections before their parent.<br/>
         /// (When "ordered" is true, only the skos:OrderedCollection typing is captured: the skos:memberList sequence is not representable at the OWL axiomatic level).
         /// </summary>
         /// <exception cref="OWLException"></exception>
@@ -175,7 +176,11 @@ namespace OWLSharp.Extensions.SKOS
 
             foreach (OWLNamedIndividual concept in concepts)
             {
-                ontology.DeclareConcept(concept);
+                //(S37) skos:Concept and skos:Collection are disjoint: a nested collection must not be typed as concept
+                if (!ontology.CheckIsIndividualOf(RDFVocabulary.SKOS.COLLECTION.ToEntity<OWLClass>(), concept)
+                     && !ontology.CheckIsIndividualOf(RDFVocabulary.SKOS.ORDERED_COLLECTION.ToEntity<OWLClass>(), concept))
+                    ontology.DeclareConcept(concept);
+
                 ontology.DeclareAssertionAxiom(new OWLObjectPropertyAssertion(
                     new OWLObjectProperty(RDFVocabulary.SKOS.MEMBER),
                     collection,
@@ -537,20 +542,27 @@ namespace OWLSharp.Extensions.SKOS
                 List<OWLObjectPropertyAssertion> objPropAsns = OWLAssertionAxiomHelper.CalibrateObjectAssertions(ontology);
                 List<OWLObjectPropertyAssertion> skosBroaderAsns = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, new OWLObjectProperty(RDFVocabulary.SKOS.BROADER));
                 List<OWLObjectPropertyAssertion> skosBroaderTransitiveAsns = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, new OWLObjectProperty(RDFVocabulary.SKOS.BROADER_TRANSITIVE));
+                List<OWLObjectPropertyAssertion> skosNarrowerAsns = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, new OWLObjectProperty(RDFVocabulary.SKOS.NARROWER));
+                List<OWLObjectPropertyAssertion> skosNarrowerTransitiveAsns = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, new OWLObjectProperty(RDFVocabulary.SKOS.NARROWER_TRANSITIVE));
 
                 //skos:broader
                 broaderConcepts.AddRange(
                     skosBroaderAsns.Where(asn => asn.SourceIndividualExpression.GetIRI().Equals(skosConceptIRI))
                                    .Select(skosBroaderAsn => skosBroaderAsn.TargetIndividualExpression.GetIRI()));
 
-                //skos:broaderTransitive
-                broaderConcepts.AddRange(ontology.SubsumeBroaderTransitivity(skosConceptIRI, skosBroaderTransitiveAsns, new Dictionary<long, RDFResource>()));
+                //skos:narrower (inverse of skos:broader)
+                broaderConcepts.AddRange(
+                    skosNarrowerAsns.Where(asn => asn.TargetIndividualExpression.GetIRI().Equals(skosConceptIRI))
+                                    .Select(skosNarrowerAsn => skosNarrowerAsn.SourceIndividualExpression.GetIRI()));
+
+                //skos:broaderTransitive and skos:narrowerTransitive (inverse of skos:broaderTransitive)
+                broaderConcepts.AddRange(ontology.SubsumeBroaderTransitivity(skosConceptIRI, skosBroaderTransitiveAsns, skosNarrowerTransitiveAsns, new Dictionary<long, RDFResource>()));
             }
 
             broaderConcepts.RemoveAll(c => c.Equals(skosConcept.GetIRI()));
-            return broaderConcepts.Select(r => new OWLNamedIndividual(r)).ToList();
+            return RDFQueryUtilities.RemoveDuplicates(broaderConcepts).Select(r => new OWLNamedIndividual(r)).ToList();
         }
-        internal static List<RDFResource> SubsumeBroaderTransitivity(this OWLOntology ontology, RDFResource skosConcept, List<OWLObjectPropertyAssertion> skosBroaderTransitiveAsns, Dictionary<long, RDFResource> visitContext)
+        internal static List<RDFResource> SubsumeBroaderTransitivity(this OWLOntology ontology, RDFResource skosConcept, List<OWLObjectPropertyAssertion> skosBroaderTransitiveAsns, List<OWLObjectPropertyAssertion> skosNarrowerTransitiveAsns, Dictionary<long, RDFResource> visitContext)
         {
             List<RDFResource> broaderTransitiveConcepts = new List<RDFResource>();
 
@@ -566,8 +578,13 @@ namespace OWLSharp.Extensions.SKOS
                 skosBroaderTransitiveAsns.Where(asn => asn.SourceIndividualExpression.GetIRI().Equals(skosConcept))
                                          .Select(skosBroaderTransitiveAsn => skosBroaderTransitiveAsn.TargetIndividualExpression.GetIRI()));
 
+            //skos:narrowerTransitive (inverse of skos:broaderTransitive)
+            broaderTransitiveConcepts.AddRange(
+                skosNarrowerTransitiveAsns.Where(asn => asn.TargetIndividualExpression.GetIRI().Equals(skosConcept))
+                                          .Select(skosNarrowerTransitiveAsn => skosNarrowerTransitiveAsn.SourceIndividualExpression.GetIRI()));
+
             foreach (RDFResource broaderTransitiveConcept in broaderTransitiveConcepts.ToList())
-                broaderTransitiveConcepts.AddRange(ontology.SubsumeBroaderTransitivity(broaderTransitiveConcept, skosBroaderTransitiveAsns, visitContext));
+                broaderTransitiveConcepts.AddRange(ontology.SubsumeBroaderTransitivity(broaderTransitiveConcept, skosBroaderTransitiveAsns, skosNarrowerTransitiveAsns, visitContext));
 
             return broaderTransitiveConcepts;
         }
@@ -591,20 +608,27 @@ namespace OWLSharp.Extensions.SKOS
                 List<OWLObjectPropertyAssertion> objPropAsns = OWLAssertionAxiomHelper.CalibrateObjectAssertions(ontology);
                 List<OWLObjectPropertyAssertion> skosNarrowerAsns = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, new OWLObjectProperty(RDFVocabulary.SKOS.NARROWER));
                 List<OWLObjectPropertyAssertion> skosNarrowerTransitiveAsns = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, new OWLObjectProperty(RDFVocabulary.SKOS.NARROWER_TRANSITIVE));
+                List<OWLObjectPropertyAssertion> skosBroaderAsns = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, new OWLObjectProperty(RDFVocabulary.SKOS.BROADER));
+                List<OWLObjectPropertyAssertion> skosBroaderTransitiveAsns = OWLAssertionAxiomHelper.SelectObjectAssertionsByOPEX(objPropAsns, new OWLObjectProperty(RDFVocabulary.SKOS.BROADER_TRANSITIVE));
 
                 //skos:narrower
                 narrowerConcepts.AddRange(
                     skosNarrowerAsns.Where(asn => asn.SourceIndividualExpression.GetIRI().Equals(skosConceptIRI))
                                     .Select(skosNarrowerAsn => skosNarrowerAsn.TargetIndividualExpression.GetIRI()));
 
-                //skos:narrowerTransitive
-                narrowerConcepts.AddRange(ontology.SubsumeNarrowerTransitivity(skosConceptIRI, skosNarrowerTransitiveAsns, new Dictionary<long, RDFResource>()));
+                //skos:broader (inverse of skos:narrower)
+                narrowerConcepts.AddRange(
+                    skosBroaderAsns.Where(asn => asn.TargetIndividualExpression.GetIRI().Equals(skosConceptIRI))
+                                   .Select(skosBroaderAsn => skosBroaderAsn.SourceIndividualExpression.GetIRI()));
+
+                //skos:narrowerTransitive and skos:broaderTransitive (inverse of skos:narrowerTransitive)
+                narrowerConcepts.AddRange(ontology.SubsumeNarrowerTransitivity(skosConceptIRI, skosNarrowerTransitiveAsns, skosBroaderTransitiveAsns, new Dictionary<long, RDFResource>()));
             }
 
             narrowerConcepts.RemoveAll(c => c.Equals(skosConcept.GetIRI()));
-            return narrowerConcepts.Select(r => new OWLNamedIndividual(r)).ToList();
+            return RDFQueryUtilities.RemoveDuplicates(narrowerConcepts).Select(r => new OWLNamedIndividual(r)).ToList();
         }
-        internal static List<RDFResource> SubsumeNarrowerTransitivity(this OWLOntology ontology, RDFResource skosConcept, List<OWLObjectPropertyAssertion> skosNarrowerTransitiveAsns, Dictionary<long, RDFResource> visitContext)
+        internal static List<RDFResource> SubsumeNarrowerTransitivity(this OWLOntology ontology, RDFResource skosConcept, List<OWLObjectPropertyAssertion> skosNarrowerTransitiveAsns, List<OWLObjectPropertyAssertion> skosBroaderTransitiveAsns, Dictionary<long, RDFResource> visitContext)
         {
             List<RDFResource> narrowerTransitiveConcepts = new List<RDFResource>();
 
@@ -620,8 +644,13 @@ namespace OWLSharp.Extensions.SKOS
                 skosNarrowerTransitiveAsns.Where(asn => asn.SourceIndividualExpression.GetIRI().Equals(skosConcept))
                                           .Select(skosNarrowerTransitiveAsn => skosNarrowerTransitiveAsn.TargetIndividualExpression.GetIRI()));
 
+            //skos:broaderTransitive (inverse of skos:narrowerTransitive)
+            narrowerTransitiveConcepts.AddRange(
+                skosBroaderTransitiveAsns.Where(asn => asn.TargetIndividualExpression.GetIRI().Equals(skosConcept))
+                                         .Select(skosBroaderTransitiveAsn => skosBroaderTransitiveAsn.SourceIndividualExpression.GetIRI()));
+
             foreach (RDFResource narrowerTransitiveConcept in narrowerTransitiveConcepts.ToList())
-                narrowerTransitiveConcepts.AddRange(ontology.SubsumeNarrowerTransitivity(narrowerTransitiveConcept, skosNarrowerTransitiveAsns, visitContext));
+                narrowerTransitiveConcepts.AddRange(ontology.SubsumeNarrowerTransitivity(narrowerTransitiveConcept, skosNarrowerTransitiveAsns, skosBroaderTransitiveAsns, visitContext));
 
             return narrowerTransitiveConcepts;
         }

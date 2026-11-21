@@ -35,7 +35,7 @@ namespace OWLSharp.Extensions.SKOS
             /// </summary>
             HiddenLabelAnalysis = 2,
             /// <summary>
-            /// Concepts should not assume the same value for preferred labels and alternative/hidden labels (SKOS, SKOS-XL)
+            /// Concepts should not have more than one preferred label per language tag (SKOS S14, SKOS-XL)
             /// </summary>
             PreferredLabelAnalysis = 3,
             /// <summary>
@@ -51,7 +51,7 @@ namespace OWLSharp.Extensions.SKOS
             /// </summary>
             NarrowerConceptAnalysis = 6,
             /// <summary>
-            /// Concepts should not clash mapping relations with associative relations (SKOS)
+            /// Concepts should not clash mapping relations with associative relations or skos:exactMatch with skos:broadMatch/skos:narrowMatch (SKOS S46)
             /// </summary>
             CloseOrExactMatchConceptAnalysis = 7,
             /// <summary>

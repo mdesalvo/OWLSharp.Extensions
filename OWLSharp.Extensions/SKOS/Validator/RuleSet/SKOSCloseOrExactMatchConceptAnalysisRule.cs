@@ -28,6 +28,8 @@ namespace OWLSharp.Extensions.SKOS
         internal const string rulesugg1B = "There should not be SKOS concepts having a clash in mapping VS associative relations (skos:closeMatch VS skos:relatedMatch)";
         internal const string rulesugg2A = "There should not be SKOS concepts having a clash in mapping VS associative relations (skos:exactMatch VS skos:related)";
         internal const string rulesugg2B = "There should not be SKOS concepts having a clash in mapping VS associative relations (skos:exactMatch VS skos:relatedMatch)";
+        internal const string rulesugg3A = "There should not be SKOS concepts having a clash in mapping relations (skos:exactMatch VS skos:broadMatch)";
+        internal const string rulesugg3B = "There should not be SKOS concepts having a clash in mapping relations (skos:exactMatch VS skos:narrowMatch)";
 
         internal static async Task<List<OWLIssue>> ExecuteRuleAsync(OWLOntology ontology)
         {
@@ -233,6 +235,16 @@ namespace OWLSharp.Extensions.SKOS
                     $"SKOS concepts '{((OWLObjectPropertyAssertion)violation.Axiom).SourceIndividualExpression.GetIRI()}' and '{((OWLObjectPropertyAssertion)violation.Axiom).TargetIndividualExpression.GetIRI()}' should be adjusted to not clash on mapping/associative relations (skos:exactMatch VS skos:relatedMatch)"
                 )));
             violations.Clear();
+
+            //skos:exactMatch VS skos:broadMatch (S46)
+            await SKOSHelper.CheckConceptRelationClashAsync(ontology, rulename,
+                RDFVocabulary.SKOS.EXACT_MATCH, RDFVocabulary.SKOS.BROAD_MATCH, rulesugg3A,
+                "mapping relations (skos:exactMatch VS skos:broadMatch)", issues);
+
+            //skos:exactMatch VS skos:narrowMatch (S46)
+            await SKOSHelper.CheckConceptRelationClashAsync(ontology, rulename,
+                RDFVocabulary.SKOS.EXACT_MATCH, RDFVocabulary.SKOS.NARROW_MATCH, rulesugg3B,
+                "mapping relations (skos:exactMatch VS skos:narrowMatch)", issues);
 
             return issues;
         }
