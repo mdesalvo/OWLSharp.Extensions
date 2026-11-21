@@ -26,7 +26,9 @@ dotnet test --filter "FullyQualifiedName~SKOSHelperTest"
 dotnet test --filter "FullyQualifiedName~GEOHelperTest.ShouldGetDistanceBetweenFeatures"
 ```
 
-The main library multi-targets `netstandard2.0;net8.0`; the test project targets `net10.0`. CI (`.github/workflows/linux.yml`, `windows.yml`) builds Release and runs `dotnet test` on both Linux (dotnet 10) and Windows (dotnet 8) against every push to `master`; Linux also collects coverage via Codecov.
+The main library multi-targets `netstandard2.0;net8.0;net10.0`; the test project targets `net10.0`. CI (`.github/workflows/linux.yml`, `windows.yml`) builds Release and runs `dotnet test` on both Linux and Windows (dotnet 10) against every push to `master`; Linux also collects coverage via Codecov.
+
+Releases go out from a version tag: pushing `vX.Y.Z` triggers `.github/workflows/nuget-publish.yml`, which checks the tag against `<Version>` in `OWLSharp.Extensions/OWLSharp.Extensions.csproj`, builds, runs the full suite and pushes `.nupkg` + `.snupkg` to nuget.org via Trusted Publishing (no API key stored in the repository). Bump `<Version>` in both csproj before tagging.
 
 Code targeting `netstandard2.0` cannot assume `Parallel.ForEachAsync` or other net8-only APIs — validator/reasoner code guards this with `#if !NET8_0_OR_GREATER` blocks (see below).
 
@@ -50,7 +52,7 @@ GEO and TIME model entities as dedicated value types rather than raw RDF: `GEOEn
 - `ApplyToOntologyAsync(ontology)` fans the selected rules out in parallel (`Parallel.ForEachAsync` on net8+, `Dasync.Collections.ParallelForEachAsync` otherwise — this is the reason for the `#if !NET8_0_OR_GREATER` guard), collects results into a per-rule dictionary, then flattens to `List<OWLIssue>` (validators) or `List<OWLInference>` (reasoner).
 - Each individual rule lives in its own `internal static class` under a `RuleSet/` subfolder (`SKOS/Validator/RuleSet/`, `TIME/Validator/RuleSet/`, `TIME/Reasoner/RuleSet/`), named `<Rule>AnalysisRule` (validators) or `<Rule>EntailmentRule` (reasoner), sharing the parent namespace (no extra `using` needed). Validator rules expose `internal static Task<List<OWLIssue>> ExecuteRuleAsync(OWLOntology)`; reasoner rules build a `SWRLRule` (antecedent/consequent atoms + built-ins) and delegate to `swrlRule.ApplyToOntologyAsync(ontology)`.
 
-**To add a new rule**: create the rule class in the appropriate `RuleSet/` folder following an existing sibling as a template, add the corresponding enum value to `SKOSEnums`/`TIMEEnums`, and wire a `case` for it into the `switch` in `SKOSValidator`/`TIMEValidator`/`TIMEReasoner`.
+**To add a new rule**: create the rule class in the appropriate `RuleSet/` folder following an existing sibling as a template, add the corresponding enum value to `SKOSEnums`/`TIMEEnums` and wire a `case` for it into the `switch` in `SKOSValidator`/`TIMEValidator`/`TIMEReasoner`.
 
 GEO currently has no validator/reasoner counterpart — only the `GEOHelper` declare/analyze surface.
 
