@@ -3,7 +3,7 @@
         <AssemblyTitle>OWLSharp.Extensions.Test</AssemblyTitle>
         <AssemblyName>OWLSharp.Extensions.Test</AssemblyName>
         <AssemblyVersion>$(Version)</AssemblyVersion>
-        <Version>5.0.0</Version>
+        <Version>5.0.1</Version>
         <Authors>Marco De Salvo</Authors>
         <Copyright>Marco De Salvo</Copyright>
         <TargetFramework>net10.0</TargetFramework>
