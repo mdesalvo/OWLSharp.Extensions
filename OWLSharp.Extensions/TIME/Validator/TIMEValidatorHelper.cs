@@ -22,7 +22,7 @@ namespace OWLSharp.Extensions.TIME
     /// <summary>
     /// Shared clash-detection helper backing the OWL-TIME validator rules, replacing per-rule SWRL antecedent/consequent
     /// scaffolding with a direct axiom check: given "?I1 propertyA ?I2", flags an issue for every pair also found in
-    /// "?I1 propertyB ?I2" (or "?I2 propertyB ?I1" when <paramref name="invertB"/> is set), I1/I2 distinct.
+    /// "?I1 propertyB ?I2" (or "?I2 propertyB ?I1" when <c>invertB</c> is set), I1/I2 distinct.
     /// </summary>
     internal static class TIMEValidatorHelper
     {
