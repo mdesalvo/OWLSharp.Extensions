@@ -44,4 +44,20 @@
   <ItemGroup>
     <PackageReference Include="OWLSharp" Version="5.0.1" />
   </ItemGroup>
+  <ItemGroup>
+    <!-- TIME ontologies -->
+    <EmbeddedResource Include="TIME\Ontologies\time.ttl" LogicalName="OWLSharp.Extensions.TIME.Ontologies.time.ttl" />
+    <EmbeddedResource Include="TIME\Ontologies\thors.ttl" LogicalName="OWLSharp.Extensions.TIME.Ontologies.thors.ttl" />
+    <EmbeddedResource Include="TIME\Ontologies\gregorian.ttl" LogicalName="OWLSharp.Extensions.TIME.Ontologies.gregorian.ttl" />
+    <!-- SKOS ontologies -->
+    <EmbeddedResource Include="SKOS\Ontologies\skos.rdf" LogicalName="OWLSharp.Extensions.SKOS.Ontologies.skos.rdf" />
+    <EmbeddedResource Include="SKOS\Ontologies\skos-xl.rdf" LogicalName="OWLSharp.Extensions.SKOS.Ontologies.skos-xl.rdf" />
+    <!-- GEO ontologies -->
+    <EmbeddedResource Include="GEO\Ontologies\geosparql.ttl" LogicalName="OWLSharp.Extensions.GEO.Ontologies.geosparql.ttl" />
+    <EmbeddedResource Include="GEO\Ontologies\sf.ttl" LogicalName="OWLSharp.Extensions.GEO.Ontologies.sf.ttl" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Licenses of the embedded ontologies -->
+    <None Include="..\THIRD-PARTY-NOTICES.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 </Project>

@@ -21,6 +21,7 @@ using RDFSharp.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace OWLSharp.Extensions.Test.SKOS;
 
@@ -28,6 +29,74 @@ namespace OWLSharp.Extensions.Test.SKOS;
 public class SKOSHelperTest
 {
     #region Tests
+    [TestMethod]
+    public async Task ShouldInitializeSKOSAsync()
+    {
+        OWLOntology ontology = new OWLOntology();
+        await ontology.InitializeSKOSAsync();
+
+        Assert.HasCount(2, ontology.Imports);
+        Assert.IsTrue(ontology.Imports.Any(import => string.Equals(import.IRI, RDFVocabulary.SKOS.DEREFERENCE_URI, StringComparison.Ordinal)));
+        Assert.IsTrue(ontology.Imports.Any(import => string.Equals(import.IRI, RDFVocabulary.SKOS.SKOSXL.DEREFERENCE_URI, StringComparison.Ordinal)));
+        Assert.HasCount(38, ontology.DeclarationAxioms);
+        Assert.HasCount(8, ontology.ClassAxioms);
+        Assert.HasCount(47, ontology.ObjectPropertyAxioms);
+        Assert.HasCount(1, ontology.DataPropertyAxioms);
+        Assert.HasCount(0, ontology.AssertionAxioms);
+        Assert.HasCount(58, ontology.AnnotationAxioms);
+
+        Assert.IsTrue(ontology.DeclarationAxioms.TrueForAll(axiom => axiom.IsImport));
+        Assert.IsTrue(ontology.ClassAxioms.TrueForAll(axiom => axiom.IsImport));
+        Assert.IsTrue(ontology.ObjectPropertyAxioms.TrueForAll(axiom => axiom.IsImport));
+        Assert.IsTrue(ontology.DataPropertyAxioms.TrueForAll(axiom => axiom.IsImport));
+        Assert.IsTrue(ontology.AssertionAxioms.TrueForAll(axiom => axiom.IsImport));
+        Assert.IsTrue(ontology.AnnotationAxioms.TrueForAll(axiom => axiom.IsImport));
+
+        await ((OWLOntology)null).InitializeSKOSAsync();
+    }
+
+    [TestMethod]
+    public async Task ShouldInitializeSKOSOnlyOnceAsync()
+    {
+        OWLOntology ontology = new OWLOntology();
+        await ontology.InitializeSKOSAsync();
+        await ontology.InitializeSKOSAsync();
+
+        Assert.HasCount(2, ontology.Imports);
+        Assert.HasCount(38, ontology.DeclarationAxioms);
+        Assert.HasCount(8, ontology.ClassAxioms);
+        Assert.HasCount(47, ontology.ObjectPropertyAxioms);
+        Assert.HasCount(1, ontology.DataPropertyAxioms);
+        Assert.HasCount(0, ontology.AssertionAxioms);
+        Assert.HasCount(58, ontology.AnnotationAxioms);
+    }
+
+    [TestMethod]
+    public async Task ShouldInitializeSKOSSkippingAlreadyImportedOntologiesAsync()
+    {
+        OWLOntology ontology = new OWLOntology();
+        ontology.Imports.Add(new OWLImport(new RDFResource(RDFVocabulary.SKOS.SKOSXL.DEREFERENCE_URI)));
+        await ontology.InitializeSKOSAsync();
+
+        Assert.HasCount(1, ontology.Imports);
+        Assert.IsEmpty(ontology.DeclarationAxioms);
+        Assert.IsEmpty(ontology.ClassAxioms);
+        Assert.IsEmpty(ontology.ObjectPropertyAxioms);
+        Assert.IsEmpty(ontology.DataPropertyAxioms);
+        Assert.IsEmpty(ontology.AssertionAxioms);
+        Assert.IsEmpty(ontology.AnnotationAxioms);
+    }
+
+    [TestMethod]
+    public async Task ShouldExportSKOSWithoutTBoxAsync()
+    {
+        OWLOntology ontology = new OWLOntology();
+        await ontology.InitializeSKOSAsync();
+        RDFGraph graph = await ontology.ToRDFGraphAsync();
+
+        Assert.AreEqual(0, graph[s: RDFVocabulary.SKOS.CONCEPT].TriplesCount);
+    }
+
     [TestMethod]
     public void ShouldDeclareConceptScheme()
     {

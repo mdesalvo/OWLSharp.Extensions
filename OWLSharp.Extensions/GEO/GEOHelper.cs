@@ -16,7 +16,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -55,16 +55,41 @@ namespace OWLSharp.Extensions.GEO
 
         #region Helper (Initializer, Declarer, Getter)
         /// <summary>
-        /// Imports GeoSPARQL-related ontologies into the working ontology, enriching it with T-BOX required for spatial modeling and reasoning
+        /// Imports the GeoSPARQL and Simple Features T-BOX into the working ontology from the copies embedded in this library
         /// </summary>
-        [ExcludeFromCodeCoverage]
+        /// <param name="ontology">The ontology opting in to GeoSPARQL support</param>
+        /// <param name="timeoutMilliseconds">Unused since 5.0.1: the T-BOX is read from embedded copies, so no download can time out</param>
+        /// <param name="cacheMilliseconds">Unused since 5.0.1: the embedded T-BOX never changes, so it is read once per process</param>
         public static async Task InitializeGEOAsync(this OWLOntology ontology, int timeoutMilliseconds=20000, int cacheMilliseconds=3600000)
         {
-            if (ontology != null)
+            //A null ontology has nothing to opt in...
+            if (ontology == null)
+                return;
+
+            //Axioms are shared with every initialized ontology and flagged as imports, exactly as ImportAsync does with its cache
+            foreach ((string[] importIRIs, OWLOntology embeddedOntology) in await EmbeddedOntologiesLazy.Value)
             {
-                await ontology.ImportAsync(new Uri(RDFVocabulary.GEOSPARQL.DEREFERENCE_URI), timeoutMilliseconds, cacheMilliseconds);
-                await ontology.ImportAsync(new Uri(RDFVocabulary.GEOSPARQL.SF.DEREFERENCE_URI), timeoutMilliseconds, cacheMilliseconds);
-                await ontology.ImportAsync(new Uri(RDFVocabulary.GEOSPARQL.GEOF.DEREFERENCE_URI), timeoutMilliseconds, cacheMilliseconds);
+                //An embedded ontology already imported, by an earlier initialization or by ImportAsync, would get its axioms twice
+                if (importIRIs.Any(importIRI => ontology.Imports.Any(import => string.Equals(import.IRI, importIRI, StringComparison.Ordinal))))
+                    continue;
+
+                //The import declarations tell exporters and reasoners which ontologies the T-BOX axioms come from
+                foreach (string importIRI in importIRIs)
+                    ontology.Imports.Add(new OWLImport(new RDFResource(importIRI)));
+
+                //Prefixes are offered to the working ontology only when it has not bound that name already
+                foreach (OWLPrefix embeddedPrefix in embeddedOntology.Prefixes.Where(embeddedPrefix => !ontology.Prefixes.Any(prefix => string.Equals(prefix.Name, embeddedPrefix.Name, StringComparison.OrdinalIgnoreCase))))
+                    ontology.Prefixes.Add(embeddedPrefix);
+
+                //Flagged as imports, the T-BOX axioms stay out of exports that do not ask for imports
+                embeddedOntology.DeclarationAxioms.ForEach(axiom => { axiom.IsImport = true; ontology.DeclarationAxioms.Add(axiom); });
+                embeddedOntology.ClassAxioms.ForEach(axiom => { axiom.IsImport = true; ontology.ClassAxioms.Add(axiom); });
+                embeddedOntology.ObjectPropertyAxioms.ForEach(axiom => { axiom.IsImport = true; ontology.ObjectPropertyAxioms.Add(axiom); });
+                embeddedOntology.DataPropertyAxioms.ForEach(axiom => { axiom.IsImport = true; ontology.DataPropertyAxioms.Add(axiom); });
+                embeddedOntology.DatatypeDefinitionAxioms.ForEach(axiom => { axiom.IsImport = true; ontology.DatatypeDefinitionAxioms.Add(axiom); });
+                embeddedOntology.KeyAxioms.ForEach(axiom => { axiom.IsImport = true; ontology.KeyAxioms.Add(axiom); });
+                embeddedOntology.AssertionAxioms.ForEach(axiom => { axiom.IsImport = true; ontology.AssertionAxioms.Add(axiom); });
+                embeddedOntology.AnnotationAxioms.ForEach(axiom => { axiom.IsImport = true; ontology.AnnotationAxioms.Add(axiom); });
             }
         }
 
@@ -1384,7 +1409,7 @@ namespace OWLSharp.Extensions.GEO
 
         /// <summary>
         /// Parses the given WKT/GML typed literal into its WGS84 geometry, after validating that it does not
-        /// declare a CRS other than WGS84 (EWKT "SRID=..." prefix, or GML "srsName" attribute).
+        /// declare a CRS other than WGS84 (EWKT "SRID=..." prefix or GML "srsName" attribute).
         /// </summary>
         /// <exception cref="OWLException"></exception>
         internal static Geometry ParseAndValidateWGS84Geometry(RDFTypedLiteral literal)
@@ -1835,6 +1860,27 @@ namespace OWLSharp.Extensions.GEO
                 coord.Y = Math.Round(y, 8);
             }
         }
+
+        //The embedded T-BOX is parsed once per process, since the copies never change. GeoSPARQL and Simple Features are read
+        //together because the latter uses terms declared in the former, which the RDF loader recognizes only when declared in
+        //the same graph. GEOF is not embedded: its published file is a SKOS registry of functions, without any OWL axiom
+        private static readonly Lazy<Task<(string[] ImportIRIs, OWLOntology Ontology)[]>> EmbeddedOntologiesLazy = new Lazy<Task<(string[] ImportIRIs, OWLOntology Ontology)[]>>(async () =>
+        {
+            //The single ontology handed to every initialization, with the two imports it stands for
+            return new (string[] ImportIRIs, OWLOntology Ontology)[]
+            {
+                (new[] { RDFVocabulary.GEOSPARQL.DEREFERENCE_URI, RDFVocabulary.GEOSPARQL.SF.DEREFERENCE_URI },
+                 await OWLOntology.FromRDFGraphAsync(await (await ReadEmbeddedGraphAsync("geosparql.ttl")).UnionWithAsync(await ReadEmbeddedGraphAsync("sf.ttl"))))
+            };
+
+            //Parses a Turtle copy embedded under the logical name fixed in the csproj, byte-identical to the published file
+            async Task<RDFGraph> ReadEmbeddedGraphAsync(string resourceFileName)
+            {
+                //The resource exists by construction: the build embeds every file of GEO/Ontologies under this name
+                using (Stream resourceStream = typeof(GEOHelper).Assembly.GetManifestResourceStream($"OWLSharp.Extensions.GEO.Ontologies.{resourceFileName}"))
+                    return await RDFGraph.FromStreamAsync(RDFModelEnums.RDFFormats.Turtle, resourceStream);
+            }
+        }, LazyThreadSafetyMode.ExecutionAndPublication);
         #endregion
     }
 }

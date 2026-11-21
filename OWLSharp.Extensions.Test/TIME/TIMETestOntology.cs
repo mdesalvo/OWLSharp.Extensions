@@ -35,9 +35,10 @@ public class TIMETestOntology
         if (TestOntology == null)
         {
             TestOntology = new OWLOntology(new Uri("ex:ont"));
-            await TestOntology.InitializeTIMEAsync(30000);
+            await TestOntology.InitializeTIMEAsync();
 
-            Assert.IsGreaterThan(0, OWLImportHelper.OntologyCache.Count);
+            //Every TIME test reasons over the embedded OWL-TIME, THORS and Gregorian T-BOX, so all three must have been imported
+            Assert.HasCount(3, TestOntology.Imports);
         }
     }
     #endregion
